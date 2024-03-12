@@ -1,0 +1,158 @@
+.container {
+    width: 70%;
+    margin-top: 30px;
+    position: relative;
+}
+.intro {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.intro h4 {
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.filter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.filter label {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.filter select {
+    border: 2px solid var(--primaryColor);
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+.filter option {
+    font-size: 18px;
+}
+.feedback {
+    // margin-top: 40px;
+    border-bottom: 1px solid var(--darkGrayColor);
+    padding: 20px 0;
+}
+.user {
+    display: flex;
+    gap: 20px;
+}
+.user img {
+    width: 40px;
+    height: 40px;
+}
+.details {
+}
+.name-time {
+    display: flex;
+    align-items: end;
+    gap: 50px;
+}
+.name {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--irisBlueColor);
+}
+.time {
+    font-size: 14px;
+    color: var(--darkGrayColor);
+}
+.rating {
+    display: flex;
+    gap: 3px;
+    margin-top: 2px;
+}
+
+.star {
+    width: 20px;
+    height: 20px;
+    color: var(--yellowColor);
+}
+.comment {
+    margin-top: 10px;
+}
+
+.reaction {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-top: 10px;
+}
+
+.react {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.feedback-btn-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.feedback-btn {
+    padding: 10px 20px;
+    background-color: var(--primaryColor);
+    border-radius: 5px;
+    color: var(--whiteColor);
+    font-size: 18px;
+    font-weight: 500;
+
+    &:hover {
+        cursor: pointer;
+        opacity: 0.8;
+    }
+}
+
+.overlay {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 150;
+    background-color: #00000084;
+    animation: fadeIn linear 0.3s;
+}
+
+.form-feedback {
+    width: 70%;
+    height: 70%;
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 200;
+    animation: fadeUp linear 0.3s;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 100%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

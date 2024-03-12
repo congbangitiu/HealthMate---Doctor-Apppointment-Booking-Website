@@ -1,0 +1,14 @@
+@import '../../../GlobalStyle.css';
+
+.container {
+    padding: 120px 120px 100px 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background-image: url(../../assets/images/Blur.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}

@@ -1,0 +1,16 @@
+.container {
+    padding: 150px 120px 100px 120px;
+    background-image: url(../../assets/images/Blur.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+// Responsive
+@media only screen and (max-width: 1024px) {
+    .container {
+        padding: 0 20px;
+        flex-direction: column;
+        margin-top: 20px;
+    }
+}

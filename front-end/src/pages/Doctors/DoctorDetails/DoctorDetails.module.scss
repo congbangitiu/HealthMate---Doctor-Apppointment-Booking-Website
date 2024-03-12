@@ -1,0 +1,33 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 150px 120px 100px 120px;
+    background-image: url(../../assets/images/Blur.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 2px solid var(--grayColor);
+    width: 70%;
+    margin-top: 50px;
+}
+
+.bar div {
+    font-size: 18px;
+    padding: 0 20px 10px 20px;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+.active {
+    border-bottom: 2px solid var(--primaryColor);
+    padding-bottom: 8px !important;
+}

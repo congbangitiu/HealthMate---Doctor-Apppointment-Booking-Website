@@ -1,0 +1,81 @@
+@import '../../GlobalStyle.css';
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px 120px 50px 120px;
+    background-color: var(--primaryColor);
+}
+
+.left-part {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.left-part img {
+    width: 100px;
+    height: 100px;
+}
+
+.left-part p {
+    font-size: 14px;
+}
+
+.social-medias {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.social-icon-wrapper {
+    padding: 5px;
+    border-radius: 50px;
+    border: 2px solid #000;
+
+    &:hover {
+        cursor: pointer;
+        border: 2px solid var(--whiteColor);
+        color: var(--whiteColor);
+    }
+}
+
+.social-icon {
+}
+
+.right-part {
+    width: 60%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.categories-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.categories-wrapper h4 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.categories {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.categories p {
+    font-size: 16px;
+    line-height: 35px;
+
+    &:hover {
+        cursor: pointer;
+        color: var(--whiteColor);
+    }
+}

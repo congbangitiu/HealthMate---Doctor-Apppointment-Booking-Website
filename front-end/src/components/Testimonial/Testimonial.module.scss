@@ -1,0 +1,78 @@
+@import '../../GlobalStyle.css';
+
+.container {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container h2 {
+    font-size: 50px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.container p {
+    font-size: 20px;
+    text-align: justify;
+}
+
+.content {
+    width: 100%;
+    gap: 30px;
+    margin-top: 50px;
+    position: relative;
+}
+
+.comment {
+    width: 99%;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: transparent;
+}
+
+.patient {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.patient img {
+    width: 40px;
+    height: 40px;
+}
+
+.name-rating {
+}
+
+.name {
+    font-size: 18px !important;
+    font-weight: 500;
+}
+
+.rating {
+    display: flex;
+    gap: 3px;
+    margin-top: 2px;
+}
+
+.star-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.star-active {
+    color: var(--yellowColor);
+}
+
+.star-disabled {
+    color: var(--grayColor);
+}
+
+.text {
+    font-size: 14px !important;
+    margin-top: 10px;
+}
+
+// CSS ủa Swipe bên file App.css

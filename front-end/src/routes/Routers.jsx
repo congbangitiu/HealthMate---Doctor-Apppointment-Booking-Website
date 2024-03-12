@@ -1,0 +1,27 @@
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+
+import Home from './../pages/Home/Home';
+import Services from './../pages/Services/Services';
+import Login from './../pages/Login/Login';
+import Register from './../pages/Register/Register';
+import Contact from './../pages/Contact/Contact';
+import DoctorList from './../pages/Doctors/DoctorList/DoctorList';
+import DoctorDetails from './../pages/Doctors/DoctorDetails/DoctorDetails';
+
+const Routers = () => {
+    return (
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/doctors" element={<DoctorList />} />
+            <Route path="/doctors/:id" element={<DoctorDetails />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/services" element={<Services />} />
+        </Routes>
+    );
+};
+
+export default Routers;

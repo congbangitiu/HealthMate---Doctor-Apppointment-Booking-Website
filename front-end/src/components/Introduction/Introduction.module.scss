@@ -1,0 +1,154 @@
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.content {
+    width: 50%;
+}
+
+.content h2 {
+    font-size: 50px;
+    font-weight: 700;
+}
+
+.content p {
+    font-size: 16px;
+    text-align: justify;
+    margin-top: 10px;
+}
+
+.request-appointment {
+    background-color: var(--buttonBgColor);
+    color: var(--whiteColor);
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    padding: 10px 20px;
+    border-radius: 50px;
+    margin-top: 20px;
+
+    &:hover {
+        cursor: pointer;
+        opacity: 0.8;
+    }
+}
+
+.statistics {
+    display: flex;
+    gap: 35px;
+}
+
+.statistic {
+    margin-top: 30px;
+}
+
+.number {
+    display: flex;
+    gap: 5px;
+}
+
+.number p {
+    font-size: 40px;
+    font-weight: 800;
+}
+
+.underline {
+    height: 10px;
+    border-radius: 10px;
+    margin-top: -20px;
+    width: 80%;
+}
+
+.doctor-images {
+    display: flex;
+    margin-left: 10%;
+    gap: 25px;
+}
+
+.doctor-images img:first-child {
+    width: 250px;
+    height: 90%;
+}
+
+.doctor-images div {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.doctor-images div img:first-child {
+    width: 200px;
+}
+
+.doctor-images div img:last-child {
+    height: 280px;
+}
+
+
+// Responsive
+@media only screen and (max-width: 1024px) {
+    .container {
+        width: 100%;
+    }
+
+    .container h2 {
+        font-size: 25px;
+        font-weight: 600;
+    }
+
+    .request-appointment {
+        font-size: 14px;
+        margin-left: calc(25% - 20px);
+    }
+
+    .statistics {
+        justify-content: center;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .statistic {
+        height: 50px;
+        margin-left: 25%;
+    }
+
+    .number {
+        gap: 0;
+    }
+
+    .number p {
+        font-size: 35px;
+        font-weight: 700;
+    }
+
+    .underline {
+        height: 5px;
+        border-radius: 10px;
+        margin-top: -15px;
+        width: 60%;
+    }
+
+    .doctor-images {
+        margin-top: 60px;
+        margin-left: 0;
+        flex-direction: column;
+    }
+
+    .doctor-images img:first-child {
+        width: 100%;
+    }
+
+    .doctor-images div {
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    .doctor-images div img:first-child {
+        width: 50%;
+    }
+
+    .doctor-images div img:last-child {
+        width: 50%;
+    }
+}

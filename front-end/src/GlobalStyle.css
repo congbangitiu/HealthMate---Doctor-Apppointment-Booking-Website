@@ -1,0 +1,17 @@
+:root {
+    --primaryColor: #30d5c8;
+    --buttonBgColor: #0067ff;
+    --yellowColor: #feb60d;
+    --purpleColor: #9771ff;
+    --irisBlueColor: #01b5c5;
+    --headingColor: #181a1e;
+    --textColor: #4e545f;
+    --whiteColor: #fff;
+    --greenColor: #007eb5;
+    --grayColor: #c0c0c0;
+    --darkGrayColor: #a9a9a9;
+
+    --subheading: 18px;
+    --textSize: 14px;
+    --textWeight: 450;
+}

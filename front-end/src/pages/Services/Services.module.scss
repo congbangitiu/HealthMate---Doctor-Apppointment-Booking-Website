@@ -1,0 +1,16 @@
+@import '../../GlobalStyle.css';
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 100px 120px 100px 120px;
+    align-items: center;
+    background-image: url(../../assets/images/Blur.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+
+
