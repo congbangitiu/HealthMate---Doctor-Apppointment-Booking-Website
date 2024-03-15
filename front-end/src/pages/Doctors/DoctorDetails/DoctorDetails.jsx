@@ -3,18 +3,22 @@ import classNames from 'classnames/bind';
 import styles from './DoctorDetails.module.scss';
 
 import Doctor from '../../../components/Doctor/Doctor';
+import SidePanel from '../../../components/SidePanel/SidePanel';
 import AboutDoctor from '../../../components/AboutDoctor/AboutDoctor';
 import FeedbackDoctor from '../../../components/FeedbackDoctor/FeedbackDoctor';
 
 const cx = classNames.bind(styles);
 
 const DoctorDetails = () => {
-    const [activeTab, setActiveTab] = useState('feedback');
+    const [activeTab, setActiveTab] = useState('about');
 
     console.log(activeTab);
     return (
         <div className={cx('container')}>
-            <Doctor />
+            <div className={cx('doctor-slots')}>
+                <Doctor />
+                <SidePanel />
+            </div>
             <div className={cx('bar')}>
                 <div className={cx({ active: activeTab === 'about' })} onClick={() => setActiveTab('about')}>
                     About

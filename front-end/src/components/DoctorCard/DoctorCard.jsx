@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './DoctorCard.module.scss';
 import { FaStar } from 'react-icons/fa';
@@ -32,9 +33,9 @@ const DoctorCard = () => {
                                 <p className={cx('patients')}>+{doctor.totalPatients} patients</p>
                                 <p className={cx('office')}>{doctor.hospital}</p>
                             </div>
-                            <div className={cx('icon-wrapper')}>
+                            <Link to='/doctors/:id' className={cx('icon-wrapper')}>
                                 <FaLongArrowAltRight className={cx('arrow-icon')} />
-                            </div>
+                            </Link>
                         </div>
                     </div>
                 ))}

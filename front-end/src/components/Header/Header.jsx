@@ -9,7 +9,6 @@ import { BiMenu } from 'react-icons/bi';
 import { IoIosClose, IoMdHome } from 'react-icons/io';
 import { FaUserDoctor } from 'react-icons/fa6';
 import { MdMedicalServices, MdContactSupport } from 'react-icons/md';
-import Home from '../../pages/Home/Home';
 
 const cx = classNames.bind(styles);
 

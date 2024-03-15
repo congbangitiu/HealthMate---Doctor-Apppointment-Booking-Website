@@ -1,5 +1,5 @@
 .container {
-    width: 70%;
+    // width: 70%;
     margin-top: 30px;
     position: relative;
 }
@@ -29,6 +29,10 @@
     border: 2px solid var(--primaryColor);
     border-radius: 5px;
     padding: 5px 10px;
+
+    &:focus {
+        outline: none;
+    }
 }
 
 .filter option {
@@ -51,7 +55,7 @@
 }
 .name-time {
     display: flex;
-    align-items: end;
+    align-items: flex-end;
     gap: 50px;
 }
 .name {
@@ -123,29 +127,7 @@
     left: 0;
     z-index: 150;
     background-color: #00000084;
-    animation: fadeIn linear 0.3s;
-}
-
-.form-feedback {
-    width: 70%;
-    height: 70%;
-    position: absolute;
-    top: -50%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 200;
-    animation: fadeUp linear 0.3s;
-}
-
-@keyframes fadeUp {
-    from {
-        opacity: 0;
-        transform: translate(-50%, 100%);
-    }
-    to {
-        opacity: 1;
-        transform: translate(-50%, 0);
-    }
+    animation: fadeIn linear 0.4s;
 }
 
 @keyframes fadeIn {
@@ -156,3 +138,27 @@
         opacity: 1;
     }
 }
+
+.form-feedback {
+    width: 50%;
+    height: 50%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 200;
+    animation: fadeUp linear 0.4s forwards;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes fadeUp {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 150%);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+

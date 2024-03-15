@@ -1,0 +1,59 @@
+.container {
+    padding: 20px 30px;
+    border-radius: 10px;
+    width: 30%;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+}
+
+.price {
+    display: flex;
+    justify-content: space-between;
+}
+
+.price h4 {
+    font-size: 18px;
+}
+
+.price h3 {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.slots {
+    margin-top: 20px;
+}
+
+.slots h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.slot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.slot p {
+    color: var(--darkGrayColor);
+}
+
+.booking-btn-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.booking-btn {
+    background-color: var(--primaryColor);
+    color: var(--whiteColor);
+    font-size: 16px;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 5px;
+
+    &:hover {
+        cursor: pointer;
+        opacity: 0.8;
+    }
+}

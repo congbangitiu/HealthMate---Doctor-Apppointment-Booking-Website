@@ -1,0 +1,91 @@
+.container {
+    padding: 150px 120px 100px 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url(../../assets/images/Blur.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.container h2 {
+    font-size: 50px;
+    font-weight: 700;
+}
+
+.container p {
+    font-size: 18px;
+    color: var(--darkGrayColor);
+}
+
+.container form {
+    margin-top: 50px;
+    width: 60%;
+}
+.fields {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 20px 40px;
+}
+
+.info {
+}
+
+.info label {
+    color: var(--primaryColor);
+}
+
+.info input {
+    border: 2px solid var(--darkGrayColor);
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+
+    &:focus {
+        outline: none;
+        caret-color: var(--primaryColor);
+    }
+}
+
+.message {
+    margin-top: 20px;
+}
+
+.message label {
+    color: var(--primaryColor);
+}
+
+.message textarea {
+    border: 2px solid var(--darkGrayColor);
+    border-radius: 5px;
+    padding: 20px;
+    width: 100%;
+
+    &:focus {
+        outline: none;
+        caret-color: var(--primaryColor);
+    }
+}
+
+.submit-btn-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.submit-btn {
+    padding: 10px 20px;
+    background-color: var(--primaryColor);
+    border-radius: 5px;
+    color: var(--whiteColor);
+    font-size: 18px;
+    font-weight: 500;
+
+    &:hover {
+        cursor: pointer;
+        opacity: 0.8;
+    }
+}
