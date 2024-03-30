@@ -178,14 +178,17 @@
 }
 
 .register-btn {
-    padding: 10px 20px;
+    width: 40%;
+    height: 50px;
     background-color: var(--primaryColor);
     font-size: 18px;
     font-weight: 500;
     color: var(--whiteColor);
     border-radius: 5px;
     margin-top: 15px;
-    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     &:hover {
         opacity: 0.8;

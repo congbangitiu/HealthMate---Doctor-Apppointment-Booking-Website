@@ -10,7 +10,7 @@ const generateToken = (user) => {
 };
 
 export const register = async (req, res) => {
-    const { fullname, username, phone, email, password, role, photo, gender } = req.body;
+    const { fullname, username, phone, email, password, confirmedPassword, role, photo, gender } = req.body;
     try {
         let user = null;
         if (role === 'patient') {
@@ -22,6 +22,11 @@ export const register = async (req, res) => {
         // Check if user exist
         if (user) {
             return res.status(400).json({ message: 'User already exist' });
+        }
+
+        // Check if password equals to confirmedPassword
+        if (password !== confirmedPassword) {
+            return res.status(400).json({ message: 'Passwords do not match !!!' });
         }
 
         // Hash password

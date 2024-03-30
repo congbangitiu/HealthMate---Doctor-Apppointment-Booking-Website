@@ -54,7 +54,6 @@ export const getSingleUser = async (req, res) => {
 };
 
 export const getAllUsers = async (req, res) => {
-    const id = req.params.id;
     try {
         const users = await User.find({}).select('-password');
 

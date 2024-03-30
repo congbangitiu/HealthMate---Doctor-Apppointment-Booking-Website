@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import uploadImageToCloudinary from '../../utils/uploadCloudinary';
+import { BASE_URL } from '../../../config';
 import classNames from 'classnames/bind';
 import styles from './Register.module.scss';
 import { MdOutlineEmail } from 'react-icons/md';
@@ -8,29 +10,37 @@ import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { FaRegUser } from 'react-icons/fa6';
 import { CiMobile3 } from 'react-icons/ci';
-import Avatar from '../../assets/images/doctor-img01.png';
+import { toast } from 'react-toastify';
+import HashLoader from 'react-spinners/HashLoader';
 
 const cx = classNames.bind(styles);
 
 const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
     const [passwordEmpty, setPasswordEmpty] = useState(true);
+    const [confirmedPasswordEmpty, setConfirmedPasswordEmpty] = useState(true);
     const [selectedFile, setSelectedFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState('');
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         fullname: '',
         username: '',
         phone: '',
         email: '',
         password: '',
-        confirmPassword: '',
+        confirmedPassword: '',
         photo: selectedFile,
-        gender: '',
+        gender: 'male',
         role: 'patient',
     });
+    const navigate = useNavigate();
 
     const handleShowPassword = () => {
         setShowPassword((prevShowPassword) => !prevShowPassword);
+    };
+    const handleShowConfirmedPassword = () => {
+        setShowConfirmedPassword((prevShowConfirmedPassword) => !prevShowConfirmedPassword);
     };
 
     const handleInputChange = (e) => {
@@ -45,13 +55,46 @@ const Register = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const handleConfirmedPasswordChange = (e) => {
+        if (e.target.value === '' && showConfirmedPassword === true) {
+            setShowConfirmedPassword(false);
+        }
+        setConfirmedPasswordEmpty(e.target.value === '');
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
     const handleFileInputChange = async (e) => {
         const file = e.target.files[0];
-        console.log(file);
+        const data = await uploadImageToCloudinary(file);
+
+        setPreviewUrl(data.url);
+        setSelectedFile(data.url);
+        setFormData({ ...formData, photo: data.url });
     };
 
     const submitHandler = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        try {
+            const res = await fetch(`${BASE_URL}/auth/register`, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const { message } = await res.json();
+            if (!res.ok) {
+                throw new Error(message);
+            }
+            setLoading(false);
+            toast.success(message);
+            navigate('/login');
+        } catch (error) {
+            toast.error(error.message);
+            setLoading(false);
+        }
     };
 
     return (
@@ -145,19 +188,19 @@ const Register = () => {
                             <p>Confirm password</p>
                             <div className={cx('info')}>
                                 <input
-                                    type={showPassword ? 'text' : 'password'}
+                                    type={showConfirmedPassword ? 'text' : 'password'}
                                     placeholder="Re-enter your password"
-                                    value={formData.confirmPassword}
-                                    name="password"
-                                    onChange={handlePasswordChange}
+                                    value={formData.confirmedPassword}
+                                    name="confirmedPassword"
+                                    onChange={handleConfirmedPasswordChange}
                                     required
                                 />
-                                {passwordEmpty ? (
+                                {confirmedPasswordEmpty ? (
                                     <RiLockPasswordLine className={cx('icon')} />
-                                ) : showPassword ? (
-                                    <FaEyeSlash className={cx('icon', 'eye')} onClick={handleShowPassword} />
+                                ) : showConfirmedPassword ? (
+                                    <FaEyeSlash className={cx('icon', 'eye')} onClick={handleShowConfirmedPassword} />
                                 ) : (
-                                    <FaEye className={cx('icon', 'eye')} onClick={handleShowPassword} />
+                                    <FaEye className={cx('icon', 'eye')} onClick={handleShowConfirmedPassword} />
                                 )}
                             </div>
                         </div>
@@ -171,7 +214,7 @@ const Register = () => {
                             </select>
                         </div>
                         <div className={cx('upload-photo')}>
-                            <img src={Avatar} alt="" />
+                            {selectedFile && <img src={previewUrl} alt="" />}
                             <input
                                 type="file"
                                 name="photo"
@@ -195,7 +238,9 @@ const Register = () => {
                         <p className={cx('question')}>I agree with the terms of use</p>
                     </div>
 
-                    <button className={cx('register-btn')}>Sign up</button>
+                    <button disabled={loading && true} className={cx('register-btn')}>
+                        {loading  ? <HashLoader size={25} color="#ffffff" /> : 'Sign up'}
+                    </button>
 
                     <div className={cx('other-account')}>
                         <p>or sign in with other accounts?</p>
