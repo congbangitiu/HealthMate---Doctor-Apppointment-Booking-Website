@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
 import logo from '../../assets/images/logo.png';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import classNames from 'classnames/bind';
@@ -9,6 +9,7 @@ import { BiMenu } from 'react-icons/bi';
 import { IoIosClose, IoMdHome } from 'react-icons/io';
 import { FaUserDoctor } from 'react-icons/fa6';
 import { MdMedicalServices, MdContactSupport } from 'react-icons/md';
+import { authContext } from '../../context/AuthContext';
 
 const cx = classNames.bind(styles);
 
@@ -38,6 +39,7 @@ const navLinks = [
 const Header = () => {
     const [activeLink, setActiveLink] = useState(null);
     const location = useLocation();
+    const { user, role, token } = useContext(authContext);
 
     const handleNavLinkClick = (index) => {
         setActiveLink(index);
@@ -79,15 +81,24 @@ const Header = () => {
 
             {/* Nav right */}
             <div className={cx('authentication')}>
-                <Link to="/">
-                    <img className={cx('avatar', 'hidden')} src={userImg} alt="" />
-                </Link>
-                <Link to="/login">
-                    <button className={cx('login')}>Login</button>
-                </Link>
-                <Link to="/register">
-                    <button className={cx('register')}>Register</button>
-                </Link>
+                {token && user ? (
+                    <Link to="/" className={cx('info')}>
+                        <img className={cx('avatar')} src={userImg} alt="" />
+                        <div className={cx('name')}>
+                            <h4>{user?.fullname}</h4>
+                            <p>{user?.username}</p>
+                        </div>
+                    </Link>
+                ) : (
+                    <>
+                        <Link to="/login">
+                            <button className={cx('login')}>Login</button>
+                        </Link>
+                        <Link to="/register">
+                            <button className={cx('register')}>Register</button>
+                        </Link>
+                    </>
+                )}
 
                 <label htmlFor="nav-mobile-input">
                     <BiMenu className={cx('menu-icon')} />

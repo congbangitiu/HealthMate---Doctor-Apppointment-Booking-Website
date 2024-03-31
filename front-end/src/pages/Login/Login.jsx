@@ -1,21 +1,29 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Login.module.scss';
 import { MdOutlineEmail } from 'react-icons/md';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { BASE_URL } from '../../../config';
+import HashLoader from 'react-spinners/HashLoader';
+import { toast } from 'react-toastify';
+import { authContext } from '../../context/AuthContext.jsx';
 
 const cx = classNames.bind(styles);
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [passwordEmpty, setPasswordEmpty] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
         password: '',
     });
+
+    const navigate = useNavigate();
+    const { dispatch } = useContext(authContext);
 
     const handleShowPassword = () => {
         setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -33,6 +41,40 @@ const Login = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const submitHandler = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const res = await fetch(`${BASE_URL}/auth/login`, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const result = await res.json();
+            if (!res.ok) {
+                throw new Error(result.message);
+            }
+
+            dispatch({
+                type: 'LOGIN_SUCCESS',
+                payload: {
+                    user: result.data,
+                    role: result.role,
+                    token: result.token,
+                },
+            });
+            setLoading(false);
+            toast.success(result.message);
+            navigate('/home');
+        } catch (error) {
+            toast.error(error.message);
+            setLoading(false);
+        }
+    };
+
     return (
         <div className={cx('container')}>
             <div className={cx('inner')}>
@@ -41,7 +83,7 @@ const Login = () => {
                     <p>Sign in to stay connected</p>
                 </div>
 
-                <form action="">
+                <form action="" onSubmit={submitHandler}>
                     <div className={cx('authentication')}>
                         <p>Email</p>
                         <div className={cx('info')}>
@@ -83,7 +125,9 @@ const Login = () => {
                         </div>
                         <p className={cx('forgot')}>Forgot Password</p>
                     </div>
-                    <button className={cx('login-btn')}>Sign in</button>
+                    <button className={cx('login-btn')}>
+                        {loading ? <HashLoader size={25} color="#ffffff" /> : 'Sign in'}
+                    </button>
 
                     <div className={cx('other-account')}>
                         <p>or sign in with other accounts?</p>

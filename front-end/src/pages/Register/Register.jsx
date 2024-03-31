@@ -34,6 +34,7 @@ const Register = () => {
         gender: 'male',
         role: 'patient',
     });
+    
     const navigate = useNavigate();
 
     const handleShowPassword = () => {

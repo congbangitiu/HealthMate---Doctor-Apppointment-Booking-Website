@@ -46,8 +46,8 @@
 }
 
 .avatar {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
 }
 
 .authentication {
@@ -57,6 +57,23 @@
 }
 .hidden {
     display: none;
+}
+
+.info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.name h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--primaryColor);
+}
+
+.name p {
+    font-size: 16px;
+    color: var(--darkGrayColor);
 }
 
 .login,
