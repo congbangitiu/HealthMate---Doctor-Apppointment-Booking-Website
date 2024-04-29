@@ -7,7 +7,7 @@ import { RiLockPasswordLine } from 'react-icons/ri';
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { BASE_URL } from '../../../config';
-import HashLoader from 'react-spinners/HashLoader';
+import SyncLoader from 'react-spinners/SyncLoader';
 import { toast } from 'react-toastify';
 import { authContext } from '../../context/AuthContext.jsx';
 
@@ -126,7 +126,7 @@ const Login = () => {
                         <p className={cx('forgot')}>Forgot Password</p>
                     </div>
                     <button className={cx('login-btn')}>
-                        {loading ? <HashLoader size={25} color="#ffffff" /> : 'Sign in'}
+                        {loading ? <SyncLoader size={10} color="#ffffff" /> : 'Sign in'}
                     </button>
 
                     <div className={cx('other-account')}>

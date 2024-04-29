@@ -1,0 +1,161 @@
+.container {
+    background-color: var(--whiteColor);
+    padding: 10px 50px 40px 50px;
+}
+
+.close-icon-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.close-icon {
+    font-size: 25px;
+    font-weight: 600;
+    border-radius: 3px;
+    margin-right: -20px;
+
+    &:hover {
+        cursor: pointer;
+        background-color: red;
+    }
+}
+
+.container h1 {
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--primaryColor);
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.container form {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+}
+
+.fields {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 20px;
+}
+
+.authentication {
+    width: 100% !important;
+}
+
+.authentication p {
+    color: var(--primaryColor);
+    font-size: 16px;
+    margin-bottom: 2px;
+}
+
+.info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info input {
+    border: 1px solid var(--darkGrayColor);
+    padding: 10px 15px;
+    width: 90%;
+    border-radius: 5px;
+    outline: none;
+
+    &:focus {
+        caret-color: var(--primaryColor);
+    }
+}
+
+.icon {
+    font-size: 25px;
+}
+
+.eye {
+    cursor: pointer;
+}
+.selection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 10px;
+}
+.choose {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.choose h4 {
+    font-size: 18px;
+    color: var(--primaryColor);
+}
+
+.choose select {
+    border: 2px solid var(--primaryColor);
+    border-radius: 5px;
+    padding: 5px 10px;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.upload-photo {
+    display: flex;
+    align-self: center;
+    gap: 20px;
+}
+
+.upload-photo img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    border: 2px solid var(--primaryColor);
+}
+
+.upload-photo input {
+    display: none;
+}
+
+.upload-photo label {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    background-color: var(--primaryColor);
+    color: var(--whiteColor);
+    padding: 10px 20px;
+    border-radius: 5px;
+
+    &:hover {
+        cursor: pointer;
+        opacity: 0.8;
+    }
+}
+
+.submit-btn {
+    width: 40%;
+    height: 50px;
+    background-color: var(--primaryColor);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--whiteColor);
+    border-radius: 5px;
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}

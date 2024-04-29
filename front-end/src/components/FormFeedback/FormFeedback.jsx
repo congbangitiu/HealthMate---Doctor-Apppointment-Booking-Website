@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './FormFeedback.module.scss';
 import { HiStar } from 'react-icons/hi';
-import { IoMdClose } from "react-icons/io";
+import { IoMdClose } from 'react-icons/io';
+import { PropTypes } from 'prop-types';
 
 const cx = classNames.bind(styles);
 
-const FormFeedback = ({setShowFormFeedback}) => {
+const FormFeedback = ({ setShowFormFeedback }) => {
     const [rating, setRating] = useState(0);
     const [hover, setHover] = useState(0);
     const [reviewText, setReviewText] = useState('');
@@ -18,7 +19,7 @@ const FormFeedback = ({setShowFormFeedback}) => {
     return (
         <form className={cx('container')} action="">
             <div className={cx('close-icon-wrapper')} onClick={() => setShowFormFeedback(false)}>
-                <IoMdClose className={cx('close-icon')}/>
+                <IoMdClose className={cx('close-icon')} />
             </div>
             <h1>FEEDBACK</h1>
             <div className={cx('voting')}>
@@ -64,6 +65,10 @@ const FormFeedback = ({setShowFormFeedback}) => {
             </button>
         </form>
     );
+};
+
+FormFeedback.propTypes = {
+    setShowFormFeedback: PropTypes.func.isRequired,
 };
 
 export default FormFeedback;

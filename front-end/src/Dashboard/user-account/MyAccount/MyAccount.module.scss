@@ -1,0 +1,142 @@
+.container-parent {
+    padding: 120px 300px 100px 300px;
+}
+.container {
+    display: flex;
+    align-items: center;
+    background-image: url(../../assets/images/Blur.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    gap: 50px;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+}
+
+.info img {
+    width: 70%;
+    border-radius: 10px;
+    border: 5px solid var(--primaryColor);
+}
+
+.info h1 {
+    font-size: 25px;
+    font-weight: 600;
+    margin-top: 15px;
+}
+
+.info h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: var(--darkGrayColor);
+}
+
+.info p {
+    font-size: 16px;
+    color: var(--darkGrayColor);
+}
+
+.info button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background-color: var(--primaryColor);
+    width: 80%;
+    padding: 10px 0;
+    border-radius: 5px;
+    color: var(--whiteColor);
+    font-size: 16px;
+    margin-top: 10px;
+
+    &:hover {
+        cursor: pointer;
+        opacity: 0.8;
+    }
+}
+
+.info button:nth-child(7) {
+    margin-top: 30px;
+}
+
+.info button:last-child {
+    background-color: red;
+}
+
+.bookings {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+.bookings h1 {
+    font-size: 25px;
+    font-weight: 500;
+    color: var(--primaryColor);
+    margin-bottom: 20px;
+}
+
+.overlay {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 150;
+    background-color: #00000084;
+    animation: fadeIn linear 0.4s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.form-update {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    border-radius: 15px;
+    transform: translate(-50%, -50%);
+    z-index: 200;
+    animation: slideUp linear 0.4s forwards;
+    animation-timing-function: ease-in-out;
+    background: white;
+    overflow-y: auto;
+}
+
+.update-info {
+    width: 70%;
+}
+
+.change-password {
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes slideUp {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+

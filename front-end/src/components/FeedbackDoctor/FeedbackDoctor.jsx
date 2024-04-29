@@ -65,7 +65,7 @@ const FeedbackDoctor = () => {
             )}
 
             {showFormFeedback && (
-                <div>
+                <div className={cx('form-wrapper')}>
                     <div className={cx('overlay')} onClick={() => setShowFormFeedback(false)}></div>
                     <div className={cx('form-feedback')}>
                         <FormFeedback setShowFormFeedback={setShowFormFeedback} />

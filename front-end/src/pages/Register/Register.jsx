@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import uploadImageToCloudinary from '../../utils/uploadCloudinary';
 import { BASE_URL } from '../../../config';
@@ -11,7 +11,7 @@ import { FaFacebook, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { FaRegUser } from 'react-icons/fa6';
 import { CiMobile3 } from 'react-icons/ci';
 import { toast } from 'react-toastify';
-import HashLoader from 'react-spinners/HashLoader';
+import SyncLoader from 'react-spinners/SyncLoader';
 
 const cx = classNames.bind(styles);
 
@@ -240,7 +240,7 @@ const Register = () => {
                     </div>
 
                     <button disabled={loading && true} className={cx('register-btn')}>
-                        {loading  ? <HashLoader size={25} color="#ffffff" /> : 'Sign up'}
+                        {loading  ? <SyncLoader size={10} color="#ffffff" /> : 'Sign up'}
                     </button>
 
                     <div className={cx('other-account')}>
