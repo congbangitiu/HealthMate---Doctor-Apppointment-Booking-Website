@@ -10,7 +10,7 @@ const Error = ({ errorMessage }) => {
     return (
         <div className={cx('container')}>
             <img src={errorIcon} alt="" />
-            <h4>{errorMessage} !!!</h4>
+            <h4>{errorMessage}</h4>
         </div>
     );
 };

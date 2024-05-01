@@ -1,4 +1,4 @@
-import { useEffect, useState, useNavigate } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './UpdateInformation.module.scss';
 
@@ -85,6 +85,8 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
         setFormData({ ...formData, photo: data.url });
     };
 
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
     const submitHandler = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -104,8 +106,9 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
             }
             setLoading(false);
             setShowFormUpdateInfo(false);
-            window.location.reload();
             toast.success(message);
+            await delay(2000);
+            window.location.reload();
         } catch (error) {
             toast.error(error.message);
             setLoading(false);

@@ -4,76 +4,53 @@ import classNames from 'classnames/bind';
 import styles from './AboutDoctor.module.scss';
 import DoctorActivity1 from '../../assets/images/doctor-activity-1.webp';
 import DoctorActivity2 from '../../assets/images/doctor-activity-2.jpg';
+import { PropTypes } from 'prop-types';
 
 const cx = classNames.bind(styles);
 
-const AboutDoctor = () => {
+const AboutDoctor = ({ fullname, about, qualifications, experiences, hidden }) => {
     return (
         <div className={cx('container')}>
-            <div className={cx('activities')}>
+            <div className={cx('activities', hidden && 'hidden')}>
                 <img src={DoctorActivity1} alt="" />
                 <img src={DoctorActivity2} alt="" />
             </div>
             <div className={cx('content')}>
                 <div className={cx('about')}>
-                    <h4>About of Nazmul Islam</h4>
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis eius assumenda corrupti at fugiat
-                        ipsum odio laudantium quisquam veritatis consectetur velit illo ullam animi necessitatibus vero
-                        voluptatum fuga consequuntur, aspernatur perspiciatis adipisci. Necessitatibus et non sapiente
-                        sit distinctio, repellat illo totam perspiciatis, inventore ex assumenda odit natus cumque saepe
-                        nostrum?
-                    </p>
+                    <h4>
+                        About of <span>{fullname}</span>
+                    </h4>
+                    <p>{about}</p>
                 </div>
                 <div className={cx('education')}>
                     <h4>Education</h4>
                     <div className={cx('education-details')}>
-                        <div className={cx('education-detail')}>
-                            <p>
-                                {formatDate('09-13-2014')} - {formatDate('09-13-2016')}
-                            </p>
-                            <div className={cx('education-location')}>
-                                <p>PhD in Surgeon</p>
-                                <p>New Apollo Hospital, New York</p>
+                        {qualifications?.map((qualification, index) => (
+                            <div key={index} className={cx('education-detail')}>
+                                <p>
+                                    {formatDate(qualification.startingDate)} - {formatDate(qualification.endingDate)}
+                                </p>
+                                <div className={cx('education-location')}>
+                                    <p>{qualification.degree}</p>
+                                    <p>{qualification.university}</p>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div className={cx('education-details')}>
-                        <div className={cx('education-detail')}>
-                            <p>
-                                {formatDate('09-13-2014')} - {formatDate('09-13-2016')}
-                            </p>
-                            <div className={cx('education-location')}>
-                                <p>PhD in Surgeon</p>
-                                <p>New Apollo Hospital, New York</p>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
                 <div className={cx('experience')}>
                     <h4>Experience</h4>
+
                     <div className={cx('experience-details')}>
-                        <div className={cx('experience-detail')}>
-                            <p>
-                                {formatDate('06-04-2014')} - {formatDate('08-12-2016')}
-                            </p>
-                            <p>Sr.Surgeon</p>
-                            <p>New Apollo Hospital, New York</p>
-                        </div>
-                        <div className={cx('experience-detail')}>
-                            <p>
-                                {formatDate('06-04-2014')} - {formatDate('08-12-2016')}
-                            </p>
-                            <p>Sr.Surgeon</p>
-                            <p>New Apollo Hospital, New York</p>
-                        </div>
-                        <div className={cx('experience-detail')}>
-                            <p>
-                                {formatDate('06-04-2014')} - {formatDate('08-12-2016')}
-                            </p>
-                            <p>Sr.Surgeon</p>
-                            <p>New Apollo Hospital, New York</p>
-                        </div>
+                        {experiences?.map((experience, index) => (
+                            <div key={index} className={cx('experience-detail')}>
+                                <p>
+                                    {formatDate(experience.startingDate)} - {formatDate(experience.endingDate)}
+                                </p>
+                                <p>{experience.position}</p>
+                                <p>{experience.hospital}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
@@ -97,6 +74,14 @@ const AboutDoctor = () => {
             </div> */}
         </div>
     );
+};
+
+AboutDoctor.propTypes = {
+    fullname: PropTypes.string.isRequired,
+    about: PropTypes.string.isRequired,
+    qualifications: PropTypes.array.isRequired,
+    experiences: PropTypes.array.isRequired,
+    hidden: PropTypes.bool.isRequired,
 };
 
 export default AboutDoctor;

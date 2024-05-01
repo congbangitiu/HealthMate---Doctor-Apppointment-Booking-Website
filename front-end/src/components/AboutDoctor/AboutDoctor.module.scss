@@ -17,6 +17,9 @@
     width: 500px;
     height: auto;
 }
+.hidden {
+    display: none;
+}
 .content {
     width: 100%;
 }
@@ -25,6 +28,10 @@
 .about h4 {
     font-size: 18px;
     font-weight: 600;
+}
+.about h4 span {
+    color: var(--irisBlueColor);
+    font-size: 20px;
 }
 .about p {
     font-size: 16px;
@@ -42,6 +49,7 @@
     margin-top: 15px;
 }
 .education-detail {
+    margin-top: 10px;
 }
 .education-detail p {
     font-size: 16px;

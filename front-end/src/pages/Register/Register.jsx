@@ -34,7 +34,7 @@ const Register = () => {
         gender: 'male',
         role: 'patient',
     });
-    
+
     const navigate = useNavigate();
 
     const handleShowPassword = () => {
@@ -215,15 +215,18 @@ const Register = () => {
                             </select>
                         </div>
                         <div className={cx('upload-photo')}>
-                            {selectedFile && <img src={previewUrl} alt="" />}
-                            <input
-                                type="file"
-                                name="photo"
-                                id="customFile"
-                                accept=".jpg, .png"
-                                onChange={handleFileInputChange}
-                            />
-                            <label htmlFor="customFile">Upload photo</label>
+                            <div>
+                                {selectedFile && <img src={previewUrl} alt="" />}
+                                <input
+                                    type="file"
+                                    name="photo"
+                                    id="customFile"
+                                    accept=".jpg, .png, .jpeg, .webp"
+                                    onChange={handleFileInputChange}
+                                />
+                                <label htmlFor="customFile">Upload photo</label>
+                            </div>
+                            <p>(Notice: 1:1 scale photo)</p>
                         </div>
                         <div className={cx('choose')}>
                             <h4>Gender: </h4>
@@ -240,7 +243,7 @@ const Register = () => {
                     </div>
 
                     <button disabled={loading && true} className={cx('register-btn')}>
-                        {loading  ? <SyncLoader size={10} color="#ffffff" /> : 'Sign up'}
+                        {loading ? <SyncLoader size={10} color="#ffffff" /> : 'Sign up'}
                     </button>
 
                     <div className={cx('other-account')}>

@@ -37,8 +37,8 @@
     font-weight: 500;
 }
 
-.search-icon-wrapper {
-    background-color: var(--primaryColor);
+.search-icon-wrapper,
+.close-icon-wrapper {
     padding: 10px;
     border-radius: 5px;
 
@@ -48,7 +48,21 @@
     }
 }
 
+.search-icon-wrapper {
+    background-color: var(--primaryColor);
+}
+
 .search-icon {
     font-size: 20px;
     color: var(--whiteColor);
+}
+
+
+.close-icon-wrapper {
+    background-color: transparent;
+}
+
+.close-icon {
+    font-size: 20px;
+    color: var(--darkGrayColor);
 }

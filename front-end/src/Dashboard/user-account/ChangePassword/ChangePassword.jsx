@@ -70,6 +70,8 @@ const ChangePassword = ({ setShowFormChangePassword, userData }) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
     const submitHandler = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -89,14 +91,13 @@ const ChangePassword = ({ setShowFormChangePassword, userData }) => {
             }
             setLoading(false);
             setShowFormChangePassword(false);
-            window.location.reload();
             toast.success(message);
+            await delay(2000);
+            window.location.reload();
         } catch (error) {
             toast.error(error.message);
             setLoading(false);
         }
-
-        console.log(formData.bloodType);
     };
 
     return (

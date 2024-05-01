@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './DoctorCard.module.scss';
@@ -8,40 +9,38 @@ import Doctors from '../../assets/data/doctors';
 
 const cx = classNames.bind(styles);
 
-const DoctorCard = () => {
+const DoctorCard = ({ doctor }) => {
     return (
         <div className={cx('container')}>
-            <h2>Our great doctors</h2>
-            <p className={cx('description')}>
-                World-class care for everyone. Our health System offers unmatched, expert health care.
-            </p>
-            <div className={cx('doctors')}>
-                {Doctors.map((doctor) => (
-                    <div key={doctor.id} className={cx('doctor')}>
-                        <img src={doctor.photo} alt="" />
-                        <h4>{doctor.name}</h4>
-                        <div className={cx('expertise-rating')}>
-                            <div className={cx('expertise')}>{doctor.specialty}</div>
-                            <div className={cx('rating')}>
-                                <FaStar className={cx('stars')} />
-                                <p>{doctor.avgRating}</p>
-                                <p>({doctor.totalRating})</p>
-                            </div>
-                        </div>
-                        <div className={cx('details')}>
-                            <div>
-                                <p className={cx('patients')}>+{doctor.totalPatients} patients</p>
-                                <p className={cx('office')}>{doctor.hospital}</p>
-                            </div>
-                            <Link to='/doctors/:id' className={cx('icon-wrapper')}>
-                                <FaLongArrowAltRight className={cx('arrow-icon')} />
-                            </Link>
-                        </div>
-                    </div>
-                ))}
+            <img src={doctor.photo} alt="" />
+            <h4>Dr. {doctor.fullname}</h4>
+            <div className={cx('expertise-rating')}>
+                <div className={cx('expertise')}>{doctor.specialization}</div>
+                <div className={cx('rating')}>
+                    <FaStar className={cx('stars')} />
+                    <p>{doctor.avgRating}</p>
+                    <p>({doctor.totalRating})</p>
+                </div>
+            </div>
+            <div className={cx('details')}>
+                <div>
+                    <p className={cx('patients')}>+{doctor.totalPatients} patients</p>
+                    <p className={cx('office')}>
+                        {doctor.experiences[0]?.hospital.length > 25
+                            ? doctor.experiences[0]?.hospital.slice(0, 25) + ' ...'
+                            : doctor.experiences[0]?.hospital}
+                    </p>
+                </div>
+                <Link to={`/doctors/${doctor._id}`} className={cx('icon-wrapper')}>
+                    <FaLongArrowAltRight className={cx('arrow-icon')} />
+                </Link>
             </div>
         </div>
     );
+};
+
+DoctorCard.propTypes = {
+    doctor: PropTypes.object.isRequired,
 };
 
 export default DoctorCard;

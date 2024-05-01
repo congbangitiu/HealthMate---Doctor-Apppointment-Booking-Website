@@ -1,0 +1,32 @@
+.container-parent {
+    padding: 150px 120px 100px 120px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+    background-image: url(../../assets/images/Blur.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.information {
+    width: 70%;
+}
+
+.pending-noti {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: var(--lightYellowColor);
+    border-radius: 5px;
+    margin-bottom: 30px;
+}
+
+.pending-noti .icon {
+    color: var(--darkYellowColor);
+    font-size: 20px;
+}

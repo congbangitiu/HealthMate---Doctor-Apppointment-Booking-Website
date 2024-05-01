@@ -9,7 +9,7 @@ import Contact from './../pages/Contact/Contact';
 import DoctorList from './../pages/Doctors/DoctorList/DoctorList';
 import DoctorDetails from './../pages/Doctors/DoctorDetails/DoctorDetails';
 import MyAccount from '../Dashboard/user-account/MyAccount/MyAccount';
-import Dashboard from '../Dashboard/doctor-account/Dashboard';
+import Dashboard from '../Dashboard/doctor-account/Dashboard/Dashboard';
 import ProtectedRoute from './ProtectedRoute';
 
 const Routers = () => {
