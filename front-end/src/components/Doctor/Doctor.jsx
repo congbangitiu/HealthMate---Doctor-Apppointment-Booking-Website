@@ -5,7 +5,21 @@ import { PropTypes } from 'prop-types';
 
 const cx = classNames.bind(styles);
 
-const Doctor = ({ smallMode, fullname, photo, specialization, averageRating, totalRating, bio }) => {
+const Doctor = ({
+    smallMode,
+    fullname,
+    qualifications,
+    experiences,
+    timeSlots,
+    reviews,
+    bio,
+    about,
+    averageRating,
+    totalRating,
+    specialization,
+    ticketPrice,
+    photo,
+}) => {
     return (
         <div className={cx('container')}>
             <img src={photo} alt="" className={cx(smallMode && 'smallImg')} />
@@ -28,11 +42,17 @@ const Doctor = ({ smallMode, fullname, photo, specialization, averageRating, tot
 Doctor.propTypes = {
     smallMode: PropTypes.bool.isRequired,
     fullname: PropTypes.string.isRequired,
-    photo: PropTypes.string.isRequired,
-    specialization: PropTypes.string.isRequired,
+    qualifications: PropTypes.array.isRequired,
+    experiences: PropTypes.array.isRequired,
+    timeSlots: PropTypes.array.isRequired,
+    reviews: PropTypes.array.isRequired,
+    bio: PropTypes.string.isRequired,
+    about: PropTypes.string.isRequired,
     averageRating: PropTypes.number.isRequired,
     totalRating: PropTypes.number.isRequired,
-    bio: PropTypes.string.isRequired,
+    specialization: PropTypes.string.isRequired,
+    ticketPrice: PropTypes.number.isRequired,
+    photo: PropTypes.string.isRequired,
 };
 
 export default Doctor;

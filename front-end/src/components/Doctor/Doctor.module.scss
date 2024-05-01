@@ -5,9 +5,11 @@
 }
 
 .container img {
-    width: 180px;
-    height: 180px;
+    width: 200px;
+    height: 200px;
     border-radius: 10px;
+    object-fit: cover;
+    aspect-ratio: 1/1;
 }
 .info {
 }
@@ -18,7 +20,7 @@
     gap: 50px;
 }
 .name-expertise h4 {
-    font-size: 30px;
+    font-size: 26px;
     font-weight: 600;
 }
 .expertise {
@@ -37,13 +39,13 @@
 }
 
 .stars {
-    font-size: 20px;
+    font-size: 18px;
     color: var(--yellowColor);
 }
 
 .rating p {
     margin: 0;
-    font-size: 20px;
+    font-size: 18px;
 }
 
 .rating p:nth-child(2) {
@@ -51,7 +53,8 @@
 }
 .description {
     margin-top: 20px;
-    font-size: 18px;
+    font-size: 16px;
+    text-align: justify;
 }
 
 .smallImg {

@@ -83,7 +83,7 @@ const Header = () => {
             <div className={cx('authentication')}>
                 {token && user ? (
                     <Link to="/" className={cx('info')}>
-                        <img className={cx('avatar')} src={userImg} alt="" />
+                        <img className={cx('avatar')} src={user?.photo} alt="" />
                         <div className={cx('name')}>
                             <h4>{user?.fullname}</h4>
                             <p>{user?.username}</p>

@@ -1,5 +1,6 @@
 import Review from '../models/ReviewSchema.js';
 import Doctor from '../models/DoctorSchema.js';
+import User from '../models/UserSchema.js';
 
 // Get all reviews
 export const getAllReviews = async (req, res) => {
@@ -34,8 +35,31 @@ export const createReview = async (req, res) => {
         });
         res.status(200).json({
             success: true,
-            message: 'Create review successfully',
+            message: 'Feedback successfully',
             data: savedReview,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+// Get user by ID
+export const getUserById = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found',
+            });
+        }
+        res.status(200).json({
+            success: true,
+            message: 'User fetched successfully',
+            data: user,
         });
     } catch (error) {
         res.status(500).json({

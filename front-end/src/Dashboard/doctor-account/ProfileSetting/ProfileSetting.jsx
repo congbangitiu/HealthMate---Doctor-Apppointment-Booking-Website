@@ -58,8 +58,6 @@ const ProfileSetting = ({ doctorData }) => {
         });
     }, [doctorData]);
 
-    console.log(doctorData.qualifications.startingDate);
-
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };

@@ -7,27 +7,47 @@ import SidePanel from '../../../components/SidePanel/SidePanel';
 import AboutDoctor from '../../../components/AboutDoctor/AboutDoctor';
 import FeedbackDoctor from '../../../components/FeedbackDoctor/FeedbackDoctor';
 
+import { BASE_URL } from '../../../../config';
+import useFetchData from '../../../hooks/useFetchData';
+import Loader from '../../../components/Loader/Loader';
+import Error from '../../../components/Error/Error';
+import { useParams } from 'react-router-dom';
+
 const cx = classNames.bind(styles);
 
 const DoctorDetails = () => {
     const [activeTab, setActiveTab] = useState('about');
+    const { id } = useParams();
+    const { data: doctor, loading, error } = useFetchData(`${BASE_URL}/doctors/${id}`);
 
-    console.log(activeTab);
     return (
-        <div className={cx('container')}>
-            <div className={cx('doctor-slots')}>
-                <Doctor />
-                <SidePanel />
-            </div>
-            <div className={cx('bar')}>
-                <div className={cx({ active: activeTab === 'about' })} onClick={() => setActiveTab('about')}>
-                    About
+        <div className={cx('container-parent')}>
+            {loading ? (
+                <Loader />
+            ) : error ? (
+                <Error errorMessage={error} />
+            ) : (
+                <div className={cx('container')}>
+                    <div className={cx('doctor-slots')}>
+                        <span>
+                            <Doctor {...doctor} />
+                        </span>
+                        <SidePanel />
+                    </div>
+                    <div className={cx('bar')}>
+                        <div className={cx({ active: activeTab === 'about' })} onClick={() => setActiveTab('about')}>
+                            About
+                        </div>
+                        <div
+                            className={cx({ active: activeTab === 'feedback' })}
+                            onClick={() => setActiveTab('feedback')}
+                        >
+                            Feedback
+                        </div>
+                    </div>
+                    {activeTab === 'about' ? <AboutDoctor {...doctor}/> : <FeedbackDoctor {...doctor}/>}
                 </div>
-                <div className={cx({ active: activeTab === 'feedback' })} onClick={() => setActiveTab('feedback')}>
-                    Feedback
-                </div>
-            </div>
-            {activeTab === 'about' ? <AboutDoctor /> : <FeedbackDoctor />}
+            )}
         </div>
     );
 };

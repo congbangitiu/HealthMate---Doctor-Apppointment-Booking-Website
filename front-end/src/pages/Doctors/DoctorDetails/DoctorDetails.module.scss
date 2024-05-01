@@ -1,8 +1,11 @@
+.container-parent {
+    padding: 150px 120px 100px 120px;
+}
+
 .container {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 150px 120px 100px 120px;
     background-image: url(../../assets/images/Blur.png);
     background-repeat: no-repeat;
     background-position: center;
@@ -13,6 +16,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.doctor-slots span{
+    width: 60%;
 }
 
 .bar {

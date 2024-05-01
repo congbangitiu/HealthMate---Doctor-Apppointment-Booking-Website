@@ -1,59 +1,108 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import formatDate from '../../utils/formatDate';
+import { BASE_URL, token } from '../../../config';
 import classNames from 'classnames/bind';
 import styles from './FeedbackDoctor.module.scss';
-import UserAvatar from '../../assets/images/avatar-icon.png';
 import { HiStar } from 'react-icons/hi';
 import { SlLike, SlDislike } from 'react-icons/sl';
 import FormFeedback from '../FormFeedback/FormFeedback';
 
 const cx = classNames.bind(styles);
 
-const FeedbackDoctor = () => {
+const FeedbackDoctor = ({ reviews, totalRating }) => {
     const [showFormFeedback, setShowFormFeedback] = useState(false);
+    const [usersInfo, setUsersInfo] = useState({});
+    const [sortCriteria, setSortCriteria] = useState('Newest');
+    const [sortedReviews, setSortedReviews] = useState([]);
+
+    const fetchUserData = async (userId) => {
+        const response = await fetch(`${BASE_URL}/users/${userId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        if (!response.ok) {
+            throw new Error('Failed to fetch user data');
+        }
+        return response.json();
+    };
+
+    const handleSortChange = (e) => {
+        setSortCriteria(e.target.value);
+    };
+
+    useEffect(() => {
+        reviews.forEach(async (review) => {
+            if (!usersInfo[review.user._id]) {
+                try {
+                    const userInfo = await fetchUserData(review.user._id);
+                    setUsersInfo((prev) => ({ ...prev, [review.user._id]: userInfo }));
+                } catch (error) {
+                    console.error('Error fetching user info:', error);
+                }
+            }
+        });
+    }, [reviews]);
+
+    useEffect(() => {
+        let sorted = [...reviews];
+        if (sortCriteria === 'Newest') {
+            sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        } else if (sortCriteria === 'Oldest') {
+            sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+        } else if (sortCriteria === 'Favourite') {
+            sorted.sort((a, b) => b.likes - a.likes); // Giả định có trường likes
+        }
+        setSortedReviews(sorted);
+    }, [reviews, sortCriteria]);
 
     return (
         <div className={cx('container')}>
             <div className={cx('intro')}>
-                <h4>All reviews (272)</h4>
-                <div className={cx('filter')}>
+                <h4>All reviews ({totalRating})</h4>
+                <div className={cx('sort')}>
                     <label htmlFor="priorities">Filtered by: </label>
-                    <select name="" id="priorities">
-                        <option value="">Newest</option>
-                        <option value="">Oldest</option>
-                        <option value="">Favourite</option>
+                    <select name="" id="priorities" value={sortCriteria} onChange={handleSortChange}>
+                        <option value="Newest">Newest</option>
+                        <option value="Oldest">Oldest</option>
+                        <option value="Favourite">Favourite</option>
                     </select>
                 </div>
             </div>
 
             <div className={cx('feedback')}>
-                <div className={cx('user')}>
-                    <img src={UserAvatar} alt="" />
-                    <div className={cx('details')}>
-                        <div className={cx('name-time')}>
-                            <p className={cx('name')}>Ali ahmed</p>
-                            <p className={cx('time')}>{formatDate('02-14-2023')}</p>
-                        </div>
-                        <div className={cx('rating')}>
-                            <HiStar className={cx('star')} />
-                            <HiStar className={cx('star')} />
-                            <HiStar className={cx('star')} />
-                            <HiStar className={cx('star')} />
-                            <HiStar className={cx('star')} />
-                        </div>
-                        <p className={cx('comment')}>Good services, highly recommended 👍 </p>
-                        <div className={cx('reaction')}>
-                            <div className={cx('react')}>
-                                <SlLike />
-                                <p>Like</p>
+                {sortedReviews.map((review, index) => (
+                    <div key={index} className={cx('user')}>
+                        <img src={review?.user?.photo} alt="" />
+                        <div className={cx('details')}>
+                            <div className={cx('name-time')}>
+                                <p className={cx('name')}>
+                                    {usersInfo[review.user._id]?.data.fullname || 'Loading...'}
+                                </p>
+                                <p className={cx('time')}>{formatDate(review?.createdAt)}</p>
                             </div>
-                            <div className={cx('react')}>
-                                <SlDislike />
-                                <p>Dislike</p>
+                            <div className={cx('rating')}>
+                                {[...Array(review?.rating).keys()].map((_, index) => (
+                                    <HiStar key={index} className={cx('star')} />
+                                ))}
+                            </div>
+                            <p className={cx('comment')}>{review?.reviewText}</p>
+                            <div className={cx('reaction')}>
+                                <div className={cx('react')}>
+                                    <SlLike />
+                                    <p>Like</p>
+                                </div>
+                                <div className={cx('react')}>
+                                    <SlDislike />
+                                    <p>Dislike</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                ))}
             </div>
 
             {!showFormFeedback && (
@@ -74,6 +123,11 @@ const FeedbackDoctor = () => {
             )}
         </div>
     );
+};
+
+FeedbackDoctor.propTypes = {
+    reviews: PropTypes.array.isRequired,
+    totalRating: PropTypes.number.isRequired,
 };
 
 export default FeedbackDoctor;

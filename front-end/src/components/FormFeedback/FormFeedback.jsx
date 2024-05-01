@@ -4,6 +4,10 @@ import styles from './FormFeedback.module.scss';
 import { HiStar } from 'react-icons/hi';
 import { IoMdClose } from 'react-icons/io';
 import { PropTypes } from 'prop-types';
+import { useParams } from 'react-router-dom';
+import { BASE_URL, token } from '../../../config';
+import { toast } from 'react-toastify';
+import SyncLoader from 'react-spinners/SyncLoader';
 
 const cx = classNames.bind(styles);
 
@@ -11,9 +15,42 @@ const FormFeedback = ({ setShowFormFeedback }) => {
     const [rating, setRating] = useState(0);
     const [hover, setHover] = useState(0);
     const [reviewText, setReviewText] = useState('');
+    const [loading, setLoading] = useState(false);
+    const { id } = useParams();
 
     const handleSubmitReview = async (e) => {
         e.preventDefault();
+        setLoading(true);
+
+        const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+        try {
+            if (!rating || !reviewText) {
+                setLoading(false);
+                return toast.error('Please fill in all fields');
+            }
+
+            const res = await fetch(`${BASE_URL}/doctors/${id}/reviews`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ rating, reviewText }),
+            });
+
+            const result = await res.json();
+            if (!res.ok) {
+                throw new Error(result.message);
+            }
+            setLoading(false);
+            toast.success(result.message);
+            await delay(2000);
+            window.location.reload();
+        } catch (error) {
+            setLoading(false);
+            toast.error(error.message);
+        }
     };
 
     return (
@@ -30,6 +67,7 @@ const FormFeedback = ({ setShowFormFeedback }) => {
 
                         return (
                             <button
+                                type="button"
                                 key={index}
                                 className={cx({
                                     active: index <= (rating || hover),
@@ -61,7 +99,7 @@ const FormFeedback = ({ setShowFormFeedback }) => {
             </div>
 
             <button type="submit" className={cx('submit-btn')} onClick={handleSubmitReview}>
-                Submit feedback
+                {loading ? <SyncLoader size={6} color="#ffffff" /> : 'Submit feedback'}
             </button>
         </form>
     );

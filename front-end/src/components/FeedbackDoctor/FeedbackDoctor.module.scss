@@ -13,19 +13,19 @@
     font-weight: 600;
 }
 
-.filter {
+.sort {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 20px;
 }
 
-.filter label {
+.sort label {
     font-size: 18px;
     font-weight: 600;
 }
 
-.filter select {
+.sort select {
     border: 2px solid var(--primaryColor);
     border-radius: 5px;
     padding: 5px 10px;
@@ -35,36 +35,42 @@
     }
 }
 
-.filter option {
+.sort option {
     font-size: 18px;
 }
 .feedback {
-    // margin-top: 40px;
     border-bottom: 1px solid var(--darkGrayColor);
     padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
 }
 .user {
     display: flex;
     gap: 20px;
 }
+
 .user img {
     width: 40px;
     height: 40px;
+    object-fit: cover;
+    aspect-ratio: 1/1;
+    border-radius: 50px;
 }
 .details {
 }
 .name-time {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     gap: 50px;
 }
 .name {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     color: var(--irisBlueColor);
 }
 .time {
-    font-size: 14px;
+    font-size: 16px;
     color: var(--darkGrayColor);
 }
 .rating {
@@ -80,6 +86,7 @@
 }
 .comment {
     margin-top: 10px;
+    font-size: 16px;
 }
 
 .reaction {
@@ -140,25 +147,26 @@
 }
 
 .form-feedback {
-    width: 50%;
-    height: 50%;
     position: fixed;
     top: 50%;
     left: 50%;
+    border-radius: 15px;
     transform: translate(-50%, -50%);
     z-index: 200;
-    animation: fadeUp linear 0.4s forwards;
+    animation: slideUp linear 0.4s forwards;
     animation-timing-function: ease-in-out;
+    background: white;
+    overflow-y: auto;
+    width: 50%;
 }
 
-@keyframes fadeUp {
+@keyframes slideUp {
     0% {
         opacity: 0;
-        transform: translate(-50%, 150%);
+        transform: translate(-50%, 100%);
     }
     100% {
         opacity: 1;
         transform: translate(-50%, -50%);
     }
 }
-
