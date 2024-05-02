@@ -49,7 +49,7 @@ export const createReview = async (req, res) => {
 // Get user by ID
 export const getUserById = async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.id).select('-password');
         if (!user) {
             return res.status(404).json({
                 success: false,

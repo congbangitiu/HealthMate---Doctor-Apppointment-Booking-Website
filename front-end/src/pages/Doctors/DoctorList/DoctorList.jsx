@@ -30,8 +30,6 @@ const DoctorList = () => {
         };
     }, [query]);
 
-    console.log(doctors.length);
-
     return (
         <div className={cx('container')}>
             <Search query={query} setQuery={setQuery} handleSearch={handleSearch} />

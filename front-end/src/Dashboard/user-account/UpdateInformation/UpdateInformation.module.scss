@@ -121,6 +121,8 @@
     height: 50px;
     border-radius: 50px;
     border: 2px solid var(--primaryColor);
+    object-fit: cover;
+    aspect-ratio: 1/1;
 }
 
 .upload-photo input {

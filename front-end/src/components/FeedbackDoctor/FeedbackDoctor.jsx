@@ -59,12 +59,13 @@ const FeedbackDoctor = ({ reviews, totalRating }) => {
         setSortedReviews(sorted);
     }, [reviews, sortCriteria]);
 
+    console.log(reviews);
     return (
         <div className={cx('container')}>
             <div className={cx('intro')}>
                 <h4>All reviews ({totalRating})</h4>
                 <div className={cx('sort')}>
-                    <label htmlFor="priorities">Filtered by: </label>
+                    <label htmlFor="priorities">Sorted by: </label>
                     <select name="" id="priorities" value={sortCriteria} onChange={handleSortChange}>
                         <option value="Newest">Newest</option>
                         <option value="Oldest">Oldest</option>

@@ -32,20 +32,22 @@ const DoctorDetails = () => {
                         <span>
                             <Doctor {...doctor} />
                         </span>
-                        <SidePanel />
+                        <SidePanel {...doctor}/>
                     </div>
                     <div className={cx('bar')}>
                         <div className={cx({ active: activeTab === 'about' })} onClick={() => setActiveTab('about')}>
                             About
+                            <div></div>
                         </div>
                         <div
                             className={cx({ active: activeTab === 'feedback' })}
                             onClick={() => setActiveTab('feedback')}
                         >
                             Feedback
+                            <div></div>
                         </div>
                     </div>
-                    {activeTab === 'about' ? <AboutDoctor {...doctor}/> : <FeedbackDoctor {...doctor}/>}
+                    {activeTab === 'about' ? <AboutDoctor {...doctor} /> : <FeedbackDoctor {...doctor} />}
                 </div>
             )}
         </div>

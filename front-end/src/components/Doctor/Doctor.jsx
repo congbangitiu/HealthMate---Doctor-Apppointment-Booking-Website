@@ -8,16 +8,10 @@ const cx = classNames.bind(styles);
 const Doctor = ({
     smallMode,
     fullname,
-    qualifications,
-    experiences,
-    timeSlots,
-    reviews,
     bio,
-    about,
     averageRating,
     totalRating,
     specialization,
-    ticketPrice,
     photo,
 }) => {
     return (
