@@ -32,7 +32,11 @@ const DoctorDetails = () => {
                         <span>
                             <Doctor {...doctor} />
                         </span>
-                        <SidePanel {...doctor}/>
+                        <SidePanel
+                            doctorId={doctor._id}
+                            ticketPrice={doctor.ticketPrice}
+                            timeSlots={doctor.timeSlots}
+                        />
                     </div>
                     <div className={cx('bar')}>
                         <div className={cx({ active: activeTab === 'about' })} onClick={() => setActiveTab('about')}>

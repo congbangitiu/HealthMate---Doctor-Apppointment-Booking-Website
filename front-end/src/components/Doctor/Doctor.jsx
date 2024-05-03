@@ -2,18 +2,11 @@ import classNames from 'classnames/bind';
 import styles from './Doctor.module.scss';
 import { FaStar } from 'react-icons/fa';
 import { PropTypes } from 'prop-types';
+import roundNumber from '../../utils/roundNumber';
 
 const cx = classNames.bind(styles);
 
-const Doctor = ({
-    smallMode,
-    fullname,
-    bio,
-    averageRating,
-    totalRating,
-    specialization,
-    photo,
-}) => {
+const Doctor = ({ smallMode, fullname, bio, averageRating, totalRating, specialization, photo }) => {
     return (
         <div className={cx('container')}>
             <img src={photo} alt="" className={cx(smallMode && 'smallImg')} />
@@ -24,7 +17,7 @@ const Doctor = ({
                 </div>
                 <div className={cx('rating')}>
                     <FaStar className={cx('stars')} />
-                    <p>{averageRating}</p>
+                    <p>{roundNumber(averageRating, 1)}</p>
                     <p>({totalRating})</p>
                 </div>
                 <p className={cx('description', smallMode && 'small')}>{bio}</p>

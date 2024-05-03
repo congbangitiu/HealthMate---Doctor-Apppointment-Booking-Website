@@ -1,9 +1,8 @@
 .container-parent {
-    padding: 120px 300px 100px 300px;
+    padding: 140px 300px 100px 300px;
 }
 .container {
     display: flex;
-    align-items: center;
     background-image: url(../../assets/images/Blur.png);
     background-repeat: no-repeat;
     background-position: center;
@@ -77,9 +76,9 @@
 
 .bookings {
     width: 70%;
+    height: inherit;
     display: flex;
     flex-direction: column;
-    justify-content: start;
     align-items: center;
 }
 
@@ -87,7 +86,7 @@
     font-size: 25px;
     font-weight: 500;
     color: var(--primaryColor);
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 .overlay {

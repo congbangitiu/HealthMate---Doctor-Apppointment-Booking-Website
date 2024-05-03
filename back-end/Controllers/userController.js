@@ -114,6 +114,7 @@ export const getMyAppointments = async (req, res) => {
             data: doctors,
         });
     } catch (error) {
+        console.log(error)
         res.status(500).json({
             success: false,
             message: 'Fail to retrieve appointments',

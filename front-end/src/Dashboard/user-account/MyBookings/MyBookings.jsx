@@ -2,14 +2,16 @@ import classNames from 'classnames/bind';
 import styles from './MyBookings.module.scss';
 import useFetchData from '../../../hooks/useFetchData';
 import { BASE_URL } from '../../../../config';
-import DoctorCard from './../../../components/DoctorCard/DoctorCard';
 import Loader from '../../../components/Loader/Loader';
 import Error from '../../../components/Error/Error';
+import PatientAppointment from '../../../components/PatientAppointment/PatientAppointment';
 
 const cx = classNames.bind(styles);
 
 const MyBookings = () => {
-    const { data: appointments, loading, error } = useFetchData(`${BASE_URL}/users/appointments/my-appointment`);
+    const { data: appointments, loading, error } = useFetchData(`${BASE_URL}/users/appointments/my-appointments`);
+
+    console.log(appointments);
     return (
         <div className={cx('container')}>
             {loading ? (
@@ -21,7 +23,7 @@ const MyBookings = () => {
                 !error && (
                     <div className={cx('appointments')}>
                         {appointments.map((doctor) => (
-                            <DoctorCard key={doctor._id} doctor={doctor} />
+                            <PatientAppointment key={doctor._id} doctor={doctor} />
                         ))}
                     </div>
                 )

@@ -13,6 +13,7 @@ import Error from '../../../components/Error/Error';
 
 import useFetchProfile from '../../../hooks/useFetchData';
 import { BASE_URL } from '../../../../config';
+import PatientAppointment from '../../../components/PatientAppointment/PatientAppointment';
 
 const cx = classNames.bind(styles);
 
@@ -59,6 +60,7 @@ const MyAccount = () => {
                     <div className={cx('bookings')}>
                         <h1>My Bookings</h1>
                         <MyBookings />
+                        
                     </div>
 
                     {showFormUpdateInfo && (
