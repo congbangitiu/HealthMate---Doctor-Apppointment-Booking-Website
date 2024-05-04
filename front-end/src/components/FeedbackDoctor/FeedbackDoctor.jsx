@@ -45,7 +45,7 @@ const FeedbackDoctor = ({ reviews, totalRating }) => {
                 }
             }
         });
-    }, [reviews]);
+    }, [reviews, usersInfo]);
 
     useEffect(() => {
         let sorted = [...reviews];
