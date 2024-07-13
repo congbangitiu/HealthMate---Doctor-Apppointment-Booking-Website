@@ -1,44 +1,56 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './Appointments.module.scss';
 import formatDate from '../../../utils/formatDate';
+import useFetchData from '../../../hooks/useFetchData';
+import { BASE_URL } from '../../../../config';
+import Loader from '../../../components/Loader/Loader';
+import Error from '../../../components/Error/Error';
 
 const cx = classNames.bind(styles);
 
-const Appointments = ({ appointments }) => {
+const Appointments = () => {
+    const { data: appointments, loading, error } = useFetchData(`${BASE_URL}/doctors/appointments/my-appointments`);
+
     return (
-        <div className={cx('container')}>
-            <table>
-                <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Gender</th>
-                        <th scope="col">Payment</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Booking time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {appointments?.map((appointment) => (
-                        <tr key={appointment._id}>
-                            <th scope="row">
-                                <img src={appointment.user.photo} alt="" />
-                                <div>
-                                    <div>{appointment.user.name}</div>
-                                    <div>{appointment.user.email}</div>
-                                </div>
-                            </th>
-                            <td>{appointment.user.gender}</td>
-                            <td>
-                                {appointment.isPaid && <div>Paid</div>} {!appointment.isPaid && <div>Unpaid</div>}
-                            </td>
-                            <td>{appointment.ticketPrice}</td>
-                            <td>{formatDate(appointment.createAt)}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+        <div className={cx('container-parent')}>
+            {loading ? (
+                <Loader />
+            ) : error ? (
+                <Error errorMessage={error} />
+            ) : (
+                <div className={cx('container')}>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Full name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Gender</th>
+                                <th scope="col">Payment</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {appointments?.map((appointment) => (
+                                <tr key={appointment._id}>
+                                    <td>{appointment.user.fullname}</td>
+                                    <td>{appointment.user.email}</td>
+                                    <td>{appointment.user.phone}</td>
+                                    <td>{appointment.user.gender}</td>
+                                    <td>
+                                        {appointment.isPaid && <div>Paid</div>}{' '}
+                                        {!appointment.isPaid && <div>Unpaid</div>}
+                                    </td>
+                                    <td>2024/07/11</td>
+                                    <td>9:00AM - 10:00AM</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
         </div>
     );
 };

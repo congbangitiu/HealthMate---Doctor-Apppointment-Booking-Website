@@ -20,7 +20,7 @@
 }
 
 .slots {
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .slots h4 {
@@ -33,9 +33,23 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 5px;
+    border-radius: 5px;
+
+    &.selected p {
+        color: var(--primaryColor);
+    }
+
+    &.selected input[type='radio']:checked {
+        accent-color: var(--primaryColor);
+    }
+
+    p {
+        color: var(--darkGrayColor);
+    }
 }
 
-.slot p {
+.empty-slot {
+    text-align: center;
     color: var(--darkGrayColor);
 }
 
@@ -52,9 +66,22 @@
     font-weight: 500;
     padding: 8px 12px;
     border-radius: 5px;
+    width: 50%;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    align-items: center;
 
     &:hover {
         cursor: pointer;
         opacity: 0.8;
     }
+}
+
+.booking-btn span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

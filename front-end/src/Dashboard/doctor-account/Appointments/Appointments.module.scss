@@ -1,26 +1,31 @@
 .container {
     width: 100%;
     overflow-x: auto;
+    border-radius: 10px;
 
     table {
         width: 100%;
-        border-collapse: collapse;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 1px solid var(--primaryColor);
+        border-radius: 10px;
     }
 
     thead {
-        background-color: var(--primary-color) !important;
+        background-color: var(--primaryColor);
     }
 
     th,
     td {
         padding: 12px;
         text-align: left;
-        border-bottom: 1px solid #ddd;
+        border: 1px solid var(--primaryColor);
         text-align: center;
     }
 
     th {
         background-color: var(--primaryColor);
+        color: var(--whiteColor);
     }
 
     tr:nth-child(even) {
@@ -32,5 +37,14 @@
         height: 40px;
         border-radius: 50%;
         margin-right: 10px;
+    }
+
+    /* Adding border-radius to the last row */
+    tbody tr:last-of-type td:first-child {
+        border-bottom-left-radius: 10px;
+    }
+
+    tbody tr:last-of-type td:last-child {
+        border-bottom-right-radius: 10px;
     }
 }

@@ -16,6 +16,7 @@ const Tabs = ({ tab, setTab, doctorData }) => {
     const { dispatch } = useContext(authContext);
     const handleLogout = () => {
         dispatch({ type: 'LOGOUT' });
+        window.location.href = '/login';
     };
     return (
         <div className={cx('container')}>
@@ -25,11 +26,14 @@ const Tabs = ({ tab, setTab, doctorData }) => {
                 <button className={cx('mode', tab === 'overview' && 'active')} onClick={() => setTab('overview')}>
                     Overview
                 </button>
-                <button className={cx('mode', tab === 'appointments' && 'active')} onClick={() => setTab('appointments')}>
+                <button
+                    className={cx('mode', tab === 'appointments' && 'active')}
+                    onClick={() => setTab('appointments')}
+                >
                     Appointments
                 </button>
                 <button className={cx('mode', tab === 'setting' && 'active')} onClick={() => setTab('setting')}>
-                    Profile
+                    Profile Setting
                 </button>
             </div>
 

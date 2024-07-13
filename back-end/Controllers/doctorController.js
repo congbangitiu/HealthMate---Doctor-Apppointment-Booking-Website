@@ -111,3 +111,21 @@ export const getDoctorProfile = async (req, res) => {
         });
     }
 };
+
+export const getAllDoctorAppointments = async (req, res) => {
+    try {
+        const appointments = await Booking.find({ doctor: req.userId }).populate('user', '-password');
+
+        res.status(200).json({
+            success: true,
+            message: 'Appointments are retrieved successfully',
+            data: appointments,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to retrieve appointments',
+        });
+    }
+};

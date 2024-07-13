@@ -280,6 +280,10 @@ const ProfileSetting = ({ doctorData }) => {
                             <option value="Surgeon">Surgeon</option>
                             <option value="Neurologist">Neurologist</option>
                             <option value="Dermatologist">Dermatologist</option>
+                            <option value="Cardiologist">Cardiologist</option>
+                            <option value="Psychiatrist">Psychiatrist</option>
+                            <option value="Pulmonologist">Pulmonologist</option>
+                            <option value="Rheumatologist">Rheumatologist</option>
                         </select>
                     </div>
                     <div className={cx('field')}>
@@ -463,23 +467,15 @@ const ProfileSetting = ({ doctorData }) => {
                             <div className={cx('schedule')}>
                                 <div className={cx('credential')}>
                                     <label htmlFor="startingDate">Date</label>
-                                    <select
+                                    <input
                                         className={cx(!timeSlot.isEditable && 'disabled')}
-                                        name="day"
-                                        id="day"
+                                        type="date"
+                                        id="startingDate"
                                         value={timeSlot.day}
-                                        disabled={!timeSlot.isEditable}
+                                        name="day"
                                         onChange={(e) => handleTimeSlotsChange(e, index)}
-                                    >
-                                        <option value="">Select</option>
-                                        <option value="Monday">Monday</option>
-                                        <option value="Tuesday">Tuesday</option>
-                                        <option value="Wednesday">Wednesday</option>
-                                        <option value="Thursday">Thursday</option>
-                                        <option value="Friday">Friday</option>
-                                        <option value="Saturday">Saturday</option>
-                                        <option value="Sunday">Sunday</option>
-                                    </select>
+                                        disabled={!timeSlot.isEditable}
+                                    />
                                 </div>
                                 <div className={cx('credential')}>
                                     <label htmlFor="startingTime">Starting time</label>

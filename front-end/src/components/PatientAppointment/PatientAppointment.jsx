@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import PropTypes from 'prop-types'; 
+import PropTypes from 'prop-types';
 import styles from './PatientAppointment.module.scss';
 import { MdEmail } from 'react-icons/md';
 import { FaPhoneAlt } from 'react-icons/fa';
@@ -8,6 +8,7 @@ import convertTime from './../../utils/convertTime';
 const cx = classNames.bind(styles);
 
 const PatientAppointment = ({ doctor }) => {
+    console.log(doctor);
     return (
         <div className={cx('container')}>
             <img src={doctor.photo} alt="" />

@@ -10,7 +10,7 @@ import FormFeedback from '../FormFeedback/FormFeedback';
 
 const cx = classNames.bind(styles);
 
-const FeedbackDoctor = ({ reviews, totalRating }) => {
+const FeedbackDoctor = ({ reviews, totalRating, role }) => {
     const [showFormFeedback, setShowFormFeedback] = useState(false);
     const [usersInfo, setUsersInfo] = useState({});
     const [sortCriteria, setSortCriteria] = useState('Newest');
@@ -106,7 +106,7 @@ const FeedbackDoctor = ({ reviews, totalRating }) => {
                 ))}
             </div>
 
-            {!showFormFeedback && (
+            {!showFormFeedback && role === 'patient' && (
                 <div className={cx('feedback-btn-wrapper')}>
                     <button className={cx('feedback-btn')} onClick={() => setShowFormFeedback(true)}>
                         Give your feedback
@@ -129,6 +129,7 @@ const FeedbackDoctor = ({ reviews, totalRating }) => {
 FeedbackDoctor.propTypes = {
     reviews: PropTypes.array.isRequired,
     totalRating: PropTypes.number.isRequired,
+    role: PropTypes.string.isRequired,
 };
 
 export default FeedbackDoctor;

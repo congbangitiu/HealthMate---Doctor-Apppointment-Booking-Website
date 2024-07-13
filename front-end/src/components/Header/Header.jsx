@@ -1,10 +1,9 @@
 import React from 'react';
-import { useEffect, useRef, useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import logo from '../../assets/images/logo.png';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Header.module.scss';
-import userImg from '../../assets/images/avatar-icon.png';
 import { BiMenu } from 'react-icons/bi';
 import { IoIosClose, IoMdHome } from 'react-icons/io';
 import { FaUserDoctor } from 'react-icons/fa6';
@@ -80,15 +79,27 @@ const Header = () => {
             </div>
 
             {/* Nav right */}
-            <div className={cx('authentication')}>
+            <div className={cx('authentication', user && 'isLogin')}>
                 {token && user ? (
-                    <Link to={`/${role === 'doctor' ? 'doctors' : 'users'}/profile/me`} className={cx('info')}>
+                    // <Link to={`/${role === 'doctor' ? 'doctors' : 'users'}/profile/me`} className={cx('info')}>
+                    //     <img className={cx('avatar')} src={user?.photo} alt="" />
+                    //     <div className={cx('name')}>
+                    //         <h4>{user?.fullname}</h4>
+                    //         <p>{user?.username}</p>
+                    //     </div>
+                    // </Link>
+                    <div
+                        onClick={() =>
+                            (window.location.href = `/${role === 'doctor' ? 'doctors' : 'users'}/profile/me`)
+                        }
+                        className={cx('info')}
+                    >
                         <img className={cx('avatar')} src={user?.photo} alt="" />
                         <div className={cx('name')}>
                             <h4>{user?.fullname}</h4>
                             <p>{user?.username}</p>
                         </div>
-                    </Link>
+                    </div>
                 ) : (
                     <>
                         <Link to="/login">

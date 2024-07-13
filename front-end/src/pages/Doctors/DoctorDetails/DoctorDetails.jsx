@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useContext } from 'react';
 import classNames from 'classnames/bind';
 import styles from './DoctorDetails.module.scss';
 
@@ -12,6 +12,7 @@ import useFetchData from '../../../hooks/useFetchData';
 import Loader from '../../../components/Loader/Loader';
 import Error from '../../../components/Error/Error';
 import { useParams } from 'react-router-dom';
+import { authContext } from '../../../context/AuthContext';
 
 const cx = classNames.bind(styles);
 
@@ -19,6 +20,7 @@ const DoctorDetails = () => {
     const [activeTab, setActiveTab] = useState('about');
     const { id } = useParams();
     const { data: doctor, loading, error } = useFetchData(`${BASE_URL}/doctors/${id}`);
+    const { role } = useContext(authContext);
 
     return (
         <div className={cx('container-parent')}>
@@ -36,6 +38,7 @@ const DoctorDetails = () => {
                             doctorId={doctor._id}
                             ticketPrice={doctor.ticketPrice}
                             timeSlots={doctor.timeSlots}
+                            role={role}
                         />
                     </div>
                     <div className={cx('bar')}>
@@ -51,7 +54,7 @@ const DoctorDetails = () => {
                             <div></div>
                         </div>
                     </div>
-                    {activeTab === 'about' ? <AboutDoctor {...doctor} /> : <FeedbackDoctor {...doctor} />}
+                    {activeTab === 'about' ? <AboutDoctor {...doctor} /> : <FeedbackDoctor {...doctor} role={role} />}
                 </div>
             )}
         </div>

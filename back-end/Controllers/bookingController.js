@@ -8,6 +8,7 @@ export const getCheckoutSession = async (req, res) => {
         // Get currently booked doctor
         const doctor = await Doctor.findById(req.params.doctorId);
         const user = await User.findById(req.userId);
+        const { timeSlot } = req.body;
 
         const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -41,10 +42,18 @@ export const getCheckoutSession = async (req, res) => {
             user: user._id,
             ticketPrice: doctor.ticketPrice,
             session: session.id,
+            timeSlot: {
+                day: timeSlot.day,
+                startingTime: timeSlot.startingTime,
+                endingTime: timeSlot.endingTime,
+            },
         });
         await booking.save();
 
-        res.status(200).json({ success: true, message: 'Transact successfully', session });
+        // Remove the booked time slot from the doctor's available time slots
+        await Doctor.updateOne({ _id: doctor._id }, { $pull: { timeSlots: timeSlot } });
+
+        res.status(200).json({ success: true, message: 'Transaction successfully', session });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Error in creating checkout session' });
     }

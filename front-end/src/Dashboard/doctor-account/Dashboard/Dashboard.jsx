@@ -13,7 +13,6 @@ import Doctor from '../../../components/Doctor/Doctor';
 import AboutDoctor from '../../../components/AboutDoctor/AboutDoctor';
 import ProfileSetting from '../ProfileSetting/ProfileSetting';
 import Appointments from '../Appointments/Appointments';
-import { data } from 'autoprefixer';
 
 const cx = classNames.bind(styles);
 
@@ -58,7 +57,7 @@ const Dashboard = () => {
                                 />
                             </div>
                         )}
-                        {tab === 'appointments' && <Appointments appointments={data.appointments} />}
+                        {tab === 'appointments' && <Appointments />}
                         {tab === 'setting' && <ProfileSetting doctorData={doctorData} />}
                     </div>
                 </div>

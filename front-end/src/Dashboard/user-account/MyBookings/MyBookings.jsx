@@ -11,7 +11,7 @@ const cx = classNames.bind(styles);
 const MyBookings = () => {
     const { data: appointments, loading, error } = useFetchData(`${BASE_URL}/users/appointments/my-appointments`);
 
-    console.log(appointments);
+
     return (
         <div className={cx('container')}>
             {loading ? (

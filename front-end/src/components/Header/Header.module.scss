@@ -57,7 +57,17 @@
     display: flex;
     gap: 10px;
     align-items: center;
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: background-color 0.3s, box-shadow 0.3s;
 }
+
+.isLogin:hover {
+    cursor: pointer;
+    background-color: var(--lightGreenColor);
+    box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+}
+
 .hidden {
     display: none;
 }
