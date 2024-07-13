@@ -8,10 +8,13 @@ import { LiaSaveSolid } from 'react-icons/lia';
 import uploadImageToCloudinary from '../../../utils/uploadCloudinary';
 import { BASE_URL, token } from '../../../../config';
 import { toast } from 'react-toastify';
+import SyncLoader from 'react-spinners/SyncLoader';
 
 const cx = classNames.bind(styles);
 
 const ProfileSetting = ({ doctorData }) => {
+    const [loading, setLoading] = useState(false);
+
     const [formData, setFormData] = useState({
         fullname: '',
         email: '',
@@ -73,6 +76,7 @@ const ProfileSetting = ({ doctorData }) => {
 
     const updateProfileHandler = async (e) => {
         e.preventDefault();
+        setLoading(true);
 
         try {
             const res = await fetch(`${BASE_URL}/doctors/${doctorData._id}`, {
@@ -89,10 +93,12 @@ const ProfileSetting = ({ doctorData }) => {
                 throw new Error(result.message);
             }
             toast.success('Profile updated successfully');
+            setLoading(false);
             await delay(2000);
             window.location.reload();
         } catch (error) {
             toast.error(error.message);
+            setLoading(false);
         }
     };
 
@@ -543,7 +549,7 @@ const ProfileSetting = ({ doctorData }) => {
                 </div>
 
                 <button onClick={updateProfileHandler} className={cx('submit-btn')}>
-                    Update profile
+                    {loading ? <SyncLoader size={10} color="#ffffff" /> : 'Update profile'}
                 </button>
             </form>
         </div>

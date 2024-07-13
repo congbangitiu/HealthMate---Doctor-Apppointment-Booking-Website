@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './Appointments.module.scss';
 import formatDate from '../../../utils/formatDate';
+import convertTime from '../../../utils/convertTime';
 import useFetchData from '../../../hooks/useFetchData';
 import { BASE_URL } from '../../../../config';
 import Loader from '../../../components/Loader/Loader';
@@ -40,11 +41,14 @@ const Appointments = () => {
                                     <td>{appointment.user.phone}</td>
                                     <td>{appointment.user.gender}</td>
                                     <td>
-                                        {appointment.isPaid && <div>Paid</div>}{' '}
+                                        {appointment.isPaid && <div>Paid</div>}
                                         {!appointment.isPaid && <div>Unpaid</div>}
                                     </td>
-                                    <td>2024/07/11</td>
-                                    <td>9:00AM - 10:00AM</td>
+                                    <td>{formatDate(appointment.timeSlot.day)}</td>
+                                    <td>
+                                        {convertTime(appointment.timeSlot.startingTime)} -{' '}
+                                        {convertTime(appointment.timeSlot.endingTime)}
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
