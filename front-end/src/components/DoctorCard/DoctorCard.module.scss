@@ -9,6 +9,12 @@
     background-color: #fff;
     width: 350px;
     margin-top: 10px;
+
+    &:hover {
+        transform: scale(1.05);
+        transition: 1s;
+        background-color: var(--lightYellowColor);
+    }
 }
 
 .container img {

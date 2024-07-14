@@ -1,11 +1,9 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './DoctorCard.module.scss';
 import { FaStar } from 'react-icons/fa';
 import { FaLongArrowAltRight } from 'react-icons/fa';
-import Doctors from '../../assets/data/doctors';
 
 const cx = classNames.bind(styles);
 

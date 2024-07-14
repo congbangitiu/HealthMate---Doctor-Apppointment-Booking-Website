@@ -11,7 +11,7 @@ import { PropTypes } from 'prop-types';
 
 const cx = classNames.bind(styles);
 
-const ChangePassword = ({ setShowFormChangePassword, userData }) => {
+const ChangePassword = ({ setShowFormChangePassword, doctorData }) => {
     const [showOldPassword, setShowOldPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmedNewPassword, setShowConfirmedNewPassword] = useState(false);
@@ -65,7 +65,7 @@ const ChangePassword = ({ setShowFormChangePassword, userData }) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await fetch(`${BASE_URL}/users/change-password/${userData._id}`, {
+            const res = await fetch(`${BASE_URL}/doctors/change-password/${doctorData._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -174,7 +174,7 @@ const ChangePassword = ({ setShowFormChangePassword, userData }) => {
 
 ChangePassword.propTypes = {
     setShowFormChangePassword: PropTypes.func.isRequired,
-    userData: PropTypes.object.isRequired,
+    doctorData: PropTypes.object.isRequired,
 };
 
 export default ChangePassword;

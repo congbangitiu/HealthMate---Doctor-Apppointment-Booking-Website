@@ -61,6 +61,26 @@
         outline: none;
         caret-color: var(--primaryColor);
     }
+
+    //Customize scroll bar
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 5px var(--lightGrayColor);
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--lightGrayColor);
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: rgb(175, 172, 172);
+        cursor: pointer;
+    }
 }
 
 .upload-photo {

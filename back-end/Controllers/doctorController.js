@@ -1,5 +1,7 @@
 import Doctor from '../models/DoctorSchema.js';
 import Booking from '../models/BookingSchema.js';
+import User from '../models/UserSchema.js';
+import bcrypt from 'bcryptjs';
 
 export const updateDoctor = async (req, res) => {
     const id = req.params.id;
@@ -126,6 +128,69 @@ export const getAllDoctorAppointments = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Failed to retrieve appointments',
+        });
+    }
+};
+
+export const changePassword = async (req, res) => {
+    const userId = req.userId;
+    const { oldPassword, newPassword, confirmedNewPassword } = req.body;
+
+    try {
+        // Fetch the user or doctor based on the role
+        let user = await User.findById(userId);
+        let doctor = null;
+
+        if (!user) {
+            doctor = await Doctor.findById(userId);
+            if (!doctor) {
+                console.error('User or Doctor not found');
+                return res.status(404).json({
+                    success: false,
+                    message: 'User or Doctor not found',
+                });
+            }
+        }
+
+        const account = user || doctor;
+
+        // Check if the old password is correct
+        const isMatch = await bcrypt.compare(oldPassword, account.password);
+        if (!isMatch) {
+            console.error('The old password is incorrect');
+            return res.status(400).json({
+                success: false,
+                message: 'The old password is incorrect !!!',
+            });
+        }
+
+        // Check if the new password and confirm new password match
+        if (newPassword !== confirmedNewPassword) {
+            console.error('The new password and confirm new password do not match');
+            return res.status(400).json({
+                success: false,
+                message: 'The new password and confirm new password do not match !!!',
+            });
+        }
+
+        // Hash the new password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+        // Update the password
+        account.password = hashedPassword;
+        await account.save();
+
+        console.log('Password changed successfully');
+        res.status(200).json({
+            success: true,
+            message: 'Password changed successfully',
+        });
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error',
         });
     }
 };

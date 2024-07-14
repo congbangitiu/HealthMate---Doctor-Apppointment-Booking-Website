@@ -1,6 +1,7 @@
 import User from '../models/UserSchema.js';
 import Booking from '../models/BookingSchema.js';
 import Doctor from '../models/DoctorSchema.js';
+import bcrypt from 'bcryptjs';
 
 export const updateUser = async (req, res) => {
     const id = req.params.id;
@@ -119,6 +120,56 @@ export const getMyAppointments = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Fail to retrieve appointments',
+        });
+    }
+};
+
+export const changePassword = async (req, res) => {
+    const userId = req.userId;
+    const { oldPassword, newPassword, confirmedNewPassword } = req.body;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found',
+            });
+        }
+
+        // Check if the old password is correct
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) {
+            return res.status(400).json({
+                success: false,
+                message: 'The old password is incorrect !!!',
+            });
+        }
+
+        // Check if the new password and confirm new password match
+        if (newPassword !== confirmedNewPassword) {
+            return res.status(400).json({
+                success: false,
+                message: 'The new password and confirm new password do not match !!!',
+            });
+        }
+
+        // Hash the new password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+        // Update the user's password
+        user.password = hashedPassword;
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Password changed successfully',
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Server error',
         });
     }
 };
