@@ -9,11 +9,13 @@ import uploadImageToCloudinary from '../../../utils/uploadCloudinary';
 import { BASE_URL, token } from '../../../../config';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
+import truncateParagraph from '../../../utils/truncateParagraph';
 
 const cx = classNames.bind(styles);
 
 const ProfileSetting = ({ doctorData }) => {
     const [loading, setLoading] = useState(false);
+    const [errorWordLimit, setErrorWordLimit] = useState('');
 
     const [formData, setFormData] = useState({
         fullname: '',
@@ -62,7 +64,18 @@ const ProfileSetting = ({ doctorData }) => {
     }, [doctorData]);
 
     const handleInputChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        if (name === 'bio') {
+            if (value.length > 350) {
+                setErrorWordLimit('Maximum 350 characters !!!');
+                setFormData({ ...formData, [name]: value.slice(0, 350) });
+            } else {
+                setErrorWordLimit('');
+                setFormData({ ...formData, [name]: value });
+            }
+        } else {
+            setFormData({ ...formData, [name]: value });
+        }
     };
 
     const handleFileInputChange = async (e) => {
@@ -238,12 +251,15 @@ const ProfileSetting = ({ doctorData }) => {
                     </div>
                     <div className={cx('rightPart')}>
                         <div className={cx('info')}>
-                            <label htmlFor="message">Biography</label>
+                            <span>
+                                <label htmlFor="message">Biography</label>
+                                {errorWordLimit && <p className={cx('error')}>{errorWordLimit}</p>}
+                            </span>
                             <textarea
                                 id="message"
                                 cols="30"
                                 rows="6"
-                                placeholder="Write your bio here ..."
+                                placeholder="Write your bio here with a maximum of 50 words"
                                 name="bio"
                                 value={formData.bio}
                                 onChange={handleInputChange}

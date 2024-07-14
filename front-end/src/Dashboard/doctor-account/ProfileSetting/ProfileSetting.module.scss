@@ -83,6 +83,12 @@
     }
 }
 
+.info span {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .upload-photo {
     display: flex;
     align-items: center;
@@ -260,4 +266,9 @@
         cursor: pointer;
         opacity: 0.8;
     }
+}
+
+.error {
+    color: red;
+    font-size: 16px;
 }
