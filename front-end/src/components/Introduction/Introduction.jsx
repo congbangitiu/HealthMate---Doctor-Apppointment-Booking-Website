@@ -1,10 +1,11 @@
-import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './Introduction.module.scss';
 import '../../GlobalStyle.css';
 import Doctor1 from '../../assets/images/hero-img01.png';
 import Doctor2 from '../../assets/images/hero-img02.png';
 import Doctor3 from '../../assets/images/hero-img03.png';
+
+import CountUp from 'react-countup';
 
 const cx = classNames.bind(styles);
 
@@ -38,16 +39,20 @@ const Introduction = () => {
             <div className={cx('content')}>
                 <h2>We help patients live a healthy, longer life</h2>
                 <p>
-                    Our mission is to provideLorem ipsum dolor sit amet consectetur, adipisicing elit. Natus quaerat
-                    cumque fugit, perspiciatis cum nemo aperiam, aut quia earum amet architecto, modi odio. Soluta unde
-                    ducimus perferendis?
+                    We help patients live a healthy, longer life by providing seamless access to top medical
+                    professionals and comprehensive healthcare services. With HealthMate, managing your health and
+                    scheduling appointments has never been easier, ensuring you receive the care you need to thrive. Our
+                    user-friendly platform empowers you to take control of your well-being, connecting you with trusted
+                    doctors and personalized health solutions.
                 </p>
                 <button className={cx('request-appointment')}>Request an appointment</button>
                 <div className={cx('statistics')}>
                     {Statistics.map((item) => (
                         <div key={item.id} className={cx('statistic')}>
                             <div className={cx('number')}>
-                                <p>{item.number}</p>
+                                <p>
+                                    <CountUp duration={5} end={item.number} />
+                                </p>
                                 <p>{item.character}</p>
                             </div>
                             <div className={cx('underline')} style={{ backgroundColor: item.underlineColor }}></div>

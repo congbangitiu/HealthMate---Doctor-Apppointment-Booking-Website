@@ -1,7 +1,5 @@
-import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './About.module.scss';
-import '../../GlobalStyle.css';
 import Doctor4 from '../../assets/images/about.png';
 import Doctor4Card from '../../assets/images/about-card.png';
 
@@ -17,13 +15,14 @@ const About = () => {
             <div className={cx('content')}>
                 <h2>Proud to be one of the nations best</h2>
                 <p>
-                    For 30 years in a row, U.S. News & Wyorld Report has recognized us as one of the best publics
-                    hospitals in the Nation and #1 in Texas. Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Quas, nemo? <br />
+                    Proud to be one of the nation&apos;s best, HealthMate is dedicated to delivering exceptional
+                    healthcare services. Our team of highly qualified doctors and healthcare professionals are committed
+                    to providing the highest standard of care to every patient.
                     <br />
-                    Our best is something we strive for each day, caring for our patients-not looking back at what we
-                    accomplished but towards what we can do tomorrow. Providing the best. Lorem ipsum dolor sit amet,
-                    consectetur adipisicing elit. Aliquid, modi?
+                    <br />
+                    At HealthMate, we continually strive for excellence in all aspects of patient care. Our innovative
+                    platform and cutting-edge technology ensure that you receive the best possible healthcare
+                    experience, making us a trusted name in the industry.
                 </p>
                 <button className={cx('more-details')}>Learn more</button>
             </div>
