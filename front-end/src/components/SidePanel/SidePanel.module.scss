@@ -46,6 +46,11 @@
     p {
         color: var(--darkGrayColor);
     }
+
+    &:hover p {
+        color: var(--primaryColor);
+        cursor: pointer;
+    }
 }
 
 .empty-slot {

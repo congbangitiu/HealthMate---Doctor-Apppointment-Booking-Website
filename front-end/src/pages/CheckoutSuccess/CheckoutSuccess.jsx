@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './CheckoutSuccess.module.scss';
 import { MdDone } from 'react-icons/md';
@@ -23,6 +23,13 @@ const CheckoutSuccess = () => {
             angle: 120,
             spread: 60,
             origin: { x: 0.8, y: 0.6 }, // The point starts at 80% of the width and at the middle of the screen's height
+        });
+    }, []);
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
         });
     }, []);
 

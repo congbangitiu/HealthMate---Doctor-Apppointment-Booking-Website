@@ -58,7 +58,11 @@ const SidePanel = ({ doctorId, ticketPrice, timeSlots: initialTimeSlots = [], ro
             <div className={cx('slots')}>
                 <h4>Available Time Slots:</h4>
                 {timeSlots?.map((timeSlot, index) => (
-                    <div key={index} className={cx('slot', { selected: selectedSlot === timeSlot })}>
+                    <div
+                        key={index}
+                        className={cx('slot', { selected: selectedSlot === timeSlot })}
+                        onClick={() => setSelectedSlot(timeSlot)}
+                    >
                         {role === 'patient' && (
                             <input
                                 type="radio"

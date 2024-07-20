@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Services.module.scss';
 
@@ -8,6 +8,13 @@ import TreatmentService from '../../components/TreatmentService/TreatmentService
 const cx = classNames.bind(styles);
 
 const Services = () => {
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }, []);
+
     return (
         <div className={cx('container')}>
             <ExaminationService />

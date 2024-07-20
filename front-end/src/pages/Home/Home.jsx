@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Home.module.scss';
 import '../../GlobalStyle.css';
@@ -12,6 +12,13 @@ import Testimonial from '../../components/Testimonial/Testimonial';
 const cx = classNames.bind(styles);
 
 const Home = () => {
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }, []);
+
     return (
         <div className={cx('container')}>
             {/* Introduction section */}

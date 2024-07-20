@@ -53,13 +53,12 @@ const FeedbackDoctor = ({ reviews, totalRating, role }) => {
             sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         } else if (sortCriteria === 'Oldest') {
             sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-        } else if (sortCriteria === 'Favourite') {
-            sorted.sort((a, b) => b.likes - a.likes); // Giả định có trường likes
+        } else if (sortCriteria === 'Most Favourite') {
+            sorted.sort((a, b) => b.rating - a.rating);
         }
         setSortedReviews(sorted);
     }, [reviews, sortCriteria]);
 
-    console.log(reviews);
     return (
         <div className={cx('container')}>
             <div className={cx('intro')}>
@@ -69,7 +68,7 @@ const FeedbackDoctor = ({ reviews, totalRating, role }) => {
                     <select name="" id="priorities" value={sortCriteria} onChange={handleSortChange}>
                         <option value="Newest">Newest</option>
                         <option value="Oldest">Oldest</option>
-                        <option value="Favourite">Favourite</option>
+                        <option value="Most Favourite">Most Favourite</option>
                     </select>
                 </div>
             </div>

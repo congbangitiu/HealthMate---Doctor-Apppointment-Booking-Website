@@ -30,6 +30,13 @@ const DoctorList = () => {
         };
     }, [query]);
 
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }, []);
+
     return (
         <div className={cx('container')}>
             <Search query={query} setQuery={setQuery} handleSearch={handleSearch} />

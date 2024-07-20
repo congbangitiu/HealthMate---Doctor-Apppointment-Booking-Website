@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import uploadImageToCloudinary from '../../utils/uploadCloudinary';
 import { BASE_URL } from '../../../config';
@@ -16,6 +16,13 @@ import SyncLoader from 'react-spinners/SyncLoader';
 const cx = classNames.bind(styles);
 
 const Register = () => {
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }, []);
+
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
     const [passwordEmpty, setPasswordEmpty] = useState(true);

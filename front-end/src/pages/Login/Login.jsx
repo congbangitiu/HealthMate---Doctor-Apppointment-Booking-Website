@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Login.module.scss';
@@ -14,6 +14,12 @@ import { authContext } from '../../context/AuthContext.jsx';
 const cx = classNames.bind(styles);
 
 const Login = () => {
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }, []);
     const [showPassword, setShowPassword] = useState(false);
     const [passwordEmpty, setPasswordEmpty] = useState(true);
     const [loading, setLoading] = useState(false);

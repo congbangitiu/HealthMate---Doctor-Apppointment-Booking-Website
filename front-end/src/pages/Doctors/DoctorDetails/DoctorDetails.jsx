@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './DoctorDetails.module.scss';
 
@@ -21,6 +21,13 @@ const DoctorDetails = () => {
     const { id } = useParams();
     const { data: doctor, loading, error } = useFetchData(`${BASE_URL}/doctors/${id}`);
     const { role } = useContext(authContext);
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }, []);
 
     return (
         <div className={cx('container-parent')}>

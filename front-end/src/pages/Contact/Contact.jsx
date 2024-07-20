@@ -1,10 +1,17 @@
-import React from 'react';
+import { useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Contact.module.scss';
 
 const cx = classNames.bind(styles);
 
 const Contact = () => {
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }, []);
+
     return (
         <div className={cx('container')}>
             <h2>Contact Us</h2>
