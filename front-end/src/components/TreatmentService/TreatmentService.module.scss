@@ -36,18 +36,25 @@
 .service {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 15px;
     border-radius: 20px;
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
     background-color: #fff;
     width: 350px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        cursor: pointer;
+        transform: scale(1.05);
+        box-shadow: 0px 0px 8px var(--primaryColor);
+    }
 }
+
 .service img {
     margin-top: 10px;
     width: 95%;
-    height: 95%;
+    height: 200px;
     object-fit: cover;
     border-radius: 15px;
 }
@@ -82,4 +89,22 @@
 .more-details p {
     font-size: 16px;
     color: var(--greenColor);
+}
+
+.container button {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    background-color: var(--primaryColor);
+    margin-top: 50px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--whiteColor);
+
+    &:hover {
+        opacity: 0.7;
+    }
 }

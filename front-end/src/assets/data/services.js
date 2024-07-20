@@ -1,104 +1,156 @@
-import Dental from '../images/Dental.png';
-import Bone from '../images/Bone.png';
-import Diagnosis from '../images/Diagnosis.png';
-import Cardiology from '../images/Cardiology.png';
-import Surgery from '../images/Surgery.png';
-import Eye from '../images/Eye.png';
-import Cancer from '../images/Cancer.jpg';
-import Labor from '../images/Labor.jpg';
-import Heart from '../images/Heart.jpg';
-import Mental from '../images/Mental.jpg';
-import Neurology from '../images/Neurology.webp';
-import Burn from '../images/Burn.webp';
-
+import NeurologicalExams from '../images/NeurologicalExams.jpg';
+import StrokeRehabilitation from '../images/StrokeRehabilitation.webp';
+import SkinCancerScreening from '../images/SkinCancerScreening.webp';
+import AcneTreatment from '../images/AcneTreatment.jpg';
+import CardiacStressTesting from '../images/CardiacStressTesting.jpg';
+import Echocardiograms from '../images/Echocardiograms.jpg';
+import MentalHealthCounseling from '../images/MentalHealthCounseling.webp';
+import MedicationManagement from '../images/MedicationManagement.jpg';
+import PulmonaryFunctionTests from '../images/PulmonaryFunctionTests.jpg';
+import SleepApneaTreatment from '../images/SleepApneaTreatment.jpg';
+import ArthritisManagement from '../images/ArthritisManagement.jpg';
+import OsteoporosisScreening from '../images/OsteoporosisScreening.webp';
+import ChemotherapyAdministration from '../images/ChemotherapyAdministration.jpg';
+import RadiationTherapy from '../images/RadiationTherapy.webp';
+import CataractSurgery from '../images/CataractSurgery.jpg';
+import GlaucomaTreatment from '../images/GlaucomaTreatment.webp';
+import DiabetesManagement from '../images/DiabetesManagement.jpg';
+import ThyroidDisorderTreatment from '../images/ThyroidDisorderTreatment.webp';
 
 const services = [
     {
         id: 1,
-        image: Dental,
-        name: 'Dental treatment',
+        image: NeurologicalExams,
+        name: 'Neurological Exams',
+        doctor: 'Neurologist',
         description:
-            'Lorem ipsum dolor sit amet consecte tur adipiscing elit semper dalaracc lacus vel facilisis volutpat est velitolm.',
+            "Thorough assessments to diagnose and manage neurological conditions such as epilepsy, migraines, and Parkinson's disease.",
     },
     {
         id: 2,
-        image: Cancer,
-        name: 'Cancer Care',
-        description:
-            'World-class care for everyone. Our health System offers unmatched, expert health care. From the lab to the clinic.',
+        image: StrokeRehabilitation,
+        name: 'Stroke Rehabilitation',
+        doctor: 'Neurologist',
+        description: 'Providing therapy and support to help patients recover and improve functionality after a stroke.',
     },
     {
         id: 3,
-        image: Bone,
-        name: 'Bones treatment',
+        image: SkinCancerScreening,
+        name: 'Skin Cancer Screening',
+        doctor: 'Dermatologist',
         description:
-            'Lorem ipsum dolor sit amet consecte tur adipiscing elit semper dalaracc lacus vel facilisis volutpat est velitolm.',
+            'Early detection and treatment of skin cancers, including melanoma, through regular skin checks and biopsies.',
     },
     {
         id: 4,
-        image: Labor,
-        name: 'Labor & Delivery',
-        description:
-            'World-class care for everyone. Our health System offers unmatched, expert health care. From the lab to the clinic.',
+        image: AcneTreatment,
+        name: 'Acne Treatment',
+        doctor: 'Dermatologist',
+        description: 'Customized treatment plans to reduce and manage acne, improving skin health and appearance.',
     },
     {
         id: 5,
-        image: Diagnosis,
-        name: 'Diagnosis treatment',
+        image: CardiacStressTesting,
+        name: 'Cardiac Stress Testing',
+        doctor: 'Cardiologist',
         description:
-            'Lorem ipsum dolor sit amet consecte tur adipiscing elit semper dalaracc lacus vel facilisis volutpat est velitolm.',
+            'Evaluation of heart function and detection of coronary artery disease through controlled physical exercise tests.',
     },
     {
         id: 6,
-        image: Heart,
-        name: 'Heart & Vascular',
+        image: Echocardiograms,
+        name: 'Echocardiograms',
+        doctor: 'Cardiologist',
         description:
-            'World-class care for everyone. Our health System offers unmatched, expert health care. From the lab to the clinic.',
+            'Using ultrasound technology to create images of the heart, aiding in the diagnosis of heart conditions.',
     },
     {
         id: 7,
-        image: Cardiology,
-        name: 'Cardiology treatment',
-        description:
-            'Lorem ipsum dolor sit amet consecte tur adipiscing elit semper dalaracc lacus vel facilisis volutpat est velitolm.',
+        image: MentalHealthCounseling,
+        name: 'Mental Health Counseling',
+        doctor: 'Psychiatrist',
+        description: 'Providing therapy and support for conditions such as depression, anxiety, and bipolar disorder.',
     },
     {
         id: 8,
-        image: Mental,
-        name: 'Mental Health',
-        description:
-            'World-class care for everyone. Our health System offers unmatched, expert health care. From the lab to the clinic.',
+        image: MedicationManagement,
+        name: 'Medication Management',
+        doctor: 'Psychiatrist',
+        description: 'Prescribing and monitoring medications to ensure effective treatment of psychiatric disorders.',
     },
     {
         id: 9,
-        image: Surgery,
-        name: 'Surgery treatment',
+        image: PulmonaryFunctionTests,
+        name: 'Pulmonary Function Tests',
+        doctor: 'Pulmonologist',
         description:
-            'Lorem ipsum dolor sit amet consecte tur adipiscing elit semper dalaracc lacus vel facilisis volutpat est velitolm.',
+            'Assessing lung function to diagnose and manage respiratory conditions like asthma and chronic obstructive pulmonary disease (COPD).',
     },
     {
         id: 10,
-        image: Neurology,
-        name: 'Neurology',
-        description:
-            'World-class care for everyone. Our health System offers unmatched, expert health care. From the lab to the clinic.',
+        image: SleepApneaTreatment,
+        name: 'Sleep Apnea Treatment',
+        doctor: 'Pulmonologist',
+        description: 'Diagnosing and managing sleep apnea to improve sleep quality and overall health.',
     },
     {
         id: 11,
-        image: Eye,
-        name: 'Eye treatment',
+        image: ArthritisManagement,
+        name: 'Arthritis Management',
+        doctor: 'Rheumatologist',
         description:
-            'Lorem ipsum dolor sit amet consecte tur adipiscing elit semper dalaracc lacus vel facilisis volutpat est velitolm.',
+            'Personalized treatment plans to alleviate pain and improve mobility for patients with various forms of arthritis.',
     },
     {
         id: 12,
-        image: Burn,
-        name: 'Burn treatment',
+        image: OsteoporosisScreening,
+        name: 'Osteoporosis Screening',
+        doctor: 'Rheumatologist',
+        description: 'Early detection and management of osteoporosis to prevent fractures and maintain bone health.',
+    },
+    {
+        id: 13,
+        image: ChemotherapyAdministration,
+        name: 'Chemotherapy Administration',
+        doctor: 'Oncologist',
         description:
-            'World-class care for everyone. Our health System offers unmatched, expert healthcare. From the lab to the clinic.',
+            'Providing cancer treatment through carefully monitored chemotherapy sessions to target and destroy cancer cells.',
+    },
+    {
+        id: 14,
+        image: RadiationTherapy,
+        name: 'Radiation Therapy',
+        doctor: 'Oncologist',
+        description: 'Using high-energy radiation to shrink tumors and kill cancer cells.',
+    },
+    {
+        id: 15,
+        image: CataractSurgery,
+        name: 'Cataract Surgery',
+        doctor: 'Ophthalmologist',
+        description: 'Surgical removal of cloudy lenses to restore clear vision.',
+    },
+    {
+        id: 16,
+        image: GlaucomaTreatment,
+        name: 'Glaucoma Treatment',
+        doctor: 'Ophthalmologist',
+        description: 'Management and treatment of glaucoma to prevent vision loss.',
+    },
+    {
+        id: 17,
+        image: DiabetesManagement,
+        name: 'Diabetes Management',
+        doctor: 'Endocrinologist',
+        description: 'Comprehensive care plans to manage blood sugar levels and prevent complications from diabetes.',
+    },
+    {
+        id: 18,
+        image: ThyroidDisorderTreatment,
+        name: 'Thyroid Disorder Treatment',
+        doctor: 'Endocrinologist',
+        description: 'Diagnosis and treatment of thyroid disorders to regulate hormone levels and maintain health.',
     },
 ];
 
 export default services;
-
-

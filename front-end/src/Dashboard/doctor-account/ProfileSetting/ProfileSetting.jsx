@@ -205,6 +205,8 @@ const ProfileSetting = ({ doctorData }) => {
         }));
     };
 
+    console.log(doctorData);
+
     return (
         <div className={cx('container')}>
             <form action="">
@@ -299,13 +301,14 @@ const ProfileSetting = ({ doctorData }) => {
                             required
                         >
                             <option value="">Select</option>
-                            <option value="Surgeon">Surgeon</option>
                             <option value="Neurologist">Neurologist</option>
                             <option value="Dermatologist">Dermatologist</option>
                             <option value="Cardiologist">Cardiologist</option>
                             <option value="Psychiatrist">Psychiatrist</option>
                             <option value="Pulmonologist">Pulmonologist</option>
                             <option value="Rheumatologist">Rheumatologist</option>
+                            <option value="Oncologist">Oncologist</option>
+                            <option value="Ophthalmologist">Ophthalmologist</option>
                         </select>
                     </div>
                     <div className={cx('field')}>
