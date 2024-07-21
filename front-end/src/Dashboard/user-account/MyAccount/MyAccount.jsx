@@ -53,7 +53,7 @@ const MyAccount = () => {
                         </div>
                     )}
                     <div className={cx('bookings')}>
-                        <h1>My Appointments</h1>
+                        <h1>MY APPOINTMENTS</h1>
                         <MyBookings />
                     </div>
 

@@ -15,6 +15,7 @@ const Appointments = () => {
 
     return (
         <div className={cx('container-parent')}>
+            <h1>MY APPOINTMENTS</h1>
             {loading ? (
                 <Loader />
             ) : error ? (
