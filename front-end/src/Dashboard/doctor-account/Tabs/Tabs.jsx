@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import classNames from 'classnames/bind';
@@ -9,19 +9,15 @@ import { MdLogout } from 'react-icons/md';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { TbStatusChange } from 'react-icons/tb';
 
-import { authContext } from '../../../context/AuthContext';
 import ChangePassword from '../ChangePassword/ChangePassword';
+import ConfirmLogout from '../../../components/ConfirmLogout/ConfirmLogout';
 
 const cx = classNames.bind(styles);
 
 const Tabs = ({ tab, setTab, doctorData }) => {
-    const { dispatch } = useContext(authContext);
     const [showFormChangePassword, setShowFormChangePassword] = useState(false);
+    const [showConfirmLogout, setShowConfirmLogout] = useState(false);
 
-    const handleLogout = () => {
-        dispatch({ type: 'LOGOUT' });
-        window.location.href = '/login';
-    };
     return (
         <div className={cx('container')}>
             <img src={doctorData.photo || Doctor} alt="" />
@@ -45,7 +41,7 @@ const Tabs = ({ tab, setTab, doctorData }) => {
                 <button onClick={() => setShowFormChangePassword(true)}>
                     Change password <TbStatusChange />
                 </button>
-                <button onClick={handleLogout}>
+                <button onClick={() => setShowConfirmLogout(true)}>
                     Logout <MdLogout />
                 </button>
                 <button>
@@ -58,6 +54,15 @@ const Tabs = ({ tab, setTab, doctorData }) => {
                     <div className={cx('overlay')} onClick={() => setShowFormChangePassword(false)}></div>
                     <div className={cx('form-update', 'change-password')}>
                         <ChangePassword setShowFormChangePassword={setShowFormChangePassword} doctorData={doctorData} />
+                    </div>
+                </div>
+            )}
+
+            {showConfirmLogout && (
+                <div className={cx('form-wrapper')}>
+                    <div className={cx('overlay')} onClick={() => setShowFormChangePassword(false)}></div>
+                    <div className={cx('form-update', 'logout')}>
+                        <ConfirmLogout setShowConfirmLogout={setShowConfirmLogout} />
                     </div>
                 </div>
             )}

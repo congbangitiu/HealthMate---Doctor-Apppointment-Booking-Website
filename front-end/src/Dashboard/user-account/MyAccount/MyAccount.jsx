@@ -1,5 +1,4 @@
-import { useContext, useState } from 'react';
-import { authContext } from '../../../context/AuthContext';
+import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './MyAccount.module.scss';
 import { TbStatusChange } from 'react-icons/tb';
@@ -10,6 +9,7 @@ import UpdateInformation from '../UpdateInformation/UpdateInformation';
 import ChangePassword from '../ChangePassword/ChangePassword';
 import Loader from '../../../components/Loader/Loader';
 import Error from '../../../components/Error/Error';
+import ConfirmLogout from '../../../components/ConfirmLogout/ConfirmLogout';
 
 import useFetchProfile from '../../../hooks/useFetchData';
 import { BASE_URL } from '../../../../config';
@@ -17,14 +17,10 @@ import { BASE_URL } from '../../../../config';
 const cx = classNames.bind(styles);
 
 const MyAccount = () => {
-    const { dispatch } = useContext(authContext);
     const { data: userData, loading, error } = useFetchProfile(`${BASE_URL}/users/profile/me`);
     const [showFormUpdateInfo, setShowFormUpdateInfo] = useState(false);
     const [showFormChangePassword, setShowFormChangePassword] = useState(false);
-
-    const handleLogout = () => {
-        dispatch({ type: 'LOGOUT' });
-    };
+    const [showConfirmLogout, setShowConfirmLogout] = useState(false);
 
     return (
         <div className={cx('container-parent')}>
@@ -48,7 +44,7 @@ const MyAccount = () => {
                             <button onClick={() => setShowFormChangePassword(true)}>
                                 Change password <TbStatusChange />
                             </button>
-                            <button onClick={handleLogout}>
+                            <button onClick={() => setShowConfirmLogout(true)}>
                                 Logout <MdLogout />
                             </button>
                             <button>
@@ -59,7 +55,6 @@ const MyAccount = () => {
                     <div className={cx('bookings')}>
                         <h1>My Appointments</h1>
                         <MyBookings />
-                        
                     </div>
 
                     {showFormUpdateInfo && (
@@ -75,10 +70,19 @@ const MyAccount = () => {
                         <div className={cx('form-wrapper')}>
                             <div className={cx('overlay')} onClick={() => setShowFormChangePassword(false)}></div>
                             <div className={cx('form-update', 'change-password')}>
-                                <ChangePassword 
-                                    setShowFormChangePassword={setShowFormChangePassword} 
-                                    userData={userData} 
+                                <ChangePassword
+                                    setShowFormChangePassword={setShowFormChangePassword}
+                                    userData={userData}
                                 />
+                            </div>
+                        </div>
+                    )}
+
+                    {showConfirmLogout && (
+                        <div className={cx('form-wrapper')}>
+                            <div className={cx('overlay')} onClick={() => setShowFormChangePassword(false)}></div>
+                            <div className={cx('form-update', 'logout')}>
+                                <ConfirmLogout setShowConfirmLogout={setShowConfirmLogout} />
                             </div>
                         </div>
                     )}
