@@ -8,6 +8,7 @@ import Register from './../pages/Register/Register';
 import Contact from './../pages/Contact/Contact';
 import DoctorList from './../pages/Doctors/DoctorList/DoctorList';
 import DoctorDetails from './../pages/Doctors/DoctorDetails/DoctorDetails';
+import ServiceDetails from '../pages/ServiceDetails/ServiceDetails';
 import MyAccount from '../Dashboard/user-account/MyAccount/MyAccount';
 import Dashboard from '../Dashboard/doctor-account/Dashboard/Dashboard';
 import CheckoutSucess from '../pages/CheckoutSuccess/CheckoutSuccess';
@@ -24,6 +25,7 @@ const Routers = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/services" element={<Services />} />
+            <Route path="/services/:id" element={<ServiceDetails />} />
             <Route path="/checkout-success" element={<CheckoutSucess />} />
             <Route
                 path="/users/profile/me"

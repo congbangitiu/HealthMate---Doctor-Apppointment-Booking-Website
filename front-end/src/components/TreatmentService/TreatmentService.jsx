@@ -2,6 +2,7 @@ import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './TreatmentService.module.scss';
 import { IoIosMore } from 'react-icons/io';
+import { Link } from 'react-router-dom';
 
 import Treatments from '../../assets/data/services';
 
@@ -22,11 +23,13 @@ const TreatmentService = () => {
             </div>
             <div className={cx('services')}>
                 {Treatments.slice(0, visibleServices).map((treatment) => (
-                    <div key={treatment.id} className={cx('service')}>
-                        <img src={treatment.image} alt="" />
-                        <h4>{treatment.name}</h4>
-                        <p>{treatment.description}</p>
-                    </div>
+                    <Link to={`/services/${treatment.id}`} key={treatment.id}>
+                        <div className={cx('service')}>
+                            <img src={treatment.image} alt="" />
+                            <h4>{treatment.name}</h4>
+                            <p>{treatment.shortDesc}</p>
+                        </div>
+                    </Link>
                 ))}
             </div>
             {visibleServices < Treatments.length && (
