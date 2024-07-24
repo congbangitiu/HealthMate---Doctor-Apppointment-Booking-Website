@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { PropTypes } from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './VerifyOTP.module.scss';
 import { LiaSmsSolid } from 'react-icons/lia';
 import SyncLoader from 'react-spinners/SyncLoader';
+import truncateNumber from '../../utils/truncateNumber';
 
 const cx = classNames.bind(styles);
 
@@ -25,7 +26,7 @@ const VerifyOTP = ({ phone, verifyOTP }) => {
         <div className={cx('container')}>
             <LiaSmsSolid className={cx('icon')} />
             <h4>
-                Please enter the OTP code sent to phone number <b>{phone}</b>
+                Please enter the OTP code sent to phone number <b>{truncateNumber(phone)}</b>
             </h4>
             <div>
                 <input type="text" value={OTP} onChange={handleChange} />

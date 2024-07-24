@@ -36,7 +36,7 @@ const MyAccount = () => {
                             <h1>{userData.fullname}</h1>
                             <h4>{userData.username}</h4>
                             <p>Email: {userData.email}</p>
-                            <p>Phone number: {userData.phone}</p>
+                            <p>Phone number: (+84) {userData.phone}</p>
                             {userData.bloodType ? <p>Blood type: {userData.bloodType}</p> : <p></p>}
                             <button onClick={() => setShowFormUpdateInfo(true)}>
                                 Change information <TbStatusChange />

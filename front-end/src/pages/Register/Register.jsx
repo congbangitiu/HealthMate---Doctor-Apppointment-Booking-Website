@@ -13,7 +13,7 @@ import { CiMobile3 } from 'react-icons/ci';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
 import VerifyOTP from '../../components/VerifyOTP/VerifyOTP.jsx';
-import firebase, { auth } from '../../utils/verifyPhone';
+import firebase, { auth } from '../../utils/verifyPhone.js';
 
 const cx = classNames.bind(styles);
 
@@ -52,7 +52,7 @@ const Register = () => {
             window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
                 size: 'invisible',
                 callback: (response) => {
-                    console.log('prepared phone auth process', response);
+                    console.log('Prepared phone auth process', response);
                 },
                 'expired-callback': () => {
                     toast.error('reCAPTCHA expired. Please try again.');
@@ -193,7 +193,7 @@ const Register = () => {
                             <div className={cx('info')}>
                                 <input
                                     type="text"
-                                    placeholder="+84xxxxxxxxx"
+                                    placeholder="Enter your phone number here"
                                     name="phone"
                                     value={formData.phone}
                                     onChange={handleInputChange}
