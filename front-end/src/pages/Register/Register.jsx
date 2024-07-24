@@ -12,17 +12,12 @@ import { FaRegUser } from 'react-icons/fa6';
 import { CiMobile3 } from 'react-icons/ci';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
+import VerifyOTP from '../../components/VerifyOTP/VerifyOTP.jsx';
+import firebase, { auth } from '../../utils/verifyPhone';
 
 const cx = classNames.bind(styles);
 
 const Register = () => {
-    useEffect(() => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth',
-        });
-    }, []);
-
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
     const [passwordEmpty, setPasswordEmpty] = useState(true);
@@ -30,6 +25,7 @@ const Register = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState('');
     const [loading, setLoading] = useState(false);
+    const [isUploadingImg, setIsUploadingImg] = useState(false);
     const [formData, setFormData] = useState({
         fullname: '',
         username: '',
@@ -43,6 +39,31 @@ const Register = () => {
     });
 
     const navigate = useNavigate();
+    const [showVerifyOTP, setShowVerifyOTP] = useState(false);
+    const [confirmationResult, setConfirmationResult] = useState(null);
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+
+        if (!window.recaptchaVerifier) {
+            window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+                size: 'invisible',
+                callback: (response) => {
+                    console.log('prepared phone auth process', response);
+                },
+                'expired-callback': () => {
+                    toast.error('reCAPTCHA expired. Please try again.');
+                },
+            });
+
+            window.recaptchaVerifier.render().then((widgetId) => {
+                window.recaptchaWidgetId = widgetId;
+            });
+        }
+    }, []);
 
     const handleShowPassword = () => {
         setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -72,18 +93,42 @@ const Register = () => {
     };
 
     const handleFileInputChange = async (e) => {
+        setIsUploadingImg(true);
         const file = e.target.files[0];
         const data = await uploadImageToCloudinary(file);
 
         setPreviewUrl(data.url);
         setSelectedFile(data.url);
         setFormData({ ...formData, photo: data.url });
+        setIsUploadingImg(false);
+    };
+
+    const sendOTP = async (phoneNumber) => {
+        try {
+            const appVerifier = window.recaptchaVerifier;
+            const confirmationResult = await auth.signInWithPhoneNumber(phoneNumber, appVerifier);
+            setConfirmationResult(confirmationResult);
+            setShowVerifyOTP(true);
+        } catch (error) {
+            console.log('Error during send OTP:', error);
+            toast.error('Failed to send OTP. Please try again.');
+        }
     };
 
     const submitHandler = async (e) => {
         e.preventDefault();
+        const phoneNumber = formData.phone.startsWith('+') ? formData.phone : `+84${formData.phone.replace(/^0/, '')}`;
+        try {
+            await sendOTP(phoneNumber);
+        } catch (error) {
+            toast.error(error.message);
+        }
+    };
+
+    const verifyOTP = async (otp) => {
         setLoading(true);
         try {
+            await confirmationResult.confirm(otp);
             const res = await fetch(`${BASE_URL}/auth/register`, {
                 method: 'post',
                 headers: {
@@ -148,7 +193,7 @@ const Register = () => {
                             <div className={cx('info')}>
                                 <input
                                     type="text"
-                                    placeholder="Enter your phone number"
+                                    placeholder="+84xxxxxxxxx"
                                     name="phone"
                                     value={formData.phone}
                                     onChange={handleInputChange}
@@ -231,7 +276,9 @@ const Register = () => {
                                     accept=".jpg, .png, .jpeg, .webp"
                                     onChange={handleFileInputChange}
                                 />
-                                <label htmlFor="customFile">Upload photo</label>
+                                <label htmlFor="customFile">
+                                    {isUploadingImg ? <SyncLoader size={5} color="#ffffff" /> : 'Upload photo'}
+                                </label>
                             </div>
                             <p>(Notice: 1:1 scale photo)</p>
                         </div>
@@ -249,7 +296,7 @@ const Register = () => {
                         <p className={cx('question')}>I agree with the terms of use</p>
                     </div>
 
-                    <button disabled={loading && true} className={cx('register-btn')}>
+                    <button disabled={loading} className={cx('register-btn')}>
                         {loading ? <SyncLoader size={10} color="#ffffff" /> : 'Sign up'}
                     </button>
 
@@ -268,6 +315,17 @@ const Register = () => {
                     </div>
                 </form>
             </div>
+
+            <div id="recaptcha-container"></div>
+
+            {showVerifyOTP && (
+                <div className={cx('form-wrapper')}>
+                    <div className={cx('overlay')} onClick={() => setShowVerifyOTP(false)}></div>
+                    <div className={cx('form-update', 'verifyOTP')}>
+                        <VerifyOTP phone={formData.phone} verifyOTP={verifyOTP} />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
