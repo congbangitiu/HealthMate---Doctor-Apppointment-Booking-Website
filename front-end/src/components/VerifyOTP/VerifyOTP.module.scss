@@ -9,7 +9,7 @@
 }
 
 .icon {
-    font-size: 50px;
+    font-size: 60px;
     color: var(--primaryColor);
 }
 
@@ -58,4 +58,20 @@
     background-color: var(--grayColor) !important;
     cursor: not-allowed !important;
     opacity: 1 !important;
+}
+
+.container .resend-otp {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.container .resend-otp span {
+    font-size: 18px;
+}
+
+.container .resend-otp button {
+    margin-top: 10px;
 }

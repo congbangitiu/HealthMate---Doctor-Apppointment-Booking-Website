@@ -104,6 +104,7 @@
 
 .choose h4 {
     font-size: 18px;
+    font-weight: 500;
     color: var(--primaryColor);
 }
 
@@ -163,6 +164,39 @@
     color: var(--darkGrayColor);
 }
 
+.authenticators {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+}
+
+.authenticators h4 {
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--primaryColor)
+}
+
+.authenticators div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    &:hover label {
+        color: var(--primaryColor) !important;
+    }
+}
+
+.authenticators div input {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--primaryColor);
+}
+
+.authenticators div label {
+    font-size: 17px;
+    color: var(--darkGrayColor);
+}
+
 .remember-container {
     display: flex;
     align-items: center;
@@ -173,6 +207,7 @@
     cursor: pointer;
     width: 15px;
     height: 15px;
+    accent-color: var(--primaryColor);
 }
 
 .question {

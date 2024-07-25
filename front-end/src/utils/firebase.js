@@ -1,5 +1,12 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import {
+    getAuth,
+    RecaptchaVerifier,
+    signInWithPhoneNumber,
+    sendSignInLinkToEmail,
+    isSignInWithEmailLink,
+    signInWithEmailLink,
+} from 'firebase/auth';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDr6iK5lOJ3E3_9IHzH-bm2hMfIoJ7n0rA',
@@ -17,5 +24,12 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firebase Authentication and get a reference to the service
 const auth = getAuth(app);
 
-export { auth, RecaptchaVerifier, signInWithPhoneNumber };
+export {
+    auth,
+    RecaptchaVerifier,
+    signInWithPhoneNumber,
+    sendSignInLinkToEmail,
+    isSignInWithEmailLink,
+    signInWithEmailLink,
+};
 export default app;

@@ -13,7 +13,7 @@ import { CiMobile3 } from 'react-icons/ci';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
 import VerifyOTP from '../../components/VerifyOTP/VerifyOTP.jsx';
-import { auth, RecaptchaVerifier, signInWithPhoneNumber } from '../../utils/firebase';
+import { auth, RecaptchaVerifier, signInWithPhoneNumber, sendSignInLinkToEmail } from '../../utils/firebase';
 
 const cx = classNames.bind(styles);
 
@@ -39,8 +39,9 @@ const Register = () => {
     });
 
     const navigate = useNavigate();
-    const [showVerifyOTP, setShowVerifyOTP] = useState(false);
+    const [showVerifyOTP, setShowVerifyOTP] = useState(true);
     const [confirmationResult, setConfirmationResult] = useState(null);
+    const [tab, setTab] = useState('email');
 
     useEffect(() => {
         window.scrollTo({
@@ -103,12 +104,15 @@ const Register = () => {
         setIsUploadingImg(false);
     };
 
-    const sendOTP = async (phoneNumber) => {
+    const sendOTPBySMS = async () => {
+        const phoneNumber = formData.phone.startsWith('+') ? formData.phone : `+84${formData.phone.replace(/^0/, '')}`;
         try {
             const appVerifier = window.recaptchaVerifier;
             const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
             setConfirmationResult(confirmationResult);
             setShowVerifyOTP(true);
+
+            console.log(phoneNumber);
         } catch (error) {
             console.log('Error during send OTP:', error);
             toast.error('Failed to send OTP. Please try again.');
@@ -118,11 +122,39 @@ const Register = () => {
         }
     };
 
+    const sendOTPByEmail = async () => {
+        try {
+            const email = formData.email;
+
+            if (!email) {
+                throw new Error('Email is missing.');
+            }
+
+            const actionCodeSettings = {
+                url: `${window.location.origin}/complete-sign-up`,
+                handleCodeInApp: true,
+            };
+
+            await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+            window.localStorage.setItem('emailForSignIn', email);
+            window.localStorage.setItem('formData', JSON.stringify(formData));
+            setShowVerifyOTP(true);
+            toast.success('Verification email sent');
+        } catch (error) {
+            console.log('Error sending email verification', error);
+            toast.error('Failed to send verification email');
+        }
+    };
+
     const submitHandler = async (e) => {
         e.preventDefault();
-        const phoneNumber = formData.phone.startsWith('+') ? formData.phone : `+84${formData.phone.replace(/^0/, '')}`;
+
         try {
-            await sendOTP(phoneNumber);
+            if (tab === 'email') {
+                await sendOTPByEmail();
+            } else {
+                await sendOTPBySMS();
+            }
         } catch (error) {
             toast.error(error.message);
         }
@@ -294,6 +326,29 @@ const Register = () => {
                             </select>
                         </div>
                     </div>
+
+                    <div className={cx('authenticators')}>
+                        <h4>Choose an authenticator: </h4>
+                        <div onClick={() => setTab('email')}>
+                            <input
+                                type="radio"
+                                name="authenticator"
+                                checked={tab === 'email'}
+                                onChange={() => setTab('email')}
+                            />
+                            <label htmlFor="authenticators">Email Authenticator</label>
+                        </div>
+                        <div onClick={() => setTab('SMS')}>
+                            <input
+                                type="radio"
+                                name="authenticator"
+                                checked={tab === 'SMS'}
+                                onChange={() => setTab('SMS')}
+                            />
+                            <label htmlFor="authenticators">SMS Authenticator</label>
+                        </div>
+                    </div>
+
                     <div className={cx('remember-container')}>
                         <input type="checkbox" />
                         <p className={cx('question')}>I agree with the terms of use</p>
@@ -325,7 +380,7 @@ const Register = () => {
                 <div className={cx('form-wrapper')}>
                     <div className={cx('overlay')} onClick={() => setShowVerifyOTP(false)}></div>
                     <div className={cx('form-update', 'verifyOTP')}>
-                        <VerifyOTP phone={formData.phone} verifyOTP={verifyOTP} />
+                        <VerifyOTP phone={formData.phone} email={formData.email} verifyOTP={verifyOTP} tab={tab} />
                     </div>
                 </div>
             )}

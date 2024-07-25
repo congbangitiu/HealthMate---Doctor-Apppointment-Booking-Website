@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import Home from './../pages/Home/Home';
@@ -13,6 +12,7 @@ import MyAccount from '../Dashboard/user-account/MyAccount/MyAccount';
 import Dashboard from '../Dashboard/doctor-account/Dashboard/Dashboard';
 import CheckoutSucess from '../pages/CheckoutSuccess/CheckoutSuccess';
 import ProtectedRoute from './ProtectedRoute';
+import CompleteSignUp from '../pages/CompleteSignUp/CompleteSignUp';
 
 const Routers = () => {
     return (
@@ -43,6 +43,7 @@ const Routers = () => {
                     </ProtectedRoute>
                 }
             />
+            <Route path="/complete-sign-up" element={<CompleteSignUp />} />
         </Routes>
     );
 };
