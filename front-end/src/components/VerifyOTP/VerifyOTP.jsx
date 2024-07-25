@@ -5,21 +5,22 @@ import styles from './VerifyOTP.module.scss';
 import { LiaSmsSolid } from 'react-icons/lia';
 import SyncLoader from 'react-spinners/SyncLoader';
 import truncateNumber from '../../utils/truncateNumber';
+import OTPInput from 'otp-input-react';
 
 const cx = classNames.bind(styles);
 
 const VerifyOTP = ({ phone, verifyOTP }) => {
     const [OTP, setOTP] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const isButtonDisabled = OTP.length !== 6;
 
-    const handleChange = (e) => {
-        setOTP(e.target.value);
+    const handleChange = (otp) => {
+        setOTP(otp);
     };
 
     const handleVerify = () => {
         setIsLoading(true);
-        verifyOTP(OTP);
-        setIsLoading(false);
+        verifyOTP(OTP).finally(() => setIsLoading(false));
     };
 
     return (
@@ -28,12 +29,19 @@ const VerifyOTP = ({ phone, verifyOTP }) => {
             <h4>
                 Please enter the OTP code sent to phone number <b>{truncateNumber(phone)}</b>
             </h4>
-            <div>
-                <input type="text" value={OTP} onChange={handleChange} />
-                <button onClick={handleVerify}>
-                    {isLoading ? <SyncLoader size={7} color="#ffffff" /> : 'Verify OTP'}
-                </button>
-            </div>
+            <OTPInput
+                value={OTP}
+                onChange={handleChange}
+                autoFocus
+                OTPLength={6}
+                otpType="number"
+                disabled={false}
+                secure
+                className={cx('otp-input')}
+            />
+            <button onClick={handleVerify} disabled={isButtonDisabled} className={cx({ disabled: isButtonDisabled })}>
+                {isLoading ? <SyncLoader size={7} color="#ffffff" /> : 'Verify OTP'}
+            </button>
         </div>
     );
 };

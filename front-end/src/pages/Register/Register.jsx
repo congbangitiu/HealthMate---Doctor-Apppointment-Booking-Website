@@ -13,7 +13,7 @@ import { CiMobile3 } from 'react-icons/ci';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
 import VerifyOTP from '../../components/VerifyOTP/VerifyOTP.jsx';
-import firebase, { auth } from '../../utils/verifyPhone.js';
+import { auth, RecaptchaVerifier, signInWithPhoneNumber } from '../../utils/firebase';
 
 const cx = classNames.bind(styles);
 
@@ -49,10 +49,10 @@ const Register = () => {
         });
 
         if (!window.recaptchaVerifier) {
-            window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+            window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
                 size: 'invisible',
                 callback: (response) => {
-                    console.log('Prepared phone auth process', response);
+                    console.log('ReCaptcha response: ', response);
                 },
                 'expired-callback': () => {
                     toast.error('reCAPTCHA expired. Please try again.');
@@ -106,12 +106,15 @@ const Register = () => {
     const sendOTP = async (phoneNumber) => {
         try {
             const appVerifier = window.recaptchaVerifier;
-            const confirmationResult = await auth.signInWithPhoneNumber(phoneNumber, appVerifier);
+            const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
             setConfirmationResult(confirmationResult);
             setShowVerifyOTP(true);
         } catch (error) {
             console.log('Error during send OTP:', error);
             toast.error('Failed to send OTP. Please try again.');
+            if (window.recaptchaVerifier) {
+                window.recaptchaVerifier.reset(window.recaptchaWidgetId);
+            }
         }
     };
 
@@ -277,7 +280,7 @@ const Register = () => {
                                     onChange={handleFileInputChange}
                                 />
                                 <label htmlFor="customFile">
-                                    {isUploadingImg ? <SyncLoader size={5} color="#ffffff" /> : 'Upload photo'}
+                                    {isUploadingImg ? <SyncLoader size={6} color="#ffffff" /> : 'Upload photo'}
                                 </label>
                             </div>
                             <p>(Notice: 1:1 scale photo)</p>
