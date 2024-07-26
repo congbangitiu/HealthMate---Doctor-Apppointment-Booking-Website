@@ -41,7 +41,7 @@ const Register = () => {
     const navigate = useNavigate();
     const [showVerifyOTP, setShowVerifyOTP] = useState(false);
     const [confirmationResult, setConfirmationResult] = useState(null);
-    const [tab, setTab] = useState('email');
+    const [tab, setTab] = useState('');
 
     useEffect(() => {
         window.scrollTo({
@@ -146,6 +146,11 @@ const Register = () => {
 
     const submitHandler = async (e) => {
         e.preventDefault();
+
+        if (formData.password !== formData.confirmedPassword) {
+            toast.error('Passwords do not match. Please try again.');
+            return;
+        }
 
         try {
             if (tab === 'email') {
@@ -331,6 +336,7 @@ const Register = () => {
                             <input
                                 type="radio"
                                 name="authenticator"
+                                required
                                 checked={tab === 'email'}
                                 onChange={() => setTab('email')}
                             />
@@ -340,6 +346,7 @@ const Register = () => {
                             <input
                                 type="radio"
                                 name="authenticator"
+                                required
                                 checked={tab === 'SMS'}
                                 onChange={() => setTab('SMS')}
                             />
