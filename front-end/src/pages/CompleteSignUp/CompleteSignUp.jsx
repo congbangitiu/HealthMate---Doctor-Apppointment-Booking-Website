@@ -4,6 +4,11 @@ import { auth } from '../../utils/firebase';
 import { toast } from 'react-toastify';
 import { isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
 import { BASE_URL } from '../../../config';
+import classNames from 'classnames/bind';
+import styles from './CompleteSignUp.module.scss';
+import { MdDone } from 'react-icons/md';
+
+const cx = classNames.bind(styles);
 
 const CompleteSignUp = () => {
     const [loading, setLoading] = useState(true);
@@ -44,10 +49,6 @@ const CompleteSignUp = () => {
                                 setTimeout(() => {
                                     navigate('/login');
                                 }, 3000);
-                            } else {
-                                const errorData = await response.json();
-                                console.log(errorData);
-                                toast.error('Error saving user to database');
                             }
                         }
                     } else {
@@ -58,8 +59,8 @@ const CompleteSignUp = () => {
                     toast.error('Invalid sign-in link');
                     setLoading(false);
                 }
-            } catch (error) {
-                toast.error('Error during sign-in');
+            } catch (warning) {
+                toast.info('Please login to access website');
                 setLoading(false);
             }
         };
@@ -71,7 +72,14 @@ const CompleteSignUp = () => {
         return <div>Loading...</div>;
     }
 
-    return <div>Account creation completed! Redirecting to Sign In page...</div>;
+    return (
+        <div className={cx('container')}>
+            <div className={cx('icon-wrapper')}>
+                <MdDone className={cx('icon')} />
+            </div>
+            <h4>Account creation completed! Redirecting to Login page in 3s ...</h4>
+        </div>
+    );
 };
 
 export default CompleteSignUp;

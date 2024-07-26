@@ -40,7 +40,9 @@ const VerifyOTP = ({ phone, email, verifyOTP, tab }) => {
                 <>
                     <MdOutlineEmail className={cx('icon')} />
                     <h4>
-                        Please check email <b>{email}</b> (including spam) and click the link to verify the account
+                        Please check email <b>{email}</b> <br />
+                        (including spam) <br />
+                        and click the link to verify the account
                     </h4>
                 </>
             ) : (

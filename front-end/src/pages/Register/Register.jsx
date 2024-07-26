@@ -39,7 +39,7 @@ const Register = () => {
     });
 
     const navigate = useNavigate();
-    const [showVerifyOTP, setShowVerifyOTP] = useState(true);
+    const [showVerifyOTP, setShowVerifyOTP] = useState(false);
     const [confirmationResult, setConfirmationResult] = useState(null);
     const [tab, setTab] = useState('email');
 
@@ -111,8 +111,6 @@ const Register = () => {
             const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
             setConfirmationResult(confirmationResult);
             setShowVerifyOTP(true);
-
-            console.log(phoneNumber);
         } catch (error) {
             console.log('Error during send OTP:', error);
             toast.error('Failed to send OTP. Please try again.');

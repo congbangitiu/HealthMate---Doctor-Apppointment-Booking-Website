@@ -9,14 +9,14 @@ import {
 } from 'firebase/auth';
 
 const firebaseConfig = {
-    apiKey: 'AIzaSyDr6iK5lOJ3E3_9IHzH-bm2hMfIoJ7n0rA',
-    authDomain: 'healthmate-974aa.firebaseapp.com',
-    projectId: 'healthmate-974aa',
-    storageBucket: 'healthmate-974aa.appspot.com',
-    messagingSenderId: '414515249099',
-    appId: '1:414515249099:web:17710123404b0f2da1004e',
-    measurementId: 'G-EESHJ151T6',
-};
+    apiKey: "AIzaSyDSeLycpa6gTm30g6uVC2Q_LcOXhYBHDIE",
+    authDomain: "healthmate-otp.firebaseapp.com",
+    projectId: "healthmate-otp",
+    storageBucket: "healthmate-otp.appspot.com",
+    messagingSenderId: "710119342527",
+    appId: "1:710119342527:web:937ba628873d5e4b44e10a",
+    measurementId: "G-89G2QSCPQ7"
+  };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
