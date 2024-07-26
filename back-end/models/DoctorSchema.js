@@ -4,8 +4,7 @@ const doctorSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     fullname: { type: String, required: true },
     username: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
-    gender: { type: String, required: true },
+    gender: { type: String },
     password: { type: String, required: true },
     phone: { type: Number },
     photo: { type: String },
@@ -20,12 +19,13 @@ const doctorSchema = new mongoose.Schema({
     reviews: [{ type: mongoose.Types.ObjectId, ref: 'Review' }],
     averageRating: { type: Number, default: 0 },
     totalRating: { type: Number, default: 0 },
+    totalPatients: { type: Number, default: 0 },
     isApproved: {
         type: String,
         enum: ['pending', 'approved', 'cancelled'],
         default: 'pending',
     },
-    appointments: [{ type: mongoose.Types.ObjectId, ref: 'Appointment' }],
+    appointments: [{ type: mongoose.Types.ObjectId, ref: 'Booking' }],
 });
 
 export default mongoose.model('Doctor', doctorSchema);

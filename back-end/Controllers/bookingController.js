@@ -6,8 +6,16 @@ import Stripe from 'stripe';
 export const getCheckoutSession = async (req, res) => {
     try {
         // Get currently booked doctor
-        const doctor = await Doctor.findById(req.params.doctorId);
+        const doctor = await Doctor.findById(req.params.doctorId).populate('appointments');
+        if (!doctor) {
+            return res.status(404).json({ success: false, message: 'Doctor not found' });
+        }
+
         const user = await User.findById(req.userId);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
         const { timeSlot } = req.body;
 
         const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -48,6 +56,16 @@ export const getCheckoutSession = async (req, res) => {
                 endingTime: timeSlot.endingTime,
             },
         });
+
+        // Check if the user already has an appointment with this doctor
+        const existingAppointment = await Booking.findOne({ doctor: doctor._id, user: user._id });
+
+        if (!existingAppointment) {
+            // Increment totalPatients if the user doesn't have an existing appointment
+            doctor.totalPatients += 1;
+            await doctor.save();
+        }
+
         await booking.save();
 
         // Remove the booked time slot from the doctor's available time slots
@@ -55,6 +73,7 @@ export const getCheckoutSession = async (req, res) => {
 
         res.status(200).json({ success: true, message: 'Transaction successfully', session });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Error in creating checkout session' });
+        console.error('Error in creating checkout session:', error);
+        res.status(500).json({ success: false, message: 'Error in creating checkout session', error: error.message });
     }
 };
