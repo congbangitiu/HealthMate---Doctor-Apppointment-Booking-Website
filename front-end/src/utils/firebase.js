@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+
 import {
     getAuth,
     RecaptchaVerifier,
@@ -8,15 +9,25 @@ import {
     signInWithEmailLink,
 } from 'firebase/auth';
 
+const API_KEY = import.meta.env.VITE_REACT_PUBLIC_FIREBASE_API_KEY
+const AUTH_DOMAIN = import.meta.env.VITE_REACT_PUBLIC_FIREBASE_AUTH_DOMAIN
+const PROJECT_ID = import.meta.env.VITE_REACT_PUBLIC_FIREBASE_PROJECT_ID
+const STORAGE_BUCKET = import.meta.env.VITE_REACT_PUBLIC_FIREBASE_STORAGE_BUCKET
+const MESSAGE_SENDER_ID = import.meta.env.VITE_REACT_PUBLIC_FIREBASE_MESSAGE_SENDER_ID
+const APP_ID = import.meta.env.VITE_REACT_PUBLIC_FIREBASE_APP_ID
+const MEASUREMENT_ID = import.meta.env.VITE_REACT_PUBLIC_FIREBASE_MEASUREMENT_ID
+
 const firebaseConfig = {
-    apiKey: "AIzaSyDSeLycpa6gTm30g6uVC2Q_LcOXhYBHDIE",
-    authDomain: "healthmate-otp.firebaseapp.com",
-    projectId: "healthmate-otp",
-    storageBucket: "healthmate-otp.appspot.com",
-    messagingSenderId: "710119342527",
-    appId: "1:710119342527:web:937ba628873d5e4b44e10a",
-    measurementId: "G-89G2QSCPQ7"
-  };
+    apiKey: API_KEY,
+    authDomain: AUTH_DOMAIN,
+    projectId: PROJECT_ID,
+    storageBucket: STORAGE_BUCKET,
+    messagingSenderId: MESSAGE_SENDER_ID,
+    appId: APP_ID,
+    measurementId: MEASUREMENT_ID,
+};
+
+console.log(API_KEY);
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
