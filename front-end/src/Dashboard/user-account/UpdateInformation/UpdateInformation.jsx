@@ -3,11 +3,10 @@ import classNames from 'classnames/bind';
 import styles from './UpdateInformation.module.scss';
 
 import { MdOutlineEmail } from 'react-icons/md';
-import { RiLockPasswordLine } from 'react-icons/ri';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { FaRegUser } from 'react-icons/fa6';
 import { CiMobile3 } from 'react-icons/ci';
 import { IoMdClose } from 'react-icons/io';
+import { IoHomeOutline } from "react-icons/io5";
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
 
@@ -18,10 +17,6 @@ import { PropTypes } from 'prop-types';
 const cx = classNames.bind(styles);
 
 const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
-    const [passwordEmpty, setPasswordEmpty] = useState(true);
-    const [confirmedPasswordEmpty, setConfirmedPasswordEmpty] = useState(true);
     const [selectedFile, setSelectedFile] = useState(null);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -32,6 +27,7 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
         password: '',
         confirmedPassword: '',
         photo: null,
+        address: '',
         gender: 'male',
         role: 'patient',
         bloodType: 'A+',
@@ -46,34 +42,12 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
             gender: userData.gender,
             role: userData.role,
             photo: userData.photo,
+            address: userData.address,
             bloodType: userData.bloodType,
         });
     }, [userData]);
 
-    const handleShowPassword = () => {
-        setShowPassword((prevShowPassword) => !prevShowPassword);
-    };
-    const handleShowConfirmedPassword = () => {
-        setShowConfirmedPassword((prevShowConfirmedPassword) => !prevShowConfirmedPassword);
-    };
-
     const handleInputChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    const handlePasswordChange = (e) => {
-        if (e.target.value === '' && showPassword === true) {
-            setShowPassword(false);
-        }
-        setPasswordEmpty(e.target.value === '');
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    const handleConfirmedPasswordChange = (e) => {
-        if (e.target.value === '' && showConfirmedPassword === true) {
-            setShowConfirmedPassword(false);
-        }
-        setConfirmedPasswordEmpty(e.target.value === '');
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
@@ -180,45 +154,20 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
                             <MdOutlineEmail className={cx('icon')} />
                         </div>
                     </div>
-
-                    {/* <div className={cx('authentication')}>
-                        <p>Password</p>
-                        <div className={cx('info')}>
-                            <input
-                                type={showPassword ? 'text' : 'password'}
-                                placeholder="Enter your password"
-                                value={formData.password}
-                                name="password"
-                                onChange={handlePasswordChange}
-                            />
-                            {passwordEmpty ? (
-                                <RiLockPasswordLine className={cx('icon')} />
-                            ) : showPassword ? (
-                                <FaEyeSlash className={cx('icon', 'eye')} onClick={handleShowPassword} />
-                            ) : (
-                                <FaEye className={cx('icon', 'eye')} onClick={handleShowPassword} />
-                            )}
-                        </div>
+                </div>
+                <div className={cx('address')}>
+                    <p>Address</p>
+                    <div className={cx('info')}>
+                        <input
+                            type="text"
+                            placeholder="Enter your address"
+                            name="address"
+                            value={formData.address}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        <IoHomeOutline className={cx('icon')} />
                     </div>
-                    <div className={cx('authentication')}>
-                        <p>Confirm password</p>
-                        <div className={cx('info')}>
-                            <input
-                                type={showConfirmedPassword ? 'text' : 'password'}
-                                placeholder="Re-enter your password"
-                                value={formData.confirmedPassword}
-                                name="confirmedPassword"
-                                onChange={handleConfirmedPasswordChange}
-                            />
-                            {confirmedPasswordEmpty ? (
-                                <RiLockPasswordLine className={cx('icon')} />
-                            ) : showConfirmedPassword ? (
-                                <FaEyeSlash className={cx('icon', 'eye')} onClick={handleShowConfirmedPassword} />
-                            ) : (
-                                <FaEye className={cx('icon', 'eye')} onClick={handleShowConfirmedPassword} />
-                            )}
-                        </div>
-                    </div> */}
                 </div>
                 <div className={cx('selection')}>
                     <div className={cx('choose')}>

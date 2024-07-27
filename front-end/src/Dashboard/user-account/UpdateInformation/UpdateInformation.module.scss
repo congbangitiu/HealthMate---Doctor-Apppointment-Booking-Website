@@ -82,6 +82,21 @@
 .eye {
     cursor: pointer;
 }
+
+.address {
+    width: 100%;
+    
+    & p {
+        color: var(--primaryColor);
+    }
+    & .info {
+        width: 100%;
+
+        & input {
+            width: 95%;
+        }
+    }
+}
 .selection {
     display: flex;
     justify-content: space-between;
