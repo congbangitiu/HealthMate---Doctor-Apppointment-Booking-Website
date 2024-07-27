@@ -6,7 +6,8 @@ import { MdOutlineEmail } from 'react-icons/md';
 import { FaRegUser } from 'react-icons/fa6';
 import { CiMobile3 } from 'react-icons/ci';
 import { IoMdClose } from 'react-icons/io';
-import { IoHomeOutline } from "react-icons/io5";
+import { IoHomeOutline } from 'react-icons/io5';
+import { LiaBirthdayCakeSolid } from 'react-icons/lia';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
 
@@ -27,10 +28,11 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
         password: '',
         confirmedPassword: '',
         photo: null,
+        dateOfBirth: '',
         address: '',
-        gender: 'male',
+        gender: '',
         role: 'patient',
-        bloodType: 'A+',
+        bloodType: '',
     });
 
     useEffect(() => {
@@ -42,6 +44,7 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
             gender: userData.gender,
             role: userData.role,
             photo: userData.photo,
+            dateOfBirth: userData.dateOfBirth,
             address: userData.address,
             bloodType: userData.bloodType,
         });
@@ -154,21 +157,36 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
                             <MdOutlineEmail className={cx('icon')} />
                         </div>
                     </div>
-                </div>
-                <div className={cx('address')}>
-                    <p>Address</p>
-                    <div className={cx('info')}>
-                        <input
-                            type="text"
-                            placeholder="Enter your address"
-                            name="address"
-                            value={formData.address}
-                            onChange={handleInputChange}
-                            required
-                        />
-                        <IoHomeOutline className={cx('icon')} />
+                    <div className={cx('authentication')}>
+                        <p>Date of birth</p>
+                        <div className={cx('info')}>
+                            <input
+                                type="text"
+                                placeholder="Enter your date of birth with format XX-YY-ZZZZ"
+                                name="dateOfBirth"
+                                value={formData.dateOfBirth}
+                                onChange={handleInputChange}
+                                required
+                            />
+                            <LiaBirthdayCakeSolid className={cx('icon')} />
+                        </div>
+                    </div>
+                    <div className={cx('authentication')}>
+                        <p>Address</p>
+                        <div className={cx('info')}>
+                            <input
+                                type="text"
+                                placeholder="Enter your address"
+                                name="address"
+                                value={formData.address}
+                                onChange={handleInputChange}
+                                required
+                            />
+                            <IoHomeOutline className={cx('icon')} />
+                        </div>
                     </div>
                 </div>
+
                 <div className={cx('selection')}>
                     <div className={cx('choose')}>
                         <h4>Blood type: </h4>

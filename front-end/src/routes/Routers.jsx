@@ -13,6 +13,7 @@ import Dashboard from '../Dashboard/doctor-account/Dashboard/Dashboard';
 import CheckoutSucess from '../pages/CheckoutSuccess/CheckoutSuccess';
 import ProtectedRoute from './ProtectedRoute';
 import CompleteSignUp from '../pages/CompleteSignUp/CompleteSignUp';
+import PrescriptionPatient from '../Dashboard/user-account/Prescription/Prescription';
 
 const Routers = () => {
     return (
@@ -32,6 +33,14 @@ const Routers = () => {
                 element={
                     <ProtectedRoute allowedRoles={['patient']}>
                         <MyAccount />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/users/profile/me/prescription"
+                element={
+                    <ProtectedRoute allowedRoles={['patient']}>
+                        <PrescriptionPatient />
                     </ProtectedRoute>
                 }
             />

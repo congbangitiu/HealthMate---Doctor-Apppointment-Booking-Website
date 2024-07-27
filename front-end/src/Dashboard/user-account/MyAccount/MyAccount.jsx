@@ -35,6 +35,11 @@ const MyAccount = () => {
                             <img src={userData.photo} alt="" />
                             <h1>{userData.fullname}</h1>
                             <h4>{userData.username}</h4>
+                            {userData.dateOfBirth && (
+                                <p>
+                                    <b>Date of birth:</b> {userData.dateOfBirth}
+                                </p>
+                            )}
                             <p>
                                 <b>Email:</b> {userData.email}
                             </p>
@@ -53,18 +58,20 @@ const MyAccount = () => {
                             ) : (
                                 <p></p>
                             )}
-                            <button onClick={() => setShowFormUpdateInfo(true)}>
-                                Change information <TbStatusChange />
-                            </button>
-                            <button onClick={() => setShowFormChangePassword(true)}>
-                                Change password <TbStatusChange />
-                            </button>
-                            <button onClick={() => setShowConfirmLogout(true)}>
-                                Logout <MdLogout />
-                            </button>
-                            <button>
-                                Delete account <FaRegTrashAlt />
-                            </button>
+                            <div>
+                                <button onClick={() => setShowFormUpdateInfo(true)}>
+                                    Change information <TbStatusChange />
+                                </button>
+                                <button onClick={() => setShowFormChangePassword(true)}>
+                                    Change password <TbStatusChange />
+                                </button>
+                                <button onClick={() => setShowConfirmLogout(true)}>
+                                    Logout <MdLogout />
+                                </button>
+                                <button>
+                                    Delete account <FaRegTrashAlt />
+                                </button>
+                            </div>
                         </div>
                     )}
                     <div className={cx('bookings')}>

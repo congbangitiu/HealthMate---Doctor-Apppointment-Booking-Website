@@ -43,6 +43,16 @@
     color: var(--darkGrayColor);
 }
 
+.info div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 30px;
+}
+
 .info button {
     display: flex;
     justify-content: center;
@@ -54,7 +64,6 @@
     border-radius: 5px;
     color: var(--whiteColor);
     font-size: 16px;
-    margin-top: 10px;
 
     &:hover {
         cursor: pointer;
@@ -62,15 +71,11 @@
     }
 }
 
-.info button:nth-child(8) {
-    margin-top: 30px;
-}
-
-.info button:nth-child(10) {
+.info div button:nth-child(3) {
     background-color: black;
 }
 
-.info button:last-child {
+.info div button:last-child {
     background-color: red;
 }
 
@@ -150,5 +155,3 @@
         transform: translate(-50%, -50%);
     }
 }
-
-
