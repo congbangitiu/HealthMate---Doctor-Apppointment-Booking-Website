@@ -253,7 +253,7 @@
             }
 
             & img:last-child {
-                width: 220px;
+                width: 200px;
                 top: 30px;
                 left: 40px;
             }
@@ -264,18 +264,44 @@
             font-weight: 500;
         }
 
-        & button {
+        & div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
             background-color: var(--primaryColor);
-            color: var(--whiteColor);
+            border-radius: 5px;
             width: 200px;
             height: 50px;
-            font-size: 18px;
-            border-radius: 5px;   
-            margin-top: 20px;    
-            
+
             &:hover {
-                opacity: 0.7;
+                cursor: pointer;
+                opacity: 0.8;
+            }
+
+            & input {
+                display: none;
+            }
+
+            & label {
+                color: var(--whiteColor);
+                font-size: 18px;
             }
         }
+    }
+}
+
+.submit-btn {
+    background-color: var(--primaryColor) !important;
+    color: var(--whiteColor);
+    width: 100%;
+    height: 50px;
+    font-size: 18px;
+    font-weight: 500;
+    border-radius: 5px;
+    margin-top: 50px;
+
+    &:hover {
+        opacity: 0.7;
     }
 }

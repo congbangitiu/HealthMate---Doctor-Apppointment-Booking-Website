@@ -25,10 +25,13 @@
 
     th,
     td {
-        padding: 12px;
         text-align: left;
         border: 1px solid var(--primaryColor);
         text-align: center;
+    }
+
+    th {
+        padding: 12px;
     }
 
     th {
@@ -40,13 +43,6 @@
         background-color: #f2f2f2;
     }
 
-    img {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-right: 10px;
-    }
-
     /* Adding border-radius to the last row */
     tbody tr:last-of-type td:first-child {
         border-bottom-left-radius: 10px;
@@ -54,5 +50,20 @@
 
     tbody tr:last-of-type td:last-child {
         border-bottom-right-radius: 10px;
+    }
+
+    .link {
+        width: 100%;
+        padding: 12px;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit; /* This makes sure the link looks like normal text */
+        display: block; /* This makes the link fill the cell */
+    }
+
+    tbody tr:hover {
+        background-color: var(--lightGreenColor); 
     }
 }

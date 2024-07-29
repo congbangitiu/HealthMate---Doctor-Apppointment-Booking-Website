@@ -10,14 +10,9 @@ const medicationSchema = new mongoose.Schema({
 
 const prescriptionSchema = new mongoose.Schema(
     {
-        patient: {
+        appointment: {
             type: mongoose.Types.ObjectId,
-            ref: 'User',
-            required: true,
-        },
-        doctor: {
-            type: mongoose.Types.ObjectId,
-            ref: 'Doctor',
+            ref: 'Booking',
             required: true,
         },
         diseaseName: { type: String, required: true },

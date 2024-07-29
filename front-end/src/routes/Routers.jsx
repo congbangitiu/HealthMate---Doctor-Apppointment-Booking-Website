@@ -54,7 +54,7 @@ const Routers = () => {
                 }
             />
             <Route
-                path="/doctors/profile/me/prescription"
+                path="/doctors/appointments/my-appointments/:id"
                 element={
                     <ProtectedRoute allowedRoles={['doctor']}>
                         <PrescriptionDoctor />

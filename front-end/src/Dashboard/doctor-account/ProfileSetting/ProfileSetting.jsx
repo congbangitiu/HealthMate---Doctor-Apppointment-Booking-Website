@@ -29,6 +29,7 @@ const ProfileSetting = ({ doctorData }) => {
         timeSlots: [{ day: '', startingTime: '', endingTime: '' }],
         about: '',
         photo: null,
+        signature: null,
     });
 
     useEffect(() => {
@@ -59,6 +60,7 @@ const ProfileSetting = ({ doctorData }) => {
             })),
             about: doctorData.about || '',
             photo: doctorData.photo || '',
+            signature: doctorData.signature || '',
         });
     }, [doctorData]);
 
@@ -77,11 +79,18 @@ const ProfileSetting = ({ doctorData }) => {
         }
     };
 
-    const handleFileInputChange = async (e) => {
+    const handleUploadAvatar = async (e) => {
         const file = e.target.files[0];
         const data = await uploadImageToCloudinary(file);
 
         setFormData({ ...formData, photo: data?.url });
+    };
+
+    const handleUploadSignature = async (e) => {
+        const file = e.target.files[0];
+        const data = await uploadImageToCloudinary(file);
+
+        setFormData({ ...formData, signature: data?.url });
     };
 
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -259,24 +268,36 @@ const ProfileSetting = ({ doctorData }) => {
                             <textarea
                                 id="message"
                                 cols="30"
-                                rows="6"
+                                rows="3"
                                 placeholder="Write your bio here with a maximum of 50 words"
                                 name="bio"
                                 value={formData.bio}
                                 onChange={handleInputChange}
                             />
                         </div>
-                        <div className={cx('upload-photo')}>
+                        <div className={cx('upload-photo', 'avatar')}>
                             {formData.photo && <img src={formData.photo} alt="" />}
                             <input
                                 type="file"
                                 name="photo"
-                                id="customFile"
+                                id="customAvatar"
                                 accept=".jpg, .png, .jpeg, .webp"
-                                onChange={handleFileInputChange}
+                                onChange={handleUploadAvatar}
                             />
-                            <label htmlFor="customFile">Upload photo</label>
+                            <label htmlFor="customAvatar">Upload photo</label>
                             <p>(Notice: 1:1 scale photo)</p>
+                        </div>
+                        <div className={cx('upload-photo', 'signature')}>
+                            {formData.signature && <img src={formData.signature} alt="" />}
+                            <input
+                                type="file"
+                                name="signature"
+                                id="customSignature"
+                                accept=".jpg, .png, .jpeg, .webp"
+                                onChange={handleUploadSignature}
+                            />
+                            <label htmlFor="customSignature">Upload signature</label>
+                            <p>(Notice: Remove background )</p>
                         </div>
                     </div>
                 </div>

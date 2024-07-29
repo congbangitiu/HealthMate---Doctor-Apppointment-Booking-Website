@@ -2,6 +2,7 @@ import Doctor from '../models/DoctorSchema.js';
 import Booking from '../models/BookingSchema.js';
 import User from '../models/UserSchema.js';
 import bcrypt from 'bcryptjs';
+import cloudinary from '../utils/cloudinaryConfig.js';
 
 export const updateDoctor = async (req, res) => {
     const id = req.params.id;
@@ -191,6 +192,65 @@ export const changePassword = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Server error',
+        });
+    }
+};
+
+export const getAppointmentById = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // Find the appointment by ID and populate the user and doctor fields
+        const appointment = await Booking.findById(id)
+            .populate({
+                path: 'user',
+                select: 'fullname email phone gender photo dateOfBirth address',
+            })
+            .populate({
+                path: 'doctor',
+                select: 'fullname email phone photo signature',
+            });
+
+        if (!appointment) {
+            return res.status(404).json({
+                success: false,
+                message: 'Appointment not found',
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: appointment,
+        });
+    } catch (error) {
+        console.error('Error fetching appointment:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error',
+        });
+    }
+};
+
+export const uploadSignature = async (req, res) => {
+    const doctorId = req.params.id;
+    const file = req.file;
+
+    try {
+        const result = await cloudinary.uploader.upload(file.path, {
+            upload_preset: process.env.UPLOAD_PRESET,
+        });
+        const updatedDoctor = await Doctor.findByIdAndUpdate(doctorId, { signature: result.secure_url }, { new: true });
+
+        res.status(200).json({
+            success: true,
+            message: 'Signature uploaded successfully',
+            data: updatedDoctor,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error uploading signature',
+            error: error.message,
         });
     }
 };

@@ -32,9 +32,12 @@ const bookingSchema = new mongoose.Schema(
 );
 
 bookingSchema.pre(/^find/, function (next) {
-    this.populate('user').populate({
+    this.populate({
+        path: 'user',
+        select: 'fullname email phone gender photo dateOfBirth address'
+    }).populate({
         path: 'doctor',
-        select: 'fullname',
+        select: 'fullname email phone photo signature'
     });
     next();
 });

@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './Appointments.module.scss';
+import { Link } from 'react-router-dom';
 import formatDate from '../../../utils/formatDate';
 import convertTime from '../../../utils/convertTime';
-import useFetchData from '../../../hooks/useFetchData';
+import useFetchData from '../../../hooks/useFetchData';  
 import { BASE_URL } from '../../../../config';
 import Loader from '../../../components/Loader/Loader';
 import Error from '../../../components/Error/Error';
@@ -36,19 +37,45 @@ const Appointments = () => {
                         </thead>
                         <tbody>
                             {appointments?.map((appointment) => (
-                                <tr key={appointment._id}>
-                                    <td>{appointment.user.fullname}</td>
-                                    <td>{appointment.user.email}</td>
-                                    <td>{appointment.user.phone}</td>
-                                    <td>{appointment.user.gender}</td>
+                                <tr key={appointment._id} className={cx('row')}>
                                     <td>
-                                        {appointment.isPaid && <div>Paid</div>}
-                                        {!appointment.isPaid && <div>Unpaid</div>}
+                                        <Link
+                                            to={`/doctors/appointments/my-appointments/${appointment._id}`}
+                                            className={cx('link')}
+                                        >
+                                            {appointment.user.fullname}
+                                        </Link>
                                     </td>
-                                    <td>{formatDate(appointment.timeSlot.day)}</td>
                                     <td>
-                                        {convertTime(appointment.timeSlot.startingTime)} -{' '}
-                                        {convertTime(appointment.timeSlot.endingTime)}
+                                        <Link to={`/doctors/appointments/my-appointments/${appointment._id}`}>
+                                            {appointment.user.email}
+                                        </Link>
+                                    </td>
+                                    <td>
+                                        <Link to={`/doctors/appointments/my-appointments/${appointment._id}`}>
+                                            {appointment.user.phone}
+                                        </Link>
+                                    </td>
+                                    <td>
+                                        <Link to={`/doctors/appointments/my-appointments/${appointment._id}`}>
+                                            {appointment.user.gender}
+                                        </Link>
+                                    </td>
+                                    <td>
+                                        <Link to={`/doctors/appointments/my-appointments/${appointment._id}`}>
+                                            {appointment.isPaid ? 'Paid' : 'Unpaid'}
+                                        </Link>
+                                    </td>
+                                    <td>
+                                        <Link to={`/doctors/appointments/my-appointments/${appointment._id}`}>
+                                            {formatDate(appointment.timeSlot.day)}
+                                        </Link>
+                                    </td>
+                                    <td>
+                                        <Link to={`/doctors/appointments/my-appointments/${appointment._id}`}>
+                                            {convertTime(appointment.timeSlot.startingTime)} -{' '}
+                                            {convertTime(appointment.timeSlot.endingTime)}
+                                        </Link>
                                     </td>
                                 </tr>
                             ))}
