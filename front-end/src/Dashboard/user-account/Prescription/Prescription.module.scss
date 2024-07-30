@@ -1,7 +1,7 @@
 .container {
     display: flex;
     background-image: url(../../assets/images/Blur.png);
-    padding: 140px 300px 100px 300px;
+    padding: 140px 150px 100px 150px;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -44,7 +44,7 @@
 }
 
 .prescription {
-    width: 700px;
+    width: 70%;
 }
 
 .brand {
@@ -61,12 +61,12 @@
     & div h4 {
         font-size: 20px;
         font-weight: 600;
-        color: var(--primaryColor);
+        color: var(--irisBlueColor);
     }
 
     & p {
         font-size: 18px;
-        color: var(--primaryColor);
+        color: var(--irisBlueColor);
     }
 }
 
@@ -98,27 +98,76 @@
 }
 
 .medications {
-    margin-top: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 10px;
+    margin-top: 20px;
 
-    & div {
-        display: flex;
-        justify-content: space-between;
+    table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 1px solid var(--primaryColor);
+        border-radius: 10px;
+        font-size: 18px;
     }
 
-    & div h4 {
-        margin-top: 0;
-        font-size: 20px;
-        font-weight: 500;
-        color: var(--irisBlueColor);
+    thead {
+        background-color: var(--primaryColor);
     }
 
-    & h4 {
-        margin-top: 20px;
+    thead > tr > th {
+        font-weight: 500 !important;
+    }
+
+    th,
+    td {
+        border: 1px solid var(--primaryColor);
+        text-align: center;
+    }
+
+    th {
+        padding: 10px;
+    }
+
+    th {
+        background-color: var(--primaryColor);
+        color: var(--whiteColor);
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    /* Adding border-radius to the last row */
+    tbody tr:last-of-type td:first-child {
+        border-bottom-left-radius: 10px;
+    }
+
+    tbody tr:last-of-type td:last-child {
+        border-bottom-right-radius: 10px;
+    }
+
+    .link {
+        width: 100%;
+        padding: 12px;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit; /* This makes sure the link looks like normal text */
+        display: block; /* This makes the link fill the cell */
+    }
+
+    tbody > tr > td {
+        padding: 5px;
+    }
+
+    h4 {
         font-size: 20px;
         font-weight: 500;
+        text-align: center;
+        margin-top: 10px;
     }
 }
 

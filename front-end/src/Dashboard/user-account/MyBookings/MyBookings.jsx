@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './MyBookings.module.scss';
 import useFetchData from '../../../hooks/useFetchData';
@@ -22,7 +23,13 @@ const MyBookings = () => {
                 !error && (
                     <div className={cx('appointments')}>
                         {appointments.map((appointment) => (
-                            <PatientAppointment key={appointment._id} appointment={appointment} />
+                            <Link
+                                key={appointment._id}
+                                to={`/users/appointments/my-appointments/${appointment._id}`}
+                                className={cx('link')}
+                            >
+                                <PatientAppointment appointment={appointment} />
+                            </Link>
                         ))}
                     </div>
                 )

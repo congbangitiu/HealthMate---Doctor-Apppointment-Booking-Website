@@ -124,6 +124,41 @@ export const getMyAppointments = async (req, res) => {
     }
 };
 
+export const getAppointmentById = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // Find the appointment by ID and populate the user and doctor fields
+        const appointment = await Booking.findById(id)
+            .populate({
+                path: 'user',
+                select: 'fullname email phone gender photo dateOfBirth address',
+            })
+            .populate({
+                path: 'doctor',
+                select: 'fullname email phone photo signature',
+            });
+
+        if (!appointment) {
+            return res.status(404).json({
+                success: false,
+                message: 'Appointment not found',
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: appointment,
+        });
+    } catch (error) {
+        console.error('Error fetching appointment:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error',
+        });
+    }
+};
+
 export const changePassword = async (req, res) => {
     const userId = req.userId;
     const { oldPassword, newPassword, confirmedNewPassword } = req.body;
