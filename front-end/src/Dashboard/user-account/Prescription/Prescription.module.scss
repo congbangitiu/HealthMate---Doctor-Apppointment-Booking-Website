@@ -43,8 +43,15 @@
     color: var(--darkGrayColor);
 }
 
-.prescription {
+.prescription-wrapper {
     width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.prescription {
+    width: 100%;
 }
 
 .brand {
@@ -206,7 +213,7 @@
             }
 
             & img:last-child {
-                width: 220px;
+                width: 200px;
                 top: 30px;
                 left: 40px;
             }
@@ -216,5 +223,34 @@
             font-size: 20px;
             font-weight: 500;
         }
+    }
+}
+
+.prescription-wrapper button {
+    width: 300px;
+    height: 50px;
+    padding: 10px;
+    background-color: var(--primaryColor);
+    color: var(--whiteColor);
+    font-size: 20px;
+    font-weight: 500;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 50px;
+
+    &:hover {
+        opacity: 0.7;
+    }
+
+    .icon {
+        font-size: 25px;
+    }
+
+    & p {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
     }
 }
