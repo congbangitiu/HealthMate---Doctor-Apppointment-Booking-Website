@@ -1,10 +1,11 @@
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './Appointments.module.scss';
 import { Link } from 'react-router-dom';
 import formatDate from '../../../utils/formatDate';
 import convertTime from '../../../utils/convertTime';
-import useFetchData from '../../../hooks/useFetchData';  
+import useFetchData from '../../../hooks/useFetchData';
 import { BASE_URL } from '../../../../config';
 import Loader from '../../../components/Loader/Loader';
 import Error from '../../../components/Error/Error';
@@ -12,6 +13,13 @@ import Error from '../../../components/Error/Error';
 const cx = classNames.bind(styles);
 
 const Appointments = () => {
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }, []);
+
     const { data: appointments, loading, error } = useFetchData(`${BASE_URL}/doctors/appointments/my-appointments`);
 
     return (
@@ -30,14 +38,14 @@ const Appointments = () => {
                                 <th scope="col">Email</th>
                                 <th scope="col">Phone</th>
                                 <th scope="col">Gender</th>
-                                <th scope="col">Payment</th>
                                 <th scope="col">Date</th>
                                 <th scope="col">Time</th>
+                                <th scope="col">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             {appointments?.map((appointment) => (
-                                <tr key={appointment._id} className={cx('row')}>
+                                <tr key={appointment._id}>
                                     <td>
                                         <Link
                                             to={`/doctors/appointments/my-appointments/${appointment._id}`}
@@ -63,11 +71,6 @@ const Appointments = () => {
                                     </td>
                                     <td>
                                         <Link to={`/doctors/appointments/my-appointments/${appointment._id}`}>
-                                            {appointment.isPaid ? 'Paid' : 'Unpaid'}
-                                        </Link>
-                                    </td>
-                                    <td>
-                                        <Link to={`/doctors/appointments/my-appointments/${appointment._id}`}>
                                             {formatDate(appointment.timeSlot.day)}
                                         </Link>
                                     </td>
@@ -75,6 +78,14 @@ const Appointments = () => {
                                         <Link to={`/doctors/appointments/my-appointments/${appointment._id}`}>
                                             {convertTime(appointment.timeSlot.startingTime)} -{' '}
                                             {convertTime(appointment.timeSlot.endingTime)}
+                                        </Link>
+                                    </td>
+                                    <td>
+                                        <Link
+                                            to={`/doctors/appointments/my-appointments/${appointment._id}`}
+                                            className={cx(appointment.status)}
+                                        >
+                                            {appointment.status}
                                         </Link>
                                     </td>
                                 </tr>

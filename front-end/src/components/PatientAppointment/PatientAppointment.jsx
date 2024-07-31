@@ -1,8 +1,9 @@
 import classNames from 'classnames/bind';
 import PropTypes from 'prop-types';
 import styles from './PatientAppointment.module.scss';
-import { MdEmail } from 'react-icons/md';
+import { MdEmail, MdOutlineDone, MdOutlinePendingActions } from 'react-icons/md';
 import { FaPhoneAlt } from 'react-icons/fa';
+import { IoMdClose } from 'react-icons/io';
 import formatDate from './../../utils/formatDate';
 import convertTime from './../../utils/convertTime';
 import useFetchData from '../../hooks/useFetchData';
@@ -13,13 +14,35 @@ const cx = classNames.bind(styles);
 const PatientAppointment = ({ appointment }) => {
     const { data: doctor } = useFetchData(`${BASE_URL}/doctors/${appointment.doctor._id}`);
 
+    const getStatusStyle = (status) => {
+        switch (status) {
+            case 'done':
+                return { color: 'var(--primaryColor)', icon: MdOutlineDone };
+            case 'pending':
+                return { color: 'var(--darkYellowColor)', icon: MdOutlinePendingActions };
+            case 'cancelled':
+                return { color: 'red', icon: IoMdClose };
+            default:
+                return { color: 'black', icon: null };
+        }
+    };
+
+    const statusStyle = getStatusStyle(appointment.status);
+    const StatusIcon = statusStyle.icon;
+
     return (
         <div className={cx('container')}>
             <img src={doctor.photo} alt="" />
             <div className={cx('info')}>
                 <div className={cx('upperPart')}>
-                    <h4>Dr. {doctor.fullname || 'Loading ...'}</h4>
-                    <span>{doctor.specialization || 'Loading ...'}</span>
+                    <div>
+                        <h4>Dr. {doctor.fullname || 'Loading ...'}</h4>
+                        <span>{doctor.specialization || 'Loading ...'}</span>
+                    </div>
+                    <div style={{ color: statusStyle.color }}>
+                        {StatusIcon && <StatusIcon className={cx('icon')} style={{ color: statusStyle.color }} />}
+                        {appointment.status}{' '}
+                    </div>
                 </div>
                 <div className={cx('lowerPart')}>
                     <div>

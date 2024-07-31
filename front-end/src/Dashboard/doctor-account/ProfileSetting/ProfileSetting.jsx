@@ -13,6 +13,13 @@ import SyncLoader from 'react-spinners/SyncLoader';
 const cx = classNames.bind(styles);
 
 const ProfileSetting = ({ doctorData }) => {
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }, []);
+    
     const [loading, setLoading] = useState(false);
     const [errorWordLimit, setErrorWordLimit] = useState('');
 

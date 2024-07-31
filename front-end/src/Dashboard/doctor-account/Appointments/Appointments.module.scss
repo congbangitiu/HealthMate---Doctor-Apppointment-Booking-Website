@@ -64,6 +64,21 @@
     }
 
     tbody tr:hover {
-        background-color: var(--lightGreenColor); 
+        background-color: var(--lightGreenColor);
+    }
+
+    .pending {
+        color: var(--yellowColor);
+        font-weight: 500;
+    }
+
+    .done {
+        color: var(--primaryColor);
+        font-weight: 500;
+    }
+
+    .cancelled {
+        color: red;
+        font-weight: 500;
     }
 }

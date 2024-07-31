@@ -50,6 +50,22 @@
     align-items: center;
 }
 
+.pending-noti {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: var(--lightYellowColor);
+    border-radius: 5px;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.pending-noti .icon {
+    color: var(--darkYellowColor);
+    font-size: 20px;
+}
+
 .prescription {
     width: 100%;
 }
@@ -93,6 +109,7 @@
     & span {
         display: flex;
         justify-content: space-between;
+        text-transform: capitalize;
 
         & p {
             font-size: 20px;

@@ -77,3 +77,31 @@ export const getCheckoutSession = async (req, res) => {
         res.status(500).json({ success: false, message: 'Error in creating checkout session', error: error.message });
     }
 };
+
+export const updateAppointmentStatus = async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    try {
+        const appointment = await Booking.findByIdAndUpdate(id, { status }, { new: true });
+
+        if (!appointment) {
+            return res.status(404).json({
+                success: false,
+                message: 'Appointment not found',
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Appointment status updated successfully',
+            data: appointment,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Server error',
+            error: error.message,
+        });
+    }
+};

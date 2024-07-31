@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Doctor.module.scss';
 import { FaStar } from 'react-icons/fa';
@@ -7,6 +8,13 @@ import roundNumber from '../../utils/roundNumber';
 const cx = classNames.bind(styles);
 
 const Doctor = ({ smallMode, fullname, bio, averageRating, totalRating, specialization, photo }) => {
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }, []);
+
     return (
         <div className={cx('container')}>
             <img src={photo} alt="" className={cx(smallMode && 'smallImg')} />

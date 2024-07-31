@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect } from 'react';
 import formatDate from '../../utils/formatDate';
 import classNames from 'classnames/bind';
 import styles from './AboutDoctor.module.scss';
@@ -9,6 +9,13 @@ import { PropTypes } from 'prop-types';
 const cx = classNames.bind(styles);
 
 const AboutDoctor = ({ fullname, about, qualifications, experiences, hidden }) => {
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }, []);
+
     return (
         <div className={cx('container')}>
             <div className={cx('activities', hidden && 'hidden')}>

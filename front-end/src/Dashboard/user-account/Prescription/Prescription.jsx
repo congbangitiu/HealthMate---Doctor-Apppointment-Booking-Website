@@ -13,6 +13,7 @@ import { TbDownload } from 'react-icons/tb';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import SyncLoader from 'react-spinners/SyncLoader';
+import { FaCircleExclamation } from 'react-icons/fa6';
 
 const cx = classNames.bind(styles);
 
@@ -112,6 +113,12 @@ const Prescription = () => {
             </div>
 
             <div className={cx('prescription-wrapper')}>
+                {!prescription?.createdAt && (
+                    <div className={cx('pending-noti')}>
+                        <FaCircleExclamation className={cx('icon')} />
+                        Your doctor has not prescribed any medication yet !
+                    </div>
+                )}
                 <div id="prescription" className={cx('prescription')}>
                     <div className={cx('brand')}>
                         <img src={Logo} alt="" />
@@ -141,54 +148,62 @@ const Prescription = () => {
                                 <b>Phone number:</b> {appointment?.user?.phone}
                             </p>
                         </span>
-                        <p>
-                            <b>Disease:</b> {prescription?.diseaseName}
-                        </p>
-                        <div className={cx('medications')}>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>No.</th>
-                                        <th>Name of Medicine</th>
-                                        <th>Quantity Per Time</th>
-                                        <th>Times Per Day</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {prescription?.medications?.map((medication, index) => (
-                                        <tr key={index}>
-                                            <td>{index + 1}</td>
-                                            <td>{medication.name}</td>
-                                            <td>{medication.dosage?.quantityPerTime}</td>
-                                            <td>{medication.dosage?.timesPerDay}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                            <h4>Total types of medications: {prescription?.medications?.length}</h4>
-                        </div>
+                        {prescription?.createdAt && (
+                            <>
+                                <p>
+                                    <b>Disease:</b> {prescription?.diseaseName}
+                                </p>
+                                <div className={cx('medications')}>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>No.</th>
+                                                <th>Name of Medicine</th>
+                                                <th>Quantity Per Time</th>
+                                                <th>Times Per Day</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {prescription?.medications?.map((medication, index) => (
+                                                <tr key={index}>
+                                                    <td>{index + 1}</td>
+                                                    <td>{medication.name}</td>
+                                                    <td>{medication.dosage?.quantityPerTime}</td>
+                                                    <td>{medication.dosage?.timesPerDay}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                    <h4>Total types of medications: {prescription?.medications?.length}</h4>
+                                </div>
+                            </>
+                        )}
                     </div>
-                    <div className={cx('confirmation')}>
-                        <div>
-                            <h4>HealthMate, {formatDate(prescription?.updatedAt)}</h4>
-                            <span>
-                                <img src={Watermark} alt="" />
-                                <img src={appointment?.doctor?.signature} alt="" />
-                            </span>
-                            <p>John Smith</p>
+                    {prescription?.createdAt && (
+                        <div className={cx('confirmation')}>
+                            <div>
+                                <h4>HealthMate, {formatDate(prescription?.updatedAt)}</h4>
+                                <span>
+                                    <img src={Watermark} alt="" />
+                                    <img src={appointment?.doctor?.signature} alt="" />
+                                </span>
+                                <p>John Smith</p>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
 
-                <button onClick={handleDownloadPDF}>
-                    {loadingBtn ? (
-                        <SyncLoader size={10} color="#ffffff" />
-                    ) : (
-                        <p>
-                            Download to PDF <TbDownload className={cx('icon')} />
-                        </p>
-                    )}
-                </button>
+                {prescription?.createdAt && (
+                    <button onClick={handleDownloadPDF}>
+                        {loadingBtn ? (
+                            <SyncLoader size={10} color="#ffffff" />
+                        ) : (
+                            <p>
+                                Download to PDF <TbDownload className={cx('icon')} />
+                            </p>
+                        )}
+                    </button>
+                )}
             </div>
         </div>
     );

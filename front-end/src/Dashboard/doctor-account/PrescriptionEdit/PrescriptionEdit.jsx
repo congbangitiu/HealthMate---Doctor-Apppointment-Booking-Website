@@ -75,7 +75,7 @@ const PrescriptionEdit = ({
             setLoadingBtnUploadSign(false);
         }
     };
-    
+
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     const submitPrescription = async (e) => {
@@ -109,6 +109,25 @@ const PrescriptionEdit = ({
             }
 
             toast.success('Prescription saved successfully!');
+
+            // Update booking status to "done"
+            const resUpdateBooking = await fetch(`${BASE_URL}/bookings/${id}/status`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    status: 'done',
+                }),
+            });
+
+            const updateBookingData = await resUpdateBooking.json();
+            if (!resUpdateBooking.ok) {
+                throw new Error(updateBookingData.message || 'Error updating booking status');
+            }
+
+            toast.success('Appointment status updated successfully!');
         } catch (error) {
             toast.error(error.message || 'An error occurred');
         } finally {
@@ -117,10 +136,11 @@ const PrescriptionEdit = ({
                 top: 0,
                 behavior: 'smooth',
             });
-            await delay(1500);
+            await delay(2000);
             window.location.reload();
         }
     };
+
     return (
         <div className={cx('container')}>
             <form className={cx('prescription')} onSubmit={submitPrescription}>
