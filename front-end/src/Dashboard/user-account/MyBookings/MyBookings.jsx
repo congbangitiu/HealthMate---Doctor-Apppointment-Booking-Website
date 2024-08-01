@@ -6,6 +6,7 @@ import { BASE_URL } from '../../../../config';
 import Loader from '../../../components/Loader/Loader';
 import Error from '../../../components/Error/Error';
 import PatientAppointment from '../../../components/PatientAppointment/PatientAppointment';
+import { FaRegTrashAlt } from 'react-icons/fa';
 
 const cx = classNames.bind(styles);
 
@@ -23,19 +24,25 @@ const MyBookings = () => {
                 !error && (
                     <div className={cx('appointments')}>
                         {appointments.map((appointment) => (
-                            <Link
-                                key={appointment._id}
-                                to={`/users/appointments/my-appointments/${appointment._id}`}
-                                className={cx('link')}
-                            >
-                                <PatientAppointment appointment={appointment} />
-                            </Link>
+                            <div key={appointment._id}>
+                                <Link
+                                    to={`/users/appointments/my-appointments/${appointment._id}`}
+                                    className={cx('link', { pending: appointment?.status === 'pending' })}
+                                >
+                                    <PatientAppointment appointment={appointment} />
+                                </Link>
+                                {appointment?.status === 'pending' && (
+                                    <span className={cx('icon')}>
+                                        <FaRegTrashAlt />
+                                    </span>
+                                )}
+                            </div>
                         ))}
                     </div>
                 )
             )}
 
-            {!loading && !error && appointments.length === 0 && <h4>You did not book any doctor yet !</h4>}
+            {!loading && !error && appointments.length === 0 && <h4>You did not book any doctor yet!</h4>}
         </div>
     );
 };
