@@ -65,7 +65,10 @@ const Appointments = () => {
                                         </Link>
                                     </td>
                                     <td>
-                                        <Link to={`/doctors/appointments/my-appointments/${appointment._id}`}>
+                                        <Link
+                                            to={`/doctors/appointments/my-appointments/${appointment._id}`}
+                                            className={cx('captitalized')}
+                                        >
                                             {appointment.user.gender}
                                         </Link>
                                     </td>
@@ -83,7 +86,7 @@ const Appointments = () => {
                                     <td>
                                         <Link
                                             to={`/doctors/appointments/my-appointments/${appointment._id}`}
-                                            className={cx(appointment.status)}
+                                            className={cx(appointment.status, 'captitalized')}
                                         >
                                             {appointment.status}
                                         </Link>

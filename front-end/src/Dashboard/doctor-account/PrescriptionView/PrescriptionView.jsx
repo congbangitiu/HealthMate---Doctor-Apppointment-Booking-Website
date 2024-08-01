@@ -71,7 +71,7 @@ const PrescriptionView = ({ appointment, prescription }) => {
                         <p>
                             <b>Date of birth:</b> {appointment?.user?.dateOfBirth}
                         </p>
-                        <p>
+                        <p className={cx('gender')}>
                             <b>Gender:</b> {appointment?.user?.gender}
                         </p>
                     </span>
@@ -107,8 +107,14 @@ const PrescriptionView = ({ appointment, prescription }) => {
                                 ))}
                             </tbody>
                         </table>
-                        <h4>Total types of medications: {prescription?.medications?.length}</h4>
+                        <h4>
+                            <b>Total types of medications:</b> {prescription?.medications?.length}
+                        </h4>
                     </div>
+                    <p>
+                        <b>Note: </b>
+                        {prescription?.note}
+                    </p>
                 </div>
                 <div className={cx('confirmation')}>
                     <div>

@@ -17,6 +17,7 @@ const Prescription = () => {
     const [prescription, setPrescription] = useState(null);
     const [medications, setMedications] = useState([{ name: '', dosage: { timesPerDay: 0, quantityPerTime: 0 } }]);
     const [diseaseName, setDiseaseName] = useState('');
+    const [note, setNote] = useState('');
     const [createdTime, setCreatedTime] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -46,6 +47,7 @@ const Prescription = () => {
                     setPrescription(prescriptionData.data);
                     setMedications(prescriptionData.data.medications);
                     setDiseaseName(prescriptionData.data.diseaseName);
+                    setNote(prescriptionData.data.note);
                     setCreatedTime(prescriptionData.data.updatedAt);
                 } else {
                     console.log('Prescription not found, creating a new one.');
@@ -127,6 +129,8 @@ const Prescription = () => {
                         setAppointment={setAppointment}
                         diseaseName={diseaseName}
                         setDiseaseName={setDiseaseName}
+                        note={note}
+                        setNote={setNote}
                         medications={medications}
                         setMedications={setMedications}
                         id={id}

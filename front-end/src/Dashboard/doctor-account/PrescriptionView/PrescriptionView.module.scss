@@ -57,6 +57,10 @@
     & p {
         font-size: 20px;
     }
+
+    & .gender {
+        text-transform: capitalize;
+    }
 }
 
 .medications {
@@ -72,6 +76,7 @@
         border: 1px solid var(--primaryColor);
         border-radius: 10px;
         font-size: 18px;
+        margin-bottom: 30px;
     }
 
     thead {
@@ -128,8 +133,8 @@
     h4 {
         font-size: 20px;
         font-weight: 500;
-        text-align: center;
         margin-top: 10px;
+        text-align: justify;
     }
 }
 

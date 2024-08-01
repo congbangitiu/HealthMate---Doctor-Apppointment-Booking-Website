@@ -17,6 +17,8 @@ const PrescriptionEdit = ({
     setAppointment,
     diseaseName,
     setDiseaseName,
+    note,
+    setNote,
     medications,
     setMedications,
     id,
@@ -100,6 +102,7 @@ const PrescriptionEdit = ({
                     appointment: id,
                     diseaseName,
                     medications,
+                    note,
                 }),
             });
 
@@ -140,6 +143,8 @@ const PrescriptionEdit = ({
             window.location.reload();
         }
     };
+
+    console.log(note);
 
     return (
         <div className={cx('container')}>
@@ -229,6 +234,16 @@ const PrescriptionEdit = ({
                         </button>
                         <h4>Total types of medication: {medications.length}</h4>
                     </div>
+                    <div className={cx('note')}>
+                        <b>Note:</b>
+                        <textarea
+                            type="text"
+                            name="note"
+                            rows="3"
+                            value={note}
+                            onChange={(e) => setNote(e.target.value)}
+                        />
+                    </div>
                 </div>
                 <div className={cx('confirmation')}>
                     <div>
@@ -273,6 +288,8 @@ PrescriptionEdit.propTypes = {
     setAppointment: PropTypes.func.isRequired,
     diseaseName: PropTypes.string.isRequired,
     setDiseaseName: PropTypes.func.isRequired,
+    note: PropTypes.string.isRequired,
+    setNote: PropTypes.func.isRequired,
     medications: PropTypes.array.isRequired,
     setMedications: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,

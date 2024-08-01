@@ -49,6 +49,7 @@
 
     & p {
         font-size: 20px;
+        text-transform: capitalize;
     }
 
     & .disease {
@@ -170,6 +171,24 @@
     & .delete:hover .text {
         max-width: 100px;
         opacity: 1;
+    }
+}
+
+.note {
+    margin-top: 10px;
+
+    & b {
+        font-size: 20px;
+    }
+
+    & textarea {
+        outline: none;
+        border: 2px solid var(--primaryColor);
+        border-radius: 5px;
+        width: 100%;
+        margin-top: 5px;
+        font-size: 20px;
+        padding: 15px;
     }
 }
 

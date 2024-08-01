@@ -17,6 +17,7 @@ const prescriptionSchema = new mongoose.Schema(
         },
         diseaseName: { type: String, required: true },
         medications: [medicationSchema],
+        note: { type: String, required: true },
     },
     { timestamps: true },
 );
