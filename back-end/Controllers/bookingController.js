@@ -83,13 +83,29 @@ export const updateAppointmentStatus = async (req, res) => {
     const { status } = req.body;
 
     try {
-        const appointment = await Booking.findByIdAndUpdate(id, { status }, { new: true });
+        const appointment = await Booking.findByIdAndUpdate(id, { status }, { new: true }).populate('doctor');
 
         if (!appointment) {
             return res.status(404).json({
                 success: false,
                 message: 'Appointment not found',
             });
+        }
+
+        // Only add the time slot back to the doctor's available slots if the appointment is cancelled
+        if (status === 'cancelled') {
+            const doctor = await Doctor.findById(appointment.doctor._id);
+
+            if (!doctor) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Doctor not found',
+                });
+            }
+
+            const { timeSlot } = appointment;
+            doctor.timeSlots.push(timeSlot);
+            await doctor.save();
         }
 
         res.status(200).json({

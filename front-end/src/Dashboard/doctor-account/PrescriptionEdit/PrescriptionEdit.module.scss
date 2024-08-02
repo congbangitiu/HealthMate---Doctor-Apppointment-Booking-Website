@@ -49,6 +49,9 @@
 
     & p {
         font-size: 20px;
+    }
+
+    & .gender {
         text-transform: capitalize;
     }
 
@@ -67,6 +70,7 @@
             border-radius: 5px;
             padding: 5px 10px;
             font-size: 20px;
+            width: 400px;
         }
     }
 }

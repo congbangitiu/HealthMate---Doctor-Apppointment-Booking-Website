@@ -63,7 +63,7 @@
         display: block; /* This makes the link fill the cell */
     }
 
-    tbody tr:hover {
+    tbody tr:not(.cancelledStatus):hover {
         background-color: var(--lightGreenColor);
     }
 
@@ -84,5 +84,9 @@
 
     .captitalized {
         text-transform: capitalize;
+    }
+
+    .cancelledStatus {
+        cursor: not-allowed !important;
     }
 }

@@ -165,7 +165,7 @@ const PrescriptionEdit = ({
                         <p>
                             <b>Date of birth:</b> {appointment?.user?.dateOfBirth}
                         </p>
-                        <p>
+                        <p className={cx('gender')}>
                             <b>Gender:</b> {appointment?.user?.gender}
                         </p>
                     </span>

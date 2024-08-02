@@ -1,0 +1,87 @@
+.container {
+    width: 100%;
+    background-color: var(--whiteColor);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon {
+    font-size: 60px;
+    color: var(--primaryColor);
+    font-weight: 500 !important;
+}
+
+.container h1:nth-child(2) {
+    margin-top: 20px;
+    color: black;
+}
+
+.appointment {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+
+    & img {
+        width: 120px;
+        height: 120px;
+        border-radius: 10px;
+    }
+
+    & div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        & h1 {
+            font-size: 22px;
+            font-weight: 500;
+            color: black;
+            margin-bottom: 10px;
+        }
+
+        & p {
+            font-size: 18px;
+            color: var(--darkGrayColor);
+        }
+    }
+}
+
+.buttons {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+.buttons button {
+    width: 150px;
+    height: 50px;
+    border-radius: 5px;
+    font-weight: 500;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.buttons button:first-child {
+    background-color: var(--whiteColor);
+    color: var(--primaryColor);
+
+    &:hover {
+        background-color: var(--lightGreenColor);
+    }
+}
+
+.buttons button:last-child {
+    background-color: var(--primaryColor);
+    color: var(--whiteColor);
+
+    &:hover {
+        opacity: 0.7;
+    }
+}
