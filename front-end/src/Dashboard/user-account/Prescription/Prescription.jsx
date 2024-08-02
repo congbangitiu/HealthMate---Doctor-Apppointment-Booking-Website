@@ -174,8 +174,14 @@ const Prescription = () => {
                                             ))}
                                         </tbody>
                                     </table>
-                                    <h4>Total types of medications: {prescription?.medications?.length}</h4>
+                                    <h4>
+                                        <b>Total types of medications:</b> {prescription?.medications?.length}
+                                    </h4>
                                 </div>
+                                <p>
+                                    <b>Note: </b>
+                                    {prescription?.note}
+                                </p>
                             </>
                         )}
                     </div>

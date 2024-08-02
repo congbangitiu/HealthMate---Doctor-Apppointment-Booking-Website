@@ -121,17 +121,25 @@
 .upload-photo label {
     display: flex;
     justify-content: center;
-    align-self: center;
+    align-items: center;
     background-color: var(--primaryColor);
     color: var(--whiteColor);
-    padding: 10px 20px;
     border-radius: 5px;
     font-size: 16px;
+    height: 45px;
 
     &:hover {
         cursor: pointer;
         opacity: 0.8;
     }
+}
+
+.avatar label {
+    width: 150px;
+}
+
+.signature label {
+    width: 200px;
 }
 
 .upload-photo p {

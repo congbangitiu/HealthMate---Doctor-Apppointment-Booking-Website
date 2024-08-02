@@ -16,12 +16,14 @@ const ProfileSetting = ({ doctorData }) => {
     useEffect(() => {
         window.scrollTo({
             top: 0,
-            behavior: 'smooth'
+            behavior: 'smooth',
         });
     }, []);
-    
+
     const [loading, setLoading] = useState(false);
     const [errorWordLimit, setErrorWordLimit] = useState('');
+    const [loadingAvatar, setLoadingAvatar] = useState(false);
+    const [loadingSignature, setLoadingSignature] = useState(false);
 
     const [formData, setFormData] = useState({
         fullname: '',
@@ -87,17 +89,21 @@ const ProfileSetting = ({ doctorData }) => {
     };
 
     const handleUploadAvatar = async (e) => {
+        setLoadingAvatar(true);
         const file = e.target.files[0];
         const data = await uploadImageToCloudinary(file);
 
         setFormData({ ...formData, photo: data?.url });
+        setLoadingAvatar(false);
     };
 
     const handleUploadSignature = async (e) => {
+        setLoadingSignature(true);
         const file = e.target.files[0];
         const data = await uploadImageToCloudinary(file);
 
         setFormData({ ...formData, signature: data?.url });
+        setLoadingSignature(false);
     };
 
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -220,8 +226,6 @@ const ProfileSetting = ({ doctorData }) => {
         }));
     };
 
-    console.log(doctorData);
-
     return (
         <div className={cx('container')}>
             <form action="">
@@ -291,7 +295,9 @@ const ProfileSetting = ({ doctorData }) => {
                                 accept=".jpg, .png, .jpeg, .webp"
                                 onChange={handleUploadAvatar}
                             />
-                            <label htmlFor="customAvatar">Upload photo</label>
+                            <label htmlFor="customAvatar">
+                                {loadingAvatar ? <SyncLoader size={7} color="#ffffff" /> : 'Upload photo'}
+                            </label>
                             <p>(Notice: 1:1 scale photo)</p>
                         </div>
                         <div className={cx('upload-photo', 'signature')}>
@@ -303,7 +309,9 @@ const ProfileSetting = ({ doctorData }) => {
                                 accept=".jpg, .png, .jpeg, .webp"
                                 onChange={handleUploadSignature}
                             />
-                            <label htmlFor="customSignature">Upload signature</label>
+                            <label htmlFor="customSignature">
+                                {loadingSignature ? <SyncLoader size={7} color="#ffffff" /> : 'Upload signature'}
+                            </label>
                             <p>(Notice: Remove background )</p>
                         </div>
                     </div>

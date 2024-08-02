@@ -52,7 +52,8 @@ const AboutDoctor = ({ fullname, about, qualifications, experiences, hidden }) =
                         {experiences?.map((experience, index) => (
                             <div key={index} className={cx('experience-detail')}>
                                 <p>
-                                    {formatDate(experience.startingDate)} - {formatDate(experience.endingDate)}
+                                    {formatDate(experience.startingDate)} -{' '}
+                                    {experience.endingDate ? formatDate(experience.endingDate) : 'Current'}
                                 </p>
                                 <p>{experience.position}</p>
                                 <p>{experience.hospital}</p>
@@ -61,24 +62,6 @@ const AboutDoctor = ({ fullname, about, qualifications, experiences, hidden }) =
                     </div>
                 </div>
             </div>
-            {/* <div className={cx('relevant-videos')}>
-                <iframe
-                    width="560"
-                    height="315"
-                    src="https://www.youtube.com/embed/XY2TKYS9Chs?si=gRh3QvzBohzYnw3u"
-                    title="YouTube video player"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen
-                />
-                <iframe
-                    width="560"
-                    height="315"
-                    src="https://www.youtube.com/embed/F4Ll2z4E3-s?si=bYlrsoalg3ch-9_X"
-                    title="YouTube video player"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen
-                />
-            </div> */}
         </div>
     );
 };
