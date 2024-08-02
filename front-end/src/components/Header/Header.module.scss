@@ -1,5 +1,3 @@
-@import '../../GlobalStyle.css';
-
 .container {
     display: flex;
     justify-content: space-between;
@@ -58,14 +56,42 @@
     gap: 10px;
     align-items: center;
     padding: 10px 15px;
-    border-radius: 10px;
     transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-.isLogin:hover {
-    cursor: pointer;
+.inner {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: transform 0.3s ease;
+    position: absolute;
+    right: 120px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    z-index: 1;
+}
+
+.isLogin {
+    padding: 10px 15px;
+    border-radius: 10px;
+
+    &:hover {
+        cursor: pointer;
+        background-color: var(--lightGreenColor);
+        box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.profileActive {
     background-color: var(--lightGreenColor);
-    box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+}
+
+.authentication:hover .inner {
+    transform: translateX(-85px);
+}
+
+.authentication:hover .logout-btn {
+    opacity: 1;
 }
 
 .hidden {
@@ -89,6 +115,22 @@
     color: var(--darkGrayColor);
 }
 
+.logout-btn {
+    color: var(--whiteColor);
+    background-color: #000;
+    font-size: 22px;
+    padding: 10px;
+    border-radius: 100px;
+    margin-left: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+
+    &:hover {
+        opacity: 0.7 !important;
+    }
+}
+
 .login,
 .register {
     background-color: var(--buttonBgColor);
@@ -98,6 +140,10 @@
     text-align: center;
     padding: 8px 16px;
     border-radius: 50px;
+
+    &:hover {
+        opacity: 0.7;
+    }
 }
 
 .menu-icon {
@@ -114,6 +160,55 @@
     width: 25px;
     height: 25px;
     display: none;
+}
+
+.overlay-logout {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 150;
+    background-color: #00000084;
+    opacity: 0.7;
+    animation: fadeIn linear 0.4s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.logout {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    border-radius: 15px;
+    transform: translate(-50%, -50%);
+    z-index: 200;
+    animation: slideUp linear 0.4s forwards;
+    animation-timing-function: ease-in-out;
+    background: white;
+    overflow-y: auto;
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes slideUp {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
 }
 
 // Responsive

@@ -5,10 +5,11 @@ import { NavLink, Link, useLocation } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Header.module.scss';
 import { BiMenu } from 'react-icons/bi';
-import { IoIosClose, IoMdHome } from 'react-icons/io';
+import { IoIosClose, IoMdHome, IoIosLogOut } from 'react-icons/io';
 import { FaUserDoctor } from 'react-icons/fa6';
 import { MdMedicalServices, MdContactSupport } from 'react-icons/md';
 import { authContext } from '../../context/AuthContext';
+import ConfirmLogout from '../ConfirmLogout/ConfirmLogout';
 
 const cx = classNames.bind(styles);
 
@@ -39,6 +40,7 @@ const Header = () => {
     const [activeLink, setActiveLink] = useState(null);
     const location = useLocation();
     const { user, role, token } = useContext(authContext);
+    const [showConfirmLogout, setShowConfirmLogout] = useState(false);
 
     const handleNavLinkClick = (index) => {
         setActiveLink(index);
@@ -46,6 +48,16 @@ const Header = () => {
 
     const isActive = (path) => {
         return location.pathname === path || (location.pathname === '/' && path === '/home');
+    };
+
+    const isProfileOrAppointment = () => {
+        const paths = [
+            '/doctors/profile/me',
+            '/users/profile/me',
+            '/doctors/appointments/my-appointments',
+            '/users/appointments/my-appointments',
+        ];
+        return paths.some((path) => location.pathname.startsWith(path));
     };
 
     return (
@@ -79,27 +91,27 @@ const Header = () => {
             </div>
 
             {/* Nav right */}
-            <div className={cx('authentication', user && 'isLogin')}>
+            <div className={cx('authentication')}>
                 {token && user ? (
-                    // <Link to={`/${role === 'doctor' ? 'doctors' : 'users'}/profile/me`} className={cx('info')}>
-                    //     <img className={cx('avatar')} src={user?.photo} alt="" />
-                    //     <div className={cx('name')}>
-                    //         <h4>{user?.fullname}</h4>
-                    //         <p>{user?.username}</p>
-                    //     </div>
-                    // </Link>
-                    <div
-                        onClick={() =>
-                            (window.location.href = `/${role === 'doctor' ? 'doctors' : 'users'}/profile/me`)
-                        }
-                        className={cx('info')}
-                    >
-                        <img className={cx('avatar')} src={user?.photo} alt="" />
-                        <div className={cx('name')}>
-                            <h4>{user?.fullname}</h4>
-                            <p>{user?.username}</p>
+                    <>
+                        <div className={cx('inner', user && 'isLogin', { profileActive: isProfileOrAppointment() })}>
+                            <div
+                                onClick={() =>
+                                    (window.location.href = `/${role === 'doctor' ? 'doctors' : 'users'}/profile/me`)
+                                }
+                                className={cx('info')}
+                            >
+                                <img className={cx('avatar')} src={user?.photo} alt="" />
+                                <div className={cx('name')}>
+                                    <h4>{user?.fullname}</h4>
+                                    <p>{user?.username}</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                        <button className={cx('logout-btn')} onClick={() => setShowConfirmLogout(true)}>
+                            <IoIosLogOut />
+                        </button>
+                    </>
                 ) : (
                     <>
                         <Link to="/login">
@@ -115,6 +127,15 @@ const Header = () => {
                     <BiMenu className={cx('menu-icon')} />
                 </label>
             </div>
+
+            {showConfirmLogout && (
+                <div className={cx('form-wrapper')}>
+                    <div className={cx('overlay-logout')}></div>
+                    <div className={cx('logout')}>
+                        <ConfirmLogout setShowConfirmLogout={setShowConfirmLogout} />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

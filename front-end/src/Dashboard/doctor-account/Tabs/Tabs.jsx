@@ -60,7 +60,7 @@ const Tabs = ({ tab, setTab, doctorData }) => {
 
             {showConfirmLogout && (
                 <div className={cx('form-wrapper')}>
-                    <div className={cx('overlay')} onClick={() => setShowFormChangePassword(false)}></div>
+                    <div className={cx('overlay')}></div>
                     <div className={cx('form-update', 'logout')}>
                         <ConfirmLogout setShowConfirmLogout={setShowConfirmLogout} />
                     </div>
