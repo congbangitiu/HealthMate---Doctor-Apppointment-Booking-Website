@@ -18,8 +18,8 @@ import { PropTypes } from 'prop-types';
 const cx = classNames.bind(styles);
 
 const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
-    const [selectedFile, setSelectedFile] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [loadingAvatar, setLoadingAvatar] = useState(false);
     const [formData, setFormData] = useState({
         fullname: '',
         username: '',
@@ -55,11 +55,12 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
     };
 
     const handleFileInputChange = async (e) => {
+        setLoadingAvatar(true);
         const file = e.target.files[0];
         const data = await uploadImageToCloudinary(file);
 
-        setSelectedFile(data.url);
         setFormData({ ...formData, photo: data.url });
+        setLoadingAvatar(false);
     };
 
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -90,8 +91,6 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
             toast.error(error.message);
             setLoading(false);
         }
-
-        console.log(formData.bloodType);
     };
 
     return (
@@ -138,7 +137,6 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
                                 name="phone"
                                 value={formData.phone}
                                 onChange={handleInputChange}
-                                required
                             />
                             <CiMobile3 className={cx('icon')} />
                         </div>
@@ -152,7 +150,6 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
                                 name="email"
                                 value={formData.email}
                                 onChange={handleInputChange}
-                                required
                             />
                             <MdOutlineEmail className={cx('icon')} />
                         </div>
@@ -166,7 +163,6 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
                                 name="dateOfBirth"
                                 value={formData.dateOfBirth}
                                 onChange={handleInputChange}
-                                required
                             />
                             <LiaBirthdayCakeSolid className={cx('icon')} />
                         </div>
@@ -180,7 +176,6 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
                                 name="address"
                                 value={formData.address}
                                 onChange={handleInputChange}
-                                required
                             />
                             <IoHomeOutline className={cx('icon')} />
                         </div>
@@ -217,7 +212,9 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
                             accept=".jpg, .png"
                             onChange={handleFileInputChange}
                         />
-                        <label htmlFor="customFile">Upload photo</label>
+                        <label htmlFor="customFile">
+                            {loadingAvatar ? <SyncLoader size={7} color="#ffffff" /> : 'Upload photo'}
+                        </label>
                     </div>
                     <div className={cx('choose')}>
                         <h4>Gender: </h4>

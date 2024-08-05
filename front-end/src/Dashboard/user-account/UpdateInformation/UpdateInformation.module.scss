@@ -113,7 +113,7 @@
 
 .upload-photo {
     display: flex;
-    align-self: center;
+    align-items: center;
     gap: 20px;
 }
 
@@ -133,10 +133,11 @@
 .upload-photo label {
     display: flex;
     justify-content: center;
-    align-self: center;
+    align-items: center;
     background-color: var(--primaryColor);
     color: var(--whiteColor);
-    padding: 10px 20px;
+    width: 150px;
+    height: 45px;
     border-radius: 5px;
 
     &:hover {
