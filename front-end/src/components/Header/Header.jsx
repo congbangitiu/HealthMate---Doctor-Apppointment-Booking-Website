@@ -54,10 +54,17 @@ const Header = () => {
         const paths = [
             '/doctors/profile/me',
             '/users/profile/me',
+            '/admins/management',
             '/doctors/appointments/my-appointments',
             '/users/appointments/my-appointments',
         ];
         return paths.some((path) => location.pathname.startsWith(path));
+    };
+
+    const handlePath = () => {
+        if (role === 'admin') window.location.href = '/admins/management';
+        else if (role === 'patient') window.location.href = '/users/profile/me';
+        else if (role === 'doctor') window.location.href = '/doctors/profile/me';
     };
 
     return (
@@ -94,13 +101,11 @@ const Header = () => {
             <div className={cx('authentication')}>
                 {token && user ? (
                     <>
-                        <div className={cx('inner', user && 'isLogin', { profileActive: isProfileOrAppointment() })}>
-                            <div
-                                onClick={() =>
-                                    (window.location.href = `/${role === 'doctor' ? 'doctors' : 'users'}/profile/me`)
-                                }
-                                className={cx('info')}
-                            >
+                        <div
+                            className={cx('inner', user && 'isLogin', { profileActive: isProfileOrAppointment() })}
+                            onClick={handlePath}
+                        >
+                            <div className={cx('info')}>
                                 <img className={cx('avatar')} src={user?.photo} alt="" />
                                 <div className={cx('name')}>
                                     <h4>{user?.fullname}</h4>

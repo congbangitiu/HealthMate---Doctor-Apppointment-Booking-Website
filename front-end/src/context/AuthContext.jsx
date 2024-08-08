@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useReducer } from 'react';
+import { createContext, useEffect, useReducer } from 'react';
+import { PropTypes } from 'prop-types';
 
 const initialState = {
     user: localStorage.getItem('user') !== undefined ? JSON.parse(localStorage.getItem('user')) : null,
@@ -50,4 +51,8 @@ export const AuthContextProvider = ({ children }) => {
             {children}
         </authContext.Provider>
     );
+};
+
+AuthContextProvider.propTypes = {
+    children: PropTypes.node.isRequired,
 };

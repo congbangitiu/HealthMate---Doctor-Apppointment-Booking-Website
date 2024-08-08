@@ -1,0 +1,31 @@
+.container {
+    padding: 30px;
+    background-color: var(--whiteColor);
+    border-radius: 20px;
+}
+
+.intro {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & h4 {
+        font-size: 25px;
+        font-weight: 600;
+        color: var(--yellowColor);
+    }
+
+    & select {
+        padding: 3px 15px;
+        border: 2px solid var(--yellowColor);
+        border-radius: 5px;
+        font-size: 18px;
+        outline: none;
+    }
+}
+
+.chart {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}

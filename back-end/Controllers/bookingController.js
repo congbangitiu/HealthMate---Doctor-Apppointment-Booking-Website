@@ -121,3 +121,20 @@ export const updateAppointmentStatus = async (req, res) => {
         });
     }
 };
+
+export const getAllAppointments = async (req, res) => {
+    try {
+        const appointments = await Booking.find({});
+
+        res.status(200).json({
+            success: true,
+            message: 'All appointments are found successfully',
+            data: appointments,
+        });
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: 'All appointments are not found !!!',
+        });
+    }
+};

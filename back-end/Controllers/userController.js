@@ -124,6 +124,7 @@ export const getMyAppointments = async (req, res) => {
     }
 };
 
+
 export const getAppointmentById = async (req, res) => {
     const { id } = req.params;
 

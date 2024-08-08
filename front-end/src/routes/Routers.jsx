@@ -15,6 +15,7 @@ import ProtectedRoute from './ProtectedRoute';
 import CompleteSignUp from '../pages/CompleteSignUp/CompleteSignUp';
 import PrescriptionPatient from '../Dashboard/user-account/Prescription/Prescription';
 import PrescriptionDoctor from '../Dashboard/doctor-account/Prescription/Prescription';
+import Management from '../Dashboard/admin-account/Management/Management';
 
 const Routers = () => {
     return (
@@ -62,6 +63,15 @@ const Routers = () => {
                 }
             />
             <Route path="/complete-sign-up" element={<CompleteSignUp />} />
+
+            <Route
+                path="/admins/management"
+                element={
+                    <ProtectedRoute allowedRoles={['admin']}>
+                        <Management />
+                    </ProtectedRoute>
+                }
+            />
         </Routes>
     );
 };
