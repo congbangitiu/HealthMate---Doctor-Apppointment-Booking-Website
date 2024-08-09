@@ -1,16 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import * as d3 from 'd3';
 import classNames from 'classnames/bind';
-import styles from './AppointmentBarChart.module.scss';
+import styles from './TimeAppointmentBarChart.module.scss';
 
 const cx = classNames.bind(styles);
 
-const AppointmentBarChart = () => {
-    const doctors = ['John Smith', 'Emily Johnson', 'James Smith', 'David Brown', 'Emily Davis', 'Sarah Wilson'];
-    const [selectedDoctor, setSelectedDoctor] = useState(doctors[0]);
+const TimeAppointmentBarChart = () => {
     const [selectedTime, setSelectedTime] = useState('month');
+    const [selectedMonth, setSelectedMonth] = useState('Jan');
+    const [selectedQuarter, setSelectedQuarter] = useState('First');
     const [selectedStatus, setSelectedStatus] = useState('Successful');
     const [data, setData] = useState([]);
+
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const quarters = ['First', 'Second', 'Third', 'Fourth'];
 
     useEffect(() => {
         const loadCSVData = async () => {
@@ -25,25 +28,33 @@ const AppointmentBarChart = () => {
 
     useEffect(() => {
         if (data.length > 0) {
-            const filteredData = data.filter((d) => d.Doctor === selectedDoctor);
+            const filteredData = data.filter((d) =>
+                selectedTime === 'month' ? d.Month === selectedMonth : d.Quarter === selectedQuarter,
+            );
 
-            // Prepare data based on selected time (month or quarter) and status (Successful or Cancelled)
-            const preparedData = filteredData.map((d) => {
-                return {
-                    time: selectedTime === 'month' ? d.Month : d.Quarter,
-                    old: +d[`${selectedStatus}_Old`],
-                    new: +d[`${selectedStatus}_New`],
-                };
-            });
+            const preparedData = d3.rollup(
+                filteredData,
+                (v) => ({
+                    old: d3.sum(v, (d) => +d[`${selectedStatus}_Old`]),
+                    new: d3.sum(v, (d) => +d[`${selectedStatus}_New`]),
+                }),
+                (d) => d.Doctor,
+            );
 
-            drawChart(preparedData);
+            const chartData = Array.from(preparedData, ([key, value]) => ({
+                doctor: key,
+                old: value.old,
+                new: value.new,
+            }));
+
+            drawChart(chartData);
         }
-    }, [data, selectedDoctor, selectedTime, selectedStatus]);
+    }, [data, selectedTime, selectedMonth, selectedQuarter, selectedStatus]);
 
     const drawChart = (data) => {
-        const margin = { top: 100, right: 30, bottom: 60, left: 60 };
+        const margin = { top: 150, right: 30, bottom: 90, left: 70 };
         const width = 1000 - margin.left - margin.right;
-        const height = 550 - margin.top - margin.bottom;
+        const height = 600 - margin.top - margin.bottom;
 
         // Remove any existing svg
         d3.select('#stackedBarChart').selectAll('*').remove();
@@ -56,20 +67,54 @@ const AppointmentBarChart = () => {
             .append('g')
             .attr('transform', `translate(${margin.left},${margin.top})`);
 
+        const x = d3
+            .scaleBand()
+            .domain(data.map((d) => d.doctor))
+            .range([0, width])
+            .padding(0.25);
+
+        const y = d3
+            .scaleLinear()
+            .domain([0, d3.max(data, (d) => d.old + d.new)])
+            .nice()
+            .range([height, 0]);
+
+        const color = d3.scaleOrdinal().domain(['old', 'new']).range(['#feb60d', '#30d5c8']);
+
+        svg.append('g')
+            .selectAll('g')
+            .data(d3.stack().keys(['old', 'new'])(data))
+            .enter()
+            .append('g')
+            .attr('fill', (d) => color(d.key))
+            .selectAll('rect')
+            .data((d) => d)
+            .enter()
+            .append('rect')
+            .attr('x', (d) => x(d.data.doctor))
+            .attr('y', y(0))
+            .attr('height', 0)
+            .attr('width', x.bandwidth())
+            .transition()
+            .duration(650)
+            .delay((d, i) => i * 100)
+            .attr('y', (d) => y(d[1]))
+            .attr('height', (d) => y(d[0]) - y(d[1]));
+
         // Add title
         svg.append('text')
             .attr('x', width / 2 - 20)
             .attr('y', -margin.top / 2 - 10)
             .attr('text-anchor', 'middle')
-            .style('font-size', '24px')
+            .style('font-size', '26px')
             .style('font-weight', 'bold')
-            .text(`Stacked bar chart showing number of patients scheduled for appointments in 2023`);
+            .text(`Number of patients scheduled for appointments in 2023`);
 
         // Add legend
         const legend = svg
             .append('g')
             .attr('class', 'legend')
-            .attr('transform', `translate(${margin.left * 4}, -${margin.top / 2 - 10})`); // Adjust position to be below the title
+            .attr('transform', `translate(${margin.left * 3.5}, -${margin.top / 2 - 15})`);
 
         // Old Patients legend
         legend.append('rect').attr('x', 0).attr('y', 0).attr('width', 20).attr('height', 20).style('fill', '#feb60d');
@@ -95,44 +140,14 @@ const AppointmentBarChart = () => {
             .style('font-size', '18')
             .text('New Patients');
 
-        const x = d3
-            .scaleBand()
-            .domain(data.map((d) => d.time))
-            .range([0, width])
-            .padding(0.25);
-
-        const y = d3
-            .scaleLinear()
-            .domain([0, d3.max(data, (d) => d.old + d.new)])
-            .nice()
-            .range([height, 0]);
-
-        const color = d3.scaleOrdinal().domain(['old', 'new']).range(['#feb60d', '#30d5c8']);
-
-        svg.append('g')
-            .selectAll('g')
-            .data(d3.stack().keys(['old', 'new'])(data))
-            .enter()
-            .append('g')
-            .attr('fill', (d) => color(d.key))
-            .selectAll('rect')
-            .data((d) => d)
-            .enter()
-            .append('rect')
-            .attr('x', (d) => x(d.data.time))
-            .attr('y', y(0))
-            .attr('height', 0)
-            .attr('width', x.bandwidth())
-            .transition()
-            .duration(750)
-            .attr('y', (d) => y(d[1]))
-            .attr('height', (d) => y(d[0]) - y(d[1]));
-
         // Add X Axis
         svg.append('g')
             .attr('class', 'x-axis')
             .attr('transform', `translate(0,${height})`)
             .call(d3.axisBottom(x))
+            .selectAll('text')
+            .attr('transform', 'rotate(-65)')
+            .style('text-anchor', 'end')
             .style('font-size', '14px');
 
         // Add X Axis Label
@@ -140,8 +155,8 @@ const AppointmentBarChart = () => {
             .attr('class', 'x-label')
             .attr('text-anchor', 'middle')
             .attr('x', width / 2)
-            .attr('y', height + margin.bottom / 2 + 15)
-            .text(`${selectedTime.toUpperCase()}`)
+            .attr('y', height + margin.bottom - 30)
+            .text('DOCTOR')
             .style('font-weight', '500');
 
         // Add Y Axis
@@ -153,7 +168,7 @@ const AppointmentBarChart = () => {
             .attr('text-anchor', 'middle')
             .attr('transform', 'rotate(-90)')
             .attr('x', -height / 2)
-            .attr('y', -margin.left / 2 - 15)
+            .attr('y', -margin.left + 15)
             .text('NUMBER OF PATIENTS')
             .style('font-weight', '500');
     };
@@ -168,16 +183,31 @@ const AppointmentBarChart = () => {
                         <option value="quarter">Quarter</option>
                     </select>
                 </div>
-                <div className={cx('selection')}>
-                    <h4>Doctor</h4>
-                    <select name="doctor" id="doctor" onChange={(e) => setSelectedDoctor(e.target.value)}>
-                        {doctors.map((doctor, index) => (
-                            <option key={index} value={doctor}>
-                                {doctor}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+
+                {selectedTime === 'month' ? (
+                    <div className={cx('selection')}>
+                        <h4>Month</h4>
+                        <select name="month" id="month" onChange={(e) => setSelectedMonth(e.target.value)}>
+                            {months.map((month, index) => (
+                                <option key={index} value={month}>
+                                    {month}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                ) : (
+                    <div className={cx('selection')}>
+                        <h4>Quarter</h4>
+                        <select name="quarter" id="quarter" onChange={(e) => setSelectedQuarter(e.target.value)}>
+                            {quarters.map((quarter, index) => (
+                                <option key={index} value={quarter}>
+                                    {quarter}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                )}
+
                 <div className={cx('selection')}>
                     <h4>Appointment Status</h4>
                     <select name="status" id="status" onChange={(e) => setSelectedStatus(e.target.value)}>
@@ -193,4 +223,4 @@ const AppointmentBarChart = () => {
     );
 };
 
-export default AppointmentBarChart;
+export default TimeAppointmentBarChart;

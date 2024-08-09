@@ -1,13 +1,11 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './DashboardManagement.module.scss';
 import { FaUserDoctor, FaHospitalUser, FaMoneyBill1Wave } from 'react-icons/fa6';
 import { FaCalendarAlt } from 'react-icons/fa';
 import CountUp from 'react-countup';
-import AppointmentBarChart from '../Charts/AppointmentBarChart/AppointmentBarChart';
+import TimeAppointmentBarChart from './../Charts/TimeAppointmentBarChart/TimeAppointmentBarChart';
 import GenderDonutChart from '../Charts/GenderDonutChart/GenderDonutChart';
-import Doctor from '../../../assets/images/about.png';
 import { FaStar } from 'react-icons/fa';
 import { PropTypes } from 'prop-types';
 import roundNumber from '../../../utils/roundNumber';
@@ -171,7 +169,7 @@ const DashboardManagement = ({ users, doctors, appointments }) => {
             </div>
 
             <div className={cx('wrapper')}>
-                <AppointmentBarChart />
+                <TimeAppointmentBarChart />
 
                 <div className={cx('wrapper-childrens')}>
                     <div className={cx('top-doctors')}>

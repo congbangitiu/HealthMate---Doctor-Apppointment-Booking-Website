@@ -96,12 +96,13 @@ const GenderDonutChart = ({ genderCount }) => {
             })
             .attr('dy', '0.35em')
             .text((d) => `${d.data.value}`)
-            .style('font-size', '14px');
+            .style('font-size', '14px')
+            .style('font-weight', '500');
 
         // Add legend
         const legend = svg
             .append('g')
-            .attr('transform', `translate(-80,${radius + 20})`)
+            .attr('transform', `translate(-90,${radius + 20})`)
             .selectAll('.legend')
             .data(genderData)
             .enter()
@@ -123,7 +124,7 @@ const GenderDonutChart = ({ genderCount }) => {
             .attr('y', 9)
             .attr('dy', '0.35em')
             .style('text-anchor', 'start')
-            .style('font-size', '14px')
+            .style('font-size', '16px')
             .text((d) => d.label);
     };
 

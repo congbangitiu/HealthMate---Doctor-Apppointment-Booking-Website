@@ -1,3 +1,171 @@
 .container {
     width: 100%;
 }
+
+.upper-part {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & h4 {
+        font-size: 25px;
+        font-weight: 600;
+    }
+
+    & .search-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 50%;
+        border-radius: 10px;
+        box-shadow: 0 0 10px var(--primaryColor);
+        padding: 10px;
+        background-color: var(--whiteColor);
+
+        &.search-wrapper input {
+            border: none;
+            outline: none;
+            width: 100%;
+            margin-left: 10px;
+            color: var(--headingColor);
+            font-weight: 500;
+        }
+
+        &.search-wrapper input::placeholder {
+            font-weight: 500;
+        }
+
+        & .search-icon-wrapper,
+        & .close-icon-wrapper {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+
+            &:hover {
+                cursor: pointer;
+                opacity: 0.8;
+            }
+        }
+
+        & .search-icon-wrapper {
+            background-color: var(--primaryColor);
+        }
+
+        & .search-icon {
+            font-size: 16px;
+            color: var(--whiteColor);
+        }
+
+        & .close-icon-wrapper {
+            background-color: transparent;
+        }
+
+        & .close-icon {
+            font-size: 20px;
+            color: var(--darkGrayColor);
+        }
+    }
+}
+
+.lower-part {
+    margin-top: 80px;
+
+    & .doctors {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: 30px;
+        width: 100%;
+
+        & .doctor {
+            background-color: var(--lightGreenColor);
+            padding: 25px;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            & div {
+                position: relative;
+
+                & img {
+                    width: 120px;
+                    height: 120px;
+                    border-radius: 100px;
+                }
+
+                & .rating {
+                    position: absolute;
+                    bottom: 0;
+                    margin-left: 50%;
+                    transform: translate(-50%, 20%);
+                    background-color: var(--whiteColor);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 5px;
+                    width: 70px;
+                    height: 30px;
+                    border-radius: 50px;
+
+                    & .star {
+                        color: var(--yellowColor);
+                        font-size: 18px;
+                    }
+
+                    & span {
+                        font-size: 16px;
+                        font-weight: 500;
+                    }
+                }
+            }
+
+            & h4 {
+                margin-top: 20px;
+                font-size: 22px;
+                font-weight: 600;
+            }
+
+            & p {
+                margin-top: 5px;
+                font-size: 16px;
+                font-weight: 600;
+                color: var(--darkGrayColor);
+            }
+
+            & .buttons {
+                margin-top: 25px;
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                & button {
+                    width: 90px;
+                    height: 40px;
+                    border-radius: 10px;
+                    font-size: 16px;
+                    font-weight: 500;
+                    cursor: pointer;
+                    background-color: var(--primaryColor);
+                    color: var(--whiteColor);
+
+                    &:hover {
+                        opacity: 0.8;
+                    }
+                }
+            }
+        }
+
+        & .activeDoctor {
+            box-shadow: 0 0 10px var(--yellowColor);
+        }
+    }
+
+    & .chart {
+        margin-top: 50px;
+    }
+}
