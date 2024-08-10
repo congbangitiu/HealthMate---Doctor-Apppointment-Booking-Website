@@ -8,7 +8,9 @@ import PropTypes from 'prop-types';
 
 const cx = classNames.bind(styles);
 
-const Tabs = ({ activeTab, setActiveTab }) => {
+const Tabs = ({ activeTab, setActiveTab, doctors }) => {
+    const pendingDoctors = doctors.filter((doctor) => doctor.isApproved === 'pending');
+
     return (
         <div className={cx('container')}>
             <div className={cx('tab', { active: activeTab === 'dashboard' })} onClick={() => setActiveTab('dashboard')}>
@@ -18,6 +20,7 @@ const Tabs = ({ activeTab, setActiveTab }) => {
             <div className={cx('tab', { active: activeTab === 'doctor' })} onClick={() => setActiveTab('doctor')}>
                 <FaUserDoctor className={cx('icon')} />
                 <h4>Doctor</h4>
+                {pendingDoctors.length > 0 && <div className={cx('doctorTab')}>{pendingDoctors.length}</div>}
             </div>
             <div className={cx('tab', { active: activeTab === 'patient' })} onClick={() => setActiveTab('patient')}>
                 <FaHospitalUser className={cx('icon')} />
@@ -37,6 +40,7 @@ const Tabs = ({ activeTab, setActiveTab }) => {
 Tabs.propTypes = {
     activeTab: PropTypes.string.isRequired,
     setActiveTab: PropTypes.func.isRequired,
+    doctors: PropTypes.array.isRequired,
 };
 
 export default Tabs;

@@ -18,6 +18,8 @@ const DashboardManagement = ({ users, doctors, appointments }) => {
         return totalRevenue;
     };
 
+    const patients = users.filter((user) => user.role === 'patient');
+
     const topDoctors = () => {
         if (!doctors || doctors.length === 0) {
             return [];
@@ -109,7 +111,7 @@ const DashboardManagement = ({ users, doctors, appointments }) => {
                     <div className={cx('content')}>
                         <p>Total Patients</p>
                         <h4>
-                            <CountUp duration={5} end={users.length} />
+                            <CountUp duration={5} end={patients.length} />
                         </h4>
                     </div>
                 </div>

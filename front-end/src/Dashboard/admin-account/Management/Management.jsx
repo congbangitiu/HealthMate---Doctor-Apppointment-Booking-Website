@@ -20,7 +20,7 @@ const Management = () => {
     return (
         <div className={cx('container')}>
             <div className={cx('inner')}>
-                <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
+                <Tabs activeTab={activeTab} setActiveTab={setActiveTab} doctors={doctors} />
 
                 <div className={cx('content')}>
                     {activeTab === 'dashboard' && (

@@ -15,17 +15,29 @@
     width: 70%;
 }
 
-.pending-noti {
+.noti {
     display: flex;
     align-items: center;
     gap: 10px;
     padding: 10px;
-    background-color: var(--lightYellowColor);
     border-radius: 5px;
     margin-bottom: 30px;
 }
 
-.pending-noti .icon {
+.pending {
+    background-color: var(--lightYellowColor);
+}
+
+.pending .icon {
     color: var(--darkYellowColor);
+    font-size: 20px;
+}
+
+.rejected {
+    background-color: var(--lightRedColor);
+}
+
+.rejected .icon {
+    color: var(--darkRedColor);
     font-size: 20px;
 }

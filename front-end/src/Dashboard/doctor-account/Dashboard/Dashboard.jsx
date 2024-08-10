@@ -31,10 +31,17 @@ const Dashboard = () => {
                     <Tabs tab={tab} setTab={setTab} doctorData={doctorData} />
                     <div className={cx('information')}>
                         {doctorData.isApproved === 'pending' && (
-                            <div className={cx('pending-noti')}>
+                            <div className={cx('noti', 'pending')}>
                                 <FaCircleExclamation className={cx('icon')} />
                                 To get approval please complete your profile. We&apos;ll review manually and accept
                                 within 3 days.
+                            </div>
+                        )}
+                        {doctorData.isApproved === 'rejected' && (
+                            <div className={cx('noti', 'rejected')}>
+                                <FaCircleExclamation className={cx('icon')} />
+                                Your account was declined by administrators due to unexpected issues. Please contact
+                                them to resolve the matter.
                             </div>
                         )}
                         {tab === 'overview' && (

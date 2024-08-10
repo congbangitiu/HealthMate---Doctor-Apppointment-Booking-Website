@@ -1,8 +1,57 @@
 .container-parent {
-    padding: 150px 120px 100px 120px;
+    padding: 100px 0;
+}
+
+.verification {
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &.pending {
+        background-color: var(--lightYellowColor);
+    }
+
+    &.rejected {
+        background-color: var(--lightRedColor);
+    }
+
+    & h4 {
+        font-size: 18px;
+        font-weight: 500;
+        color: var(--irisBlueColor);
+    }
+
+    & .buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 30px;
+
+        & button {
+            width: 100px;
+            height: 40px;
+            border-radius: 10px;
+            font-weight: 500;
+
+            &:hover {
+                opacity: 0.7;
+            }
+        }
+
+        & button:first-child {
+            color: var(--irisBlueColor);
+            background-color: var(--lightGreenColor);
+        }
+
+        & button:last-child {
+            color: var(--whiteColor);
+            background-color: var(--primaryColor);
+        }
+    }
 }
 
 .container {
+    padding: 50px 120px 0 120px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -33,24 +82,23 @@
 
 .bar div {
     font-size: 18px;
-    padding: 10px 20px 0 20px; 
-    position: relative; 
-    
+    padding: 10px 20px 0 20px;
+    position: relative;
+
     &:hover {
         cursor: pointer;
     }
 
     &::after {
-        content: "";
+        content: '';
         display: block;
         width: 100%;
         height: 6px;
         background-color: transparent;
         position: absolute;
-        bottom: -2px; 
+        bottom: -2px;
         left: 0;
         transition: background-color 0.3s;
-        
     }
 }
 
@@ -59,7 +107,7 @@
 }
 
 .active div::after {
-    background-color: var(--primaryColor); 
+    background-color: var(--primaryColor);
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }

@@ -37,6 +37,8 @@ const DoctorList = () => {
         });
     }, []);
 
+    const officialDoctors = doctors.filter((doctor) => doctor.isApproved === 'approved');
+
     return (
         <div className={cx('container')}>
             <Search query={query} setQuery={setQuery} handleSearch={handleSearch} />
@@ -52,7 +54,7 @@ const DoctorList = () => {
                         World-class care for everyone. Our health System offers unmatched, expert health care.
                     </p>
                     <div className={cx('doctors')}>
-                        {doctors.map((doctor) => (
+                        {officialDoctors.map((doctor) => (
                             <DoctorCard key={doctor._id} doctor={doctor} />
                         ))}
                     </div>
