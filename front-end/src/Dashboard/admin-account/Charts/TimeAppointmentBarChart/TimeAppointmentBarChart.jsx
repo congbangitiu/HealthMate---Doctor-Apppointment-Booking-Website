@@ -81,13 +81,30 @@ const TimeAppointmentBarChart = () => {
 
         const color = d3.scaleOrdinal().domain(['old', 'new']).range(['#feb60d', '#30d5c8']);
 
-        svg.append('g')
+        const tooltip = d3
+            .select('body')
+            .append('div')
+            .attr('class', 'tooltip')
+            .style('position', 'absolute')
+            .style('text-align', 'center')
+            .style('width', '100px')
+            .style('height', '28px')
+            .style('padding', '4px')
+            .style('font-size', '14px')
+            .style('background', 'lightsteelblue')
+            .style('border', '0px')
+            .style('border-radius', '8px')
+            .style('pointer-events', 'none')
+            .style('opacity', 0);
+
+        const bars = svg
             .selectAll('g')
             .data(d3.stack().keys(['old', 'new'])(data))
             .enter()
             .append('g')
-            .attr('fill', (d) => color(d.key))
-            .selectAll('rect')
+            .attr('fill', (d) => color(d.key));
+
+        bars.selectAll('rect')
             .data((d) => d)
             .enter()
             .append('rect')
@@ -95,11 +112,39 @@ const TimeAppointmentBarChart = () => {
             .attr('y', y(0))
             .attr('height', 0)
             .attr('width', x.bandwidth())
+            .on('mouseover', function (event, d) {
+                d3.select(this).style('opacity', 0.8);
+                tooltip.transition().duration(200).style('opacity', 0.9);
+                tooltip
+                    .html(`${d[1] - d[0]} patients`)
+                    .style('left', event.pageX + 5 + 'px')
+                    .style('top', event.pageY - 30 + 'px');
+            })
+            .on('mouseout', function () {
+                d3.select(this).style('opacity', 1);
+                tooltip.transition().duration(500).style('opacity', 0);
+            })
             .transition()
             .duration(650)
             .delay((d, i) => i * 100)
             .attr('y', (d) => y(d[1]))
             .attr('height', (d) => y(d[0]) - y(d[1]));
+
+        // Add text labels on top of each bar segment
+        svg.selectAll('.text')
+            .data(data)
+            .enter()
+            .append('text')
+            .attr('x', (d) => x(d.doctor) + x.bandwidth() / 2)
+            .attr('y', (d) => y(d.old + d.new) - 10)
+            .attr('text-anchor', 'middle')
+            .text((d) => d.old + d.new) // This line shows the total of old and new patients
+            .style('font-size', '16px')
+            .style('fill', '#000')
+            .style('opacity', 0) // Start with invisible text
+            .transition()
+            .delay((d, i) => i * 100 + 650) // Delay text appearance to match the end of the bar animation
+            .style('opacity', 1); // Make text visible after delay
 
         // Add title
         svg.append('text')
@@ -114,7 +159,7 @@ const TimeAppointmentBarChart = () => {
         const legend = svg
             .append('g')
             .attr('class', 'legend')
-            .attr('transform', `translate(${margin.left * 3.5}, -${margin.top / 2 - 15})`);
+            .attr('transform', `translate(${margin.left * 3.5}, -${margin.top / 2 - 10})`);
 
         // Old Patients legend
         legend.append('rect').attr('x', 0).attr('y', 0).attr('width', 20).attr('height', 20).style('fill', '#feb60d');

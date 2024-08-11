@@ -26,21 +26,34 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
         if (data.length > 0) {
             const filteredData = data.filter((d) => d.Doctor === doctorChart);
 
-            // Prepare data based on selected time (month or quarter) and status (Successful or Cancelled)
-            const preparedData = filteredData.map((d) => {
-                return {
-                    time: selectedTime === 'month' ? d.Month : d.Quarter,
-                    old: +d[`${selectedStatus}_Old`],
-                    new: +d[`${selectedStatus}_New`],
-                };
-            });
+            let preparedData;
+
+            if (selectedTime === 'month') {
+                preparedData = filteredData.map((d) => {
+                    return {
+                        time: d.Month,
+                        old: +d[`${selectedStatus}_Old`],
+                        new: +d[`${selectedStatus}_New`],
+                    };
+                });
+            } else if (selectedTime === 'quarter') {
+                const groupedData = d3.group(filteredData, (d) => d.Quarter);
+
+                preparedData = Array.from(groupedData, ([key, values]) => {
+                    return {
+                        time: key,
+                        old: d3.sum(values, (d) => +d[`${selectedStatus}_Old`]),
+                        new: d3.sum(values, (d) => +d[`${selectedStatus}_New`]),
+                    };
+                });
+            }
 
             drawChart(preparedData);
         }
     }, [data, doctorChart, selectedTime, selectedStatus]);
 
     const drawChart = (data) => {
-        const margin = { top: 100, right: 30, bottom: 60, left: 60 };
+        const margin = { top: 120, right: 30, bottom: 60, left: 60 };
         const width = 1000 - margin.left - margin.right;
         const height = 550 - margin.top - margin.bottom;
 
@@ -58,7 +71,7 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
         // Add title
         svg.append('text')
             .attr('x', width / 2 - 20)
-            .attr('y', -margin.top / 2 - 10)
+            .attr('y', -margin.top / 2 - 25)
             .attr('text-anchor', 'middle')
             .style('font-size', '26px')
             .style('font-weight', 'bold')
@@ -68,7 +81,7 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
         const legend = svg
             .append('g')
             .attr('class', 'legend')
-            .attr('transform', `translate(${margin.left * 4}, -${margin.top / 2 - 10})`); // Adjust position to be below the title
+            .attr('transform', `translate(${margin.left * 4}, -${margin.top / 2})`);
 
         // Old Patients legend
         legend.append('rect').attr('x', 0).attr('y', 0).attr('width', 20).attr('height', 20).style('fill', '#feb60d');
@@ -108,6 +121,22 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
 
         const color = d3.scaleOrdinal().domain(['old', 'new']).range(['#feb60d', '#30d5c8']);
 
+        const tooltip = d3
+            .select('body')
+            .append('div')
+            .attr('class', 'tooltip')
+            .style('position', 'absolute')
+            .style('text-align', 'center')
+            .style('width', '80px')
+            .style('height', '28px')
+            .style('padding', '5px 2px 0 2px')
+            .style('font-size', '12px')
+            .style('background', 'lightsteelblue')
+            .style('border', '0px')
+            .style('border-radius', '8px')
+            .style('pointer-events', 'none')
+            .style('opacity', 0);
+
         svg.append('g')
             .selectAll('g')
             .data(d3.stack().keys(['old', 'new'])(data))
@@ -122,10 +151,36 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
             .attr('y', y(0))
             .attr('height', 0)
             .attr('width', x.bandwidth())
+            .on('mouseover', function (event, d) {
+                d3.select(this).style('opacity', 0.8);
+                tooltip.transition().duration(200).style('opacity', 0.9);
+                tooltip
+                    .html(`${d[1] - d[0]} patients`)
+                    .style('left', event.pageX + 5 + 'px')
+                    .style('top', event.pageY - 30 + 'px');
+            })
+            .on('mouseout', function () {
+                d3.select(this).style('opacity', 1);
+                tooltip.transition().duration(500).style('opacity', 0);
+            })
             .transition()
             .duration(750)
             .attr('y', (d) => y(d[1]))
-            .attr('height', (d) => y(d[0]) - y(d[1]));
+            .attr('height', (d) => y(d[0]) - y(d[1]))
+            .on('end', function (d, i) {
+                if (i === data.length - 1) {
+                    svg.append('g')
+                        .selectAll('text')
+                        .data(data)
+                        .enter()
+                        .append('text')
+                        .attr('x', (d) => x(d.time) + x.bandwidth() / 2)
+                        .attr('y', (d) => y(d.old + d.new) - 10)
+                        .attr('text-anchor', 'middle')
+                        .style('font-size', '14px')
+                        .text((d) => d.old + d.new);
+                }
+            });
 
         // Add X Axis
         svg.append('g')

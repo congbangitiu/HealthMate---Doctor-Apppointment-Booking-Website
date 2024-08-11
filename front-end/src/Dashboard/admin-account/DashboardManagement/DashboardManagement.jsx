@@ -19,6 +19,7 @@ const DashboardManagement = ({ users, doctors, appointments }) => {
     };
 
     const patients = users.filter((user) => user.role === 'patient');
+    const officialDoctors = doctors.filter((doctor) => doctor.isApproved === 'approved');
 
     const topDoctors = () => {
         if (!doctors || doctors.length === 0) {
@@ -64,7 +65,7 @@ const DashboardManagement = ({ users, doctors, appointments }) => {
 
         return genderCount;
     };
-    const genderCount = countGenderByRole(users, doctors);
+    const genderCount = countGenderByRole(patients, officialDoctors);
 
     return (
         <div className={cx('container')}>
@@ -88,7 +89,7 @@ const DashboardManagement = ({ users, doctors, appointments }) => {
                     <div className={cx('content')}>
                         <p>Total Doctors</p>
                         <h4>
-                            <CountUp duration={5} end={doctors.length} />
+                            <CountUp duration={5} end={officialDoctors.length} />
                         </h4>
                     </div>
                 </div>
