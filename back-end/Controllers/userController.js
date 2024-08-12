@@ -58,7 +58,17 @@ export const getSingleUser = async (req, res) => {
 
 export const getAllUsers = async (req, res) => {
     try {
-        const users = await User.find({}).select('-password');
+        const { query } = req.query;
+        let users;
+        if (query) {
+            users = await User.find({
+                $or: [
+                    { fullname: { $regex: req.query.query, $options: 'i' } },
+                ],
+            }).select('-password');
+        } else {
+            users = await User.find({}).select('-password');
+        }
 
         res.status(200).json({
             success: true,
@@ -123,7 +133,6 @@ export const getMyAppointments = async (req, res) => {
         });
     }
 };
-
 
 export const getAppointmentById = async (req, res) => {
     const { id } = req.params;

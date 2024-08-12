@@ -62,16 +62,6 @@ const GenderDonutChart = ({ genderCount }) => {
             .outerRadius(radius - 5)
             .innerRadius(radius - 50);
 
-        const labelArcMale = d3
-            .arc()
-            .outerRadius(radius - 45)
-            .innerRadius(radius - 20);
-
-        const labelArcFemale = d3
-            .arc()
-            .outerRadius(radius - 30)
-            .innerRadius(radius - 20);
-
         const arc = svg.selectAll('.arc').data(pie(genderData)).enter().append('g').attr('class', 'arc');
 
         arc.append('path')
@@ -84,20 +74,18 @@ const GenderDonutChart = ({ genderCount }) => {
                 return function (t) {
                     return path(interpolate(t));
                 };
-            });
-
-        arc.append('text')
-            .attr('transform', (d) => {
-                if (d.data.label === 'Male') {
-                    return `translate(${labelArcMale.centroid(d)})`;
-                } else {
-                    return `translate(${labelArcFemale.centroid(d)})`;
-                }
             })
-            .attr('dy', '0.35em')
-            .text((d) => `${d.data.value}`)
-            .style('font-size', '14px')
-            .style('font-weight', '500');
+            .on('end', function (d) {
+                // Delay text appearance until after the animation
+                setTimeout(() => {
+                    arc.append('text')
+                        .attr('transform', () => `translate(${path.centroid(d)})`)
+                        .attr('dx', '-0.3em')
+                        .attr('dy', '0.1em')
+                        .text(d.data.value)
+                        .style('font-size', '14px');
+                }, 100);
+            });
 
         // Add legend
         const legend = svg
