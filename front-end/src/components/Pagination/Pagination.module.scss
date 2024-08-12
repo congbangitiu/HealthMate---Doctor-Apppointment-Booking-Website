@@ -1,0 +1,47 @@
+.container {
+    margin-top: 60px;
+}
+
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    justify-content: center;
+
+    & li {
+        margin: 0 5px;
+        cursor: pointer;
+
+        & a {
+            padding: 10px;
+            border: 1px solid var(--lightGrayColor);
+            color: var(--primaryColor);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            font-weight: 500;
+
+            &:hover {
+                background-color: var(--primaryColor);
+                color: var(--whiteColor);
+            }
+        }
+
+        &.active a {
+            background-color: var(--primaryColor);
+            color: var(--whiteColor);
+            border: 1px solid var(--primaryColor);
+        }
+
+        &.disabled a {
+            color: var(--darkGrayColor);
+            background-color: var(--lightGrayColor);
+            cursor: not-allowed;
+        }
+    }
+
+    & .break-me {
+        cursor: default;
+        color: var(--darkGrayColor);
+    }
+}

@@ -13,8 +13,17 @@ const cx = classNames.bind(styles);
 
 const Management = () => {
     const [activeTab, setActiveTab] = useState('dashboard');
-    const { data: users } = useFetchData(`${BASE_URL}/users`);
-    const { data: doctors } = useFetchData(`${BASE_URL}/doctors`);
+    const [debouncedQuery, setDebouncedQuery] = useState('');
+    const {
+        data: users,
+        loading: userLoading,
+        error: userError,
+    } = useFetchData(`${BASE_URL}/users?query=${debouncedQuery}`);
+    const {
+        data: doctors,
+        loading: doctorLoading,
+        error: doctorError,
+    } = useFetchData(`${BASE_URL}/doctors?query=${debouncedQuery}`);
     const { data: appointments } = useFetchData(`${BASE_URL}/bookings`);
 
     return (
@@ -26,8 +35,22 @@ const Management = () => {
                     {activeTab === 'dashboard' && (
                         <DashboardManagement users={users} doctors={doctors} appointments={appointments} />
                     )}
-                    {activeTab === 'doctor' && <DoctorManagement />}
-                    {activeTab === 'patient' && <PatientManagement />}
+                    {activeTab === 'doctor' && (
+                        <DoctorManagement
+                            doctors={doctors}
+                            setDebouncedQuery={setDebouncedQuery}
+                            loading={doctorLoading}
+                            error={doctorError}
+                        />
+                    )}
+                    {activeTab === 'patient' && (
+                        <PatientManagement
+                            users={users}
+                            setDebouncedQuery={setDebouncedQuery}
+                            loading={userLoading}
+                            error={userError}
+                        />
+                    )}
                     {activeTab === 'appointment' && <AppointmentManagement />}
                 </div>
             </div>

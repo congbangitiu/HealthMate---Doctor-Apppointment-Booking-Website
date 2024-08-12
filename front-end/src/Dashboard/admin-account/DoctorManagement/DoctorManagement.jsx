@@ -4,7 +4,6 @@ import axios from 'axios';
 import classNames from 'classnames/bind';
 import styles from './DoctorManagement.module.scss';
 import { BASE_URL, token } from '../../../../config';
-import useFetchData from '../../../hooks/useFetchData';
 import { FaStar, FaLongArrowAltRight } from 'react-icons/fa';
 import roundNumber from '../../../utils/roundNumber';
 import Loader from '../../../components/Loader/Loader';
@@ -13,13 +12,12 @@ import AppointmentBarChart from '../Charts/DoctorAppointmentBarChart/DoctorAppoi
 import AdminSearch from '../AdminSearch/AdminSearch';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
+import { PropTypes } from 'prop-types';
 
 const cx = classNames.bind(styles);
 
-const DoctorManagement = () => {
+const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
     const [query, setQuery] = useState('');
-    const [debouncedQuery, setDebouncedQuery] = useState('');
-    const { data: doctors, loading, error } = useFetchData(`${BASE_URL}/doctors?query=${debouncedQuery}`);
     const [doctorChart, setDoctorChart] = useState('');
     const [isActiveDoctor, setIsActiveDoctor] = useState();
     const [loadingApprove, setLoadingApprove] = useState(false);
@@ -29,7 +27,7 @@ const DoctorManagement = () => {
     useEffect(() => {
         const timeout = setTimeout(() => {
             setDebouncedQuery(query);
-        }, 700);
+        }, 600);
         return () => {
             clearTimeout(timeout);
         };
@@ -240,6 +238,13 @@ const DoctorManagement = () => {
             )}
         </div>
     );
+};
+
+DoctorManagement.propTypes = {
+    doctors: PropTypes.array.isRequired,
+    setDebouncedQuery: PropTypes.func.isRequired,
+    loading: PropTypes.bool.isRequired,
+    error: PropTypes.string,
 };
 
 export default DoctorManagement;

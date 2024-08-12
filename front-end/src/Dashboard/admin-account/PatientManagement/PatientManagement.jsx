@@ -1,30 +1,37 @@
 import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './PatientManagement.module.scss';
-import useFetchData from '../../../hooks/useFetchData';
-import { BASE_URL } from '../../../../config';
 import AdminSearch from '../AdminSearch/AdminSearch';
 import Loader from '../../../components/Loader/Loader';
 import Error from '../../../components/Error/Error';
 import { IoMdMale, IoMdFemale } from 'react-icons/io';
+import { PropTypes } from 'prop-types';
+import Pagination from '../../../components/Pagination/Pagination';
 
 const cx = classNames.bind(styles);
 
-const PatientManagement = () => {
+const PatientManagement = ({ users, setDebouncedQuery, loading, error }) => {
     const [query, setQuery] = useState('');
-    const [debouncedQuery, setDebouncedQuery] = useState('');
-    const { data: users, loading, error } = useFetchData(`${BASE_URL}/users?query=${debouncedQuery}`);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [currentItems, setCurrentItems] = useState([]);
+    const itemsPerPage = 10;
 
     useEffect(() => {
         const timeout = setTimeout(() => {
             setDebouncedQuery(query);
-        }, 700);
+        }, 600);
         return () => {
             clearTimeout(timeout);
         };
-    }, [query]);
+    }, [query, setDebouncedQuery]);
 
     const patients = users.filter((user) => user.role === 'patient');
+
+    useEffect(() => {
+        const offset = currentPage * itemsPerPage;
+        const items = patients.slice(offset, offset + itemsPerPage);
+        setCurrentItems(items);
+    }, [currentPage, patients]);
 
     return (
         <div className={cx('container')}>
@@ -42,7 +49,7 @@ const PatientManagement = () => {
                 <Error errorMessage={error} />
             ) : (
                 <div className={cx('patients')}>
-                    {patients.map((patient, index) => (
+                    {currentItems.map((patient, index) => (
                         <div key={index} className={cx('patient')}>
                             <div className={cx('left-part')}>
                                 <img src={patient.photo} alt="" />
@@ -98,8 +105,23 @@ const PatientManagement = () => {
                     ))}
                 </div>
             )}
+
+            <Pagination
+                data={patients}
+                itemsPerPage={itemsPerPage}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                setCurrentItems={setCurrentItems}
+            />
         </div>
     );
+};
+
+PatientManagement.propTypes = {
+    users: PropTypes.array.isRequired,
+    setDebouncedQuery: PropTypes.func.isRequired,
+    loading: PropTypes.bool.isRequired,
+    error: PropTypes.string,
 };
 
 export default PatientManagement;
