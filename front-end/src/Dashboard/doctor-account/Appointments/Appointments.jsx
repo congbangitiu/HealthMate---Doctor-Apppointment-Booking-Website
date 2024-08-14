@@ -49,7 +49,11 @@ const Appointments = () => {
                                     key={appointment._id}
                                     className={cx({ cancelledStatus: appointment.status === 'cancelled' })}
                                 >
-                                    <td>
+                                    <td
+                                        className={cx({
+                                            cancelledStatus: appointment.status === 'cancelled',
+                                        })}
+                                    >
                                         {appointment.status === 'cancelled' ? (
                                             <Link
                                                 className={cx('link', {
@@ -82,7 +86,11 @@ const Appointments = () => {
                                             </Link>
                                         )}
                                     </td> */}
-                                    <td>
+                                    <td
+                                        className={cx({
+                                            cancelledStatus: appointment.status === 'cancelled',
+                                        })}
+                                    >
                                         {appointment.status === 'cancelled' ? (
                                             <Link
                                                 className={cx('link', {
@@ -97,7 +105,11 @@ const Appointments = () => {
                                             </Link>
                                         )}
                                     </td>
-                                    <td>
+                                    <td
+                                        className={cx({
+                                            cancelledStatus: appointment.status === 'cancelled',
+                                        })}
+                                    >
                                         {appointment.status === 'cancelled' ? (
                                             <Link
                                                 className={cx('captitalized', {
@@ -115,7 +127,11 @@ const Appointments = () => {
                                             </Link>
                                         )}
                                     </td>
-                                    <td>
+                                    <td
+                                        className={cx({
+                                            cancelledStatus: appointment.status === 'cancelled',
+                                        })}
+                                    >
                                         {appointment.status === 'cancelled' ? (
                                             <Link
                                                 className={cx('link', {
@@ -130,7 +146,11 @@ const Appointments = () => {
                                             </Link>
                                         )}
                                     </td>
-                                    <td>
+                                    <td
+                                        className={cx({
+                                            cancelledStatus: appointment.status === 'cancelled',
+                                        })}
+                                    >
                                         {appointment.status === 'cancelled' ? (
                                             <Link
                                                 className={cx('link', {
@@ -147,14 +167,23 @@ const Appointments = () => {
                                             </Link>
                                         )}
                                     </td>
-                                    <td>
-                                        <Link
-                                            className={cx(appointment.status, 'captitalized', {
-                                                cancelledStatus: appointment.status === 'cancelled',
-                                            })}
-                                        >
-                                            {appointment.status}
-                                        </Link>
+                                    <td
+                                        className={cx({
+                                            cancelledStatus: appointment.status === 'cancelled',
+                                        })}
+                                    >
+                                        {appointment.status === 'cancelled' ? (
+                                            <Link className={cx(appointment.status, 'cancelledStatus', 'captitalized')}>
+                                                {appointment.status}
+                                            </Link>
+                                        ) : (
+                                            <Link
+                                                to={`/doctors/appointments/my-appointments/${appointment._id}`}
+                                                className={cx(appointment.status, 'captitalized')}
+                                            >
+                                                {appointment.status}
+                                            </Link>
+                                        )}
                                     </td>
                                 </tr>
                             ))}

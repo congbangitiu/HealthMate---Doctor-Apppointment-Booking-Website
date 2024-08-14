@@ -62,9 +62,7 @@ export const getAllUsers = async (req, res) => {
         let users;
         if (query) {
             users = await User.find({
-                $or: [
-                    { fullname: { $regex: req.query.query, $options: 'i' } },
-                ],
+                $or: [{ fullname: { $regex: req.query.query, $options: 'i' } }],
             }).select('-password');
         } else {
             users = await User.find({}).select('-password');

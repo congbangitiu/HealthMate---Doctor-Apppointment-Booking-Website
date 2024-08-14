@@ -16,10 +16,10 @@ const router = express.Router();
 router.get('/:id', getSingleUser);
 router.get('/', authenticate, restrict(['admin']), getAllUsers);
 router.put('/:id', authenticate, restrict(['patient']), updateUser);
-router.delete('/:id', authenticate, restrict(['patient']), deleteUser);
-router.get('/profile/me', authenticate, restrict(['patient']), getUserProfile);
-router.get('/appointments/my-appointments', authenticate, restrict(['patient']), getMyAppointments);
-router.get('/appointments/my-appointments/:id', authenticate, restrict(['patient']), getAppointmentById);
+router.delete('/:id', authenticate, restrict(['patient', 'admin']), deleteUser);
+router.get('/profile/me', authenticate, restrict(['patient', 'admin']), getUserProfile);
+router.get('/appointments/my-appointments', authenticate, restrict(['patient', 'admin']), getMyAppointments);
+router.get('/appointments/my-appointments/:id', authenticate, restrict(['patient', 'admin']), getAppointmentById);
 router.put('/change-password/:id', authenticate, restrict(['patient']), changePassword);
 
 export default router;

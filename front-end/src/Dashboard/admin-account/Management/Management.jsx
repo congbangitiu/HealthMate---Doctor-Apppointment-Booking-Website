@@ -51,7 +51,9 @@ const Management = () => {
                             error={userError}
                         />
                     )}
-                    {activeTab === 'appointment' && <AppointmentManagement />}
+                    {activeTab === 'appointment' && (
+                        <AppointmentManagement doctors={doctors} users={users} appointments={appointments} />
+                    )}
                 </div>
             </div>
         </div>

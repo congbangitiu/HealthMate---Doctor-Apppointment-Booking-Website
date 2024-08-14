@@ -22,11 +22,11 @@ router.use('/:doctorId/reviews', reviewRouter);
 
 router.get('/:id', getSingleDoctor);
 router.get('/', getAllDoctors);
-router.put('/:id', authenticate, restrict(['doctor', 'admin']), updateDoctor);
+router.put('/:id', authenticate, restrict(['doctor']), updateDoctor);
 router.delete('/:id', authenticate, restrict(['doctor', 'admin']), deleteDoctor);
-router.get('/profile/me', authenticate, restrict(['doctor']), getDoctorProfile);
-router.get('/appointments/my-appointments', authenticate, restrict(['doctor']), getAllDoctorAppointments);
-router.get('/appointments/my-appointments/:id', authenticate, restrict(['doctor']), getAppointmentById);
+router.get('/profile/me', authenticate, restrict(['doctor', 'admin']), getDoctorProfile);
+router.get('/appointments/my-appointments', authenticate, restrict(['doctor', 'admin']), getAllDoctorAppointments);
+router.get('/appointments/my-appointments/:id', authenticate, restrict(['doctor', 'admin']), getAppointmentById);
 router.put('/change-password/:id', authenticate, restrict(['doctor']), changePassword);
 router.post('/upload-signature/:id', authenticate, restrict(['doctor']), upload.single('signature'), uploadSignature);
 

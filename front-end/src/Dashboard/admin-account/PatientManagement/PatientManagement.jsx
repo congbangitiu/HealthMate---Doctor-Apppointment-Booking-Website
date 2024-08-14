@@ -106,13 +106,15 @@ const PatientManagement = ({ users, setDebouncedQuery, loading, error }) => {
                 </div>
             )}
 
-            <Pagination
-                data={patients}
-                itemsPerPage={itemsPerPage}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                setCurrentItems={setCurrentItems}
-            />
+            {patients.length !== 0 && (
+                <Pagination
+                    data={patients}
+                    itemsPerPage={itemsPerPage}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    setCurrentItems={setCurrentItems}
+                />
+            )}
         </div>
     );
 };
