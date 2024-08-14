@@ -89,13 +89,15 @@
 .eye {
     cursor: pointer;
 }
+
 .selection {
     display: flex;
     justify-content: space-evenly;
-    align-items: start;
+    align-items: flex-start;
     width: 100%;
     margin-top: 20px;
 }
+
 .choose {
     display: flex;
     align-items: center;
