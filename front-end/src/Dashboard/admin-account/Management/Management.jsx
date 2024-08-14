@@ -6,6 +6,7 @@ import DashboardManagement from '../DashboardManagement/DashboardManagement';
 import DoctorManagement from '../DoctorManagement/DoctorManagement';
 import PatientManagement from '../PatientManagement/PatientManagement';
 import AppointmentManagement from '../AppointmentManagement/AppointmentManagement';
+import RevenueManagement from '../RevenueManagement/RevenueManagement';
 import { BASE_URL } from '../../../../config';
 import useFetchData from '../../../hooks/useFetchData';
 
@@ -54,6 +55,7 @@ const Management = () => {
                     {activeTab === 'appointment' && (
                         <AppointmentManagement doctors={doctors} users={users} appointments={appointments} />
                     )}
+                    {activeTab === 'revenue' && <RevenueManagement doctors={doctors} appointments={appointments} />}
                 </div>
             </div>
         </div>

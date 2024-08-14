@@ -1,8 +1,7 @@
-import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Tabs.module.scss';
 import { BiSolidDashboard } from 'react-icons/bi';
-import { FaUserDoctor, FaHospitalUser } from 'react-icons/fa6';
+import { FaUserDoctor, FaHospitalUser, FaMoneyBill1Wave } from 'react-icons/fa6';
 import { FaCalendarAlt } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 
@@ -32,6 +31,10 @@ const Tabs = ({ activeTab, setActiveTab, doctors }) => {
             >
                 <FaCalendarAlt className={cx('icon')} />
                 <h4>Appointment</h4>
+            </div>
+            <div className={cx('tab', { active: activeTab === 'revenue' })} onClick={() => setActiveTab('revenue')}>
+                <FaMoneyBill1Wave className={cx('icon')} />
+                <h4>Revenue</h4>
             </div>
         </div>
     );

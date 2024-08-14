@@ -1,0 +1,45 @@
+.container {
+    background-color: var(--whiteColor);
+    padding: 40px 0 20px 0;
+    border-radius: 20px;
+    width: 100%;
+}
+
+.selections {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 150px;
+}
+
+.selection {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    & h4 {
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    & select {
+        padding: 5px 10px;
+        border: 2px solid var(--primaryColor);
+        border-radius: 5px;
+        font-size: 18px;
+        outline: none;
+    }
+}
+
+.chart {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+#tooltip {
+    position: absolute;
+    top: 0;
+    left: 0;
+}

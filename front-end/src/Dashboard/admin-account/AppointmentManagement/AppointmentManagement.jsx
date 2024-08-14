@@ -58,7 +58,7 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
         { value: 'all', label: 'All Doctors' },
         ...officialDoctors.map((doctor) => ({
             value: doctor.fullname,
-            label: doctor.fullname,
+            label: 'Dr. ' + doctor.fullname,
         })),
     ];
 
@@ -162,7 +162,7 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
                     </thead>
                     <tbody>
                         {currentItems.map((appointment, index) => (
-                            <tr key={index}>
+                            <tr key={index} className={cx({ cancelledStatus: appointment.status === 'cancelled' })}>
                                 <td
                                     className={cx({
                                         cancelledStatus: appointment.status === 'cancelled',
