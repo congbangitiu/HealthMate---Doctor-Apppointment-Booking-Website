@@ -3,24 +3,21 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 20px;
     border-radius: 20px;
+    padding: 20px;
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
     background-color: #fff;
-    width: 350px;
+    width: 320px;
     margin-top: 10px;
 
     &:hover {
-        transform: scale(1.05);
+        transform: scale(1.02);
         transition: 0.5s;
         background-color: var(--lightYellowColor);
     }
 }
 
 .container img {
-    margin-top: 10px;
-    width: 95%;
-    height: 95%;
     object-fit: cover;
     border-radius: 15px;
     aspect-ratio: 1/1;

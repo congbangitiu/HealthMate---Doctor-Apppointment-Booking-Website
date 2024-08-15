@@ -1,4 +1,3 @@
-import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './ExaminationService.module.scss';
 import { FaLongArrowAltRight } from 'react-icons/fa';
