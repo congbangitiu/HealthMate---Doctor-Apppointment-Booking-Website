@@ -6,32 +6,59 @@ import { LiaSmsSolid } from 'react-icons/lia';
 import { MdOutlineEmail } from 'react-icons/md';
 import SyncLoader from 'react-spinners/SyncLoader';
 import truncateNumber from '../../utils/truncateNumber';
-import OTPInput, { ResendOTP } from 'otp-input-react';
+import OTPInput from 'otp-input-react';
+import { toast } from 'react-toastify';
+import { BASE_URL } from '../../../config';
 
 const cx = classNames.bind(styles);
 
-const VerifyOTP = ({ phone, email, verifyOTP, tab }) => {
+const VerifyOTP = ({ formData, tab }) => {
     const [OTP, setOTP] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const isButtonDisabled = OTP.length !== 6;
-    const [hideResendOTP, setHideResendOTP] = useState(true);
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     const handleChange = (otp) => {
         setOTP(otp);
     };
 
-    const handleVerify = () => {
+    const handleVerify = async () => {
         setIsLoading(true);
-        setHideResendOTP(false);
-        verifyOTP(OTP).finally(() => setIsLoading(false));
-    };
 
-    const renderButton = (buttonProps) => {
-        return <button {...buttonProps}>Resend</button>;
-    };
+        try {
+            const response = await fetch(`${BASE_URL}/auth/register-verify-otp`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: formData.email,
+                    otp: OTP,
+                    fullname: formData.fullname,
+                    username: formData.username,
+                    phone: formData.phone,
+                    password: formData.password,
+                    confirmedPassword: formData.confirmedPassword,
+                    role: formData.role,
+                    photo: formData.photo,
+                    gender: formData.gender,
+                }),
+            });
 
-    const renderTime = (time) => {
-        return <span>{time} seconds remaining</span>;
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error);
+            }
+
+            toast.success('Account created successfully!');
+            await delay(2000);
+            window.location.href = '/login';
+        } catch (error) {
+            toast.error(`Verification failed: ${error.message}`);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -40,51 +67,38 @@ const VerifyOTP = ({ phone, email, verifyOTP, tab }) => {
                 <>
                     <MdOutlineEmail className={cx('icon')} />
                     <h4>
-                        Please check email <b>{email}</b> <br />
+                        Please check email <b>{formData.email}</b> <br />
                         (including spam) <br />
-                        and click the link to verify the account
                     </h4>
                 </>
             ) : (
                 <>
                     <LiaSmsSolid className={cx('icon')} />
                     <h4>
-                        Please enter the OTP code sent to phone number <b>{truncateNumber(phone)}</b>
+                        Please enter the OTP code sent to phone number <b>{truncateNumber(formData.phone)}</b>
                     </h4>
                 </>
             )}
-            {tab === 'SMS' && (
-                <OTPInput
-                    value={OTP}
-                    onChange={handleChange}
-                    autoFocus
-                    OTPLength={6}
-                    otpType="number"
-                    disabled={false}
-                    secure
-                    className={cx('otp-input')}
-                />
-            )}
-            {tab === 'SMS' &&
-                (hideResendOTP ? (
-                    <button
-                        onClick={handleVerify}
-                        disabled={isButtonDisabled}
-                        className={cx({ disabled: isButtonDisabled })}
-                    >
-                        {isLoading ? <SyncLoader size={7} color="#ffffff" /> : 'Verify OTP'}
-                    </button>
-                ) : (
-                    <ResendOTP renderTime={renderTime} renderButton={renderButton} className={cx('resend-otp')} />
-                ))}
+            <OTPInput
+                value={OTP}
+                onChange={handleChange}
+                autoFocus
+                OTPLength={6}
+                otpType="number"
+                disabled={false}
+                secure
+                className={cx('otp-input')}
+            />
+
+            <button onClick={handleVerify} disabled={isButtonDisabled} className={cx({ disabled: isButtonDisabled })}>
+                {isLoading ? <SyncLoader size={7} color="#ffffff" /> : 'Verify OTP'}
+            </button>
         </div>
     );
 };
 
 VerifyOTP.propTypes = {
-    phone: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    verifyOTP: PropTypes.func.isRequired,
+    formData: PropTypes.object.isRequired,
     tab: PropTypes.string.isRequired,
 };
 

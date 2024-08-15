@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import uploadImageToCloudinary from '../../utils/uploadCloudinary';
 import { BASE_URL } from '../../../config';
 import classNames from 'classnames/bind';
@@ -38,7 +38,6 @@ const Register = () => {
         role: 'patient',
     });
 
-    const navigate = useNavigate();
     const [showVerifyOTP, setShowVerifyOTP] = useState(false);
     const [confirmationResult, setConfirmationResult] = useState(null);
     const [tab, setTab] = useState('');
@@ -121,26 +120,29 @@ const Register = () => {
     };
 
     const sendOTPByEmail = async () => {
-        try {
-            const email = formData.email;
+        setLoading(true);
 
-            if (!email) {
-                throw new Error('Email is missing.');
+        try {
+            const res = await fetch(`${BASE_URL}/auth/send-otp`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ fullname: formData.fullname, email: formData.email }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || 'Failed to send OTP');
             }
 
-            const actionCodeSettings = {
-                url: `${window.location.origin}/complete-sign-up`,
-                handleCodeInApp: true,
-            };
-
-            await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-            window.localStorage.setItem('emailForSignIn', email);
-            window.localStorage.setItem('formData', JSON.stringify(formData));
+            toast.success('OTP sent successfully to your email!');
             setShowVerifyOTP(true);
-            toast.success('Verification email sent');
         } catch (error) {
-            console.log('Error sending email verification', error);
-            toast.error('Failed to send verification email');
+            toast.error(error.message || 'Failed to send OTP. Please try again.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -160,31 +162,6 @@ const Register = () => {
             }
         } catch (error) {
             toast.error(error.message);
-        }
-    };
-
-    const verifyOTP = async (otp) => {
-        setLoading(true);
-        try {
-            await confirmationResult.confirm(otp);
-            const res = await fetch(`${BASE_URL}/auth/register`, {
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
-
-            const { message } = await res.json();
-            if (!res.ok) {
-                throw new Error(message);
-            }
-            setLoading(false);
-            toast.success(message);
-            navigate('/login');
-        } catch (error) {
-            toast.error(error.message);
-            setLoading(false);
         }
     };
 
@@ -385,7 +362,7 @@ const Register = () => {
                 <div className={cx('form-wrapper')}>
                     <div className={cx('overlay')} onClick={() => setShowVerifyOTP(false)}></div>
                     <div className={cx('form-update', 'verifyOTP')}>
-                        <VerifyOTP phone={formData.phone} email={formData.email} verifyOTP={verifyOTP} tab={tab} />
+                        <VerifyOTP formData={formData} tab={tab} />
                     </div>
                 </div>
             )}

@@ -1,7 +1,12 @@
 import User from '../models/UserSchema.js';
 import Doctor from '../models/DoctorSchema.js';
+import Otp from '../models/OtpSchema.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const generateToken = (user) => {
     return jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET_KEY, {
@@ -9,71 +14,99 @@ const generateToken = (user) => {
     });
 };
 
-export const register = async (req, res) => {
-    const { fullname, username, phone, email, password, confirmedPassword, role, photo, gender } = req.body;
+const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
+    },
+});
+
+export const registerAndVerifyOTP = async (req, res) => {
+    const { fullname, username, phone, email, password, confirmedPassword, role, photo, gender, otp } = req.body;
+
+    if (!email || !otp) {
+        return res.status(400).json({
+            error: 'Please provide both email and OTP!',
+        });
+    }
+
     try {
         let user = null;
+
+        // Check if user already exists
         if (role === 'patient') {
             user = await User.findOne({ email });
         } else if (role === 'doctor') {
             user = await Doctor.findOne({ email });
         }
 
-        // Check if user exist
         if (user) {
-            return res.status(400).json({ message: 'User already exist' });
+            return res.status(400).json({ message: 'User already exists' });
         }
 
-        // Check if password equals to confirmedPassword
+        // Check OTP
+        const otpRecord = await Otp.findOne({ email: email });
+        if (!otpRecord) {
+            return res.status(400).json({ error: 'OTP expired or not found for this email!' });
+        }
+
+        if (otpRecord.otp !== otp) {
+            return res.status(400).json({ error: 'Invalid OTP!' });
+        }
+
+        // If password and confirm password do not match
         if (password !== confirmedPassword) {
-            return res.status(400).json({ message: 'Passwords do not match !!!' });
+            return res.status(400).json({ message: 'Passwords do not match!' });
         }
 
         // Hash password
         const salt = await bcrypt.genSalt(10);
         const hashPassword = await bcrypt.hash(password, salt);
 
+        // Create new account
         if (role === 'patient') {
-            {
-                user = new User({
-                    fullname,
-                    username,
-                    phone,
-                    email,
-                    password: hashPassword,
-                    confirmedPassword: hashPassword,
-                    role,
-                    photo,
-                    gender,
-                });
-            }
-        }
-
-        if (role === 'doctor') {
-            {
-                user = new Doctor({
-                    fullname,
-                    username,
-                    phone,
-                    email,
-                    password: hashPassword,
-                    confirmedPassword: hashPassword,
-                    role,
-                    photo,
-                    gender,
-                });
-            }
+            user = new User({
+                fullname,
+                username,
+                phone,
+                email,
+                password: hashPassword,
+                confirmedPassword: hashPassword,
+                role,
+                photo,
+                gender,
+            });
+        } else if (role === 'doctor') {
+            user = new Doctor({
+                fullname,
+                username,
+                phone,
+                email,
+                password: hashPassword,
+                confirmedPassword: hashPassword,
+                role,
+                photo,
+                gender,
+            });
         }
 
         await user.save();
+
+        // Delete OTP after successfully creating an account
+        await Otp.deleteOne({ email: email });
+
         res.status(200).json({
             success: true,
-            message: 'User is created successfully',
+            message: 'Account created successfully!',
         });
     } catch (error) {
+        console.error('Error in register and verify OTP:', error);
         res.status(500).json({
             success: false,
-            message: 'Internal server error. Try again !!!',
+            message: 'Internal server error. Try again!',
         });
     }
 };
@@ -122,5 +155,64 @@ export const login = async (req, res) => {
             status: false,
             message: 'Login failed',
         });
+    }
+};
+
+export const sendOTP = async (req, res) => {
+    const { fullname, email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({
+            error: 'Please enter your email!',
+        });
+    }
+
+    try {
+        // Generate 6 digit OTP
+        const OTP = Math.floor(100000 + Math.random() * 900000);
+        const existEmail = await Otp.findOne({ email: email });
+
+        if (existEmail) {
+            // Update OTP and reset the creation time
+            existEmail.otp = OTP;
+            existEmail.createdAt = Date.now();
+            await existEmail.save();
+        } else {
+            // Create new OTP record
+            const saveOtpData = new Otp({
+                email,
+                otp: OTP,
+            });
+            await saveOtpData.save();
+        }
+
+        // Send OTP
+        const mailOptions = {
+            from: process.env.EMAIL_USERNAME,
+            to: email,
+            subject: 'HEALTHMATE - OTP Validation',
+            html: `
+                <div style="font-family: Arial, sans-serif; text-align: center;">
+                    <p style="color: #4e545f;">Dear ${fullname},</p>
+                    <p style="color: #4e545f;">Thank you for choosing <strong>HEALTHMATE</strong>. Use the following OTP to complete the procedure for creating your new account. OTP is valid for <strong>2 minutes</strong>. Do not share this code with others.</p>
+                    <div style="font-size: 30px; color: #30d5c8; letter-spacing: 10px; font-weight: bold; margin-top: 20px;">
+                        ${OTP.toString().split('').join(' ')}
+                    </div>
+                <div>
+            `,
+        };
+
+        transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+                console.log('Error: ', err);
+                res.status(400).json({ error: 'Failed to send email' });
+            } else {
+                console.log('Email sent: ', info.response);
+                res.status(200).json({ message: 'OTP sent successfully to your email!' });
+            }
+        });
+    } catch (error) {
+        console.error('Error in sendOTP:', error);
+        res.status(500).json({ error: 'Server error' });
     }
 };
