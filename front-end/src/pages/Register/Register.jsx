@@ -13,7 +13,7 @@ import { CiMobile3 } from 'react-icons/ci';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
 import VerifyOTP from '../../components/VerifyOTP/VerifyOTP.jsx';
-import { auth, RecaptchaVerifier, signInWithPhoneNumber, sendSignInLinkToEmail } from '../../utils/firebase';
+import { auth, RecaptchaVerifier, signInWithPhoneNumber } from '../../utils/firebase';
 
 const cx = classNames.bind(styles);
 
@@ -103,8 +103,40 @@ const Register = () => {
         setIsUploadingImg(false);
     };
 
+    // Send SMS by Twilio (but not work due to country)
+
+    // const sendOTPBySMS = async () => {
+    //     setLoading(true);
+
+    //     const phoneNumber = formData.phone.startsWith('+') ? formData.phone : `+84${formData.phone.replace(/^0/, '')}`;
+
+    //     try {
+    //         const res = await fetch(`${BASE_URL}/auth/send-sms-otp`, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({ phoneNumber }),
+    //         });
+
+    //         const data = await res.json();
+
+    //         if (!res.ok) {
+    //             throw new Error(data.error || 'Failed to send OTP');
+    //         }
+
+    //         toast.success('OTP sent successfully to your phone!');
+    //         setShowVerifyOTP(true);
+    //     } catch (error) {
+    //         toast.error(error.message || 'Failed to send OTP. Please try again.');
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
     const sendOTPBySMS = async () => {
         const phoneNumber = formData.phone.startsWith('+') ? formData.phone : `+84${formData.phone.replace(/^0/, '')}`;
+
         try {
             const appVerifier = window.recaptchaVerifier;
             const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
@@ -123,7 +155,7 @@ const Register = () => {
         setLoading(true);
 
         try {
-            const res = await fetch(`${BASE_URL}/auth/send-otp`, {
+            const res = await fetch(`${BASE_URL}/auth/send-email-otp`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

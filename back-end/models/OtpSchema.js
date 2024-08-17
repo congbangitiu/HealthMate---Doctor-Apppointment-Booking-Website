@@ -8,9 +8,20 @@ const OtpSchema = new mongoose.Schema({
         unique: true,
         validate(value) {
             if (!validator.isEmail(value)) {
-                throw new Error('Enter Valid Email');
+                throw new Error('Enter valid email');
             }
         },
+        required: false,
+    },
+    phone: {
+        type: String,
+        required: true,
+        validate(value) {
+            if (!validator.isMobilePhone(value, 'any', { strictMode: true })) {
+                throw new Error('Enter a valid phone number');
+            }
+        },
+        required: false,
     },
     otp: {
         type: String,

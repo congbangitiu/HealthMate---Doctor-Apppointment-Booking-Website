@@ -4,6 +4,7 @@ import Otp from '../models/OtpSchema.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import nodemailer from 'nodemailer';
+import twilio from 'twilio';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -158,7 +159,7 @@ export const login = async (req, res) => {
     }
 };
 
-export const sendOTP = async (req, res) => {
+export const sendEmailOTP = async (req, res) => {
     const { fullname, email } = req.body;
 
     if (!email) {
@@ -213,6 +214,62 @@ export const sendOTP = async (req, res) => {
         });
     } catch (error) {
         console.error('Error in sendOTP:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+export const sendSMSOTP = async (req, res) => {
+    const { phoneNumber } = req.body;
+
+    console.log(phoneNumber);
+    
+
+    if (!phoneNumber) {
+        return res.status(400).json({
+            error: 'Please enter your phone number!',
+        });
+    }
+
+    try {
+        // Generate 6 digit OTP
+        const OTP = Math.floor(100000 + Math.random() * 900000);
+        let otpRecord = await Otp.findOne({ phone: phoneNumber });
+
+        if (otpRecord) {
+            // Update OTP and reset the creation time
+            otpRecord.otp = OTP;
+            otpRecord.createdAt = Date.now();
+            await otpRecord.save();
+        } else {
+            // Create new OTP record
+            otpRecord = new Otp({
+                phone: phoneNumber,
+                otp: OTP,
+            });
+            await otpRecord.save();
+        }
+
+        // Send OTP using Twilio
+        const accountSid = process.env.TWILIO_ACCOUNT_SID;
+        const authToken = process.env.TWILIO_AUTH_TOKEN;
+        const client = new twilio(accountSid, authToken);
+
+        client.messages
+            .create({
+                body: `Thank you for choosing HEALTHMATE. Your OTP is: ${OTP}`,
+                from: process.env.PHONE_NUMBER,
+                to: phoneNumber,
+            })
+            .then((message) => {
+                console.log('OTP sent successfully to your phone!');
+                res.status(200).json({ message: 'OTP sent successfully to your phone!' });
+            })
+            .catch((error) => {
+                console.error('Error in sendSMSOTP:', error);
+                res.status(400).json({ error: 'Failed to send SMS' });
+            });
+    } catch (error) {
+        console.error('Error in sendSMSOTP:', error);
         res.status(500).json({ error: 'Server error' });
     }
 };
