@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/UserSchema.js';
-import Doctor from '../models/DoctorSchema.js';
+import User from '../Models/UserSchema.js';
+import Doctor from '../Models/DoctorSchema.js';
 
 export const authenticate = async (req, res, next) => {
     // Get token from headers

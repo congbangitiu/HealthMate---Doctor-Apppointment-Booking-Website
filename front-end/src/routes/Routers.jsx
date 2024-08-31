@@ -16,6 +16,8 @@ import CompleteSignUp from '../pages/CompleteSignUp/CompleteSignUp';
 import PrescriptionPatient from '../Dashboard/user-account/Prescription/Prescription';
 import PrescriptionDoctor from '../Dashboard/doctor-account/Prescription/Prescription';
 import Management from '../Dashboard/admin-account/Management/Management';
+import Chat from '../pages/Chat/Chat';
+import ContentChat from '../components/ContentChat/ContentChat';
 
 const Routers = () => {
     return (
@@ -30,6 +32,8 @@ const Routers = () => {
             <Route path="/services" element={<Services />} />
             <Route path="/services/:id" element={<ServiceDetails />} />
             <Route path="/checkout-success" element={<CheckoutSucess />} />
+            <Route path="/chats" element={<Chat />} />
+            <Route path="/chats/:id" element={<ContentChat />} />
             <Route
                 path="/users/profile/me"
                 element={

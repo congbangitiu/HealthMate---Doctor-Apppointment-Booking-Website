@@ -1,6 +1,6 @@
-import Doctor from '../models/DoctorSchema.js';
-import Booking from '../models/BookingSchema.js';
-import User from '../models/UserSchema.js';
+import Doctor from '../Models/DoctorSchema.js';
+import Booking from '../Models/BookingSchema.js';
+import User from '../Models/UserSchema.js';
 import bcrypt from 'bcryptjs';
 import cloudinary from '../utils/cloudinaryConfig.js';
 

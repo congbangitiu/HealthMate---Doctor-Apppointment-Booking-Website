@@ -1,6 +1,6 @@
-import User from '../models/UserSchema.js';
-import Doctor from '../models/DoctorSchema.js';
-import Otp from '../models/OtpSchema.js';
+import User from '../Models/UserSchema.js';
+import Doctor from '../Models/DoctorSchema.js';
+import Otp from '../Models/OtpSchema.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import nodemailer from 'nodemailer';
@@ -222,7 +222,6 @@ export const sendSMSOTP = async (req, res) => {
     const { phoneNumber } = req.body;
 
     console.log(phoneNumber);
-    
 
     if (!phoneNumber) {
         return res.status(400).json({

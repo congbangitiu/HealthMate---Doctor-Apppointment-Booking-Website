@@ -18,6 +18,11 @@ const UserSchema = new mongoose.Schema({
     gender: { type: String, enum: ['male', 'female', 'other'] },
     bloodType: { type: String, enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] },
     appointments: [{ type: mongoose.Types.ObjectId, ref: 'Booking' }],
+    status: {
+        type: String,
+        enum: ['online', 'offline'],
+        default: 'offline',
+    },
 });
 
 export default mongoose.model('User', UserSchema);

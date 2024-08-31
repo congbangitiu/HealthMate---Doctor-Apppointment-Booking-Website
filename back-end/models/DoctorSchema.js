@@ -27,6 +27,11 @@ const doctorSchema = new mongoose.Schema({
         default: 'pending',
     },
     appointments: [{ type: mongoose.Types.ObjectId, ref: 'Booking' }],
+    status: {
+        type: String,
+        enum: ['online', 'offline'],
+        default: 'offline',
+    },
 });
 
 export default mongoose.model('Doctor', doctorSchema);

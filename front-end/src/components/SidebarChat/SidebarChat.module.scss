@@ -1,0 +1,183 @@
+.container {
+    width: 25%;
+    padding: 15px;
+    background-color: var(--extremeLightGrayColor);
+
+    & h1 {
+        font-size: 25px;
+        font-weight: bold;
+    }
+
+    & .search-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 10px;
+        box-shadow: 0 0 10px var(--primaryColor);
+        padding: 10px;
+        background-color: var(--whiteColor);
+        margin-top: 20px;
+
+        &.search-wrapper input {
+            border: none;
+            outline: none;
+            width: 100%;
+            margin-left: 5px;
+            color: var(--headingColor);
+            font-weight: 500;
+        }
+
+        &.search-wrapper input::placeholder {
+            font-weight: 500;
+        }
+
+        & .search-icon-wrapper,
+        & .close-icon-wrapper {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+
+            &:hover {
+                cursor: pointer;
+                opacity: 0.8;
+            }
+        }
+
+        & .search-icon-wrapper {
+            background-color: var(--primaryColor);
+        }
+
+        & .search-icon {
+            font-size: 16px;
+            color: var(--whiteColor);
+        }
+
+        & .close-icon-wrapper {
+            background-color: transparent;
+        }
+
+        & .close-icon {
+            font-size: 20px;
+            color: var(--darkGrayColor);
+        }
+    }
+
+    & .chats {
+        margin-top: 20px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-height: 480px;
+        overflow-y: auto;
+
+        //Customize scroll bar
+        &::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        &::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 5px var(--grayColor);
+            border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: var(--lightGreenColor);
+            border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+            background-color: var(--primaryColor);
+            cursor: pointer;
+        }
+
+        & .chat {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            gap: 10px;
+            border-radius: 10px;
+
+            &:hover {
+                background-color: var(--extremeLightGreenColor);
+                cursor: pointer;
+            }
+
+            &.currentChat {
+                background-color: var(--lightGreenColor);
+            }
+
+            & .img-wrapper {
+                width: 60px;
+                height: 50px;
+                position: relative;
+
+                & img {
+                    border-radius: 50px;
+                }
+
+                & div {
+                    position: absolute;
+                    bottom: 0;
+                    right: 0;
+                    width: 15px;
+                    height: 15px;
+                    border-radius: 50px;
+                    border: 2px solid var(--whiteColor);
+                    background-color: var(--greenColor);
+                }
+            }
+
+            & .intro {
+                width: 100%;
+
+                & div {
+                    display: flex;
+                    justify-content: space-between;
+
+                    &:first-child {
+                        align-items: center;
+
+                        & h4 {
+                            font-size: 16px;
+                            font-weight: 600;
+                        }
+
+                        & p {
+                            font-size: 14px;
+                            color: var(--darkGrayColor);
+                            font-weight: 500;
+                        }
+                    }
+
+                    &:last-child {
+                        align-items: flex-end;
+
+                        & p {
+                            font-size: 14px;
+                            color: var(--darkGrayColor);
+                            font-weight: 500;
+                        }
+
+                        & div {
+                            width: 20px;
+                            height: 20px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            background-color: var(--primaryColor);
+                            border-radius: 50px;
+                            font-size: 14px;
+                            font-weight: 500;
+                            color: var(--whiteColor);
+                            margin-top: 5px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
