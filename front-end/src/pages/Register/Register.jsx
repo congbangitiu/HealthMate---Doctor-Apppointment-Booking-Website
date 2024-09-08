@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import uploadImageToCloudinary from '../../utils/uploadCloudinary';
+import {uploadImageToCloudinary} from '../../utils/uploadCloudinary';
 import { BASE_URL } from '../../../config';
 import classNames from 'classnames/bind';
 import styles from './Register.module.scss';

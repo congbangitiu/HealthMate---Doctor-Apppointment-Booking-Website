@@ -5,7 +5,7 @@ import styles from './ProfileSetting.module.scss';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
 import { LiaSaveSolid } from 'react-icons/lia';
-import uploadImageToCloudinary from '../../../utils/uploadCloudinary';
+import {uploadImageToCloudinary} from '../../../utils/uploadCloudinary';
 import { BASE_URL, token } from '../../../../config';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';

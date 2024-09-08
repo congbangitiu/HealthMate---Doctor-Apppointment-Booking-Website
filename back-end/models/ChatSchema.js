@@ -19,10 +19,27 @@ const chatSchema = new mongoose.Schema(
                     type: String,
                     enum: ['text', 'media', 'document', 'link'],
                 },
+                mediaType: {
+                    type: String,
+                    enum: ['image', 'video'],
+                },
+                documentDetails: {
+                    documentName: { type: String },
+                    documentSize: { type: Number }, // in bytes
+                    documentType: {
+                        type: String,
+                        enum: ['doc', 'docx', 'xlsx', 'pdf'],
+                    },
+                },
                 content: { type: String, required: true },
                 timestamp: { type: Date, default: Date.now },
             },
         ],
+        unreadMessages: {
+            type: Map, 
+            of: Number,
+            default: {},
+        },
     },
     { timestamps: true },
 );

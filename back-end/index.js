@@ -73,17 +73,25 @@ io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
 
     socket.on('user-online', async ({ userId }) => {
-        await User.findByIdAndUpdate(userId, { status: 'online' });
-        await Doctor.findByIdAndUpdate(userId, { status: 'online' });
-        io.emit('user-status-changed', { userId, status: 'online' });
+        try {
+            await User.findByIdAndUpdate(userId, { status: 'online' });
+            await Doctor.findByIdAndUpdate(userId, { status: 'online' });
+            io.emit('user-status-changed', { userId, status: 'online' });
+        } catch (error) {
+            console.error('Error updating user status:', error);
+        }
     });
 
     socket.on('send-message', async ({ chatId, senderId, content }) => {
-        const chat = await Chat.findById(chatId);
-        if (chat) {
-            chat.messages.push({ sender: senderId, content });
-            await chat.save();
-            io.to(chatId).emit('new-message', { senderId, content });
+        try {
+            const chat = await Chat.findById(chatId);
+            if (chat) {
+                chat.messages.push({ sender: senderId, content });
+                await chat.save();
+                io.to(chatId).emit('new-message', { senderId, content });
+            }
+        } catch (error) {
+            console.error('Error sending message:', error);
         }
     });
 
@@ -92,11 +100,20 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', async () => {
-        const userId = socket.userId;
-        await User.findByIdAndUpdate(userId, { status: 'offline' });
-        await Doctor.findByIdAndUpdate(userId, { status: 'offline' });
-        io.emit('user-status-changed', { userId, status: 'offline' });
+        if (socket.userId) {
+            try {
+                await User.findByIdAndUpdate(socket.userId, { status: 'offline' });
+                await Doctor.findByIdAndUpdate(socket.userId, { status: 'offline' });
+                io.emit('user-status-changed', { userId: socket.userId, status: 'offline' });
+            } catch (error) {
+                console.error('Error updating user status on disconnect:', error);
+            }
+        }
         console.log('A user disconnected:', socket.id);
+    });
+
+    socket.on('error', (error) => {
+        console.error('Socket.IO Error:', error);
     });
 });
 

@@ -58,7 +58,7 @@ const SidebarChat = ({ chats, selectedChat, handleSelectChat, role, userId, isLo
             </div>
 
             {isLoading ? (
-                <Loader iconSize="12px" />
+                <Loader iconSize={12} />
             ) : isError ? (
                 <Error errorMessage="Fetch data failed" />
             ) : (
@@ -85,18 +85,88 @@ const SidebarChat = ({ chats, selectedChat, handleSelectChat, role, userId, isLo
                                         </h4>
 
                                         {chat.messages && chat.messages.length > 0 && (
-                                            <p>{formatTimestamp(chat.messages[chat.messages.length - 1].timestamp)}</p>
+                                            <p>
+                                                {formatTimestamp(
+                                                    chat.messages[chat.messages.length - 1].timestamp,
+                                                    'date',
+                                                )}
+                                            </p>
                                         )}
                                     </div>
                                     <div>
                                         {chat.messages && chat.messages.length > 0 ? (
                                             <>
-                                                <p>
-                                                    {chat.messages[chat.messages.length - 1].sender._id === userId &&
-                                                        'You: '}
-                                                    {truncateText(chat.messages[chat.messages.length - 1].content, 22)}
+                                                <p
+                                                    className={cx({
+                                                        'unread-message': chat.unreadMessages[userId] > 0,
+                                                    })}
+                                                >
+                                                    {chat.messages[chat.messages.length - 1].sender._id === userId ? (
+                                                        <>
+                                                            {chat.messages[chat.messages.length - 1].type ===
+                                                                'text' && (
+                                                                <>
+                                                                    You:{' '}
+                                                                    {truncateText(
+                                                                        chat.messages[chat.messages.length - 1].content,
+                                                                        18,
+                                                                    )}
+                                                                </>
+                                                            )}
+                                                            {chat.messages[chat.messages.length - 1].mediaType ===
+                                                                'image' && <>You sent an image</>}
+                                                            {chat.messages[chat.messages.length - 1].mediaType ===
+                                                                'video' && <>You sent a video</>}
+                                                            {chat.messages[chat.messages.length - 1].type ===
+                                                                'document' && <>You sent an attachment</>}
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            {chat.messages[chat.messages.length - 1].type ===
+                                                                'text' && (
+                                                                <>
+                                                                    {truncateText(
+                                                                        chat.messages[chat.messages.length - 1].content,
+                                                                        22,
+                                                                    )}
+                                                                </>
+                                                            )}
+                                                            {chat.messages[chat.messages.length - 1].mediaType ===
+                                                                'image' && (
+                                                                <>
+                                                                    {role === 'doctor'
+                                                                        ? truncateFullname(chat.user.fullname)
+                                                                        : truncateFullname(chat.doctor.fullname)}{' '}
+                                                                    sent an image
+                                                                </>
+                                                            )}
+                                                            {chat.messages[chat.messages.length - 1].mediaType ===
+                                                                'video' && (
+                                                                <>
+                                                                    {role === 'doctor'
+                                                                        ? truncateFullname(chat.user.fullname)
+                                                                        : truncateFullname(chat.doctor.fullname)}{' '}
+                                                                    sent a video
+                                                                </>
+                                                            )}
+                                                            {chat.messages[chat.messages.length - 1].type ===
+                                                                'document' && (
+                                                                <>
+                                                                    {role === 'doctor'
+                                                                        ? truncateFullname(chat.user.fullname)
+                                                                        : truncateFullname(chat.doctor.fullname)}{' '}
+                                                                    sent an attachment
+                                                                </>
+                                                            )}
+                                                        </>
+                                                    )}
                                                 </p>
-                                                <div>{/* Message count hoặc unread messages */}</div>
+
+                                                {chat.unreadMessages[userId] > 0 && (
+                                                    <div className={cx('unread-count')}>
+                                                        {chat.unreadMessages[userId]}
+                                                    </div>
+                                                )}
                                             </>
                                         ) : (
                                             <p>No message yet</p>

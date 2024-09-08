@@ -106,6 +106,13 @@
             cursor: pointer;
         }
 
+        & .timestamp {
+            text-align: center;
+            color: var(--darkGrayColor);
+            font-size: 14px;
+            margin: 30px 0;
+        }
+
         & .incoming,
         & .outgoing {
             margin-bottom: 15px;
@@ -125,18 +132,99 @@
                 }
 
                 &.media {
-                    border-radius: 10px;
                     background-color: transparent;
+                    box-shadow: none;
+
+                    &.image {
+                        & img {
+                            border-radius: 10px;
+                        }
+                    }
+
+                    &.video {
+                        & video {
+                            border-radius: 10px;
+                        }
+                    }
+
+                    & .image-portrait {
+                        width: 250px;
+                        height: auto;
+                    }
+
+                    & .image-landscape {
+                        height: 250px;
+                        width: auto;
+                    }
+
+                    & .video-portrait {
+                        width: 250px;
+                        height: auto;
+                    }
+
+                    & .video-landscape {
+                        height: 250px;
+                        width: auto;
+                    }
                 }
 
-                &.portrait img {
-                    width: 200px;
-                    height: auto;
-                }
+                & .document {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 15px;
+                    background-color: var(--whiteColor);
+                    border-radius: 10px;
+                    color: black;
+                    padding: 10px 15px;
 
-                &.landscape img {
-                    height: 200px;
-                    width: auto;
+                    & div:first-child {
+                        padding: 6px;
+                        background-color: var(--lightGrayColor);
+                        border-radius: 100px;
+
+                        & .icon {
+                            font-size: 22px;
+                            color: black;
+                        }
+                    }
+
+                    & div:nth-child(2) {
+                        & h4 {
+                            font-size: 16px;
+                            font-weight: 650;
+                        }
+                        & p {
+                            font-size: 16px;
+                            font-weight: 500;
+                            color: var(--darkGrayColor);
+                        }
+                    }
+
+                    & div:last-child {
+                        padding: 6px;
+                        background-color: var(--lightGrayColor);
+                        border-radius: 100px;
+
+                        &:hover {
+                            cursor: pointer;
+                            background-color: var(--grayColor);
+                        }
+
+                        & .icon {
+                            font-size: 22px;
+                            color: black;
+                        }
+                    }
+                }
+                & .link {
+                    display: block;
+                    padding: 8px 10px;
+                    text-decoration: underline;
+
+                    &:hover {
+                        cursor: pointer;
+                    }
                 }
             }
         }
@@ -279,17 +367,43 @@
                 gap: 15px;
                 overflow-x: auto;
 
-                & .img-wrapper {
+                & .file-wrapper {
                     display: flex;
                     gap: 5px;
                     position: relative;
 
-                    & img {
+                    & img,
+                    & video {
                         width: 100px;
                         height: 100px;
                         object-fit: cover;
                         border-radius: 10px;
                         border: 1px solid var(--darkGrayColor);
+                    }
+
+                    & .document {
+                        width: 100px;
+                        height: 100px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        gap: 5px;
+                        border: 1px solid var(--darkGrayColor);
+                        border-radius: 10px;
+                        background-color: var(--lightGrayColor);
+
+                        & h4 {
+                            text-transform: uppercase;
+                            font-weight: bold;
+                            color: var(--darkGrayColor);
+                            font-size: 20px;
+                            line-height: 18px;
+                        }
+                        & .document-icon {
+                            font-size: 45px;
+                            color: var(--darkGrayColor);
+                        }
                     }
 
                     & .icon {
@@ -299,7 +413,7 @@
 
                         &:hover {
                             cursor: pointer;
-                            opacity: 0.7;
+                            color: var(--darkGrayColor);
                         }
                     }
                 }
@@ -309,7 +423,7 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                gap: 10px;
+                gap: 5px;
                 background-color: var(--lightGreenColor);
                 padding: 5px 15px;
                 border-radius: 10px;
@@ -321,8 +435,12 @@
                     justify-content: center;
                     align-items: center;
 
-                    & label:hover {
-                        cursor: pointer;
+                    & label {
+                        padding: 5px;
+
+                        &:hover {
+                            cursor: pointer;
+                        }
                     }
                 }
 

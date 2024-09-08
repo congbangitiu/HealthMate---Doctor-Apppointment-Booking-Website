@@ -11,7 +11,7 @@ import { LiaBirthdayCakeSolid } from 'react-icons/lia';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
 
-import uploadImageToCloudinary from '../../../utils/uploadCloudinary';
+import { uploadImageToCloudinary } from '../../../utils/uploadCloudinary';
 import { BASE_URL, token } from '../../../../config';
 import { PropTypes } from 'prop-types';
 

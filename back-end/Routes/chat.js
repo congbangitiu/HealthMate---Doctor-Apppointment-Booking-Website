@@ -1,5 +1,11 @@
 import express from 'express';
-import { createNewChat, getUserChats, sendMessage, handleMessageAction } from '../Controllers/chatController.js';
+import {
+    createNewChat,
+    getUserChats,
+    sendMessage,
+    updateUnreadMessages,
+    handleMessageAction,
+} from '../Controllers/chatController.js';
 
 const router = express.Router();
 
@@ -11,6 +17,9 @@ router.get('/user-chats/:userId', getUserChats);
 
 // Send a message in a chat
 router.post('/send-message', sendMessage);
+
+// Update unread messages
+router.post('/update-unread-messages', updateUnreadMessages);
 
 // Handle actions in a message
 router.post('/handle-message-action', handleMessageAction);
