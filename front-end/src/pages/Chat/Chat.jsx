@@ -22,29 +22,25 @@ const Chat = () => {
     const isFirstLoad = useRef(true);
 
     useEffect(() => {
-        socket.on('new-message', (newMessage) => {
-            // Check if the message belongs to the current chat
-            const updatedChats = userChats.map((chat) => {
-                if (chat._id === newMessage.chatId) {
-                    return {
-                        ...chat,
-                        messages: [...chat.messages, newMessage],
-                        unreadMessages: {
-                            ...chat.unreadMessages,
-                            [user._id]: chat.unreadMessages[user._id] + 1, // Increase the number of unread messages
-                        },
-                    };
-                }
-                return chat;
+        if (selectedChat) {
+            // Join the chat room
+            socket.emit('join-chat', selectedChat._id);
+
+            // Listen for new messages
+            socket.on('new-message', (newMessage) => {
+                // Update the selectedChat with the new message
+                setSelectedChat((prevChat) => ({
+                    ...prevChat,
+                    messages: [...prevChat.messages, newMessage],
+                }));
             });
+        }
 
-            setSelectedChat(updatedChats);
-        });
-
+        // Cleanup when the component unmounts or chat changes
         return () => {
             socket.off('new-message');
         };
-    }, [userChats, user._id]);
+    }, [selectedChat?._id]);
 
     useEffect(() => {
         const fetchUserChats = async () => {

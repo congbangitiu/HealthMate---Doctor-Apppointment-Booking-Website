@@ -119,6 +119,8 @@ const SidebarChat = ({ chats, selectedChat, handleSelectChat, role, userId, isLo
                                                                 'video' && <>You sent a video</>}
                                                             {chat.messages[chat.messages.length - 1].type ===
                                                                 'document' && <>You sent an attachment</>}
+                                                            {chat.messages[chat.messages.length - 1].type ===
+                                                                'link' && <>You sent a link</>}
                                                         </>
                                                     ) : (
                                                         <>
@@ -156,6 +158,15 @@ const SidebarChat = ({ chats, selectedChat, handleSelectChat, role, userId, isLo
                                                                         ? truncateFullname(chat.user.fullname)
                                                                         : truncateFullname(chat.doctor.fullname)}{' '}
                                                                     sent an attachment
+                                                                </>
+                                                            )}
+                                                            {chat.messages[chat.messages.length - 1].type ===
+                                                                'link' && (
+                                                                <>
+                                                                    {role === 'doctor'
+                                                                        ? truncateFullname(chat.user.fullname)
+                                                                        : truncateFullname(chat.doctor.fullname)}{' '}
+                                                                    sent a link
                                                                 </>
                                                             )}
                                                         </>

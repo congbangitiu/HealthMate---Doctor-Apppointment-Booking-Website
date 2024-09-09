@@ -28,7 +28,7 @@ const chatSchema = new mongoose.Schema(
                     documentSize: { type: Number }, // in bytes
                     documentType: {
                         type: String,
-                        enum: ['doc', 'docx', 'xlsx', 'pdf'],
+                        enum: ['doc', 'docx', 'xlsx', 'csv', 'pdf'],
                     },
                 },
                 content: { type: String, required: true },
@@ -36,7 +36,7 @@ const chatSchema = new mongoose.Schema(
             },
         ],
         unreadMessages: {
-            type: Map, 
+            type: Map,
             of: Number,
             default: {},
         },

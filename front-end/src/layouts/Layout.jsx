@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Layout.module.scss';
@@ -16,13 +16,15 @@ const SOCKET_URL = import.meta.env.VITE_REACT_PUBLIC_SOCKET_URL;
 const Layout = () => {
     const [isHovered, setIsHovered] = useState(false);
     const [socket, setSocket] = useState(null); // State to manage the socket connection
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = useMemo(() => JSON.parse(localStorage.getItem('user')), []); // Memoize user
 
     // Establish a socket connection when the component mounts
     useEffect(() => {
+        if (!user) return; // Ensure user exists before connecting
+
         // Connect to the server with the server URL from environment variables
         const newSocket = io(SOCKET_URL, {
-            query: { userId: user?._id }, // Send the userId when connecting
+            query: { userId: user._id }, // Send the userId when connecting
             transports: ['websocket'], // Ensure websocket is used for communication
         });
 

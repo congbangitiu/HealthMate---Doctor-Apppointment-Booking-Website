@@ -47,7 +47,7 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
                 contentPartRef.current.scrollTo({
                     top: contentPartRef.current.scrollHeight,
                 });
-            }, 100); // Delay of 100ms to ensure the chat content is rendered
+            }, 200); // Delay of 200ms to ensure the chat content is rendered
         }
     }, [selectedChat?._id]);
 
@@ -121,36 +121,54 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
     }, [openPicker, activeMenuIndex]);
 
     const determineMessageType = () => {
+        const messageTypes = [];
+
+        // Handle files
         if (files.length > 0) {
-            return files
+            const fileMessages = files
                 .map((file) => {
                     if (file.fileType === 'image') {
                         return { type: 'media', mediaType: 'image', fileDetails: file };
                     } else if (file.fileType === 'video') {
                         return { type: 'media', mediaType: 'video', fileDetails: file };
-                    } else if (['doc', 'docx', 'xlsx', 'pdf'].includes(file.fileType)) {
+                    } else if (['doc', 'docx', 'xlsx', 'csv', 'pdf'].includes(file.fileType)) {
                         return { type: 'document', fileDetails: file };
                     }
                     return null;
                 })
                 .filter((item) => item !== null); // Remove any null values
-        } else if (message.trim().startsWith('http')) {
-            return [{ type: 'link' }];
-        } else {
-            return [{ type: 'text' }];
+            messageTypes.push(...fileMessages);
         }
+
+        // Handle links within the text
+        const containsUrl = (text) => {
+            const urlPattern = /(https?:\/\/[^\s]+)/g; // Basic URL pattern
+            return urlPattern.test(text);
+        };
+
+        // Handle message text (link or regular text)
+        if (message.trim()) {
+            if (containsUrl(message)) {
+                messageTypes.push({ type: 'link', content: message.trim() }); // Recognize the message as a link
+            } else {
+                messageTypes.push({ type: 'text', content: message.trim() }); // Regular text message
+            }
+        }
+
+        // Return the final message types (could contain both files and text)
+        return messageTypes;
     };
 
     const handleSendMessage = async () => {
-        const messageTypes = determineMessageType(); // Returns an array of message objects
+        const messageTypes = determineMessageType(); // Get message types (files, text, or link)
 
-        // If there is any text input, add it to the messageTypes array
-        if (message.trim()) {
-            messageTypes.push({ type: 'text', content: message.trim() });
+        // If messageTypes is empty, don't send anything
+        if (messageTypes.length === 0) {
+            return;
         }
 
         try {
-            // Handle multiple files and text together
+            // Send all messages (files, text, or links)
             for (const messageType of messageTypes) {
                 let content;
                 let messagePayload = {
@@ -160,8 +178,9 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
                     type: messageType.type,
                 };
 
+                // Handle file types (media or document)
                 if (messageType.type === 'media' || messageType.type === 'document') {
-                    content = messageType.fileDetails.fileUrl; // Use the URL of the uploaded file
+                    content = messageType.fileDetails.fileUrl; // Use file URL
                     messagePayload = {
                         ...messagePayload,
                         content: content,
@@ -174,14 +193,14 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
                             },
                         }),
                     };
-                } else if (messageType.type === 'link') {
-                    content = messageType.content; // Link content
-                    messagePayload = { ...messagePayload, content: content };
-                } else if (messageType.type === 'text') {
-                    content = messageType.content; // Text message content
+                }
+                // Handle link and text messages
+                else if (messageType.type === 'link' || messageType.type === 'text') {
+                    content = messageType.content; // Use text or link content
                     messagePayload = { ...messagePayload, content: content };
                 }
 
+                // Send the message to the server
                 const response = await axios.post(`${BASE_URL}/chats/send-message`, messagePayload, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -194,17 +213,17 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
                         sender: { _id: userId }, // Assign userId to new messages
                     };
 
-                    // Update selectedChat by appending the new message to the existing messages
+                    // Update selectedChat by appending the new message
                     setSelectedChat((prevChat) => ({
                         ...prevChat,
-                        messages: [...prevChat.messages, newMessage], // Append each new message separately
+                        messages: [...prevChat.messages, newMessage], // Append new message
                     }));
                 }
             }
 
-            // Clear the message and files after sending
-            setMessage(''); // Reset input message after sending
-            setFiles([]); // Reset files after sending
+            // Clear message and files after sending
+            setMessage('');
+            setFiles([]);
         } catch (error) {
             console.error('Failed to send message: ', error);
         }
@@ -335,7 +354,7 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
                 uploadedFileUrl = await uploadVideoToCloudinary(file);
             }
 
-            if (['doc', 'docx', 'xlsx', 'pdf'].includes(documentType)) {
+            if (['doc', 'docx', 'xlsx', 'csv', 'pdf'].includes(documentType)) {
                 uploadedFileUrl = await uploadDocumentToCloudinary(file);
             }
 
@@ -539,7 +558,7 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
                                             <source src={file.fileUrl} type="video/mp4" />
                                         </video>
                                     )}
-                                    {['doc', 'docx', 'xlsx', 'pdf'].includes(file.fileType) && (
+                                    {['doc', 'docx', 'xlsx', 'csv', 'pdf'].includes(file.fileType) && (
                                         <div className={cx('document')}>
                                             <IoDocumentText className={cx('document-icon')} />
                                             <h4>{file.fileType}</h4>
