@@ -83,14 +83,14 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
         // Filter by selected doctor
         if (selectedDoctor && selectedDoctor.value !== 'all') {
             updatedAppointments = updatedAppointments.filter(
-                (appointment) => appointment.doctor.fullname === selectedDoctor.value,
+                (appointment) => appointment.doctor && appointment.doctor.fullname === selectedDoctor.value,
             );
         }
 
         // Filter by selected patient
         if (selectedPatient && selectedPatient.value !== 'all') {
             updatedAppointments = updatedAppointments.filter(
-                (appointment) => appointment.user.fullname === selectedPatient.value,
+                (appointment) => appointment.user && appointment.user.fullname === selectedPatient.value,
             );
         }
 
@@ -168,25 +168,37 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
                                         cancelledStatus: appointment.status === 'cancelled',
                                     })}
                                 >
-                                    {appointment.status === 'cancelled' ? (
-                                        <Link className={cx('info-cell', 'cancelledStatus')}>
-                                            <img src={appointment.user.photo} alt="" className={cx('avatar')} />
-                                            <div>
-                                                <div>{appointment.user.fullname}</div>
-                                                <div>{appointment.user.email}</div>
-                                            </div>
-                                        </Link>
+                                    {appointment.user ? (
+                                        appointment.status === 'cancelled' ? (
+                                            <Link className={cx('info-cell', 'cancelledStatus')}>
+                                                <img
+                                                    src={appointment.user.photo || ''}
+                                                    alt=""
+                                                    className={cx('avatar')}
+                                                />
+                                                <div>
+                                                    <div>{appointment.user.fullname}</div>
+                                                    <div>{appointment.user.email || 'No email'}</div>
+                                                </div>
+                                            </Link>
+                                        ) : (
+                                            <Link
+                                                to={`/users/appointments/my-appointments/${appointment._id}`}
+                                                className={cx('info-cell')}
+                                            >
+                                                <img
+                                                    src={appointment.user.photo || ''}
+                                                    alt=""
+                                                    className={cx('avatar')}
+                                                />
+                                                <div>
+                                                    <div>{appointment.user.fullname}</div>
+                                                    <div>{appointment.user.email || 'No email'}</div>
+                                                </div>
+                                            </Link>
+                                        )
                                     ) : (
-                                        <Link
-                                            to={`/users/appointments/my-appointments/${appointment._id}`}
-                                            className={cx('info-cell')}
-                                        >
-                                            <img src={appointment.user.photo} alt="" className={cx('avatar')} />
-                                            <div>
-                                                <div>{appointment.user.fullname}</div>
-                                                <div>{appointment.user.email}</div>
-                                            </div>
-                                        </Link>
+                                        <div>N/A</div>
                                     )}
                                 </td>
                                 <td
@@ -194,25 +206,37 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
                                         cancelledStatus: appointment.status === 'cancelled',
                                     })}
                                 >
-                                    {appointment.status === 'cancelled' ? (
-                                        <Link className={cx('info-cell', 'cancelledStatus')}>
-                                            <img src={appointment.doctor.photo} alt="" className={cx('avatar')} />
-                                            <div>
-                                                <div>{appointment.doctor.fullname}</div>
-                                                <div>{appointment.doctor.email}</div>
-                                            </div>
-                                        </Link>
+                                    {appointment.doctor ? (
+                                        appointment.status === 'cancelled' ? (
+                                            <Link className={cx('info-cell', 'cancelledStatus')}>
+                                                <img
+                                                    src={appointment.doctor.photo || ''}
+                                                    alt=""
+                                                    className={cx('avatar')}
+                                                />
+                                                <div>
+                                                    <div>{appointment.doctor.fullname}</div>
+                                                    <div>{appointment.doctor.email || 'No email'}</div>
+                                                </div>
+                                            </Link>
+                                        ) : (
+                                            <Link
+                                                to={`/users/appointments/my-appointments/${appointment._id}`}
+                                                className={cx('info-cell')}
+                                            >
+                                                <img
+                                                    src={appointment.doctor.photo || ''}
+                                                    alt=""
+                                                    className={cx('avatar')}
+                                                />
+                                                <div>
+                                                    <div>{appointment.doctor.fullname}</div>
+                                                    <div>{appointment.doctor.email || 'No email'}</div>
+                                                </div>
+                                            </Link>
+                                        )
                                     ) : (
-                                        <Link
-                                            to={`/users/appointments/my-appointments/${appointment._id}`}
-                                            className={cx('info-cell')}
-                                        >
-                                            <img src={appointment.doctor.photo} alt="" className={cx('avatar')} />
-                                            <div>
-                                                <div>{appointment.doctor.fullname}</div>
-                                                <div>{appointment.doctor.email}</div>
-                                            </div>
-                                        </Link>
+                                        <div>N/A</div>
                                     )}
                                 </td>
                                 <td
@@ -220,12 +244,18 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
                                         cancelledStatus: appointment.status === 'cancelled',
                                     })}
                                 >
-                                    {appointment.status === 'cancelled' ? (
-                                        <Link className={cx('cancelledStatus')}>{appointment.timeSlot.day}</Link>
+                                    {appointment.timeSlot ? (
+                                        appointment.status === 'cancelled' ? (
+                                            <Link className={cx('cancelledStatus')}>
+                                                {appointment.timeSlot.day || 'No date'}
+                                            </Link>
+                                        ) : (
+                                            <Link to={`/users/appointments/my-appointments/${appointment._id}`}>
+                                                {appointment.timeSlot.day || 'No date'}
+                                            </Link>
+                                        )
                                     ) : (
-                                        <Link to={`/users/appointments/my-appointments/${appointment._id}`}>
-                                            {appointment.timeSlot.day}
-                                        </Link>
+                                        <div>N/A</div>
                                     )}
                                 </td>
                                 <td
@@ -233,16 +263,20 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
                                         cancelledStatus: appointment.status === 'cancelled',
                                     })}
                                 >
-                                    {appointment.status === 'cancelled' ? (
-                                        <Link className={cx('cancelledStatus')}>
-                                            {convertTime(appointment.timeSlot.startingTime)} -{' '}
-                                            {convertTime(appointment.timeSlot.endingTime)}
-                                        </Link>
+                                    {appointment.timeSlot ? (
+                                        appointment.status === 'cancelled' ? (
+                                            <Link className={cx('cancelledStatus')}>
+                                                {convertTime(appointment.timeSlot.startingTime)} -{' '}
+                                                {convertTime(appointment.timeSlot.endingTime)}
+                                            </Link>
+                                        ) : (
+                                            <Link to={`/users/appointments/my-appointments/${appointment._id}`}>
+                                                {convertTime(appointment.timeSlot.startingTime)} -{' '}
+                                                {convertTime(appointment.timeSlot.endingTime)}
+                                            </Link>
+                                        )
                                     ) : (
-                                        <Link to={`/users/appointments/my-appointments/${appointment._id}`}>
-                                            {convertTime(appointment.timeSlot.startingTime)} -{' '}
-                                            {convertTime(appointment.timeSlot.endingTime)}
-                                        </Link>
+                                        <div>N/A</div>
                                     )}
                                 </td>
                                 <td
@@ -250,12 +284,16 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
                                         cancelledStatus: appointment.status === 'cancelled',
                                     })}
                                 >
-                                    {appointment.status === 'cancelled' ? (
-                                        <Link className={cx('cancelledStatus')}>${appointment.ticketPrice}</Link>
+                                    {appointment.ticketPrice ? (
+                                        appointment.status === 'cancelled' ? (
+                                            <Link className={cx('cancelledStatus')}>${appointment.ticketPrice}</Link>
+                                        ) : (
+                                            <Link to={`/users/appointments/my-appointments/${appointment._id}`}>
+                                                ${appointment.ticketPrice}
+                                            </Link>
+                                        )
                                     ) : (
-                                        <Link to={`/users/appointments/my-appointments/${appointment._id}`}>
-                                            ${appointment.ticketPrice}
-                                        </Link>
+                                        <div>N/A</div>
                                     )}
                                 </td>
                                 <td
@@ -263,17 +301,21 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
                                         cancelledStatus: appointment.status === 'cancelled',
                                     })}
                                 >
-                                    {appointment.status === 'cancelled' ? (
-                                        <Link className={cx(appointment.status, 'cancelledStatus', 'captitalized')}>
-                                            {appointment.status}
-                                        </Link>
+                                    {appointment.status ? (
+                                        appointment.status === 'cancelled' ? (
+                                            <Link className={cx(appointment.status, 'cancelledStatus', 'captitalized')}>
+                                                {appointment.status}
+                                            </Link>
+                                        ) : (
+                                            <Link
+                                                to={`/users/appointments/my-appointments/${appointment._id}`}
+                                                className={cx(appointment.status, 'captitalized')}
+                                            >
+                                                {appointment.status}
+                                            </Link>
+                                        )
                                     ) : (
-                                        <Link
-                                            to={`/users/appointments/my-appointments/${appointment._id}`}
-                                            className={cx(appointment.status, 'captitalized')}
-                                        >
-                                            {appointment.status}
-                                        </Link>
+                                        <div>N/A</div>
                                     )}
                                 </td>
                             </tr>
