@@ -70,7 +70,7 @@ app.use('/api/v1/chats', chatRoute);
 
 // Socket.IO logic
 io.on('connection', (socket) => {
-    console.log('A user connected:', socket.id);
+    console.log('Client connected with socket ID:', socket.id);
 
     socket.on('user-online', async ({ userId }) => {
         try {
@@ -82,21 +82,69 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('send-message', async ({ chatId, senderId, content }) => {
+    socket.on('send-message', async ({ chatId, senderId, content, type, mediaType, documentDetails }) => {
+        console.log('DEBUG: Server received send-message with data:', {
+            chatId,
+            senderId,
+            content,
+            type,
+            mediaType,
+            documentDetails,
+        });
+
         try {
             const chat = await Chat.findById(chatId);
             if (chat) {
-                chat.messages.push({ sender: senderId, content });
+                // Create a new message object
+                const newMessage = {
+                    sender: senderId,
+                    content,
+                    type,
+                    timestamp: new Date(),
+                };
+
+                // If media => store mediaType
+                if (type === 'media') {
+                    newMessage.mediaType = mediaType;
+                }
+
+                // If document => store documentDetails
+                if (type === 'document') {
+                    newMessage.documentDetails = documentDetails;
+                }
+
+                chat.messages.push(newMessage);
                 await chat.save();
-                io.to(chatId).emit('new-message', { senderId, content });
+
+                // After saving, retrieve the inserted message
+                const savedMessage = chat.messages[chat.messages.length - 1];
+
+                // Emit to everyone in room
+                io.to(chatId).emit('new-message', {
+                    chatId,
+                    _id: savedMessage._id,
+                    content: savedMessage.content,
+                    sender: { _id: senderId },
+                    timestamp: savedMessage.timestamp,
+                    type: savedMessage.type,
+                    ...(savedMessage.type === 'media' && { mediaType: savedMessage.mediaType }),
+                    ...(savedMessage.type === 'document' && {
+                        documentDetails: savedMessage.documentDetails,
+                    }),
+                });
+
+                console.log('DEBUG: Sent new-message event to chatId:', chatId);
+            } else {
+                console.error(`Chat with ID ${chatId} not found`);
             }
         } catch (error) {
             console.error('Error sending message:', error);
         }
     });
 
-    socket.on('join-chat', ({ chatId }) => {
+    socket.on('join-chat', (chatId) => {
         socket.join(chatId);
+        console.log(`DEBUG: Socket ${socket.id} joined chat room ${chatId}`);
     });
 
     socket.on('disconnect', async () => {
@@ -109,7 +157,7 @@ io.on('connection', (socket) => {
                 console.error('Error updating user status on disconnect:', error);
             }
         }
-        console.log('A user disconnected:', socket.id);
+        console.log('Client disconnected with socket ID:', socket.id);
     });
 
     socket.on('error', (error) => {

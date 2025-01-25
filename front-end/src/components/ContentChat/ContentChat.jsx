@@ -22,8 +22,9 @@ import { Image } from 'antd';
 import formatTimestamp from '../../utils/formatTimestamp';
 import convertFileSize from '../../utils/convertFileSize';
 import truncateText from '../../utils/truncateText';
+
 import { io } from 'socket.io-client';
-const socket = io(import.meta.env.VITE_REACT_PUBLIC_BASE_URL);
+const socket = io(import.meta.env.VITE_REACT_PUBLIC_SOCKET_URL);
 
 const cx = classNames.bind(styles);
 
@@ -40,6 +41,7 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
     const targetRef = useRef(null);
     const contentPartRef = useRef(null);
 
+    // Scroll down when chat changes
     useLayoutEffect(() => {
         if (contentPartRef.current) {
             // Delay the scroll action to ensure content is fully rendered
@@ -51,6 +53,7 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
         }
     }, [selectedChat?._id]);
 
+    // Smooth scroll when new messages appear
     useEffect(() => {
         if (contentPartRef.current) {
             contentPartRef.current.scrollTo({
@@ -59,21 +62,6 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
             });
         }
     }, [selectedChat?.messages]);
-
-    useEffect(() => {
-        socket.on('new-message', (newMessage) => {
-            if (newMessage.chatId === selectedChat._id) {
-                setSelectedChat((prevChat) => ({
-                    ...prevChat,
-                    messages: [...prevChat.messages, newMessage],
-                }));
-            }
-        });
-
-        return () => {
-            socket.off('new-message');
-        };
-    }, [selectedChat?._id]);
 
     const handleClickOutside = (event) => {
         if (targetRef.current && !targetRef.current.contains(event.target)) {
@@ -160,17 +148,11 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
     };
 
     const handleSendMessage = async () => {
-        const messageTypes = determineMessageType(); // Get message types (files, text, or link)
-
-        // If messageTypes is empty, don't send anything
-        if (messageTypes.length === 0) {
-            return;
-        }
+        const messageTypes = determineMessageType();
+        if (messageTypes.length === 0) return;
 
         try {
-            // Send all messages (files, text, or links)
             for (const messageType of messageTypes) {
-                let content;
                 let messagePayload = {
                     chatId: selectedChat._id,
                     senderId: userId,
@@ -178,12 +160,12 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
                     type: messageType.type,
                 };
 
-                // Handle file types (media or document)
+                // files
                 if (messageType.type === 'media' || messageType.type === 'document') {
-                    content = messageType.fileDetails.fileUrl; // Use file URL
+                    const content = messageType.fileDetails.fileUrl;
                     messagePayload = {
                         ...messagePayload,
-                        content: content,
+                        content,
                         ...(messageType.type === 'media' && { mediaType: messageType.mediaType }),
                         ...(messageType.type === 'document' && {
                             documentDetails: {
@@ -194,34 +176,19 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
                         }),
                     };
                 }
-                // Handle link and text messages
-                else if (messageType.type === 'link' || messageType.type === 'text') {
-                    content = messageType.content; // Use text or link content
-                    messagePayload = { ...messagePayload, content: content };
-                }
-
-                // Send the message to the server
-                const response = await axios.post(`${BASE_URL}/chats/send-message`, messagePayload, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-
-                if (response.status === 200 && selectedChat) {
-                    const newMessage = {
-                        ...response.data.messages[response.data.messages.length - 1],
-                        sender: { _id: userId }, // Assign userId to new messages
+                // text/link
+                else {
+                    messagePayload = {
+                        ...messagePayload,
+                        content: messageType.content,
                     };
-
-                    // Update selectedChat by appending the new message
-                    setSelectedChat((prevChat) => ({
-                        ...prevChat,
-                        messages: [...prevChat.messages, newMessage], // Append new message
-                    }));
                 }
+
+                // Emit the message via WebSocket
+                socket.emit('send-message', messagePayload);
             }
 
-            // Clear message and files after sending
+            // Clear state
             setMessage('');
             setFiles([]);
         } catch (error) {
@@ -581,7 +548,14 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
                                     <ImAttachment className={cx('icon')} />
                                 )}
                             </label>
-                            <input id="inputFile" type="file" multiple hidden onChange={handleFileUpload} />
+                            <input
+                                id="inputFile"
+                                type="file"
+                                multiple
+                                hidden
+                                onChange={handleFileUpload}
+                                accept=".png, .jpg, .jpeg, .gif, .mp4, .mov, .doc, .docx, .xlsx, .csv, .pdf"
+                            />
                         </div>
                         <input
                             type="text"

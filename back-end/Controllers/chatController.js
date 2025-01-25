@@ -54,22 +54,17 @@ export const sendMessage = async (req, res) => {
 
     try {
         const chat = await Chat.findById(chatId);
-
         if (!chat) {
             return res.status(404).json({ error: 'Chat not found' });
         }
 
         let newMessage;
-
         if (type === 'media') {
-            // Ensure mediaType is provided when type is 'media'
             if (!mediaType || !['image', 'video'].includes(mediaType)) {
                 return res.status(400).json({ error: 'Invalid or missing mediaType for media message' });
             }
-
             newMessage = { sender: senderId, senderModel, type, mediaType, content };
         } else if (type === 'document') {
-            // Ensure documentDetails are provided when type is 'document'
             if (
                 !documentDetails ||
                 !documentDetails.documentName ||
@@ -78,33 +73,43 @@ export const sendMessage = async (req, res) => {
             ) {
                 return res.status(400).json({ error: 'Missing document details for document message' });
             }
-
             newMessage = { sender: senderId, senderModel, type, content, documentDetails };
         } else {
-            // For other types like 'text' or 'link'
+            // 'text' or 'link' or anything else
             newMessage = { sender: senderId, senderModel, type, content };
         }
 
+        // Push new message to chat
         chat.messages.push(newMessage);
 
-        // Determine who the recipient is to increase the unread message count
+        // Increase unread count for recipient
         const receiverId = senderModel === 'Doctor' ? chat.user._id : chat.doctor._id;
-
-        // Update the number of unread messages for the recipient
         if (!chat.unreadMessages.has(receiverId.toString())) {
             chat.unreadMessages.set(receiverId.toString(), 0);
         }
         chat.unreadMessages.set(receiverId.toString(), chat.unreadMessages.get(receiverId.toString()) + 1);
 
+        // Save chat
         await chat.save();
 
-        // Emit the message to all connected clients in the room
-        req.io.to(chatId).emit('new-message', newMessage);
+        const savedMessage = chat.messages[chat.messages.length - 1];
 
-        res.status(200).json(chat);
+        req.io.to(chatId).emit('new-message', {
+            chatId,
+            _id: savedMessage._id,
+            sender: { _id: savedMessage.sender },
+            senderModel: savedMessage.senderModel,
+            content: savedMessage.content,
+            timestamp: savedMessage.timestamp,
+            type: savedMessage.type,
+            mediaType: savedMessage.mediaType,
+            documentDetails: savedMessage.documentDetails,
+        });
+
+        return res.status(200).json(chat);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to send message' });
-        console.log(error);
+        console.error('Failed to send message:', error);
+        return res.status(500).json({ error: 'Failed to send message' });
     }
 };
 
