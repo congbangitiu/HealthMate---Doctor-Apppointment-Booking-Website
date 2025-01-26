@@ -258,7 +258,7 @@
             position: relative;
 
             & .icon {
-                font-size: 20px;
+                font-size: 22px;
                 color: var(--darkGrayColor);
                 padding: 2px;
 
@@ -276,6 +276,7 @@
                 border-radius: 5px;
                 z-index: 10;
                 width: 170px;
+                overflow: hidden;
 
                 &.incoming {
                     top: -40px;

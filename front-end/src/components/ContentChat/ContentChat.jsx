@@ -457,7 +457,7 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
                                                 'video-landscape': videoOrientation[index] === 'landscape',
                                             })}
                                             onLoadedMetadata={(event) => handleVideoLoad(event, index)}
-                                        ></video>
+                                        />
                                     )}
                                     {msg.type === 'document' && (
                                         <div className={cx('document')}>
