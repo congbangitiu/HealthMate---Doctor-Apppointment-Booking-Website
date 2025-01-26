@@ -34,8 +34,8 @@ export const getUserChats = async (req, res) => {
         const chats = await Chat.find({
             $or: [{ user: userId }, { doctor: userId }],
         })
-            .populate('doctor', 'fullname photo')
-            .populate('user', 'fullname photo')
+            .populate('doctor', 'fullname photo status')
+            .populate('user', 'fullname photo status')
             .populate('messages.sender', 'fullname');
 
         if (!chats) {
@@ -91,20 +91,6 @@ export const sendMessage = async (req, res) => {
 
         // Save chat
         await chat.save();
-
-        const savedMessage = chat.messages[chat.messages.length - 1];
-
-        req.io.to(chatId).emit('new-message', {
-            chatId,
-            _id: savedMessage._id,
-            sender: { _id: savedMessage.sender },
-            senderModel: savedMessage.senderModel,
-            content: savedMessage.content,
-            timestamp: savedMessage.timestamp,
-            type: savedMessage.type,
-            mediaType: savedMessage.mediaType,
-            documentDetails: savedMessage.documentDetails,
-        });
 
         return res.status(200).json(chat);
     } catch (error) {

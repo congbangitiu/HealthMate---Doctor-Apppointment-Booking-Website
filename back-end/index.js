@@ -69,29 +69,9 @@ app.use('/api/v1/prescriptions', prescriptionRoute);
 app.use('/api/v1/chats', chatRoute);
 
 // Socket.IO logic
+const userSockets = {};
 io.on('connection', (socket) => {
-    console.log('Client connected with socket ID:', socket.id);
-
-    socket.on('user-online', async ({ userId }) => {
-        try {
-            await User.findByIdAndUpdate(userId, { status: 'online' });
-            await Doctor.findByIdAndUpdate(userId, { status: 'online' });
-            io.emit('user-status-changed', { userId, status: 'online' });
-        } catch (error) {
-            console.error('Error updating user status:', error);
-        }
-    });
-
     socket.on('send-message', async ({ chatId, senderId, content, type, mediaType, documentDetails }) => {
-        console.log('DEBUG: Server received send-message with data:', {
-            chatId,
-            senderId,
-            content,
-            type,
-            mediaType,
-            documentDetails,
-        });
-
         try {
             const chat = await Chat.findById(chatId);
             if (chat) {
@@ -114,6 +94,8 @@ io.on('connection', (socket) => {
                 }
 
                 chat.messages.push(newMessage);
+
+                // Store the chat to the database
                 await chat.save();
 
                 // After saving, retrieve the inserted message
@@ -132,8 +114,6 @@ io.on('connection', (socket) => {
                         documentDetails: savedMessage.documentDetails,
                     }),
                 });
-
-                console.log('DEBUG: Sent new-message event to chatId:', chatId);
             } else {
                 console.error(`Chat with ID ${chatId} not found`);
             }
@@ -142,22 +122,112 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('join-chat', (chatId) => {
-        socket.join(chatId);
-        console.log(`DEBUG: Socket ${socket.id} joined chat room ${chatId}`);
+    socket.on('remove-message', async ({ chatId, messageId }) => {
+        try {
+            const chat = await Chat.findById(chatId);
+            if (!chat) throw new Error('Chat not found');
+
+            // Delete messages from chat.messages
+            chat.messages = chat.messages.filter((msg) => msg._id.toString() !== messageId);
+            await chat.save();
+
+            // Broadcast event to all clients in the room
+            io.to(chatId).emit('message-removed', { chatId, messageId });
+        } catch (error) {
+            console.error('Error removing message:', error);
+        }
+    });
+
+    socket.on('edit-message', async ({ chatId, messageId, newContent }) => {
+        try {
+            const chat = await Chat.findById(chatId);
+            if (!chat) throw new Error('Chat not found');
+
+            // Find and edit message content
+            const message = chat.messages.find((msg) => msg._id.toString() === messageId);
+            if (!message) throw new Error('Message not found');
+            message.content = newContent;
+            await chat.save();
+
+            // Broadcast event to all clients in the room
+            io.to(chatId).emit('message-edited', { chatId, messageId, newContent });
+        } catch (error) {
+            console.error('Error editing message:', error);
+        }
+    });
+
+    socket.on('join-chat', async ({ chatId, userId, role }) => {
+        try {
+            if (socket.rooms.has(chatId)) {
+                return;
+            }
+
+            // Join room
+            socket.join(chatId);
+
+            // Manage socket list by userId
+            if (!userSockets[userId]) {
+                userSockets[userId] = new Set();
+            }
+            userSockets[userId].add(socket.id);
+
+            // Update online status only if necessary
+            if (userSockets[userId].size === 1) {
+                let currentStatus;
+                if (role === 'patient') {
+                    const user = await User.findById(userId);
+                    currentStatus = user?.status;
+                } else if (role === 'doctor') {
+                    const doctor = await Doctor.findById(userId);
+                    currentStatus = doctor?.status;
+                }
+
+                if (currentStatus !== 'online') {
+                    if (role === 'patient') {
+                        await User.findByIdAndUpdate(userId, { status: 'online' });
+                    } else if (role === 'doctor') {
+                        await Doctor.findByIdAndUpdate(userId, { status: 'online' });
+                    }
+
+                    io.emit('user-status-changed', { userId, status: 'online', role });
+                }
+            }
+
+            // Attach role and userId to socket
+            socket.userId = userId;
+            socket.role = role;
+        } catch (error) {
+            console.error('Error joining chat room:', error);
+        }
     });
 
     socket.on('disconnect', async () => {
-        if (socket.userId) {
+        const { userId, role } = socket;
+
+        if (userId) {
             try {
-                await User.findByIdAndUpdate(socket.userId, { status: 'offline' });
-                await Doctor.findByIdAndUpdate(socket.userId, { status: 'offline' });
-                io.emit('user-status-changed', { userId: socket.userId, status: 'offline' });
+                // Remove current socket from user list
+                if (userSockets[userId]) {
+                    userSockets[userId].delete(socket.id);
+
+                    // If there are no more sockets, update offline status
+                    if (userSockets[userId].size === 0) {
+                        delete userSockets[userId];
+
+                        if (role === 'patient') {
+                            await User.findByIdAndUpdate(userId, { status: 'offline' });
+                        } else if (role === 'doctor') {
+                            await Doctor.findByIdAndUpdate(userId, { status: 'offline' });
+                        }
+
+                        // Emit the user-status-changed event
+                        io.emit('user-status-changed', { userId, status: 'offline', role });
+                    }
+                }
             } catch (error) {
-                console.error('Error updating user status on disconnect:', error);
+                console.error('Error updating status to offline:', error);
             }
         }
-        console.log('Client disconnected with socket ID:', socket.id);
     });
 
     socket.on('error', (error) => {

@@ -241,10 +241,20 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
             );
 
             if (response.status === 200) {
-                // Update selectedChat with the response data (chat)
-                setSelectedChat(response.data.chat);
+                // Broadcast events via socket for realtime updates
+                socket.emit('remove-message', {
+                    chatId: selectedChat._id,
+                    messageId,
+                    userId,
+                });
 
-                // After removing the message for everyone, update hiddenMessages accordingly
+                // Update selectedChat for current user
+                setSelectedChat((prevChat) => ({
+                    ...prevChat,
+                    messages: prevChat.messages.filter((msg) => msg._id !== messageId),
+                }));
+
+                // Update hidden message status if needed
                 handleRemoveMessageForYou(messageId);
             }
 
@@ -285,7 +295,21 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
             );
 
             if (response.status === 200) {
-                setSelectedChat(response.data.chat);
+                // Broadcast events via socket for realtime updates
+                socket.emit('edit-message', {
+                    chatId: selectedChat._id,
+                    messageId: messageToEdit._id,
+                    newContent,
+                    userId,
+                });
+
+                // Update selectedChat for current user
+                setSelectedChat((prevChat) => ({
+                    ...prevChat,
+                    messages: prevChat.messages.map((msg) =>
+                        msg._id === messageToEdit._id ? { ...msg, content: newContent } : msg,
+                    ),
+                }));
             }
 
             handleCancelEdit();
@@ -368,14 +392,18 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
                 <div className={cx('info')}>
                     <div className={cx('img-wrapper')}>
                         <img src={role === 'doctor' ? selectedChat.user.photo : selectedChat.doctor.photo} alt="" />
-                        <div></div>
+                        {role === 'doctor'
+                            ? selectedChat.user.status === 'online' && <div></div>
+                            : selectedChat.doctor.status === 'online' && <div></div>}
                     </div>
                     <div>
                         <h4>
                             {role === 'doctor' ? selectedChat.user.fullname : 'Dr. ' + selectedChat.doctor.fullname}
                         </h4>
 
-                        <p>Online</p>
+                        {role === 'doctor'
+                            ? selectedChat.user.status === 'online' && <p>Online</p>
+                            : selectedChat.doctor.status === 'online' && <p>Online</p>}
                     </div>
                 </div>
                 <div className={cx('actions')}>

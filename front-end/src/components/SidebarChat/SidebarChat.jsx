@@ -74,7 +74,9 @@ const SidebarChat = ({ chats, selectedChat, handleSelectChat, role, userId, isLo
                             >
                                 <div className={cx('img-wrapper')}>
                                     <img src={role === 'doctor' ? chat.user.photo : chat.doctor.photo} alt="" />
-                                    <div></div>
+                                    {role === 'doctor'
+                                        ? chat.user.status === 'online' && <div></div>
+                                        : chat.doctor.status === 'online' && <div></div>}
                                 </div>
                                 <div className={cx('intro')}>
                                     <div>
