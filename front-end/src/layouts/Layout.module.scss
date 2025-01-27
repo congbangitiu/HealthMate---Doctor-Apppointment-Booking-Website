@@ -70,20 +70,25 @@
                 transition: all 0.3s;
                 cursor: pointer;
 
-                .icon {
+                & .icon-1 {
                     color: var(--whiteColor);
-                    font-size: 22px;
+                    font-size: 25px;
+                }
+
+                & .icon-2 {
+                    color: var(--whiteColor);
+                    font-size: 30px;
                 }
             }
 
             & .icon-wrapper:nth-child(1) {
                 bottom: -15px;
-                left: 10px;
+                left: 20px;
             }
 
             & .icon-wrapper:nth-child(2) {
                 top: 30px;
-                right: -15px;
+                right: -20px;
             }
         }
     }

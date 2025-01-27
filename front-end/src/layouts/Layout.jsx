@@ -41,10 +41,10 @@ const Layout = () => {
 
                         <div className={cx('fab-options')}>
                             <Link to="/chats" className={cx('icon-wrapper')}>
-                                <IoMdChatbubbles className={cx('icon')} />
+                                <IoMdChatbubbles className={cx('icon-1')} />
                             </Link>
                             <div className={cx('icon-wrapper')}>
-                                <GiArtificialHive className={cx('icon')} />
+                                <GiArtificialHive className={cx('icon-2')} />
                             </div>
                         </div>
                     </div>
