@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Login.module.scss';
 import { MdOutlineEmail } from 'react-icons/md';
@@ -28,7 +28,6 @@ const Login = () => {
         password: '',
     });
 
-    const navigate = useNavigate();
     const { dispatch } = useContext(authContext);
 
     const handleShowPassword = () => {
@@ -74,7 +73,9 @@ const Login = () => {
             });
             setLoading(false);
             toast.success(result.message);
-            navigate('/home');
+            setTimeout(() => {
+                window.location.href = '/home';
+            }, 1000);
         } catch (error) {
             toast.error(error.message);
             setLoading(false);

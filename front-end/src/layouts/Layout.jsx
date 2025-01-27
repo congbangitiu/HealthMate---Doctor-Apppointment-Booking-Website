@@ -34,28 +34,24 @@ const Layout = () => {
 
                 {/* Only show the more-info section if the user is logged in */}
                 {user && (
-                    <div className={cx('more-info', { hovered: isHovered })} onMouseLeave={handleMouseLeave}>
-                        <div className={cx('inner')}>
-                            {/* Plus icon to toggle the more-info section */}
-                            <div className={cx('icon-wrapper', { rotate: isHovered })} onMouseEnter={handleMouseEnter}>
-                                <FaPlus className={cx('icon')} />
-                            </div>
+                    <div className={cx('fab-container', { hovered: isHovered })} onMouseLeave={handleMouseLeave}>
+                        <div className={cx('fab-button', { rotate: isHovered })} onMouseEnter={handleMouseEnter}>
+                            <FaPlus className={cx('icon')} />
+                        </div>
 
-                            {/* Display additional options (e.g., chat or AI feature) */}
-                            <div className={cx('icon-wrapper', { move: isHovered })}>
-                                <GiArtificialHive className={cx('icon')} />
-                            </div>
-
-                            {/* Link to the chat page */}
-                            <Link to="/chats" className={cx('icon-wrapper', { move: isHovered })}>
+                        <div className={cx('fab-options')}>
+                            <Link to="/chats" className={cx('icon-wrapper')}>
                                 <IoMdChatbubbles className={cx('icon')} />
                             </Link>
+                            <div className={cx('icon-wrapper')}>
+                                <GiArtificialHive className={cx('icon')} />
+                            </div>
                         </div>
                     </div>
                 )}
             </main>
-            
-            <Footer /> 
+
+            <Footer />
         </div>
     );
 };
