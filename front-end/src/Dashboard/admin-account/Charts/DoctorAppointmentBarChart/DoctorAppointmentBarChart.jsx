@@ -135,7 +135,8 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
             .style('border', '0px')
             .style('border-radius', '8px')
             .style('pointer-events', 'none')
-            .style('opacity', 0);
+            .style('opacity', 0)
+            .style('z-index', 9999);
 
         svg.append('g')
             .selectAll('g')

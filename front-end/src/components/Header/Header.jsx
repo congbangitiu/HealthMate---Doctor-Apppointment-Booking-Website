@@ -37,14 +37,9 @@ const navLinks = [
 ];
 
 const Header = () => {
-    const [activeLink, setActiveLink] = useState(null);
     const location = useLocation();
     const { user, role, token } = useContext(authContext);
     const [showConfirmLogout, setShowConfirmLogout] = useState(false);
-
-    const handleNavLinkClick = (index) => {
-        setActiveLink(index);
-    };
 
     const isActive = (path) => {
         return location.pathname === path || (location.pathname === '/' && path === '/home');
@@ -84,11 +79,7 @@ const Header = () => {
                     </div>
                     {navLinks.map((link, index) => (
                         <li key={index}>
-                            <NavLink
-                                to={link.path}
-                                className={cx('link', { active: isActive(link.path) })}
-                                onClick={() => handleNavLinkClick(index)}
-                            >
+                            <NavLink to={link.path} className={cx('link', { active: isActive(link.path) })}>
                                 {React.createElement(link.icon, { className: cx('link-icon') })}
                                 {link.content}
                             </NavLink>

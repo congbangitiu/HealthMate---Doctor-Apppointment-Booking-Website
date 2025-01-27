@@ -1,7 +1,6 @@
 .container {
     background-color: var(--whiteColor);
-    padding: 40px 0 20px 0;
-    border-radius: 20px;
+    padding: 35px 50px 20px 50px;
     width: 100%;
 
     & .selections {
@@ -30,17 +29,5 @@
                 outline: none;
             }
         }
-    }
-
-    & .chart {
-        display: flex;
-        justify-content: center;
-        position: relative;
-    }
-
-    & #tooltip {
-        position: absolute;
-        top: 0;
-        left: 0;
     }
 }

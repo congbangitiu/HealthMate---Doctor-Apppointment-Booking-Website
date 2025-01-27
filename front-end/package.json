@@ -12,7 +12,10 @@
   "dependencies": {
     "@emoji-mart/data": "^1.2.1",
     "@emoji-mart/react": "^1.1.1",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@faker-js/faker": "^8.4.1",
+    "@mui/material": "^6.4.1",
     "@react-pdf/renderer": "^3.4.4",
     "@szhsin/react-menu": "^4.2.2",
     "antd": "^5.20.3",
