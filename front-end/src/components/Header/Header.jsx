@@ -5,9 +5,10 @@ import { NavLink, Link, useLocation } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Header.module.scss';
 import { BiMenu } from 'react-icons/bi';
-import { IoIosClose, IoMdHome, IoIosLogOut } from 'react-icons/io';
+import { IoIosClose, IoMdHome, IoIosLogOut, IoIosNotifications } from 'react-icons/io';
 import { FaUserDoctor } from 'react-icons/fa6';
 import { MdMedicalServices, MdContactSupport } from 'react-icons/md';
+import Popover from '@mui/material/Popover';
 import { authContext } from '../../context/AuthContext';
 import ConfirmLogout from '../ConfirmLogout/ConfirmLogout';
 
@@ -62,6 +63,19 @@ const Header = () => {
         else if (role === 'doctor') window.location.href = '/doctors/profile/me';
     };
 
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+
     return (
         <div className={cx('container')}>
             {/* Logo */}
@@ -92,21 +106,33 @@ const Header = () => {
             <div className={cx('authentication')}>
                 {token && user ? (
                     <>
-                        <div
-                            className={cx('inner', user && 'isLogin', { profileActive: isProfileOrAppointment() })}
-                            onClick={handlePath}
-                        >
-                            <div className={cx('info')}>
-                                <img className={cx('avatar')} src={user?.photo} alt="" />
-                                <div className={cx('name')}>
-                                    <h4>{user?.fullname}</h4>
-                                    <p>{user?.username}</p>
+                        <div>
+                            <div
+                                className={cx('inner', user && 'isLogin', { profileActive: isProfileOrAppointment() })}
+                                onClick={handlePath}
+                            >
+                                <div className={cx('info')}>
+                                    <img className={cx('avatar')} src={user?.photo} alt="" />
+                                    <div className={cx('name')}>
+                                        <h4>{user?.fullname}</h4>
+                                        <p>{user?.username}</p>
+                                    </div>
                                 </div>
                             </div>
+                            <button className={cx('logout-btn')} onClick={() => setShowConfirmLogout(true)}>
+                                <IoIosLogOut />
+                            </button>
                         </div>
-                        <button className={cx('logout-btn')} onClick={() => setShowConfirmLogout(true)}>
-                            <IoIosLogOut />
-                        </button>
+
+                        <div
+                            className={cx('noti', { open })}
+                            aria-owns={open ? 'mouse-over-popover' : undefined}
+                            aria-haspopup="true"
+                            onClick={handleClick}
+                        >
+                            <IoIosNotifications className={cx('icon')} />
+                            <div>1</div>
+                        </div>
                     </>
                 ) : (
                     <>
@@ -132,6 +158,204 @@ const Header = () => {
                     </div>
                 </div>
             )}
+
+            <Popover
+                id={id}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+                sx={{
+                    '& .MuiPaper-root': {
+                        borderRadius: '10px',
+                        marginTop: '15px',
+                        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)',
+                    },
+                }}
+                className={cx('notification-wrapper')}
+            >
+                <div className={cx('notifications')}>
+                    {role === 'doctor' && (
+                        <>
+                            <div className={cx('notification')}>
+                                <img
+                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+                                    alt=""
+                                />
+                                <div className={cx('details')}>
+                                    <p>
+                                        <b>Nguyen Van A</b> has booked an appointment
+                                    </p>
+                                    <p>10 minutes ago</p>
+                                </div>
+                            </div>
+                            <div className={cx('notification')}>
+                                <img
+                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+                                    alt=""
+                                />
+                                <div className={cx('details')}>
+                                    <p>
+                                        <b>Nguyen Van A</b> has booked an appointment
+                                    </p>
+                                    <p>10 minutes ago</p>
+                                </div>
+                            </div>
+                            <div className={cx('notification')}>
+                                <img
+                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+                                    alt=""
+                                />
+                                <div className={cx('details')}>
+                                    <p>
+                                        <b>Nguyen Van A</b> has booked an appointment
+                                    </p>
+                                    <p>10 minutes ago</p>
+                                </div>
+                            </div>
+                            <div className={cx('notification')}>
+                                <img
+                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+                                    alt=""
+                                />
+                                <div className={cx('details')}>
+                                    <p>
+                                        <b>Nguyen Van A</b> has booked an appointment
+                                    </p>
+                                    <p>10 minutes ago</p>
+                                </div>
+                            </div>
+                            <div className={cx('notification')}>
+                                <img
+                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+                                    alt=""
+                                />
+                                <div className={cx('details')}>
+                                    <p>
+                                        <b>Nguyen Van A</b> has booked an appointment
+                                    </p>
+                                    <p>10 minutes ago</p>
+                                </div>
+                            </div>
+                            <div className={cx('notification')}>
+                                <img
+                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+                                    alt=""
+                                />
+                                <div className={cx('details')}>
+                                    <p>
+                                        <b>Nguyen Van A</b> has booked an appointment
+                                    </p>
+                                    <p>10 minutes ago</p>
+                                </div>
+                            </div>
+                            <div className={cx('notification')}>
+                                <img
+                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+                                    alt=""
+                                />
+                                <div className={cx('details')}>
+                                    <p>
+                                        <b>Nguyen Van A</b> has booked an appointment
+                                    </p>
+                                    <p>10 minutes ago</p>
+                                </div>
+                            </div>
+                            <div className={cx('notification')}>
+                                <img
+                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+                                    alt=""
+                                />
+                                <div className={cx('details')}>
+                                    <p>
+                                        <b>Nguyen Van A</b> has booked an appointment
+                                    </p>
+                                    <p>10 minutes ago</p>
+                                </div>
+                            </div>
+                            <div className={cx('notification')}>
+                                <img
+                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+                                    alt=""
+                                />
+                                <div className={cx('details')}>
+                                    <p>
+                                        <b>Nguyen Van A</b> has booked an appointment
+                                    </p>
+                                    <p>10 minutes ago</p>
+                                </div>
+                            </div>
+                        </>
+                    )}
+                    {role === 'patient' && (
+                        <>
+                            <div className={cx('notification')}>
+                                <img
+                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+                                    alt=""
+                                />
+                                <div className={cx('details')}>
+                                    <p>
+                                        <b>Dr. John Smith</b> has prescribed your medication
+                                    </p>
+                                    <p>10 minutes ago</p>
+                                </div>
+                            </div>
+                            <div className={cx('notification')}>
+                                <img
+                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+                                    alt=""
+                                />
+                                <div className={cx('details')}>
+                                    <p>
+                                        <b>Dr. John Smith</b> has prescribed your medication
+                                    </p>
+                                    <p>10 minutes ago</p>
+                                </div>
+                            </div>
+                            <div className={cx('notification')}>
+                                <img
+                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+                                    alt=""
+                                />
+                                <div className={cx('details')}>
+                                    <p>
+                                        <b>Dr. John Smith</b> has prescribed your medication
+                                    </p>
+                                    <p>10 minutes ago</p>
+                                </div>
+                            </div>
+                            <div className={cx('notification')}>
+                                <img
+                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+                                    alt=""
+                                />
+                                <div className={cx('details')}>
+                                    <p>
+                                        <b>Dr. John Smith</b> has prescribed your medication
+                                    </p>
+                                    <p>10 minutes ago</p>
+                                </div>
+                            </div>
+                            <div className={cx('notification')}>
+                                <img
+                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+                                    alt=""
+                                />
+                                <div className={cx('details')}>
+                                    <p>
+                                        <b>Dr. John Smith</b> has prescribed your medication
+                                    </p>
+                                    <p>10 minutes ago</p>
+                                </div>
+                            </div>
+                        </>
+                    )}
+                </div>
+            </Popover>
         </div>
     );
 };
