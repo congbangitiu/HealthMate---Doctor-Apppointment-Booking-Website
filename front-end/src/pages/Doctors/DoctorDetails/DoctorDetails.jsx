@@ -128,6 +128,8 @@ const DoctorDetails = () => {
                             doctorId={doctor._id}
                             ticketPrice={doctor.ticketPrice}
                             timeSlots={doctor.timeSlots}
+                            doctorPhoto={doctor.photo}
+                            doctorName={doctor.fullname}
                             role={role}
                         />
                     </div>

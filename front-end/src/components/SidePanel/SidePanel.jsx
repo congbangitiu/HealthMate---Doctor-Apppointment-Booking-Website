@@ -1,70 +1,28 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './SidePanel.module.scss';
 import convertTime from '../../utils/convertTime';
-import { BASE_URL, token } from './../../../config';
-import { toast } from 'react-toastify';
-import SyncLoader from 'react-spinners/SyncLoader';
+import ConfirmBooking from '../../Dashboard/user-account/ConfirmBooking/ConfirmBooking';
+import Dialog from '@mui/material/Dialog';
+import Slide from '@mui/material/Slide';
 
 const cx = classNames.bind(styles);
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
-const SidePanel = ({ doctorId, ticketPrice, timeSlots: initialTimeSlots = [], role }) => {
+const SidePanel = ({ doctorId, ticketPrice, timeSlots: initialTimeSlots = [], doctorPhoto, doctorName, role }) => {
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [timeSlots, setTimeSlots] = useState(initialTimeSlots);
-    const [loading, setLoading] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false);
 
-    const bookingHandler = async () => {
-        if (!selectedSlot) {
-            toast.error('Please select a time slot');
-            return;
-        }
+    const handleClickOpenDialog = () => {
+        setOpenDialog(true);
+    };
 
-        setLoading(true);
-
-        try {
-            const appointmentRes = await fetch(`${BASE_URL}/bookings/checkout-session/${doctorId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({ timeSlot: selectedSlot }),
-            });
-
-            const appointmentData = await appointmentRes.json();
-            if (!appointmentRes.ok) {
-                throw new Error(appointmentData.message + '! Please try again !!!');
-            }
-
-            if (appointmentData.session.url) {
-                // Remove the booked time slot from the available time slots
-                setTimeSlots((prevSlots) => prevSlots.filter((slot) => slot !== selectedSlot));
-                window.location.href = appointmentData.session.url;
-            }
-
-            // Create the chat after a successful booking
-            const user = JSON.parse(localStorage.getItem('user'));
-
-            const chatRes = await fetch(`${BASE_URL}/chats/create-chat`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({ doctorId, userId: user._id }),
-            });
-
-            const chatData = await chatRes.json();
-            if (!chatRes.ok) {
-                throw new Error(chatData.message || 'Failed to create chat. Please try again.');
-            }
-
-            setLoading(false);
-        } catch (error) {
-            toast.error(error.message);
-            setLoading(false);
-        }
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
     };
 
     return (
@@ -100,11 +58,38 @@ const SidePanel = ({ doctorId, ticketPrice, timeSlots: initialTimeSlots = [], ro
             </div>
             {role === 'patient' && timeSlots.length > 0 && (
                 <div className={cx('booking-btn-wrapper')}>
-                    <button className={cx('booking-btn')} onClick={bookingHandler}>
-                        {loading ? <SyncLoader size={8} color="#ffffff" /> : 'Book appointment'}
+                    <button
+                        className={cx('booking-btn', { notSelectedSlot: !selectedSlot })}
+                        onClick={handleClickOpenDialog}
+                        disabled={!selectedSlot}
+                    >
+                        Book appointment
                     </button>
                 </div>
             )}
+
+            <Dialog
+                open={openDialog}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={handleCloseDialog}
+                aria-describedby="alert-dialog-slide-description"
+                className={cx('booking-confirmation')}
+                sx={{
+                    '& .MuiPaper-root': {
+                        borderRadius: '16px',
+                    },
+                }}
+            >
+                <ConfirmBooking
+                    doctorId={doctorId}
+                    doctorPhoto={doctorPhoto}
+                    doctorName={doctorName}
+                    selectedSlot={selectedSlot}
+                    ticketPrice={ticketPrice}
+                    setTimeSlots={setTimeSlots}
+                />
+            </Dialog>
         </div>
     );
 };
@@ -113,6 +98,8 @@ SidePanel.propTypes = {
     doctorId: PropTypes.string.isRequired,
     ticketPrice: PropTypes.number.isRequired,
     timeSlots: PropTypes.array.isRequired,
+    doctorPhoto: PropTypes.string.isRequired,
+    doctorName: PropTypes.string.isRequired,
     role: PropTypes.string.isRequired,
 };
 

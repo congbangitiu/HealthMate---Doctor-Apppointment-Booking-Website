@@ -85,8 +85,11 @@
     }
 }
 
-.booking-btn span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.notSelectedSlot {
+    background-color: var(--lightGrayColor);
+
+    &:hover {
+        cursor: not-allowed;
+        opacity: 1;
+    }
 }

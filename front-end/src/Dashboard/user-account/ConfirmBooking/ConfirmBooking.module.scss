@@ -1,0 +1,100 @@
+.container {
+    width: 100%;
+    background-color: var(--whiteColor);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+
+    & h1 {
+        color: var(--primaryColor);
+        font-size: 24px;
+        font-weight: 500;
+    }
+
+    & .appointment {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+
+        & img {
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+        }
+
+        & div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            & h2 {
+                font-size: 22px;
+                font-weight: 550;
+                color: black;
+                margin-bottom: 10px;
+            }
+
+            & p {
+                font-size: 18px;
+                color: var(--darkGrayColor);
+            }
+        }
+    }
+
+    & .payment-method {
+        width: 100%;
+
+        & p:first-child {
+            font-size: 18px;
+            color: black;
+        }
+
+        & span {
+            display: flex;
+            justify-content: space-between;
+
+            & b {
+                font-size: 18px;
+            }
+
+            & p {
+                font-size: 18px;
+
+                & input {
+                    margin-right: 10px;
+
+                    &:checked {
+                        accent-color: var(--primaryColor);
+                    }
+                }
+            }
+        }
+    }
+
+    & button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50%;
+        height: 40px;
+        border-radius: 5px;
+        color: var(--whiteColor);
+        font-size: 16px;
+        font-weight: 500;
+        background-color: var(--primaryColor);
+
+        &:hover {
+            opacity: 0.8;
+        }
+
+        &.disabled {
+            background-color: var(--lightGrayColor);
+            cursor: not-allowed;
+            opacity: 1;
+        }
+    }
+}
