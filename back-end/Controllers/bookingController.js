@@ -3,6 +3,56 @@ import Doctor from '../Models/DoctorSchema.js';
 import Booking from '../Models/BookingSchema.js';
 import Stripe from 'stripe';
 
+export const createBooking = async (req, res) => {
+    try {
+        const { doctorId, userId, timeSlot, ticketPrice, paymentMethod } = req.body;
+
+        // Check if doctor exists
+        const doctor = await Doctor.findById(doctorId);
+        if (!doctor) {
+            return res.status(404).json({ success: false, message: 'Doctor not found' });
+        }
+
+        // Check if user exists
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        // Check if timeSlot exists in doctor's list
+        const availableSlot = doctor.timeSlots.some(
+            (slot) =>
+                slot.day === timeSlot.day &&
+                slot.startingTime === timeSlot.startingTime &&
+                slot.endingTime === timeSlot.endingTime,
+        );
+
+        if (!availableSlot) {
+            return res.status(400).json({ success: false, message: 'Selected time slot is no longer available' });
+        }
+
+        // Create new booking
+        const newBooking = new Booking({
+            doctor: doctorId,
+            user: userId,
+            ticketPrice,
+            paymentMethod,
+            isPaid: false,
+            timeSlot,
+        });
+
+        await newBooking.save();
+
+        // Remove the set timeSlot from the doctor's free time list
+        await Doctor.updateOne({ _id: doctorId }, { $pull: { timeSlots: timeSlot } });
+
+        res.status(201).json({ success: true, message: 'Booking created successfully', booking: newBooking });
+    } catch (error) {
+        console.error('Error creating booking:', error);
+        res.status(500).json({ success: false, message: 'Error creating booking', error: error.message });
+    }
+};
+
 export const getCheckoutSession = async (req, res) => {
     try {
         // Get currently booked doctor

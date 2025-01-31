@@ -20,7 +20,11 @@ const bookingSchema = new mongoose.Schema(
         },
         isPaid: {
             type: Boolean,
-            default: true,
+            default: false,
+        },
+        paymentMethod: {
+            type: String,
+            enum: ['e-wallet', 'cash'],
         },
         timeSlot: {
             day: { type: String, required: true },
