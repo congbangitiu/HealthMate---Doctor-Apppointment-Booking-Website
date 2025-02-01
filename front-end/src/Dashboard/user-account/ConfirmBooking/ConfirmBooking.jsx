@@ -14,59 +14,6 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
     const [loading, setLoading] = useState(false);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
 
-    // const bookingHandler = async () => {
-    //     if (!selectedSlot) {
-    //         toast.error('Please select a time slot');
-    //         return;
-    //     }
-
-    //     setLoading(true);
-
-    //     try {
-    //         const appointmentRes = await fetch(`${BASE_URL}/bookings/checkout-session/${doctorId}`, {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 Authorization: `Bearer ${token}`,
-    //             },
-    //             body: JSON.stringify({ timeSlot: selectedSlot }),
-    //         });
-
-    //         const appointmentData = await appointmentRes.json();
-    //         if (!appointmentRes.ok) {
-    //             throw new Error(appointmentData.message + '! Please try again !!!');
-    //         }
-
-    //         if (appointmentData.session.url) {
-    //             // Remove the booked time slot from the available time slots
-    //             setTimeSlots((prevSlots) => prevSlots.filter((slot) => slot !== selectedSlot));
-    //             window.location.href = appointmentData.session.url;
-    //         }
-
-    //         // Create the chat after a successful booking
-    //         const user = JSON.parse(localStorage.getItem('user'));
-
-    //         const chatRes = await fetch(`${BASE_URL}/chats/create-chat`, {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 Authorization: `Bearer ${token}`,
-    //             },
-    //             body: JSON.stringify({ doctorId, userId: user._id }),
-    //         });
-
-    //         const chatData = await chatRes.json();
-    //         if (!chatRes.ok) {
-    //             throw new Error(chatData.message || 'Failed to create chat. Please try again.');
-    //         }
-
-    //         setLoading(false);
-    //     } catch (error) {
-    //         toast.error(error.message);
-    //         setLoading(false);
-    //     }
-    // };
-
     const bookingHandler = async () => {
         if (!selectedSlot) {
             toast.error('Please select a time slot');
