@@ -3,110 +3,110 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
 
-.content {
-    width: 650px;
-    margin-top: 150px;
-}
+    & .content {
+        width: 650px;
+        margin-top: 150px;
 
-.content h2 {
-    font-size: 40px;
-    font-weight: 700;
-    line-height: 45px;
-    text-align: center;
-}
+        & h2 {
+            font-size: 40px;
+            font-weight: 700;
+            line-height: 45px;
+            text-align: center;
+        }
 
-.content p {
-    font-size: 15px;
-    font-weight: 500;
-    text-align: center;
-    line-height: 30px;
-    margin-top: 10px;
-}
-
-.services {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 50px;
-    margin-top: 50px;
-}
-
-.service {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 15px;
-    border-radius: 20px;
-    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
-    background-color: #fff;
-    width: 350px;
-    height: 370px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-    &:hover {
-        cursor: pointer;
-        transform: scale(1.02);
-        box-shadow: 0px 0px 8px var(--primaryColor);
+        & p {
+            font-size: 15px;
+            font-weight: 500;
+            text-align: center;
+            line-height: 30px;
+            margin-top: 10px;
+        }
     }
-}
 
-.service img {
-    margin-top: 10px;
-    width: 95%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 15px;
-}
+    & .services {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 50px;
+        margin-top: 50px;
 
-.service h4 {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--primaryColor);
-    text-align: center;
-    margin-top: 20px;
-    margin-bottom: 10px;
-}
+        & .service {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+            background-color: #fff;
+            width: 350px;
+            height: 370px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-.service p {
-    font-size: 14px;
-    font-weight: 500;
-    text-align: center;
-}
+            &:hover {
+                cursor: pointer;
+                transform: scale(1.02);
+                box-shadow: 0px 0px 8px var(--primaryColor);
+            }
 
-.more-details {
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 5px;
-    margin-top: 10px;
+            & img {
+                margin-top: 10px;
+                width: 95%;
+                height: 200px;
+                object-fit: cover;
+                border-radius: 15px;
+            }
 
-    &:hover {
-        cursor: pointer;
-        text-decoration: underline;
+            & h4 {
+                font-size: 20px;
+                font-weight: 700;
+                color: var(--primaryColor);
+                text-align: center;
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+
+            & p {
+                font-size: 14px;
+                font-weight: 500;
+                text-align: center;
+            }
+        }
     }
-}
 
-.more-details p {
-    font-size: 16px;
-    color: var(--greenColor);
-}
+    & .more-details {
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 5px;
+        margin-top: 10px;
 
-.container button {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    background-color: var(--primaryColor);
-    margin-top: 50px;
-    padding: 10px 20px;
-    border-radius: 5px;
-    gap: 5px;
-    font-size: 18px;
-    font-weight: 500;
-    color: var(--whiteColor);
+        &:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
 
-    &:hover {
-        opacity: 0.7;
+        & p {
+            font-size: 16px;
+            color: var(--greenColor);
+        }
+    }
+
+    & button {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        background-color: var(--primaryColor);
+        margin-top: 50px;
+        padding: 10px 20px;
+        border-radius: 5px;
+        gap: 5px;
+        font-size: 18px;
+        font-weight: 500;
+        color: var(--whiteColor);
+
+        &:hover {
+            opacity: 0.7;
+        }
     }
 }
