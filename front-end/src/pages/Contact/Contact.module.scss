@@ -8,87 +8,92 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-}
 
-.container h2 {
-    font-size: 50px;
-    font-weight: 700;
-}
-
-.container p {
-    font-size: 18px;
-    color: var(--darkGrayColor);
-}
-
-.container form {
-    margin-top: 50px;
-    width: 60%;
-}
-.fields {
-    display: grid;
-    grid-template-columns: auto auto;
-    gap: 20px 40px;
-}
-
-.info {
-}
-
-.info label {
-    font-weight: 500;
-    color: var(--primaryColor);
-}
-
-.info input {
-    border: 2px solid var(--darkGrayColor);
-    border-radius: 5px;
-    padding: 10px;
-    width: 100%;
-    margin-top: 2px;
-
-    &:focus {
-        outline: none;
-        caret-color: var(--primaryColor);
+    & h2 {
+        font-size: 50px;
+        font-weight: 700;
     }
-}
 
-.message {
-    margin-top: 20px;
-}
-
-.message label {
-    font-weight: 500;
-    color: var(--primaryColor);
-}
-
-.message textarea {
-    border: 2px solid var(--darkGrayColor);
-    border-radius: 5px;
-    padding: 20px;
-    width: 100%;
-
-    &:focus {
-        outline: none;
-        caret-color: var(--primaryColor);
+    & p {
+        font-size: 18px;
+        color: var(--darkGrayColor);
+        text-align: center;
+        margin-top: 10px;
     }
-}
 
-.submit-btn-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 30px;
-}
+    & form {
+        margin-top: 50px;
+        width: 60%;
 
-.submit-btn {
-    padding: 10px 20px;
-    background-color: var(--primaryColor);
-    border-radius: 5px;
-    color: var(--whiteColor);
-    font-size: 18px;
-    font-weight: 500;
+        & .fields {
+            display: grid;
+            grid-template-columns: auto auto;
+            gap: 20px 40px;
+        }
 
-    &:hover {
-        cursor: pointer;
-        opacity: 0.8;
+        & .info {
+            display: flex;
+            flex-direction: column;
+
+            & label {
+                font-weight: 500;
+                color: var(--primaryColor);
+            }
+
+            & input {
+                border: 2px solid var(--darkGrayColor);
+                border-radius: 5px;
+                padding: 10px;
+                width: 100%;
+                margin-top: 2px;
+
+                &:focus {
+                    outline: none;
+                    caret-color: var(--primaryColor);
+                }
+            }
+        }
+
+        & .message {
+            margin-top: 20px;
+
+            & label {
+                font-weight: 500;
+                color: var(--primaryColor);
+            }
+
+            & textarea {
+                border: 2px solid var(--darkGrayColor);
+                border-radius: 5px;
+                padding: 20px;
+                width: 100%;
+
+                &:focus {
+                    outline: none;
+                    caret-color: var(--primaryColor);
+                }
+            }
+        }
+
+        & .submit-btn-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        & .submit-btn {
+            padding: 10px 20px;
+            background-color: var(--primaryColor);
+            border-radius: 5px;
+            color: var(--whiteColor);
+            font-size: 18px;
+            font-weight: 500;
+
+            &:hover {
+                cursor: pointer;
+                opacity: 0.8;
+            }
+        }
     }
 }
