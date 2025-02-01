@@ -97,7 +97,7 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
                         timeSlot: selectedSlot,
                         ticketPrice,
                         paymentMethod: 'cash',
-                        isPaid: false, 
+                        isPaid: false,
                     }),
                 });
 
@@ -183,7 +183,7 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
                 </p>
                 <span>
                     <b>Payment method: </b>
-                    <p>
+                    <p onClick={() => setSelectedPaymentMethod('E-Wallet')}>
                         <input
                             type="radio"
                             name="payment"
@@ -193,7 +193,7 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
                         />
                         E-Wallet
                     </p>
-                    <p>
+                    <p onClick={() => setSelectedPaymentMethod('Cash')}>
                         <input
                             type="radio"
                             name="payment"
