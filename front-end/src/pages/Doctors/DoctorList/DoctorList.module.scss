@@ -4,37 +4,36 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
     background-image: url(../../assets/images/Blur.png);
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-}
 
-.doctors-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 100px;
-}
+    & .doctors-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 100px;
 
-.doctors-wrapper h2 {
-    line-height: 60px;
-    font-size: 50px;
-    font-weight: 700;
-}
+        & h2 {
+            line-height: 60px;
+            font-size: 50px;
+            font-weight: 700;
+        }
 
-.description {
-    margin-top: 10px;
-    font-size: 18px;
-    text-align: justify;
-}
+        & .description {
+            margin-top: 10px;
+            font-size: 18px;
+            text-align: justify;
+        }
 
-.doctors {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 50px;
-    margin-top: 30px;
+        & .doctors {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 30px;
+        }
+    }
 }
