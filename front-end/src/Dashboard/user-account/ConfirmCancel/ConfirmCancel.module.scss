@@ -6,19 +6,19 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
 
-.icon {
-    font-size: 60px;
-    color: var(--primaryColor);
-    font-weight: 500 !important;
-}
+    & .icon {
+        font-size: 60px;
+        color: var(--primaryColor);
+        font-weight: 500 !important;
+    }
 
-.booking-confirmation h1:nth-child(2) {
-    margin-top: 20px;
-    color: black;
+    & h1:nth-child(2) {
+        margin-top: 20px;
+        color: black;
+    }
 
-    .appointment {
+    & .appointment {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -49,39 +49,39 @@
         }
     }
 
-    .buttons {
+    & .buttons {
         margin-top: 50px;
         display: flex;
         justify-content: space-evenly;
         width: 100%;
-    }
 
-    .buttons button {
-        width: 150px;
-        height: 50px;
-        border-radius: 5px;
-        font-weight: 500;
+        & button {
+            width: 150px;
+            height: 50px;
+            border-radius: 5px;
+            font-weight: 500;
 
-        &:hover {
-            cursor: pointer;
-        }
-    }
+            &:hover {
+                cursor: pointer;
+            }
 
-    .buttons button:first-child {
-        background-color: var(--whiteColor);
-        color: var(--primaryColor);
+            &:first-child {
+                background-color: var(--whiteColor);
+                color: var(--primaryColor);
 
-        &:hover {
-            background-color: var(--lightGreenColor);
-        }
-    }
+                &:hover {
+                    background-color: var(--lightGreenColor);
+                }
+            }
 
-    .buttons button:last-child {
-        background-color: var(--primaryColor);
-        color: var(--whiteColor);
+            &:last-child {
+                background-color: var(--primaryColor);
+                color: var(--whiteColor);
 
-        &:hover {
-            opacity: 0.7;
+                &:hover {
+                    opacity: 0.7;
+                }
+            }
         }
     }
 }
