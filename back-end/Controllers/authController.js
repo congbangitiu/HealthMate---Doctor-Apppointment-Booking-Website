@@ -193,13 +193,16 @@ export const sendEmailOTP = async (req, res) => {
             to: email,
             subject: 'HEALTHMATE - OTP Validation',
             html: `
-                <div style="font-family: Arial, sans-serif; text-align: center;">
+                <div style="font-family: Arial, sans-serif;">
                     <p style="color: #4e545f;">Dear ${fullname},</p>
-                    <p style="color: #4e545f;">Thank you for choosing <strong>HEALTHMATE</strong>. Use the following OTP to complete the procedure for creating your new account. OTP is valid for <strong>2 minutes</strong>. Do not share this code with others.</p>
-                    <div style="font-size: 30px; color: #30d5c8; letter-spacing: 10px; font-weight: bold; margin-top: 20px;">
+                    <p style="color: #4e545f;">Thank you for choosing <strong>HEALTHMATE</strong>! Please use the OTP below to complete your account registration. This OTP is valid for only <strong>2 minutes</strong>, so be sure to use it promptly.</p>
+                    <div style="font-size: 30px; color: #30d5c8; letter-spacing: 10px; font-weight: bold; margin: 20px 0; text-align: center;">
                         ${OTP.toString().split('').join(' ')}
                     </div>
-                <div>
+                    <p style="color: #4e545f; font-style: italic">CONFIDENTIALITY NOTICE: This email is intended only for the person named in the message body. For your security, do not share this OTP with anyone, including HealthMate staff. We will never ask for your OTP under any circumstances.</p>
+                    <p style="color: #4e545f; font-style: italic; margin-top: 20px">Best regards,</p>
+                    <strong style="color: #4e545f;">HealthMate Clinic</strong>
+                </div>
             `,
         };
 
@@ -212,6 +215,20 @@ export const sendEmailOTP = async (req, res) => {
                 res.status(200).json({ message: 'OTP sent successfully to your email!' });
             }
         });
+
+        // Return HTML content for testing API instead of sending real email 
+        // res.send(`
+        //     <div style="font-family: Arial, sans-serif;">
+        //         <p style="color: #4e545f;">Dear ${fullname},</p>
+        //         <p style="color: #4e545f;">Thank you for choosing <strong>HEALTHMATE</strong>! Please use the OTP below to complete your account registration. This OTP is valid for only <strong>2 minutes</strong>, so be sure to use it promptly.</p>
+        //         <div style="font-size: 30px; color: #30d5c8; letter-spacing: 10px; font-weight: bold; margin: 20px 0; text-align: center;">
+        //             ${OTP.toString().split('').join(' ')}
+        //         </div>
+        //         <p style="color: #4e545f; font-style: italic">CONFIDENTIALITY NOTICE: This email is intended only for the person named in the message body. For your security, do not share this OTP with anyone, including HealthMate staff. We will never ask for your OTP under any circumstances.</p>
+        //         <p style="color: #4e545f; font-style: italic; margin-top: 20px">Best regards,</p>
+        //         <strong style="color: #4e545f;">HealthMate Clinic</strong>
+        //     </div>
+        // `);
     } catch (error) {
         console.error('Error in sendOTP:', error);
         res.status(500).json({ error: 'Server error' });
