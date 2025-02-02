@@ -1,406 +1,406 @@
 .container {
     width: 100%;
-}
 
-.lower-part {
-    margin-top: 80px;
+    & .lower-part {
+        margin-top: 80px;
 
-    & .pending-doctors {
-        & .title {
-            font-size: 30px;
-            font-weight: 600;
-            color: var(--yellowColor);
-        }
-
-        & .doctors {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-
-            & .doctor-card {
-                padding: 20px;
-                border-radius: 20px;
-                background-color: var(--whiteColor);
-                box-shadow: 0 0 10px var(--lightGrayColor);
-                transition: box-shadow 0.3s ease;
-
-                &:hover {
-                    cursor: pointer;
-                }
-
-                &:has(.buttons button:hover) {
-                    box-shadow: 0 0 10px var(--lightGrayColor);
-                }
-
-                & .doctor {
-                    display: flex;
-                    align-items: center;
-                    gap: 20px;
-
-                    & img {
-                        border-radius: 15px;
-                        width: 100px;
-                        height: 100px;
-                    }
-
-                    & .info {
-                        width: 100%;
-
-                        & div:first-child {
-                            display: flex;
-                            align-items: center;
-                            margin-bottom: 5px;
-
-                            & div {
-                                display: flex;
-                                align-items: center;
-                                gap: 50px;
-                                width: 100%;
-
-                                & h4 {
-                                    font-size: 22px;
-                                    font-weight: 600;
-                                    color: var(--primaryColor);
-                                }
-
-                                & span {
-                                    font-size: 18px;
-                                    font-weight: 500;
-                                    color: var(--irisBlueColor);
-                                    background-color: var(--lightGreenColor);
-                                    padding: 5px 20px;
-                                    border-radius: 10px;
-                                }
-                            }
-
-                            & h4 {
-                                font-size: 20px;
-                                font-weight: 600;
-                                color: var(--yellowColor);
-                            }
-                        }
-
-                        & div:last-child {
-                            display: flex;
-                            justify-content: space-between;
-                            align-items: center;
-
-                            & div {
-                                display: flex;
-                                flex-direction: column;
-                                justify-content: center;
-                                align-items: flex-start;
-                                margin-bottom: 0;
-
-                                & p {
-                                    color: var(--darkGrayColor);
-                                    font-size: 18px;
-                                }
-                            }
-
-                            & .icon-wrapper {
-                                padding: 8px;
-                                border-radius: 50px;
-                                border: 2px solid #000;
-
-                                &:hover {
-                                    color: var(--whiteColor);
-                                    cursor: pointer;
-                                    background-color: var(--primaryColor);
-                                    border: 2px solid var(--primaryColor);
-                                }
-
-                                & .arrow-icon {
-                                    font-size: 20px;
-                                }
-                            }
-                        }
-                    }
-
-                    & p {
-                        font-size: 18px;
-                        font-weight: 500;
-                    }
-                }
-
-                & .buttons {
-                    display: flex;
-                    justify-content: flex-end;
-                    gap: 30px;
-                    margin-top: 5px;
-
-                    & button {
-                        width: 100px;
-                        height: 40px;
-                        border-radius: 10px;
-                        font-weight: 500;
-                    }
-
-                    & button:first-child {
-                        color: var(--primaryColor);
-                        border: 3px solid var(--lightGreenColor);
-
-                        &:hover {
-                            background-color: var(--lightGreenColor);
-                        }
-                    }
-
-                    & button:last-child {
-                        color: var(--whiteColor);
-                        background-color: var(--primaryColor);
-
-                        &:hover {
-                            opacity: 0.7;
-                        }
-                    }
-                }
+        & .pending-doctors {
+            & .title {
+                font-size: 30px;
+                font-weight: 600;
+                color: var(--yellowColor);
             }
-        }
-    }
 
-    & .rejected-doctors {
-        margin-top: 60px;
-
-        & .title {
-            font-size: 30px;
-            font-weight: 600;
-            color: red;
-        }
-
-        & .doctors {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-
-            & .doctor-card {
-                padding: 20px;
-                border-radius: 20px;
-                background-color: var(--whiteColor);
-                box-shadow: 0 0 10px var(--lightGrayColor);
-                transition: box-shadow 0.3s ease;
-
-                &:hover {
-                    cursor: pointer;
-                }
-
-                &:has(.buttons button:hover) {
-                    box-shadow: 0 0 10px var(--lightGrayColor);
-                }
-
-                & .doctor {
-                    display: flex;
-                    align-items: center;
-                    gap: 20px;
-
-                    & img {
-                        border-radius: 15px;
-                        width: 100px;
-                        height: 100px;
-                    }
-
-                    & .info {
-                        width: 100%;
-
-                        & div:first-child {
-                            display: flex;
-                            align-items: center;
-                            margin-bottom: 5px;
-
-                            & div {
-                                display: flex;
-                                align-items: center;
-                                gap: 50px;
-                                width: 100%;
-
-                                & h4 {
-                                    font-size: 22px;
-                                    font-weight: 600;
-                                    color: var(--primaryColor);
-                                }
-
-                                & span {
-                                    font-size: 18px;
-                                    font-weight: 500;
-                                    color: var(--irisBlueColor);
-                                    background-color: var(--lightGreenColor);
-                                    padding: 5px 20px;
-                                    border-radius: 10px;
-                                }
-                            }
-
-                            & h4 {
-                                font-size: 18px;
-                                font-weight: 600;
-                                color: red;
-                            }
-                        }
-
-                        & div:last-child {
-                            display: flex;
-                            justify-content: space-between;
-                            align-items: center;
-
-                            & div {
-                                display: flex;
-                                flex-direction: column;
-                                justify-content: center;
-                                align-items: flex-start;
-                                margin-bottom: 0;
-                            }
-
-                            & .icon-wrapper {
-                                padding: 8px;
-                                border-radius: 50px;
-                                border: 2px solid #000;
-
-                                &:hover {
-                                    color: var(--whiteColor);
-                                    cursor: pointer;
-                                    background-color: var(--primaryColor);
-                                    border: 2px solid var(--primaryColor);
-                                }
-
-                                & .arrow-icon {
-                                    font-size: 20px;
-                                }
-                            }
-                        }
-                    }
-
-                    & p {
-                        font-size: 18px;
-                        font-weight: 500;
-                    }
-                }
-
-                & .buttons {
-                    display: flex;
-                    justify-content: flex-end;
-                    gap: 30px;
-                    margin-top: 5px;
-
-                    & button {
-                        width: 100px;
-                        height: 40px;
-                        border-radius: 10px;
-                        font-weight: 500;
-
-                        &:hover {
-                            opacity: 0.7;
-                        }
-                    }
-
-                    & button {
-                        color: var(--whiteColor);
-                        background-color: var(--primaryColor);
-                    }
-                }
-            }
-        }
-    }
-
-    & .official-doctors {
-        margin-top: 60px;
-
-        & .title {
-            font-size: 30px;
-            font-weight: 600;
-            color: var(--primaryColor);
-        }
-
-        & .doctors {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 30px;
-            width: 100%;
-            margin-top: 20px;
-
-            & .doctor {
-                background-color: var(--lightGreenColor);
-                box-shadow: 0 0 5px var(--lightGrayColor);
-                padding: 25px;
-                border-radius: 20px;
+            & .doctors {
+                margin-top: 20px;
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
-                align-items: center;
+                gap: 30px;
 
-                & div {
-                    position: relative;
+                & .doctor-card {
+                    padding: 20px;
+                    border-radius: 20px;
+                    background-color: var(--whiteColor);
+                    box-shadow: 0 0 10px var(--lightGrayColor);
+                    transition: box-shadow 0.3s ease;
 
-                    & img {
-                        width: 120px;
-                        height: 120px;
-                        border-radius: 100px;
+                    &:hover {
+                        cursor: pointer;
                     }
 
-                    & .rating {
-                        position: absolute;
-                        bottom: 0;
-                        margin-left: 50%;
-                        transform: translate(-50%, 55%);
-                        background-color: var(--whiteColor);
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        gap: 5px;
-                        width: 70px;
-                        height: 30px;
-                        border-radius: 50px;
+                    &:has(.buttons button:hover) {
+                        box-shadow: 0 0 10px var(--lightGrayColor);
+                    }
 
-                        & .star {
-                            color: var(--yellowColor);
-                            font-size: 18px;
+                    & .doctor {
+                        display: flex;
+                        align-items: center;
+                        gap: 20px;
+
+                        & img {
+                            border-radius: 15px;
+                            width: 100px;
+                            height: 100px;
                         }
 
-                        & span {
-                            font-size: 16px;
+                        & .info {
+                            width: 100%;
+
+                            & div:first-child {
+                                display: flex;
+                                align-items: center;
+                                margin-bottom: 5px;
+
+                                & div {
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 50px;
+                                    width: 100%;
+
+                                    & h4 {
+                                        font-size: 22px;
+                                        font-weight: 600;
+                                        color: var(--primaryColor);
+                                    }
+
+                                    & span {
+                                        font-size: 18px;
+                                        font-weight: 500;
+                                        color: var(--irisBlueColor);
+                                        background-color: var(--lightGreenColor);
+                                        padding: 5px 20px;
+                                        border-radius: 10px;
+                                    }
+                                }
+
+                                & h4 {
+                                    font-size: 20px;
+                                    font-weight: 600;
+                                    color: var(--yellowColor);
+                                }
+                            }
+
+                            & div:last-child {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+
+                                & div {
+                                    display: flex;
+                                    flex-direction: column;
+                                    justify-content: center;
+                                    align-items: flex-start;
+                                    margin-bottom: 0;
+
+                                    & p {
+                                        color: var(--darkGrayColor);
+                                        font-size: 18px;
+                                    }
+                                }
+
+                                & .icon-wrapper {
+                                    padding: 8px;
+                                    border-radius: 50px;
+                                    border: 2px solid #000;
+
+                                    &:hover {
+                                        color: var(--whiteColor);
+                                        cursor: pointer;
+                                        background-color: var(--primaryColor);
+                                        border: 2px solid var(--primaryColor);
+                                    }
+
+                                    & .arrow-icon {
+                                        font-size: 20px;
+                                    }
+                                }
+                            }
+                        }
+
+                        & p {
+                            font-size: 18px;
                             font-weight: 500;
                         }
                     }
-                }
 
-                & h4 {
-                    margin-top: 28px;
-                    font-size: 22px;
-                    font-weight: 600;
-                }
+                    & .buttons {
+                        display: flex;
+                        justify-content: flex-end;
+                        gap: 30px;
+                        margin-top: 5px;
 
-                & p {
-                    margin-top: 5px;
-                    font-size: 16px;
-                    font-weight: 600;
-                    color: var(--darkGrayColor);
-                }
+                        & button {
+                            width: 100px;
+                            height: 40px;
+                            border-radius: 10px;
+                            font-weight: 500;
+                        }
 
-                & .buttons {
-                    margin-top: 25px;
-                    width: 100%;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
+                        & button:first-child {
+                            color: var(--primaryColor);
+                            border: 3px solid var(--lightGreenColor);
 
-                    & button {
-                        width: 90px;
-                        height: 40px;
-                        border-radius: 10px;
-                        font-size: 16px;
-                        font-weight: 500;
-                        cursor: pointer;
-                        background-color: var(--primaryColor);
-                        color: var(--whiteColor);
+                            &:hover {
+                                background-color: var(--lightGreenColor);
+                            }
+                        }
 
-                        &:hover {
-                            opacity: 0.8;
+                        & button:last-child {
+                            color: var(--whiteColor);
+                            background-color: var(--primaryColor);
+
+                            &:hover {
+                                opacity: 0.7;
+                            }
                         }
                     }
                 }
             }
+        }
 
-            & .activeDoctor {
-                box-shadow: 0 0 10px var(--yellowColor);
+        & .rejected-doctors {
+            margin-top: 60px;
+
+            & .title {
+                font-size: 30px;
+                font-weight: 600;
+                color: red;
+            }
+
+            & .doctors {
+                margin-top: 20px;
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+
+                & .doctor-card {
+                    padding: 20px;
+                    border-radius: 20px;
+                    background-color: var(--whiteColor);
+                    box-shadow: 0 0 10px var(--lightGrayColor);
+                    transition: box-shadow 0.3s ease;
+
+                    &:hover {
+                        cursor: pointer;
+                    }
+
+                    &:has(.buttons button:hover) {
+                        box-shadow: 0 0 10px var(--lightGrayColor);
+                    }
+
+                    & .doctor {
+                        display: flex;
+                        align-items: center;
+                        gap: 20px;
+
+                        & img {
+                            border-radius: 15px;
+                            width: 100px;
+                            height: 100px;
+                        }
+
+                        & .info {
+                            width: 100%;
+
+                            & div:first-child {
+                                display: flex;
+                                align-items: center;
+                                margin-bottom: 5px;
+
+                                & div {
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 50px;
+                                    width: 100%;
+
+                                    & h4 {
+                                        font-size: 22px;
+                                        font-weight: 600;
+                                        color: var(--primaryColor);
+                                    }
+
+                                    & span {
+                                        font-size: 18px;
+                                        font-weight: 500;
+                                        color: var(--irisBlueColor);
+                                        background-color: var(--lightGreenColor);
+                                        padding: 5px 20px;
+                                        border-radius: 10px;
+                                    }
+                                }
+
+                                & h4 {
+                                    font-size: 18px;
+                                    font-weight: 600;
+                                    color: red;
+                                }
+                            }
+
+                            & div:last-child {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+
+                                & div {
+                                    display: flex;
+                                    flex-direction: column;
+                                    justify-content: center;
+                                    align-items: flex-start;
+                                    margin-bottom: 0;
+                                }
+
+                                & .icon-wrapper {
+                                    padding: 8px;
+                                    border-radius: 50px;
+                                    border: 2px solid #000;
+
+                                    &:hover {
+                                        color: var(--whiteColor);
+                                        cursor: pointer;
+                                        background-color: var(--primaryColor);
+                                        border: 2px solid var(--primaryColor);
+                                    }
+
+                                    & .arrow-icon {
+                                        font-size: 20px;
+                                    }
+                                }
+                            }
+                        }
+
+                        & p {
+                            font-size: 18px;
+                            font-weight: 500;
+                        }
+                    }
+
+                    & .buttons {
+                        display: flex;
+                        justify-content: flex-end;
+                        gap: 30px;
+                        margin-top: 5px;
+
+                        & button {
+                            width: 100px;
+                            height: 40px;
+                            border-radius: 10px;
+                            font-weight: 500;
+
+                            &:hover {
+                                opacity: 0.7;
+                            }
+                        }
+
+                        & button {
+                            color: var(--whiteColor);
+                            background-color: var(--primaryColor);
+                        }
+                    }
+                }
+            }
+        }
+
+        & .official-doctors {
+            margin-top: 60px;
+
+            & .title {
+                font-size: 30px;
+                font-weight: 600;
+                color: var(--primaryColor);
+            }
+
+            & .doctors {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+                gap: 30px;
+                width: 100%;
+                margin-top: 20px;
+
+                & .doctor {
+                    background-color: var(--lightGreenColor);
+                    box-shadow: 0 0 5px var(--lightGrayColor);
+                    padding: 25px;
+                    border-radius: 20px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+
+                    & div {
+                        position: relative;
+
+                        & img {
+                            width: 120px;
+                            height: 120px;
+                            border-radius: 100px;
+                        }
+
+                        & .rating {
+                            position: absolute;
+                            bottom: 0;
+                            margin-left: 50%;
+                            transform: translate(-50%, 55%);
+                            background-color: var(--whiteColor);
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            gap: 5px;
+                            width: 70px;
+                            height: 30px;
+                            border-radius: 50px;
+
+                            & .star {
+                                color: var(--yellowColor);
+                                font-size: 18px;
+                            }
+
+                            & span {
+                                font-size: 16px;
+                                font-weight: 500;
+                            }
+                        }
+                    }
+
+                    & h4 {
+                        margin-top: 28px;
+                        font-size: 22px;
+                        font-weight: 600;
+                    }
+
+                    & p {
+                        margin-top: 5px;
+                        font-size: 16px;
+                        font-weight: 600;
+                        color: var(--darkGrayColor);
+                    }
+
+                    & .buttons {
+                        margin-top: 25px;
+                        width: 100%;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+
+                        & button {
+                            width: 90px;
+                            height: 40px;
+                            border-radius: 10px;
+                            font-size: 16px;
+                            font-weight: 500;
+                            cursor: pointer;
+                            background-color: var(--primaryColor);
+                            color: var(--whiteColor);
+
+                            &:hover {
+                                opacity: 0.8;
+                            }
+                        }
+                    }
+                }
+
+                & .activeDoctor {
+                    box-shadow: 0 0 10px var(--yellowColor);
+                }
             }
         }
     }

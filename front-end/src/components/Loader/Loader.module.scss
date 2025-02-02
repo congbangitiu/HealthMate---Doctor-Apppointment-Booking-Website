@@ -4,10 +4,10 @@
     justify-content: center;
     align-items: center;
     height: 200px;
-}
 
-.container h4 {
-    margin-top: 25px;
-    font-size: 18px;
-    color: var(--darkGrayColor);
+    & h4 {
+        margin-top: 25px;
+        font-size: 18px;
+        color: var(--darkGrayColor);
+    }
 }

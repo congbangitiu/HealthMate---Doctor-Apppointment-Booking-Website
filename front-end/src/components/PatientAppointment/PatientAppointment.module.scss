@@ -1,110 +1,109 @@
 .container {
-    width: 100%;
-    padding: 20px;
     display: flex;
     gap: 30px;
+    padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
 
-.container img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    aspect-ratio: 1/1;
-    border-radius: 10px;
-}
-
-.info {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.upperPart {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.upperPart div {
-    display: flex;
-    align-items: center;
-}
-
-.upperPart div:first-child {
-    gap: 30px;
-    justify-content: flex-start;
-}
-
-.upperPart div:last-child {
-    gap: 10px;
-    font-size: 18px;
-    font-weight: 500;
-    text-transform: uppercase;
-    justify-content: flex-end;
-
-    & .icon {
-        font-size: 25px;
+    & img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        aspect-ratio: 1/1;
+        border-radius: 10px;
     }
-}
 
-.upperPart h4 {
-    font-size: 20px;
-    font-weight: 500;
-    color: black;
-}
+    & .info {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
 
-.upperPart span {
-    padding: 5px 10px;
-    border-radius: 5px;
-    color: var(--irisBlueColor);
-    background-color: var(--lightGreenColor);
-    font-size: 16px;
-    font-weight: 500;
-}
+        & .upperPart {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
 
-.lowerPart {
-    margin-top: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-}
+            & div {
+                display: flex;
+                align-items: center;
+            }
 
-.lowerPart div {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
+            & div:first-child {
+                gap: 30px;
+                justify-content: flex-start;
+            }
 
-.lowerPart div:first-child {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-}
+            & div:last-child {
+                gap: 10px;
+                font-size: 18px;
+                font-weight: 500;
+                text-transform: uppercase;
+                justify-content: flex-end;
 
-.lowerPart div:first-child span {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 16px;
-}
+                & .icon {
+                    font-size: 25px;
+                }
+            }
 
-.icon {
-    color: var(--primaryColor);
-}
+            & h4 {
+                font-size: 20px;
+                font-weight: 500;
+                color: black;
+            }
 
-.lowerPart div:last-child {
-    align-items: flex-end;
-}
+            & span {
+                padding: 5px 10px;
+                border-radius: 5px;
+                color: var(--irisBlueColor);
+                background-color: var(--lightGreenColor);
+                font-size: 16px;
+                font-weight: 500;
+            }
+        }
 
-.lowerPart div:last-child h4 {
-    font-size: 16px;
-    color: var(--darkGrayColor);
-}
+        & .lowerPart {
+            margin-top: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
 
-.lowerPart div:last-child h4:first-child {
-    text-align: end;
+            & div {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            & div:first-child {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: flex-start;
+
+                & span {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    font-size: 16px;
+
+                    & .icon {
+                        color: var(--primaryColor);
+                    }
+                }
+            }
+
+            & div:last-child {
+                align-items: flex-end;
+
+                & h4 {
+                    font-size: 16px;
+                    color: var(--darkGrayColor);
+                }
+
+                & h4:first-child {
+                    text-align: end;
+                }
+            }
+        }
+    }
 }

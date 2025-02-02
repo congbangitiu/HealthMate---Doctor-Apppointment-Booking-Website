@@ -1,92 +1,90 @@
-.container-parent h1 {
-    font-size: 25px;
-    font-weight: 600;
-    color: var(--primaryColor);
-    margin-bottom: 30px;
-    text-align: center;
-}
-
-.container {
-    width: 100%;
-    overflow-x: auto;
-    border-radius: 10px;
-
-    table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        border: 1px solid var(--primaryColor);
-        border-radius: 10px;
-    }
-
-    thead {
-        background-color: var(--primaryColor);
-    }
-
-    th,
-    td {
-        text-align: left;
-        border: 1px solid var(--primaryColor);
+.container-parent {
+    & h1 {
+        font-size: 25px;
+        font-weight: 600;
+        color: var(--primaryColor);
+        margin-bottom: 30px;
         text-align: center;
     }
 
-    th {
-        padding: 12px;
-    }
-
-    th {
-        background-color: var(--primaryColor);
-        color: var(--whiteColor);
-    }
-
-    tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-
-    /* Adding border-radius to the last row */
-    tbody tr:last-of-type td:first-child {
-        border-bottom-left-radius: 10px;
-    }
-
-    tbody tr:last-of-type td:last-child {
-        border-bottom-right-radius: 10px;
-    }
-
-    .link {
+    & .container {
         width: 100%;
-        padding: 12px;
-    }
+        overflow-x: auto;
+        border-radius: 10px;
 
-    a {
-        text-decoration: none;
-        color: inherit; /* This makes sure the link looks like normal text */
-        display: block; /* This makes the link fill the cell */
-    }
+        & table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 1px solid var(--primaryColor);
+            border-radius: 10px;
 
-    tbody tr:not(.cancelledStatus):hover {
-        background-color: var(--lightGreenColor);
-    }
+            & thead {
+                background-color: var(--primaryColor);
+            }
 
-    .pending {
-        color: var(--yellowColor);
-        font-weight: 500;
-    }
+            & th,
+            & td {
+                text-align: center;
+                border: 1px solid var(--primaryColor);
+                padding: 12px;
+            }
 
-    .done {
-        color: var(--primaryColor);
-        font-weight: 500;
-    }
+            & th {
+                background-color: var(--primaryColor);
+                color: var(--whiteColor);
+            }
 
-    .cancelled {
-        color: red;
-        font-weight: 500;
-    }
+            & tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
 
-    .captitalized {
-        text-transform: capitalize;
-    }
+            /* Adding border-radius to the last row */
+            & tbody tr:last-of-type td:first-child {
+                border-bottom-left-radius: 10px;
+            }
 
-    .cancelledStatus {
-        cursor: not-allowed !important;
+            & tbody tr:last-of-type td:last-child {
+                border-bottom-right-radius: 10px;
+            }
+
+            & tbody tr:not(.cancelledStatus):hover {
+                background-color: var(--lightGreenColor);
+            }
+        }
+
+        & .link {
+            width: 100%;
+            padding: 12px;
+        }
+
+        & a {
+            text-decoration: none;
+            color: inherit; /* This makes sure the link looks like normal text */
+            display: block; /* This makes the link fill the cell */
+        }
+
+        & .pending {
+            color: var(--yellowColor);
+            font-weight: 500;
+        }
+
+        & .done {
+            color: var(--primaryColor);
+            font-weight: 500;
+        }
+
+        & .cancelled {
+            color: red;
+            font-weight: 500;
+        }
+
+        & .captitalized {
+            text-transform: capitalize;
+        }
+
+        & .cancelledStatus {
+            cursor: not-allowed !important;
+        }
     }
 }

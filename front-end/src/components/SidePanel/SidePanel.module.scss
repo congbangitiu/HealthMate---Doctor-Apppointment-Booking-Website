@@ -3,93 +3,96 @@
     border-radius: 10px;
     width: 30%;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
-}
 
-.price {
-    display: flex;
-    justify-content: space-between;
-}
+    & .price {
+        display: flex;
+        justify-content: space-between;
 
-.price h4 {
-    font-size: 18px;
-}
+        & h4 {
+            font-size: 18px;
+        }
 
-.price h3 {
-    font-size: 20px;
-    font-weight: 600;
-}
-
-.slots {
-    margin-top: 10px;
-}
-
-.slots h4 {
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-.slot {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 5px;
-    border-radius: 5px;
-
-    &.selected p {
-        color: var(--primaryColor);
+        & h3 {
+            font-size: 20px;
+            font-weight: 600;
+        }
     }
 
-    &.selected input[type='radio']:checked {
-        accent-color: var(--primaryColor);
+    & .slots {
+        margin-top: 10px;
+
+        & h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        & .slot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+            border-radius: 5px;
+
+            & p {
+                color: var(--darkGrayColor);
+            }
+
+            &.selected {
+                & p {
+                    color: var(--primaryColor);
+                }
+
+                & input[type='radio']:checked {
+                    accent-color: var(--primaryColor);
+                }
+            }
+
+            &:hover {
+                cursor: pointer;
+
+                & p {
+                    color: var(--primaryColor);
+                }
+            }
+        }
     }
 
-    p {
+    & .empty-slot {
+        text-align: center;
         color: var(--darkGrayColor);
     }
 
-    &:hover p {
-        color: var(--primaryColor);
-        cursor: pointer;
-    }
-}
+    & .booking-btn-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-top: 15px;
 
-.empty-slot {
-    text-align: center;
-    color: var(--darkGrayColor);
-}
+        & .booking-btn {
+            background-color: var(--primaryColor);
+            color: var(--whiteColor);
+            font-size: 16px;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 5px;
+            width: 50%;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
-.booking-btn-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-top: 15px;
-}
+            &:hover {
+                cursor: pointer;
+                opacity: 0.8;
+            }
+        }
 
-.booking-btn {
-    background-color: var(--primaryColor);
-    color: var(--whiteColor);
-    font-size: 16px;
-    font-weight: 500;
-    padding: 8px 12px;
-    border-radius: 5px;
-    width: 50%;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+        & .notSelectedSlot {
+            background-color: var(--lightGrayColor);
 
-    align-items: center;
-
-    &:hover {
-        cursor: pointer;
-        opacity: 0.8;
-    }
-}
-
-.notSelectedSlot {
-    background-color: var(--lightGrayColor);
-
-    &:hover {
-        cursor: not-allowed;
-        opacity: 1;
+            &:hover {
+                cursor: not-allowed;
+                opacity: 1;
+            }
+        }
     }
 }

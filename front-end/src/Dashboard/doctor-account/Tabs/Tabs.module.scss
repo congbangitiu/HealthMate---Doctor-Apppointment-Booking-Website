@@ -7,92 +7,125 @@
     align-items: center;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
-}
 
-.container img {
-    width: 85%;
-    object-fit: cover;
-    aspect-ratio: 1/1;
-    border-radius: 10px;
-}
-
-.container h4 {
-    font-size: 20px;
-    font-weight: 500;
-    margin-top: 10px;
-}
-
-.modes {
-    margin-top: 25px;
-    display: flex;
-    flex-direction: column;
-    width: 85%;
-    border: 2px solid var(--primaryColor);
-    border-radius: 10px;
-}
-
-.mode {
-    font-size: 16px;
-    font-weight: 500;
-    padding: 10px 0;
-}
-
-.mode:first-child {
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-}
-
-.mode:last-child {
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-
-.active {
-    color: var(--whiteColor);
-    background-color: var(--primaryColor);
-}
-
-.account {
-    width: 90%;
-    margin-top: 30px;
-}
-
-.account button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    background-color: var(--primaryColor);
-    width: 100%;
-    padding: 10px 0;
-    border-radius: 5px;
-    color: var(--whiteColor);
-    font-size: 16px;
-    margin-top: 10px;
-
-    &:hover {
-        cursor: pointer;
-        opacity: 0.8;
+    & img {
+        width: 85%;
+        object-fit: cover;
+        aspect-ratio: 1/1;
+        border-radius: 10px;
     }
-}
 
-.account button:nth-child(2) {
-    background-color: black;
-}
+    & h4 {
+        font-size: 20px;
+        font-weight: 500;
+        margin-top: 10px;
+    }
 
-.account button:last-child {
-    background-color: red;
-}
+    & .modes {
+        margin-top: 25px;
+        display: flex;
+        flex-direction: column;
+        width: 85%;
+        border: 2px solid var(--primaryColor);
+        border-radius: 10px;
 
-.overlay {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 150;
-    background-color: #00000084;
-    animation: fadeIn linear 0.4s;
+        & .mode {
+            font-size: 16px;
+            font-weight: 500;
+            padding: 10px 0;
+
+            &:first-child {
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+            }
+
+            &:last-child {
+                border-bottom-left-radius: 5px;
+                border-bottom-right-radius: 5px;
+            }
+
+            &.active {
+                color: var(--whiteColor);
+                background-color: var(--primaryColor);
+            }
+        }
+    }
+
+    & .account {
+        width: 90%;
+        margin-top: 30px;
+
+        & button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--primaryColor);
+            width: 100%;
+            padding: 10px 0;
+            border-radius: 5px;
+            color: var(--whiteColor);
+            font-size: 16px;
+            margin-top: 10px;
+
+            &:hover {
+                cursor: pointer;
+                opacity: 0.8;
+            }
+
+            &:nth-child(2) {
+                background-color: black;
+            }
+
+            &:last-child {
+                background-color: red;
+            }
+        }
+    }
+
+    & .form-wrapper {
+        & .overlay {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 150;
+            background-color: #00000084;
+            animation: fadeIn linear 0.4s;
+        }
+
+        & .form-update {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            border-radius: 15px;
+            transform: translate(-50%, -50%);
+            z-index: 200;
+            animation: slideUp linear 0.4s forwards;
+            animation-timing-function: ease-in-out;
+            background: white;
+            overflow-y: auto;
+
+            &.update-info {
+                width: 70%;
+            }
+
+            &.change-password {
+                width: 30%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            &.logout {
+                width: 20%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    }
 }
 
 @keyframes fadeIn {
@@ -102,37 +135,6 @@
     to {
         opacity: 1;
     }
-}
-
-.form-update {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    border-radius: 15px;
-    transform: translate(-50%, -50%);
-    z-index: 200;
-    animation: slideUp linear 0.4s forwards;
-    animation-timing-function: ease-in-out;
-    background: white;
-    overflow-y: auto;
-}
-
-.update-info {
-    width: 70%;
-}
-
-.change-password {
-    width: 30%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.logout {
-    width: 20%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 @keyframes slideUp {

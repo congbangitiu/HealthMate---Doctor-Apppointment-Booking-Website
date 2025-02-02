@@ -6,268 +6,269 @@
     background-position: center;
     background-size: cover;
     gap: 100px;
-}
 
-.application {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-    width: 300px;
-}
-
-.info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    box-shadow: 0 0 5px var(--darkGrayColor);
-    border-radius: 10px;
-}
-
-.info img {
-    border-radius: 10px;
-    border: 5px solid var(--primaryColor);
-    object-fit: cover;
-    aspect-ratio: 1/1;
-}
-
-.info h1 {
-    font-size: 20px;
-    font-weight: 600;
-    margin: 10px 0;
-}
-
-.info p {
-    font-size: 16px;
-    color: var(--darkGrayColor);
-}
-
-.prescription-wrapper {
-    width: 70%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.pending-noti {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
-    background-color: var(--lightYellowColor);
-    border-radius: 5px;
-    margin-bottom: 30px;
-    width: 100%;
-}
-
-.pending-noti .icon {
-    color: var(--darkYellowColor);
-    font-size: 20px;
-}
-
-.prescription {
-    width: 100%;
-}
-
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    width: 100%;
-
-    & img {
-        width: 100px;
-        height: 100px;
-    }
-
-    & div h4 {
-        font-size: 20px;
-        font-weight: 600;
-        color: var(--irisBlueColor);
-    }
-
-    & p {
-        font-size: 18px;
-        color: var(--irisBlueColor);
-    }
-}
-
-.prescription h1 {
-    font-size: 30px;
-    font-weight: 500;
-    color: var(--primaryColor);
-    margin: 20px 0;
-    text-align: center;
-}
-
-.patient-info {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-
-    & span {
+    & .application {
         display: flex;
-        justify-content: space-between;
-        text-transform: capitalize;
+        flex-direction: column;
+        gap: 40px;
+        width: 300px;
 
-        & p {
-            font-size: 20px;
+        & .info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-shadow: 0 0 5px var(--darkGrayColor);
+            border-radius: 10px;
+
+            & img {
+                border-radius: 10px;
+                border: 5px solid var(--primaryColor);
+                object-fit: cover;
+                aspect-ratio: 1/1;
+            }
+
+            & h1 {
+                font-size: 20px;
+                font-weight: 600;
+                margin: 10px 0;
+            }
+
+            & p {
+                font-size: 16px;
+                color: var(--darkGrayColor);
+            }
         }
     }
 
-    & p {
-        font-size: 20px;
-    }
-}
-
-.medications {
-    width: 100%;
-    overflow-x: auto;
-    border-radius: 10px;
-    margin-top: 20px;
-
-    table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        border: 1px solid var(--primaryColor);
-        border-radius: 10px;
-        font-size: 18px;
-        margin-bottom: 30px;
-    }
-
-    thead {
-        background-color: var(--primaryColor);
-    }
-
-    thead > tr > th {
-        font-weight: 500 !important;
-    }
-
-    th,
-    td {
-        border: 1px solid var(--primaryColor);
-        text-align: center;
-    }
-
-    th {
-        padding: 10px;
-    }
-
-    th {
-        background-color: var(--primaryColor);
-        color: var(--whiteColor);
-    }
-
-    tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-
-    /* Adding border-radius to the last row */
-    tbody tr:last-of-type td:first-child {
-        border-bottom-left-radius: 10px;
-    }
-
-    tbody tr:last-of-type td:last-child {
-        border-bottom-right-radius: 10px;
-    }
-
-    .link {
-        width: 100%;
-        padding: 12px;
-    }
-
-    a {
-        text-decoration: none;
-        color: inherit; /* This makes sure the link looks like normal text */
-        display: block; /* This makes the link fill the cell */
-    }
-
-    tbody > tr > td {
-        padding: 5px;
-    }
-
-    h4 {
-        font-size: 20px;
-        font-weight: 500;
-        margin-top: 10px;
-    }
-}
-
-.confirmation {
-    width: 100%;
-    display: flex;
-    margin-top: 50px;
-    justify-content: flex-end;
-
-    & > div {
+    & .prescription-wrapper {
+        width: 70%;
         display: flex;
         flex-direction: column;
         align-items: center;
 
-        & h4 {
-            font-size: 20px;
-            font-weight: 500;
-            color: var(--irisBlueColor);
-        }
-
-        & span {
-            position: relative;
-            margin: 5px 0;
-            width: 300px;
+        & .pending-noti {
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background-color: var(--lightYellowColor);
+            border-radius: 5px;
+            margin-bottom: 30px;
+            width: 100%;
 
-            & img + img {
-                position: absolute;
-                z-index: 1;
-            }
-
-            & img:first-child {
-                width: 150px;
-                height: 150px;
-            }
-
-            & img:last-child {
-                width: 200px;
-                top: 30px;
-                left: 40px;
+            & .icon {
+                color: var(--darkYellowColor);
+                font-size: 20px;
             }
         }
 
-        & p {
+        & .prescription {
+            width: 100%;
+
+            & .brand {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                width: 100%;
+
+                & img {
+                    width: 100px;
+                    height: 100px;
+                }
+
+                & div {
+                    & h4 {
+                        font-size: 20px;
+                        font-weight: 600;
+                        color: var(--irisBlueColor);
+                    }
+
+                    & p {
+                        font-size: 18px;
+                        color: var(--irisBlueColor);
+                    }
+                }
+            }
+
+            & h1 {
+                font-size: 30px;
+                font-weight: 500;
+                color: var(--primaryColor);
+                margin: 20px 0;
+                text-align: center;
+            }
+
+            & .patient-info {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+
+                & span {
+                    display: flex;
+                    justify-content: space-between;
+                    text-transform: capitalize;
+
+                    & p {
+                        font-size: 20px;
+                    }
+                }
+
+                & p {
+                    font-size: 20px;
+                }
+            }
+
+            & .medications {
+                width: 100%;
+                overflow-x: auto;
+                border-radius: 10px;
+                margin-top: 20px;
+
+                & table {
+                    width: 100%;
+                    border-collapse: separate;
+                    border-spacing: 0;
+                    border: 1px solid var(--primaryColor);
+                    border-radius: 10px;
+                    font-size: 18px;
+                    margin-bottom: 30px;
+
+                    & thead {
+                        background-color: var(--primaryColor);
+
+                        & > tr > th {
+                            font-weight: 500 !important;
+                        }
+                    }
+
+                    & th,
+                    & td {
+                        border: 1px solid var(--primaryColor);
+                        text-align: center;
+                    }
+
+                    & th {
+                        padding: 10px;
+                        background-color: var(--primaryColor);
+                        color: var(--whiteColor);
+                    }
+
+                    & tr:nth-child(even) {
+                        background-color: #f2f2f2;
+                    }
+
+                    & tbody {
+                        & tr:last-of-type {
+                            & td:first-child {
+                                border-bottom-left-radius: 10px;
+                            }
+                            & td:last-child {
+                                border-bottom-right-radius: 10px;
+                            }
+                        }
+
+                        & > tr > td {
+                            padding: 5px;
+                        }
+                    }
+
+                    & .link {
+                        width: 100%;
+                        padding: 12px;
+
+                        & a {
+                            text-decoration: none;
+                            color: inherit;
+                            display: block;
+                        }
+                    }
+                }
+
+                & h4 {
+                    font-size: 20px;
+                    font-weight: 500;
+                    margin-top: 10px;
+                }
+            }
+
+            & .confirmation {
+                width: 100%;
+                display: flex;
+                margin-top: 50px;
+                justify-content: flex-end;
+
+                & > div {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+
+                    & h4 {
+                        font-size: 20px;
+                        font-weight: 500;
+                        color: var(--irisBlueColor);
+                    }
+
+                    & span {
+                        position: relative;
+                        margin: 5px 0;
+                        width: 300px;
+                        display: flex;
+                        flex-direction: column;
+
+                        & img + img {
+                            position: absolute;
+                            z-index: 1;
+                        }
+
+                        & img:first-child {
+                            width: 150px;
+                            height: 150px;
+                        }
+
+                        & img:last-child {
+                            width: 200px;
+                            top: 30px;
+                            left: 40px;
+                        }
+                    }
+
+                    & p {
+                        font-size: 20px;
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+
+        & button {
+            width: 300px;
+            height: 50px;
+            padding: 10px;
+            background-color: var(--primaryColor);
+            color: var(--whiteColor);
             font-size: 20px;
             font-weight: 500;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 50px;
+
+            &:hover {
+                opacity: 0.7;
+            }
+
+            & .icon {
+                font-size: 25px;
+            }
+
+            & p {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+            }
         }
-    }
-}
-
-.prescription-wrapper button {
-    width: 300px;
-    height: 50px;
-    padding: 10px;
-    background-color: var(--primaryColor);
-    color: var(--whiteColor);
-    font-size: 20px;
-    font-weight: 500;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-top: 50px;
-
-    &:hover {
-        opacity: 0.7;
-    }
-
-    .icon {
-        font-size: 25px;
-    }
-
-    & p {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 20px;
     }
 }

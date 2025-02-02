@@ -2,77 +2,82 @@
     display: flex;
     align-items: center;
     gap: 30px;
-}
 
-.container img {
-    width: 200px;
-    height: 200px;
-    border-radius: 10px;
-    object-fit: cover;
-    aspect-ratio: 1/1;
-}
-.info {
-}
-
-.name-expertise {
-    display: flex;
-    align-items: center;
-    gap: 50px;
-}
-.name-expertise h4 {
-    font-size: 26px;
-    font-weight: 600;
-}
-.expertise {
-    padding: 5px 10px;
-    border-radius: 5px;
-    color: var(--irisBlueColor);
-    background-color: var(--lightGreenColor);
-    text-align: center;
-    font-size: 20px;
-    font-weight: 600;
-}
-.rating {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 5px;
-}
-
-.stars {
-    color: var(--yellowColor);
-}
-
-.rating p {
-    margin: 0;
-    font-size: 18px;
-}
-
-.rating p:nth-child(2) {
-    font-weight: 600;
-}
-.description {
-    margin-top: 20px;
-    font-size: 16px;
-    text-align: justify;
-}
-
-.smallImg {
-    width: 160px !important;
-    height: 160px !important;
-}
-
-.small h4 {
-    font-size: 22px;
-}
-
-.small {
-    .expertise,
-    .stars,
-    .rating p {
-        font-size: 18px;
+    & img {
+        width: 200px;
+        height: 200px;
+        border-radius: 10px;
+        object-fit: cover;
+        aspect-ratio: 1/1;
     }
-    .description {
-        font-size: 16px;
+
+    & .info {
+        & .name-expertise {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+
+            & h4 {
+                font-size: 26px;
+                font-weight: 600;
+            }
+
+            & .expertise {
+                padding: 5px 10px;
+                border-radius: 5px;
+                color: var(--irisBlueColor);
+                background-color: var(--lightGreenColor);
+                text-align: center;
+                font-size: 20px;
+                font-weight: 600;
+            }
+        }
+
+        & .rating {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+
+            & .stars {
+                color: var(--yellowColor);
+            }
+
+            & p {
+                margin: 0;
+                font-size: 18px;
+
+                &:nth-child(2) {
+                    font-weight: 600;
+                }
+            }
+        }
+
+        & .description {
+            margin-top: 20px;
+            font-size: 16px;
+            text-align: justify;
+        }
+    }
+
+    & .smallImg {
+        width: 160px !important;
+        height: 160px !important;
+    }
+
+    & .small {
+        & h4 {
+            font-size: 22px;
+        }
+
+        & .expertise,
+        & .stars,
+        & .rating p {
+            font-size: 18px;
+        }
+
+        & .description {
+            font-size: 16px;
+        }
     }
 }

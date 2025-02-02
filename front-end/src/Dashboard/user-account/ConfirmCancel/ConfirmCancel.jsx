@@ -46,6 +46,15 @@ const ConfirmCancel = ({ setShowConfirmCancel, appointment }) => {
         }
     };
 
+    // Check if timeSlot and its properties exist before using them
+    const appointmentDate = appointment?.timeSlot?.day ? formatDate(appointment.timeSlot.day) : 'Date not available';
+    const startTime = appointment?.timeSlot?.startingTime
+        ? convertTime(appointment.timeSlot.startingTime)
+        : 'Time not available';
+    const endTime = appointment?.timeSlot?.endingTime
+        ? convertTime(appointment.timeSlot.endingTime)
+        : 'Time not available';
+
     return (
         <div className={cx('container')}>
             <FaCircleExclamation className={cx('icon')} />
@@ -55,13 +64,10 @@ const ConfirmCancel = ({ setShowConfirmCancel, appointment }) => {
                 <div>
                     <h1>Dr. {appointment?.doctor?.fullname}</h1>
                     <p>
-                        <b>Date: </b>
-                        {formatDate(appointment?.timeSlot?.day)}
+                        <b>Date: </b> {appointmentDate}
                     </p>
                     <p>
-                        <b>Time: </b>
-                        {convertTime(appointment?.timeSlot?.startingTime)} -{' '}
-                        {convertTime(appointment?.timeSlot?.endingTime)}
+                        <b>Time: </b> {startTime} - {endTime}
                     </p>
                 </div>
             </div>

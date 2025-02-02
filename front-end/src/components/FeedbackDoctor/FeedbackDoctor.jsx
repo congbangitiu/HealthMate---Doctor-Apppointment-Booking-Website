@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import formatDate from '../../utils/formatDate';
 import { BASE_URL, token } from '../../../config';
@@ -6,9 +6,14 @@ import classNames from 'classnames/bind';
 import styles from './FeedbackDoctor.module.scss';
 import { HiStar } from 'react-icons/hi';
 import { SlLike, SlDislike } from 'react-icons/sl';
+import Dialog from '@mui/material/Dialog';
+import Slide from '@mui/material/Slide';
 import FormFeedback from '../FormFeedback/FormFeedback';
 
 const cx = classNames.bind(styles);
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const FeedbackDoctor = ({ reviews, totalRating, role }) => {
     const [showFormFeedback, setShowFormFeedback] = useState(false);
@@ -113,14 +118,17 @@ const FeedbackDoctor = ({ reviews, totalRating, role }) => {
                 </div>
             )}
 
-            {showFormFeedback && (
-                <div className={cx('form-wrapper')}>
-                    <div className={cx('overlay')} onClick={() => setShowFormFeedback(false)}></div>
-                    <div className={cx('form-feedback')}>
-                        <FormFeedback setShowFormFeedback={setShowFormFeedback} />
-                    </div>
+            <Dialog
+                open={showFormFeedback}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={() => setShowFormFeedback(false)}
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <div className={cx('form-feedback')}>
+                    <FormFeedback setShowFormFeedback={setShowFormFeedback} />
                 </div>
-            )}
+            </Dialog>
         </div>
     );
 };

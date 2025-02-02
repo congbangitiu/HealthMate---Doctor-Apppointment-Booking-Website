@@ -5,122 +5,93 @@
     justify-content: flex-start;
     align-items: center;
     min-height: 450px;
-}
 
-.container h4 {
-    font-size: 16px;
-    color: var(--darkGrayColor);
-}
+    & h4 {
+        font-size: 16px;
+        color: var(--darkGrayColor);
+    }
 
-.appointments {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-
-    & div {
+    & .appointments {
         width: 100%;
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: relative;
+        flex-direction: column;
+        gap: 30px;
 
-        & .link {
-            border-radius: 10px;
+        & > div {
+            // Direct child selector for better specificity
             width: 100%;
-            position: relative;
-            z-index: 1;
-            background-color: var(--whiteColor);
-            transition: transform 0.3s ease;
-
-            &:hover {
-                cursor: pointer;
-                transform: scale(1.02);
-                box-shadow: 0px 0px 8px var(--primaryColor);
-            }
-        }
-
-        & .pending {
-            transition: width 0.3s ease, box-shadow 0.3s ease;
-            transform: scale(1) !important;
-        }
-
-        & .cancelled {
-            cursor: not-allowed !important;
-            transform: scale(1) !important;
-            box-shadow: none !important;
-        }
-
-        &:hover .pending {
-            width: 92%;
-        }
-
-        & .icon {
-            font-size: 18px;
-            color: var(--whiteColor);
-            background-color: red;
-            width: 45px;
-            height: 45px;
-            border-radius: 100px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            position: absolute;
-            right: 0;
-            z-index: 0;
+            position: relative;
 
-            &:hover {
-                cursor: pointer;
-                opacity: 0.7;
+            & .link {
+                border-radius: 10px;
+                width: 100%;
+                position: relative;
+                z-index: 1;
+                background-color: var(--whiteColor);
+                transition: transform 0.3s ease;
+
+                &:hover {
+                    cursor: pointer;
+                    transform: scale(1.02);
+                    box-shadow: 0px 0px 8px var(--primaryColor);
+                }
+
+                &.pending {
+                    // Use &. for modifier classes
+                    transition: width 0.3s ease, box-shadow 0.3s ease;
+                    transform: scale(1) !important;
+                }
+
+                &.cancelled {
+                    // Use &. for modifier classes
+                    cursor: not-allowed !important;
+                    transform: scale(1) !important;
+                    box-shadow: none !important;
+                }
+            }
+
+            &:hover .pending {
+                width: 92%;
+            }
+
+            & .icon {
+                font-size: 18px;
+                color: var(--whiteColor);
+                background-color: red;
+                width: 45px;
+                height: 45px;
+                border-radius: 100px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: absolute;
+                right: 0;
+                z-index: 0;
+
+                &:hover {
+                    cursor: pointer;
+                    opacity: 0.7;
+                }
             }
         }
     }
-}
 
-.overlay {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 150;
-    background-color: #00000084;
-    animation: fadeIn linear 0.4s;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-.cancel {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    border-radius: 15px;
-    transform: translate(-50%, -50%);
-    z-index: 200;
-    animation: slideUp linear 0.4s forwards;
-    animation-timing-function: ease-in-out;
-    background: white;
-    overflow-y: auto;
-    width: 700px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-@keyframes slideUp {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, 100%);
-    }
-    100% {
-        opacity: 1;
+    & .cancel {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        border-radius: 15px;
         transform: translate(-50%, -50%);
+        z-index: 200;
+        animation: slideUp linear 0.4s forwards;
+        animation-timing-function: ease-in-out;
+        background: white;
+        overflow-y: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 }

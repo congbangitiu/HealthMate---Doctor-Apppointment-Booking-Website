@@ -2,82 +2,93 @@
     background-color: var(--whiteColor);
     padding: 30px 50px;
     border-radius: 10px;
-
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
 
-.close-icon-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-}
-.close-icon {
-    font-size: 25px;
-    font-weight: 600;
-    border-radius: 3px;
-    margin-right: -20px;
+    & .close-icon-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
 
-    &:hover {
-        cursor: pointer;
-        background-color: red;
+        & .close-icon {
+            font-size: 25px;
+            font-weight: 600;
+            border-radius: 3px;
+            margin-right: -20px;
+
+            &:hover {
+                cursor: pointer;
+                background-color: red;
+            }
+        }
     }
-}
-.container h1 {
-    font-size: 30px;
-    font-weight: 500;
-    color: var(--primaryColor);
-}
-.voting {
-    margin-top: 30px;
-    width: 100%;
-}
-.question {
-    font-size: 18px;
-    font-weight: 500;
-}
-.star {
-    font-size: 25px;
-    margin-top: 10px;
-}
-.active {
-    color: var(--yellowColor);
-}
 
-.disabled {
-    color: var(--darkGrayColor);
-}
-
-.suggestion {
-    margin-top: 30px;
-    width: 100%;
-}
-
-.suggestion textarea {
-    width: 100%;
-    padding: 20px;
-    border: 2px solid #0066ff34;
-    margin-top: 20px;
-    border-radius: 5px;
-
-    &:focus {
-        outline: var(--primaryColor);
+    & h1 {
+        font-size: 30px;
+        font-weight: 500;
+        color: var(--primaryColor);
     }
-}
 
-.submit-btn {
-    padding: 10px 0;
-    width: 30%;
-    border-radius: 50px;
-    color: var(--whiteColor);
-    font-weight: 500;
-    background-color: var(--primaryColor) !important;
-    margin-top: 20px;
+    & .voting {
+        margin-top: 30px;
+        width: 100%;
 
-    &:hover {
-        cursor: pointer;
-        opacity: 0.8;
+        & .question {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        & .star {
+            font-size: 25px;
+            margin-top: 10px;
+        }
+
+        & .active {
+            color: var(--yellowColor);
+        }
+
+        & .disabled {
+            color: var(--darkGrayColor);
+        }
+    }
+
+    & .suggestion {
+        margin-top: 30px;
+        width: 100%;
+
+        & .question {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        & textarea {
+            width: 100%;
+            padding: 20px;
+            border: 2px solid #0066ff34;
+            margin-top: 20px;
+            border-radius: 5px;
+
+            &:focus {
+                outline: var(--primaryColor);
+            }
+        }
+    }
+
+    & .submit-btn {
+        padding: 10px 0;
+        width: 30%;
+        border-radius: 5px;
+        color: var(--whiteColor);
+        font-size: 18px;
+        font-weight: 500;
+        background-color: var(--primaryColor) !important;
+        margin-top: 20px;
+
+        &:hover {
+            cursor: pointer;
+            opacity: 0.8;
+        }
     }
 }

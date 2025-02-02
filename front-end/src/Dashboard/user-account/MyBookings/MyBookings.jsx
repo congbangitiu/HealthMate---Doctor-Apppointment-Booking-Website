@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './MyBookings.module.scss';
@@ -9,8 +9,13 @@ import Error from '../../../components/Error/Error';
 import PatientAppointment from '../../../components/PatientAppointment/PatientAppointment';
 import ConfirmCancel from '../ConfirmCancel/ConfirmCancel';
 import { FaRegTrashAlt } from 'react-icons/fa';
+import Dialog from '@mui/material/Dialog';
+import Slide from '@mui/material/Slide';
 
 const cx = classNames.bind(styles);
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const MyBookings = () => {
     const { data: appointments, loading, error } = useFetchData(`${BASE_URL}/users/appointments/my-appointments`);
@@ -59,14 +64,22 @@ const MyBookings = () => {
 
             {!loading && !error && appointments.length === 0 && <h4>You did not book any doctor yet!</h4>}
 
-            {showConfirmCancel && selectedAppointment && (
-                <div className={cx('form-wrapper')}>
-                    <div className={cx('overlay')}></div>
-                    <div className={cx('cancel')}>
-                        <ConfirmCancel setShowConfirmCancel={setShowConfirmCancel} appointment={selectedAppointment} />
-                    </div>
+            <Dialog
+                open={showConfirmCancel && selectedAppointment}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={() => setShowConfirmCancel(false)}
+                aria-describedby="alert-dialog-slide-description"
+                sx={{
+                    '& .MuiPaper-root': {
+                        borderRadius: '10px',
+                    },
+                }}
+            >
+                <div className={cx('cancel')}>
+                    <ConfirmCancel setShowConfirmCancel={setShowConfirmCancel} appointment={selectedAppointment} />
                 </div>
-            )}
+            </Dialog>
         </div>
     );
 };

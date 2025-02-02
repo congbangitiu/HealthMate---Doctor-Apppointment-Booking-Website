@@ -9,10 +9,15 @@ import { IoIosClose, IoMdHome, IoIosLogOut, IoIosNotifications } from 'react-ico
 import { FaUserDoctor } from 'react-icons/fa6';
 import { MdMedicalServices, MdContactSupport } from 'react-icons/md';
 import Popover from '@mui/material/Popover';
+import Dialog from '@mui/material/Dialog';
+import Slide from '@mui/material/Slide';
 import { authContext } from '../../context/AuthContext';
 import ConfirmLogout from '../ConfirmLogout/ConfirmLogout';
 
 const cx = classNames.bind(styles);
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const navLinks = [
     {
@@ -150,14 +155,17 @@ const Header = () => {
                 </label>
             </div>
 
-            {showConfirmLogout && (
-                <div className={cx('form-wrapper')}>
-                    <div className={cx('overlay-logout')}></div>
-                    <div className={cx('logout')}>
-                        <ConfirmLogout setShowConfirmLogout={setShowConfirmLogout} />
-                    </div>
+            <Dialog
+                open={showConfirmLogout}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={() => setShowConfirmLogout(false)}
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <div className={cx('logout')}>
+                    <ConfirmLogout setShowConfirmLogout={setShowConfirmLogout} />
                 </div>
-            )}
+            </Dialog>
 
             <Popover
                 id={id}

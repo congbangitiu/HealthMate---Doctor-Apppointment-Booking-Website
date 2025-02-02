@@ -6,133 +6,132 @@
     background-position: center;
     background-size: cover;
     gap: 100px;
-}
 
-.application {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-    width: 300px;
-}
-
-.info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    box-shadow: 0 0 5px var(--darkGrayColor);
-    border-radius: 10px;
-}
-
-.info img {
-    border-radius: 10px;
-    border: 5px solid var(--primaryColor);
-    object-fit: cover;
-    aspect-ratio: 1/1;
-}
-
-.info h1 {
-    font-size: 20px;
-    font-weight: 600;
-    margin: 10px 0;
-}
-
-.info p {
-    font-size: 16px;
-    color: var(--darkGrayColor);
-}
-
-.prescription {
-    width: 70%;
-
-    .toggle {
-        margin-bottom: 20px;
+    & .application {
         display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 10px;
+        flex-direction: column;
+        gap: 40px;
+        width: 300px;
 
-        h4 {
-            font-size: 20px;
-            font-weight: 500;
-            color: var(--irisBlueColor);
+        & .info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-shadow: 0 0 5px var(--darkGrayColor);
+            border-radius: 10px;
+
+            & img {
+                border-radius: 10px;
+                border: 5px solid var(--primaryColor);
+                object-fit: cover;
+                aspect-ratio: 1/1;
+            }
+
+            & h1 {
+                font-size: 20px;
+                font-weight: 600;
+                margin: 10px 0;
+            }
+
+            & p {
+                font-size: 16px;
+                color: var(--darkGrayColor);
+            }
         }
+    }
 
+    & .prescription {
+        width: 70%;
 
-        .switch {
-            --circle-dim: 1.4em;
-            font-size: 17px;
-            position: relative;
-            display: inline-block;
-            width: 3.5em;
-            height: 2em;
-        }
+        & .toggle {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
 
-        /* Hide default HTML checkbox */
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
+            & h4 {
+                font-size: 20px;
+                font-weight: 500;
+                color: var(--irisBlueColor);
+            }
 
-        /* The slider */
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--lightGreenColor);
-            transition: 0.4s;
-            border-radius: 30px;
-        }
+            & .switch {
+                --circle-dim: 1.4em;
+                font-size: 17px;
+                position: relative;
+                display: inline-block;
+                width: 3.5em;
+                height: 2em;
 
-        .slider-card {
-            position: absolute;
-            content: '';
-            height: var(--circle-dim);
-            width: var(--circle-dim);
-            border-radius: 20px;
-            left: 0.3em;
-            bottom: 0.3em;
-            transition: 0.4s;
-            pointer-events: none;
-        }
+                /* Hide default HTML checkbox */
+                & input {
+                    opacity: 0;
+                    width: 0;
+                    height: 0;
+                }
 
-        .slider-card-face {
-            position: absolute;
-            inset: 0;
-            backface-visibility: hidden;
-            perspective: 1000px;
-            border-radius: 50%;
-            transition: 0.4s transform;
-        }
+                /* The slider */
+                & .slider {
+                    position: absolute;
+                    cursor: pointer;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: var(--lightGreenColor);
+                    transition: 0.4s;
+                    border-radius: 30px;
+                }
 
-        .slider-card-front {
-            background-color: var(--primaryColor);
-        }
+                & .slider-card {
+                    position: absolute;
+                    content: '';
+                    height: var(--circle-dim);
+                    width: var(--circle-dim);
+                    border-radius: 20px;
+                    left: 0.3em;
+                    bottom: 0.3em;
+                    transition: 0.4s;
+                    pointer-events: none;
 
-        .slider-card-back {
-            background-color: var(--lightGreenColor);
-            transform: rotateY(180deg);
-        }
+                    & .slider-card-face {
+                        position: absolute;
+                        inset: 0;
+                        backface-visibility: hidden;
+                        perspective: 1000px;
+                        border-radius: 50%;
+                        transition: 0.4s transform;
+                    }
 
-        input:checked ~ .slider-card .slider-card-back {
-            transform: rotateY(0);
-        }
+                    & .slider-card-front {
+                        background-color: var(--primaryColor);
+                    }
 
-        input:checked ~ .slider-card .slider-card-front {
-            transform: rotateY(-180deg);
-        }
+                    & .slider-card-back {
+                        background-color: var(--lightGreenColor);
+                        transform: rotateY(180deg);
+                    }
+                }
 
-        input:checked ~ .slider-card {
-            transform: translateX(1.5em);
-        }
+                & input:checked ~ .slider-card .slider-card-back {
+                    transform: rotateY(0);
+                }
 
-        input:checked ~ .slider {
-            background-color: var(--primaryColor);
+                & input:checked ~ .slider-card .slider-card-front {
+                    transform: rotateY(-180deg);
+                }
+
+                & input:checked ~ .slider-card {
+                    transform: translateX(1.5em);
+                }
+
+                & input:checked ~ .slider {
+                    background-color: var(--primaryColor);
+                }
+            }
         }
     }
 }

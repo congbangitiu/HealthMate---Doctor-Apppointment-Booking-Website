@@ -1,43 +1,43 @@
 .container-parent {
     padding: 150px 120px 100px 120px;
-}
 
-.container {
-    display: flex;
-    justify-content: center;
-    gap: 100px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-}
+    & .container {
+        display: flex;
+        justify-content: center;
+        gap: 100px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
 
-.information {
-    width: 70%;
-}
+        & .information {
+            width: 70%;
+        }
 
-.noti {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 30px;
-}
+        & .noti {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
 
-.pending {
-    background-color: var(--lightYellowColor);
-}
+        & .pending {
+            background-color: var(--lightYellowColor);
 
-.pending .icon {
-    color: var(--darkYellowColor);
-    font-size: 20px;
-}
+            & .icon {
+                color: var(--darkYellowColor);
+                font-size: 20px;
+            }
+        }
 
-.rejected {
-    background-color: var(--lightRedColor);
-}
+        & .rejected {
+            background-color: var(--lightRedColor);
 
-.rejected .icon {
-    color: var(--darkRedColor);
-    font-size: 20px;
+            & .icon {
+                color: var(--darkRedColor);
+                font-size: 20px;
+            }
+        }
+    }
 }
