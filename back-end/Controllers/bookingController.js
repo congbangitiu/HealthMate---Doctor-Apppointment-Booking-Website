@@ -147,7 +147,6 @@ export const stripeWebhook = async (req, res) => {
         const event = stripe.webhooks.constructEvent(req.body, signature, process.env.STRIPE_WEBHOOK_SECRET);
 
         if (event.type === 'checkout.session.completed') {
-            console.log('Payment Successful! Processing booking...');
             const session = event.data.object;
 
             // Check if metadata exists
@@ -192,13 +191,10 @@ export const stripeWebhook = async (req, res) => {
                 paymentMethod,
                 isPaid: true,
             });
-
-            console.log('Booking confirmed and email sent successfully.');
         }
 
         res.status(200).json({ received: true });
     } catch (error) {
-        console.error('Error processing Stripe webhook:', error);
         res.status(400).json({ success: false, message: 'Webhook error', error: error.message });
     }
 };

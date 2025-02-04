@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import classNames from 'classnames/bind';
@@ -6,13 +6,18 @@ import styles from './Tabs.module.scss';
 
 import Doctor from '../../../assets/images/about.png';
 import { MdLogout } from 'react-icons/md';
-import { FaRegTrashAlt } from 'react-icons/fa';
 import { TbStatusChange } from 'react-icons/tb';
 
 import ChangePassword from '../ChangePassword/ChangePassword';
 import ConfirmLogout from '../../../components/ConfirmLogout/ConfirmLogout';
 
+import Dialog from '@mui/material/Dialog';
+import Slide from '@mui/material/Slide';
+
 const cx = classNames.bind(styles);
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const Tabs = ({ tab, setTab, doctorData }) => {
     const [showFormChangePassword, setShowFormChangePassword] = useState(false);
@@ -44,28 +49,31 @@ const Tabs = ({ tab, setTab, doctorData }) => {
                 <button onClick={() => setShowConfirmLogout(true)}>
                     Logout <MdLogout />
                 </button>
-                <button>
-                    Delete account <FaRegTrashAlt />
-                </button>
             </div>
 
-            {showFormChangePassword && (
-                <div className={cx('form-wrapper')}>
-                    <div className={cx('overlay')} onClick={() => setShowFormChangePassword(false)}></div>
-                    <div className={cx('form-update', 'change-password')}>
-                        <ChangePassword setShowFormChangePassword={setShowFormChangePassword} doctorData={doctorData} />
-                    </div>
+            <Dialog
+                open={showFormChangePassword}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={() => setShowFormChangePassword(false)}
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <div className={cx('dialog', 'change-password')}>
+                    <ChangePassword setShowFormChangePassword={setShowFormChangePassword} doctorData={doctorData} />
                 </div>
-            )}
+            </Dialog>
 
-            {showConfirmLogout && (
-                <div className={cx('form-wrapper')}>
-                    <div className={cx('overlay')}></div>
-                    <div className={cx('form-update', 'logout')}>
-                        <ConfirmLogout setShowConfirmLogout={setShowConfirmLogout} />
-                    </div>
+            <Dialog
+                open={showConfirmLogout}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={() => setShowConfirmLogout(false)}
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <div className={cx('dialog', 'logout')}>
+                    <ConfirmLogout setShowConfirmLogout={setShowConfirmLogout} />
                 </div>
-            )}
+            </Dialog>
         </div>
     );
 };

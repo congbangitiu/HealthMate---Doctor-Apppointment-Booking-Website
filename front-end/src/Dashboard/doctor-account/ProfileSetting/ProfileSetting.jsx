@@ -5,7 +5,7 @@ import styles from './ProfileSetting.module.scss';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
 import { LiaSaveSolid } from 'react-icons/lia';
-import {uploadImageToCloudinary} from '../../../utils/uploadCloudinary';
+import { uploadImageToCloudinary } from '../../../utils/uploadCloudinary';
 import { BASE_URL, token } from '../../../../config';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
@@ -228,384 +228,380 @@ const ProfileSetting = ({ doctorData }) => {
 
     return (
         <div className={cx('container')}>
-            <form action="">
-                {/* PERSONAL INFORMATION  */}
-                <h3 className={cx('title')}>Personal Information</h3>
-                <div className={cx('upperPart')}>
-                    <div className={cx('leftPart')}>
-                        <div className={cx('info')}>
-                            <label htmlFor="fullname">Fullname</label>
-                            <input
-                                type="text"
-                                id="fullname"
-                                placeholder="Enter your fullname"
-                                value={formData.fullname}
-                                name="fullname"
-                                onChange={handleInputChange}
-                                required
-                            />
-                        </div>
-                        <div className={cx('info')}>
-                            <label htmlFor="email">Email</label>
-                            <input
-                                type="email"
-                                id="email"
-                                placeholder="Email"
-                                value={formData.email}
-                                name="email"
-                                onChange={handleInputChange}
-                                required
-                            />
-                        </div>
-                        <div className={cx('info')}>
-                            <label htmlFor="phone">Phone No.</label>
-                            <input
-                                type="text"
-                                id="phone"
-                                placeholder="Enter your phone number"
-                                value={formData.phone}
-                                name="phone"
-                                onChange={handleInputChange}
-                                required
-                            />
-                        </div>
-                    </div>
-                    <div className={cx('rightPart')}>
-                        <div className={cx('info')}>
-                            <span>
-                                <label htmlFor="message">Biography</label>
-                                {errorWordLimit && <p className={cx('error')}>{errorWordLimit}</p>}
-                            </span>
-                            <textarea
-                                id="message"
-                                cols="30"
-                                rows="3"
-                                placeholder="Write your bio here with a maximum of 50 words"
-                                name="bio"
-                                value={formData.bio}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <div className={cx('upload-photo', 'avatar')}>
-                            {formData.photo && <img src={formData.photo} alt="" />}
-                            <input
-                                type="file"
-                                name="photo"
-                                id="customAvatar"
-                                accept=".jpg, .png, .jpeg, .webp"
-                                onChange={handleUploadAvatar}
-                            />
-                            <label htmlFor="customAvatar">
-                                {loadingAvatar ? <SyncLoader size={7} color="#ffffff" /> : 'Upload photo'}
-                            </label>
-                            <p>(Notice: 1:1 scale photo)</p>
-                        </div>
-                        <div className={cx('upload-photo', 'signature')}>
-                            {formData.signature && <img src={formData.signature} alt="" />}
-                            <input
-                                type="file"
-                                name="signature"
-                                id="customSignature"
-                                accept=".jpg, .png, .jpeg, .webp"
-                                onChange={handleUploadSignature}
-                            />
-                            <label htmlFor="customSignature">
-                                {loadingSignature ? <SyncLoader size={7} color="#ffffff" /> : 'Upload signature'}
-                            </label>
-                            <p>(Notice: Remove background )</p>
-                        </div>
-                    </div>
-                </div>
-                <div className={cx('info', 'selection')}>
-                    <div className={cx('field')}>
-                        <label htmlFor="gender">Gender</label>
-                        <select name="gender" id="gender" value={formData.gender} onChange={handleInputChange} required>
-                            <option value="">Select</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div className={cx('field')}>
-                        <label htmlFor="specialization">Specialization</label>
-                        <select
-                            name="specialization"
-                            id="specialization"
-                            value={formData.specialization}
+            {/* PERSONAL INFORMATION  */}
+            <h3 className={cx('title')}>Personal Information</h3>
+            <div className={cx('upperPart')}>
+                <div className={cx('leftPart')}>
+                    <div className={cx('info')}>
+                        <label htmlFor="fullname">Fullname</label>
+                        <input
+                            type="text"
+                            id="fullname"
+                            placeholder="Enter your fullname"
+                            value={formData.fullname}
+                            name="fullname"
                             onChange={handleInputChange}
                             required
-                        >
-                            <option value="">Select</option>
-                            <option value="Neurologist">Neurologist</option>
-                            <option value="Dermatologist">Dermatologist</option>
-                            <option value="Cardiologist">Cardiologist</option>
-                            <option value="Psychiatrist">Psychiatrist</option>
-                            <option value="Pulmonologist">Pulmonologist</option>
-                            <option value="Rheumatologist">Rheumatologist</option>
-                            <option value="Oncologist">Oncologist</option>
-                            <option value="Ophthalmologist">Ophthalmologist</option>
-                        </select>
+                        />
                     </div>
-                    <div className={cx('field')}>
-                        <label htmlFor="ticketPrice">Ticket price</label>
+                    <div className={cx('info')}>
+                        <label htmlFor="email">Email</label>
                         <input
-                            type="number"
-                            name="ticketPrice"
-                            id="ticketPrice"
-                            value={formData.ticketPrice}
+                            type="email"
+                            id="email"
+                            placeholder="Email"
+                            value={formData.email}
+                            name="email"
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </div>
+                    <div className={cx('info')}>
+                        <label htmlFor="phone">Phone No.</label>
+                        <input
+                            type="text"
+                            id="phone"
+                            placeholder="Enter your phone number"
+                            value={formData.phone}
+                            name="phone"
                             onChange={handleInputChange}
                             required
                         />
                     </div>
                 </div>
-
-                {/* QUALIFICATION */}
-                <h3 className={cx('title', 'other')}>Qualifications</h3>
-                <div className={cx('info')}>
-                    {formData.qualifications?.map((qualification, index) => (
-                        <div key={index} className={cx('credentials')}>
-                            <div className={cx('credential')}>
-                                <label htmlFor="startingDate">Starting date</label>
-                                <input
-                                    className={cx(!qualification.isEditable && 'disabled')}
-                                    type="date"
-                                    id="startingDate"
-                                    value={qualification.startingDate}
-                                    name="startingDate"
-                                    onChange={(e) => handleQuanlificationChange(e, index)}
-                                    disabled={!qualification.isEditable}
-                                />
-                            </div>
-                            <div className={cx('credential')}>
-                                <label htmlFor="endingDate">Ending date</label>
-                                <input
-                                    className={cx(!qualification.isEditable && 'disabled')}
-                                    type="date"
-                                    id="endingDate"
-                                    value={qualification.endingDate}
-                                    name="endingDate"
-                                    onChange={(e) => handleQuanlificationChange(e, index)}
-                                    disabled={!qualification.isEditable}
-                                />
-                            </div>
-                            <div className={cx('credential')}>
-                                <label htmlFor="degree">Degree</label>
-                                <input
-                                    className={cx(!qualification.isEditable && 'disabled')}
-                                    type="text"
-                                    id="degree"
-                                    value={qualification.degree}
-                                    name="degree"
-                                    onChange={(e) => handleQuanlificationChange(e, index)}
-                                    disabled={!qualification.isEditable}
-                                />
-                            </div>
-                            <div className={cx('credential')}>
-                                <label htmlFor="university">University</label>
-                                <input
-                                    className={cx(!qualification.isEditable && 'disabled')}
-                                    type="text"
-                                    id="university"
-                                    value={qualification.university}
-                                    name="university"
-                                    onChange={(e) => handleQuanlificationChange(e, index)}
-                                    disabled={!qualification.isEditable}
-                                />
-                            </div>
-                            <div></div>
-                            <div className={cx('modeWrapper')}>
-                                <div className={cx('mode')} onClick={() => toggleEditable('qualifications', index)}>
-                                    {qualification.isEditable ? (
-                                        <>
-                                            <LiaSaveSolid className={cx('icon')} />
-                                            <p className={cx('text')}>Save</p>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <MdOutlineModeEditOutline className={cx('icon')} />
-                                            <p className={cx('text')}>Edit</p>
-                                        </>
-                                    )}
-                                </div>
-                                <div className={cx('mode')} onClick={(e) => deleteQualification(e, index)}>
-                                    <FaRegTrashAlt className={cx('icon')} />
-                                    <p className={cx('text')}>Delete</p>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                    <button className={cx('add')} onClick={addQualification}>
-                        Add qualification
-                    </button>
+                <div className={cx('rightPart')}>
+                    <div className={cx('info')}>
+                        <span>
+                            <label htmlFor="message">Biography</label>
+                            {errorWordLimit && <p className={cx('error')}>{errorWordLimit}</p>}
+                        </span>
+                        <textarea
+                            id="message"
+                            cols="30"
+                            rows="3"
+                            placeholder="Write your bio here with a maximum of 50 words"
+                            name="bio"
+                            value={formData.bio}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <div className={cx('upload', 'avatar')}>
+                        {formData.photo && <img src={formData.photo} alt="" />}
+                        <input
+                            type="file"
+                            name="photo"
+                            id="customAvatar"
+                            accept=".jpg, .png, .jpeg, .webp"
+                            onChange={handleUploadAvatar}
+                        />
+                        <label htmlFor="customAvatar">
+                            {loadingAvatar ? <SyncLoader size={7} color="#ffffff" /> : 'Upload photo'}
+                        </label>
+                        <p>(Notice: 1:1 scale photo)</p>
+                    </div>
+                    <div className={cx('upload', 'signature')}>
+                        {formData.signature && <img src={formData.signature} alt="" />}
+                        <input
+                            type="file"
+                            name="signature"
+                            id="customSignature"
+                            accept=".jpg, .png, .jpeg, .webp"
+                            onChange={handleUploadSignature}
+                        />
+                        <label htmlFor="customSignature">
+                            {loadingSignature ? <SyncLoader size={7} color="#ffffff" /> : 'Upload signature'}
+                        </label>
+                        <p>(Notice: Remove background )</p>
+                    </div>
                 </div>
-
-                {/* EXPERIENCES */}
-                <h3 className={cx('title', 'other')}>Experiences</h3>
-                <div className={cx('info')}>
-                    {formData.experiences?.map((experience, index) => (
-                        <div key={index} className={cx('credentials')}>
-                            <div className={cx('credential')}>
-                                <label htmlFor="startingDate">Starting date</label>
-                                <input
-                                    className={cx(!experience.isEditable && 'disabled')}
-                                    type="date"
-                                    id="startingDate"
-                                    value={experience.startingDate}
-                                    name="startingDate"
-                                    onChange={(e) => handleExperienceChange(e, index)}
-                                    disabled={!experience.isEditable}
-                                />
-                            </div>
-                            <div className={cx('credential')}>
-                                <label htmlFor="endingDate">Ending date</label>
-                                <input
-                                    className={cx(!experience.isEditable && 'disabled')}
-                                    type="date"
-                                    id="endingDate"
-                                    value={experience.endingDate}
-                                    name="endingDate"
-                                    onChange={(e) => handleExperienceChange(e, index)}
-                                    disabled={!experience.isEditable}
-                                />
-                            </div>
-                            <div className={cx('credential')}>
-                                <label htmlFor="position">Position</label>
-                                <input
-                                    className={cx(!experience.isEditable && 'disabled')}
-                                    type="text"
-                                    id="position"
-                                    value={experience.position}
-                                    name="position"
-                                    onChange={(e) => handleExperienceChange(e, index)}
-                                    disabled={!experience.isEditable}
-                                />
-                            </div>
-                            <div className={cx('credential')}>
-                                <label htmlFor="hospital">Hospital</label>
-                                <input
-                                    className={cx(!experience.isEditable && 'disabled')}
-                                    type="text"
-                                    id="hospital"
-                                    value={experience.hospital}
-                                    name="hospital"
-                                    onChange={(e) => handleExperienceChange(e, index)}
-                                    disabled={!experience.isEditable}
-                                />
-                            </div>
-                            <div></div>
-                            <div className={cx('modeWrapper')}>
-                                <div className={cx('mode')} onClick={() => toggleEditable('experiences', index)}>
-                                    {experience.isEditable ? (
-                                        <>
-                                            <LiaSaveSolid className={cx('icon')} />
-                                            <p className={cx('text')}>Save</p>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <MdOutlineModeEditOutline className={cx('icon')} />
-                                            <p className={cx('text')}>Edit</p>
-                                        </>
-                                    )}
-                                </div>
-                                <div className={cx('mode')} onClick={(e) => deleteExperience(e, index)}>
-                                    <FaRegTrashAlt className={cx('icon')} />
-                                    <p className={cx('text')}>Delete</p>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                    <button className={cx('add')} onClick={addExperience}>
-                        Add experiences
-                    </button>
+            </div>
+            <div className={cx('info', 'selection')}>
+                <div className={cx('field')}>
+                    <label htmlFor="gender">Gender</label>
+                    <select name="gender" id="gender" value={formData.gender} onChange={handleInputChange} required>
+                        <option value="">Select</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
                 </div>
-
-                {/* TIME SLOTS */}
-                <h3 className={cx('title', 'other')}>Time slots</h3>
-                <div className={cx('info')}>
-                    {formData.timeSlots?.map((timeSlot, index) => (
-                        <div key={index} className={cx('timeSlots')}>
-                            <div className={cx('schedule')}>
-                                <div className={cx('credential')}>
-                                    <label htmlFor="startingDate">Date</label>
-                                    <input
-                                        className={cx(!timeSlot.isEditable && 'disabled')}
-                                        type="date"
-                                        id="startingDate"
-                                        value={timeSlot.day}
-                                        name="day"
-                                        onChange={(e) => handleTimeSlotsChange(e, index)}
-                                        disabled={!timeSlot.isEditable}
-                                    />
-                                </div>
-                                <div className={cx('credential')}>
-                                    <label htmlFor="startingTime">Starting time</label>
-                                    <input
-                                        className={cx(!timeSlot.isEditable && 'disabled')}
-                                        type="time"
-                                        id="startingTime"
-                                        value={timeSlot.startingTime}
-                                        name="startingTime"
-                                        onChange={(e) => handleTimeSlotsChange(e, index)}
-                                        disabled={!timeSlot.isEditable}
-                                    />
-                                </div>
-                                <div className={cx('credential')}>
-                                    <label htmlFor="endingTime">Ending time</label>
-                                    <input
-                                        className={cx(!timeSlot.isEditable && 'disabled')}
-                                        type="time"
-                                        id="endingTime"
-                                        value={timeSlot.endingTime}
-                                        name="endingTime"
-                                        onChange={(e) => handleTimeSlotsChange(e, index)}
-                                        disabled={!timeSlot.isEditable}
-                                    />
-                                </div>
-                            </div>
-                            <div className={cx('modeWrapper')}>
-                                <div className={cx('mode')} onClick={() => toggleEditable('timeSlots', index)}>
-                                    {timeSlot.isEditable ? (
-                                        <>
-                                            <LiaSaveSolid className={cx('icon')} />
-                                            <p className={cx('text')}>Save</p>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <MdOutlineModeEditOutline className={cx('icon')} />
-                                            <p className={cx('text')}>Edit</p>
-                                        </>
-                                    )}
-                                </div>
-                                <div className={cx('mode')} onClick={(e) => deleteTimeSlots(e, index)}>
-                                    <FaRegTrashAlt className={cx('icon')} />
-                                    <p className={cx('text')}>Delete</p>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                    <button className={cx('add')} onClick={addTimeSlots}>
-                        Add time slots
-                    </button>
-                </div>
-
-                {/* ABOUT */}
-                <h3 className={cx('title', 'other')}>About</h3>
-                <div className={cx('info')}>
-                    <textarea
-                        id="message"
-                        cols="30"
-                        rows="6"
-                        placeholder="Write more your details ..."
-                        name="about"
-                        value={formData.about}
+                <div className={cx('field')}>
+                    <label htmlFor="specialization">Specialization</label>
+                    <select
+                        name="specialization"
+                        id="specialization"
+                        value={formData.specialization}
                         onChange={handleInputChange}
+                        required
+                    >
+                        <option value="">Select</option>
+                        <option value="Neurologist">Neurologist</option>
+                        <option value="Dermatologist">Dermatologist</option>
+                        <option value="Cardiologist">Cardiologist</option>
+                        <option value="Psychiatrist">Psychiatrist</option>
+                        <option value="Pulmonologist">Pulmonologist</option>
+                        <option value="Rheumatologist">Rheumatologist</option>
+                        <option value="Oncologist">Oncologist</option>
+                        <option value="Ophthalmologist">Ophthalmologist</option>
+                    </select>
+                </div>
+                <div className={cx('field')}>
+                    <label htmlFor="ticketPrice">Ticket price</label>
+                    <input
+                        type="number"
+                        name="ticketPrice"
+                        id="ticketPrice"
+                        value={formData.ticketPrice}
+                        onChange={handleInputChange}
+                        required
                     />
                 </div>
+            </div>
 
-                <button onClick={updateProfileHandler} className={cx('submit-btn')}>
-                    {loading ? <SyncLoader size={10} color="#ffffff" /> : 'Update profile'}
+            {/* QUALIFICATION */}
+            <h3 className={cx('title', 'other')}>Qualifications</h3>
+            <div className={cx('details')}>
+                {formData.qualifications?.map((qualification, index) => (
+                    <div key={index} className={cx('credentials')}>
+                        <div className={cx('credential')}>
+                            <label htmlFor="startingDate">Starting date</label>
+                            <input
+                                className={cx(!qualification.isEditable && 'disabled')}
+                                type="date"
+                                id="startingDate"
+                                value={qualification.startingDate}
+                                name="startingDate"
+                                onChange={(e) => handleQuanlificationChange(e, index)}
+                                disabled={!qualification.isEditable}
+                            />
+                        </div>
+                        <div className={cx('credential')}>
+                            <label htmlFor="endingDate">Ending date</label>
+                            <input
+                                className={cx(!qualification.isEditable && 'disabled')}
+                                type="date"
+                                id="endingDate"
+                                value={qualification.endingDate}
+                                name="endingDate"
+                                onChange={(e) => handleQuanlificationChange(e, index)}
+                                disabled={!qualification.isEditable}
+                            />
+                        </div>
+                        <div className={cx('credential')}>
+                            <label htmlFor="degree">Degree</label>
+                            <input
+                                className={cx(!qualification.isEditable && 'disabled')}
+                                type="text"
+                                id="degree"
+                                value={qualification.degree}
+                                name="degree"
+                                onChange={(e) => handleQuanlificationChange(e, index)}
+                                disabled={!qualification.isEditable}
+                            />
+                        </div>
+                        <div className={cx('credential')}>
+                            <label htmlFor="university">University</label>
+                            <input
+                                className={cx(!qualification.isEditable && 'disabled')}
+                                type="text"
+                                id="university"
+                                value={qualification.university}
+                                name="university"
+                                onChange={(e) => handleQuanlificationChange(e, index)}
+                                disabled={!qualification.isEditable}
+                            />
+                        </div>
+                        <div></div>
+                        <div className={cx('modeWrapper')}>
+                            <div className={cx('mode')} onClick={() => toggleEditable('qualifications', index)}>
+                                {qualification.isEditable ? (
+                                    <>
+                                        <LiaSaveSolid className={cx('icon')} />
+                                        <p className={cx('text')}>Save</p>
+                                    </>
+                                ) : (
+                                    <>
+                                        <MdOutlineModeEditOutline className={cx('icon')} />
+                                        <p className={cx('text')}>Edit</p>
+                                    </>
+                                )}
+                            </div>
+                            <div className={cx('mode')} onClick={(e) => deleteQualification(e, index)}>
+                                <FaRegTrashAlt className={cx('icon')} />
+                                <p className={cx('text')}>Delete</p>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+                <button className={cx('add')} onClick={addQualification}>
+                    Add qualification
                 </button>
-            </form>
+            </div>
+
+            {/* EXPERIENCES */}
+            <h3 className={cx('title', 'other')}>Experiences</h3>
+            <div className={cx('details')}>
+                {formData.experiences?.map((experience, index) => (
+                    <div key={index} className={cx('credentials')}>
+                        <div className={cx('credential')}>
+                            <label htmlFor="startingDate">Starting date</label>
+                            <input
+                                className={cx(!experience.isEditable && 'disabled')}
+                                type="date"
+                                id="startingDate"
+                                value={experience.startingDate}
+                                name="startingDate"
+                                onChange={(e) => handleExperienceChange(e, index)}
+                                disabled={!experience.isEditable}
+                            />
+                        </div>
+                        <div className={cx('credential')}>
+                            <label htmlFor="endingDate">Ending date</label>
+                            <input
+                                className={cx(!experience.isEditable && 'disabled')}
+                                type="date"
+                                id="endingDate"
+                                value={experience.endingDate}
+                                name="endingDate"
+                                onChange={(e) => handleExperienceChange(e, index)}
+                                disabled={!experience.isEditable}
+                            />
+                        </div>
+                        <div className={cx('credential')}>
+                            <label htmlFor="position">Position</label>
+                            <input
+                                className={cx(!experience.isEditable && 'disabled')}
+                                type="text"
+                                id="position"
+                                value={experience.position}
+                                name="position"
+                                onChange={(e) => handleExperienceChange(e, index)}
+                                disabled={!experience.isEditable}
+                            />
+                        </div>
+                        <div className={cx('credential')}>
+                            <label htmlFor="hospital">Hospital</label>
+                            <input
+                                className={cx(!experience.isEditable && 'disabled')}
+                                type="text"
+                                id="hospital"
+                                value={experience.hospital}
+                                name="hospital"
+                                onChange={(e) => handleExperienceChange(e, index)}
+                                disabled={!experience.isEditable}
+                            />
+                        </div>
+                        <div></div>
+                        <div className={cx('modeWrapper')}>
+                            <div className={cx('mode')} onClick={() => toggleEditable('experiences', index)}>
+                                {experience.isEditable ? (
+                                    <>
+                                        <LiaSaveSolid className={cx('icon')} />
+                                        <p className={cx('text')}>Save</p>
+                                    </>
+                                ) : (
+                                    <>
+                                        <MdOutlineModeEditOutline className={cx('icon')} />
+                                        <p className={cx('text')}>Edit</p>
+                                    </>
+                                )}
+                            </div>
+                            <div className={cx('mode')} onClick={(e) => deleteExperience(e, index)}>
+                                <FaRegTrashAlt className={cx('icon')} />
+                                <p className={cx('text')}>Delete</p>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+                <button className={cx('add')} onClick={addExperience}>
+                    Add experiences
+                </button>
+            </div>
+
+            {/* TIME SLOTS */}
+            <h3 className={cx('title', 'other')}>Time slots</h3>
+            <div className={cx('details')}>
+                {formData.timeSlots?.map((timeSlot, index) => (
+                    <div key={index} className={cx('timeSlots')}>
+                        <div className={cx('schedule')}>
+                            <div className={cx('credential')}>
+                                <label htmlFor="startingDate">Date</label>
+                                <input
+                                    className={cx(!timeSlot.isEditable && 'disabled')}
+                                    type="date"
+                                    id="startingDate"
+                                    value={timeSlot.day}
+                                    name="day"
+                                    onChange={(e) => handleTimeSlotsChange(e, index)}
+                                    disabled={!timeSlot.isEditable}
+                                />
+                            </div>
+                            <div className={cx('credential')}>
+                                <label htmlFor="startingTime">Starting time</label>
+                                <input
+                                    className={cx(!timeSlot.isEditable && 'disabled')}
+                                    type="time"
+                                    id="startingTime"
+                                    value={timeSlot.startingTime}
+                                    name="startingTime"
+                                    onChange={(e) => handleTimeSlotsChange(e, index)}
+                                    disabled={!timeSlot.isEditable}
+                                />
+                            </div>
+                            <div className={cx('credential')}>
+                                <label htmlFor="endingTime">Ending time</label>
+                                <input
+                                    className={cx(!timeSlot.isEditable && 'disabled')}
+                                    type="time"
+                                    id="endingTime"
+                                    value={timeSlot.endingTime}
+                                    name="endingTime"
+                                    onChange={(e) => handleTimeSlotsChange(e, index)}
+                                    disabled={!timeSlot.isEditable}
+                                />
+                            </div>
+                        </div>
+                        <div className={cx('modeWrapper')}>
+                            <div className={cx('mode')} onClick={() => toggleEditable('timeSlots', index)}>
+                                {timeSlot.isEditable ? (
+                                    <>
+                                        <LiaSaveSolid className={cx('icon')} />
+                                        <p className={cx('text')}>Save</p>
+                                    </>
+                                ) : (
+                                    <>
+                                        <MdOutlineModeEditOutline className={cx('icon')} />
+                                        <p className={cx('text')}>Edit</p>
+                                    </>
+                                )}
+                            </div>
+                            <div className={cx('mode')} onClick={(e) => deleteTimeSlots(e, index)}>
+                                <FaRegTrashAlt className={cx('icon')} />
+                                <p className={cx('text')}>Delete</p>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+                <button className={cx('add')} onClick={addTimeSlots}>
+                    Add time slots
+                </button>
+            </div>
+
+            {/* ABOUT */}
+            <h3 className={cx('title', 'other')}>About</h3>
+            <textarea
+                id="message"
+                cols="30"
+                rows="6"
+                placeholder="Write more your details ..."
+                name="about"
+                value={formData.about}
+                onChange={handleInputChange}
+            />
+
+            <button onClick={updateProfileHandler} className={cx('submit-btn')}>
+                {loading ? <SyncLoader size={10} color="#ffffff" /> : 'Update profile'}
+            </button>
         </div>
     );
 };
