@@ -1,18 +1,19 @@
 {
     "scripts": {
-        "start": "concurrently \"cd front-end && npm run dev\" \"cd back-end && npm start\""
+      "start": "concurrently \"cd front-end && npm run dev\" \"cd back-end && npm start\" \"cd back-end && stripe listen --forward-to http://localhost:5000/api/v1/bookings/webhook/stripe\""
     },
     "devDependencies": {
-        "autoprefixer": "^10.4.18",
-        "concurrently": "^8.2.2",
-        "postcss": "^8.4.35",
-        "tailwindcss": "^3.4.1"
+      "autoprefixer": "^10.4.18",
+      "concurrently": "^8.2.2",
+      "postcss": "^8.4.35",
+      "tailwindcss": "^3.4.1"
     },
     "dependencies": {
-        "react-paginate": "^8.2.0",
-        "react-router-dom": "^6.22.2",
-        "react-spinners": "^0.13.8",
-        "react-toastify": "^10.0.4",
-        "swiper": "^11.0.7"
+      "react-paginate": "^8.2.0",
+      "react-router-dom": "^6.22.2",
+      "react-spinners": "^0.13.8",
+      "react-toastify": "^10.0.4",
+      "swiper": "^11.0.7"
     }
-}
+  }
+  

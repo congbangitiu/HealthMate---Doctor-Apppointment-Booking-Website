@@ -5,6 +5,7 @@ import {
     getCheckoutSession,
     updateAppointmentStatus,
     getAllAppointments,
+    stripeWebhook,
 } from '../Controllers/bookingController.js';
 
 const router = express.Router();

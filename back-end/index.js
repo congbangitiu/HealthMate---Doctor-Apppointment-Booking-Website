@@ -13,6 +13,7 @@ import reviewRoute from './Routes/review.js';
 import bookingRoute from './Routes/booking.js';
 import prescriptionRoute from './Routes/prescription.js';
 import chatRoute from './Routes/chat.js';
+import { stripeWebhook } from './Controllers/bookingController.js';
 
 dotenv.config();
 
@@ -41,6 +42,10 @@ const connectDB = async () => {
         process.exit(1); // Exit the process with failure
     }
 };
+
+
+// Define webhook route for Stripe before calling express.json()
+app.post('/api/v1/bookings/webhook/stripe', express.raw({ type: 'application/json' }), stripeWebhook);
 
 // Middleware
 app.use(express.json());
