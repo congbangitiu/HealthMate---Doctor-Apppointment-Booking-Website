@@ -168,6 +168,7 @@ export const stripeWebhook = async (req, res) => {
                 paymentMethod,
                 isPaid: true, // Mark as paid since Stripe confirmed payment
                 timeSlot: parsedTimeSlot,
+                session: session.id,
             });
             await newBooking.save();
 
@@ -313,5 +314,43 @@ export const getAllAppointments = async (req, res) => {
             success: false,
             message: 'All appointments are not found !!!',
         });
+    }
+};
+
+// Get appointment by session ID (used when user pays with Stripe)
+export const getAppointmentBySessionId = async (req, res) => {
+    try {
+        const { sessionId } = req.params;
+
+        // Find appointment by sessionId from Stripe
+        const appointment = await Booking.findOne({ session: sessionId }).populate('doctor user');
+
+        if (!appointment) {
+            return res.status(404).json({ success: false, message: 'Appointment not found' });
+        }
+
+        res.status(200).json({ success: true, appointment });
+    } catch (error) {
+        console.error('Error fetching appointment:', error);
+        res.status(500).json({ success: false, message: 'Error fetching appointment', error: error.message });
+    }
+};
+
+
+// Get appointment by ID (used when user pays with Cash)
+export const getAppointmentById = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const appointment = await Booking.findById(id).populate('doctor user');
+
+        if (!appointment) {
+            return res.status(404).json({ success: false, message: 'Appointment not found' });
+        }
+
+        res.status(200).json({ success: true, appointment });
+    } catch (error) {
+        console.error('Error fetching appointment by ID:', error);
+        res.status(500).json({ success: false, message: 'Error fetching appointment', error: error.message });
     }
 };

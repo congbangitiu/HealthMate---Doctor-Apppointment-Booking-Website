@@ -31,6 +31,7 @@ const bookingSchema = new mongoose.Schema(
             startingTime: { type: String, required: true },
             endingTime: { type: String, required: true },
         },
+        session: { type: String },
     },
     { timestamps: true },
 );
@@ -38,10 +39,10 @@ const bookingSchema = new mongoose.Schema(
 bookingSchema.pre(/^find/, function (next) {
     this.populate({
         path: 'user',
-        select: 'fullname email phone gender photo dateOfBirth address'
+        select: 'fullname email phone gender photo dateOfBirth address',
     }).populate({
         path: 'doctor',
-        select: 'fullname email phone photo signature'
+        select: 'fullname email phone photo signature',
     });
     next();
 });

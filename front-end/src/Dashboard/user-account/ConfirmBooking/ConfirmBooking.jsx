@@ -53,6 +53,8 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
                     throw new Error(bookingData.message || 'Failed to create booking.');
                 }
 
+                localStorage.setItem('appointmentId', bookingData.booking._id);
+
                 toast.success('Booking successful!');
                 setTimeSlots((prevSlots) => prevSlots.filter((slot) => slot !== selectedSlot));
 

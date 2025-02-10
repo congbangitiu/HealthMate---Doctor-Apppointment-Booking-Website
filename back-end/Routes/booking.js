@@ -5,7 +5,8 @@ import {
     getCheckoutSession,
     updateAppointmentStatus,
     getAllAppointments,
-    stripeWebhook,
+    getAppointmentBySessionId,
+    getAppointmentById
 } from '../Controllers/bookingController.js';
 
 const router = express.Router();
@@ -13,5 +14,7 @@ router.post('/create', authenticate, createBooking);
 router.post('/checkout-session/:doctorId', authenticate, getCheckoutSession);
 router.put('/:id/status', authenticate, updateAppointmentStatus);
 router.get('/', authenticate, restrict(['admin']), getAllAppointments);
+router.get('/:id', authenticate, getAppointmentById);
+router.get('/appointment/:sessionId', authenticate, getAppointmentBySessionId);
 
 export default router;
