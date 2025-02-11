@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import http from 'http';
 import { Server } from 'socket.io';
-import socketHandler from './WebSocket/socket.js';
+import chatSocketHandler from './WebSocket/chatSocket.js';
 import authRoute from './Routes/auth.js';
 import userRoute from './Routes/user.js';
 import doctorRoute from './Routes/doctor.js';
@@ -72,7 +72,7 @@ app.use('/api/v1/prescriptions', prescriptionRoute);
 app.use('/api/v1/chats', chatRoute);
 
 // Attach Socket.IO logic
-socketHandler(io);
+chatSocketHandler(io);
 
 // Start the server and connect to the database
 server.listen(port, () => {

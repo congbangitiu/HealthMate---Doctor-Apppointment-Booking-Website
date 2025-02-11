@@ -4,7 +4,7 @@ import Chat from '../Models/ChatSchema.js';
 
 const userSockets = {}; // Used to manage sockets by userId
 
-const socketHandler = (io) => {
+const chatSocketHandler = (io) => {
     io.on('connection', (socket) => {
         socket.on('send-message', async ({ chatId, senderId, content, type, mediaType, documentDetails }) => {
             try {
@@ -171,4 +171,4 @@ const socketHandler = (io) => {
     });
 };
 
-export default socketHandler;
+export default chatSocketHandler;

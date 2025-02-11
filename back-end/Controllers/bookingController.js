@@ -115,6 +115,9 @@ export const createBooking = async (req, res) => {
         // Remove the set timeSlot from the doctor's free time list
         await Doctor.updateOne({ _id: doctorId }, { $pull: { timeSlots: timeSlot } });
 
+        // Increment the total number of patients for the doctor
+        await Doctor.updateOne({ _id: doctorId }, { $inc: { totalPatients: 1 } });
+
         // Send confirmation email to user
         await sendConfirmationEmail(user.email, {
             userName: user.fullname,
@@ -174,6 +177,9 @@ export const stripeWebhook = async (req, res) => {
 
             // Remove booked time slot from doctor's available slots
             await Doctor.updateOne({ _id: doctorId }, { $pull: { timeSlots: parsedTimeSlot } });
+
+            // Increment the total number of patients for the doctor
+            await Doctor.updateOne({ _id: doctorId }, { $inc: { totalPatients: 1 } });
 
             // Fetch user and doctor info for sending email
             const user = await User.findById(userId);
@@ -335,7 +341,6 @@ export const getAppointmentBySessionId = async (req, res) => {
         res.status(500).json({ success: false, message: 'Error fetching appointment', error: error.message });
     }
 };
-
 
 // Get appointment by ID (used when user pays with Cash)
 export const getAppointmentById = async (req, res) => {
