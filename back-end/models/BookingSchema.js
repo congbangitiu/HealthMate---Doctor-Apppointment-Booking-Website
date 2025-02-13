@@ -32,6 +32,10 @@ const bookingSchema = new mongoose.Schema(
             endingTime: { type: String, required: true },
         },
         session: { type: String },
+        unread: {
+            type: Boolean,
+            default: true,
+        },
     },
     { timestamps: true },
 );

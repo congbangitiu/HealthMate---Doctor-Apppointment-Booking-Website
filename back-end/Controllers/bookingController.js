@@ -108,6 +108,7 @@ export const createBooking = async (req, res) => {
             paymentMethod,
             isPaid: false,
             timeSlot,
+            unread: true,
         });
 
         // Save booking to database
@@ -141,6 +142,7 @@ export const createBooking = async (req, res) => {
             ticketPrice,
             paymentMethod,
             isPaid: false,
+            unread: true,
             createdAt: savedBooking.createdAt,
         });
 
@@ -187,6 +189,7 @@ export const stripeWebhook = async (req, res) => {
                 paymentMethod,
                 isPaid: true, // Mark as paid since Stripe confirmed payment
                 timeSlot: parsedTimeSlot,
+                unread: true,
                 session: session.id,
             });
 
@@ -228,6 +231,7 @@ export const stripeWebhook = async (req, res) => {
                 ticketPrice,
                 paymentMethod,
                 isPaid: true,
+                unread: true,
                 createdAt: savedBooking.createdAt,
             });
         }
@@ -389,5 +393,30 @@ export const getAppointmentById = async (req, res) => {
     } catch (error) {
         console.error('Error fetching appointment by ID:', error);
         res.status(500).json({ success: false, message: 'Error fetching appointment', error: error.message });
+    }
+};
+
+// Count unread appointments for a doctor
+export const countUnreadAppointments = async (req, res) => {
+    try {
+        const unreadBookings = await Booking.countDocuments({
+            doctor: req.params.doctorId,
+            unread: true,
+        });
+
+        res.json({ unreadCount: unreadBookings });
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching unread bookings', error });
+    }
+};
+
+// Mark appointment as read
+export const markAppointmentAsRead = async (req, res) => {
+    try {
+        await Booking.updateMany({ doctor: req.params.doctorId, unread: true }, { $set: { unread: false } });
+
+        res.json({ message: 'Marked all unread bookings as read' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error marking bookings as read', error });
     }
 };

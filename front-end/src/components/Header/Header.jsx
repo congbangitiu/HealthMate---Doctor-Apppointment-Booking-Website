@@ -16,6 +16,7 @@ import ConfirmLogout from '../ConfirmLogout/ConfirmLogout';
 import NotificationItem from '../NotificationItem/NotificationItem';
 import { BASE_URL } from '../../../config';
 import useFetchData from '../../hooks/useFetchData';
+import notificationSound from '../../assets/sounds/notificationSound.wav';
 
 import { io } from 'socket.io-client';
 
@@ -55,6 +56,9 @@ const Header = () => {
     const [showConfirmLogout, setShowConfirmLogout] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const { data } = useFetchData(`${BASE_URL}/doctors/appointments/my-appointments`);
+    const [unreadNotiCount, setUnreadNotiCount] = useState(0);
+    const [isNotiOpen, setIsNotiOpen] = useState(false);
+    const [isShaking, setIsShaking] = useState(false);
 
     const isActive = (path) => {
         return location.pathname === path || (location.pathname === '/' && path === '/home');
@@ -79,12 +83,51 @@ const Header = () => {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
 
-    const handleClick = (event) => {
+    useEffect(() => {
+        const fetchUnreadCount = async () => {
+            try {
+                const response = await fetch(`${BASE_URL}/bookings/${user._id}/unread-bookings`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                
+                const data = await response.json();
+                if (response.ok) {
+                    setUnreadNotiCount(data.unreadCount);
+                }
+            } catch (error) {
+                console.error('Error fetching unread bookings:', error);
+            }
+        };
+
+        if (role === 'doctor') {
+            fetchUnreadCount();
+            socket.emit('join-room', { doctorId: user._id });
+        }
+
+        socket.on('booking-notification', (appointment) => {
+            setUnreadNotiCount((prev) => prev + 1);
+        });
+
+        return () => {
+            socket.off('booking-notification');
+        };
+    }, [user, role]);
+
+    const handleOpenNotifications = async (event) => {
         setAnchorEl(event.currentTarget);
+        setIsNotiOpen(true);
+        setUnreadNotiCount(0);
+        setIsShaking(false);
+
+        await fetch(`${BASE_URL}/bookings/${user._id}/mark-bookings-read`, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        });
     };
 
-    const handleClose = () => {
+    const handleCloseNotifications = () => {
         setAnchorEl(null);
+        setIsNotiOpen(false);
     };
 
     const open = Boolean(anchorEl);
@@ -93,13 +136,16 @@ const Header = () => {
     useEffect(() => {
         if (role === 'doctor') {
             socket.emit('join-room', { doctorId: user._id });
-            console.log(`Doctor ${user._id} joined room`);
         }
 
         // Sort by createdAt and limit to 6 notifications initially
         setNotifications(data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 6));
 
         socket.on('booking-notification', (appointment) => {
+            // Play notification sound when a new booking arrives
+            const audio = new Audio(notificationSound);
+            audio.play().catch((error) => console.error('Error playing sound:', error));
+
             setNotifications((prevNotifications) => {
                 // Add new notification and sort
                 const updatedNotifications = [
@@ -115,6 +161,9 @@ const Header = () => {
                 // Keep only the latest 6 notifications
                 return updatedNotifications.slice(0, 6);
             });
+
+            setUnreadNotiCount((prevCount) => prevCount + 1);
+            setIsShaking(true);
         });
 
         return () => {
@@ -174,10 +223,10 @@ const Header = () => {
                             className={cx('noti', { open })}
                             aria-owns={open ? 'mouse-over-popover' : undefined}
                             aria-haspopup="true"
-                            onClick={handleClick}
+                            onClick={handleOpenNotifications}
                         >
-                            <IoIosNotifications className={cx('icon')} />
-                            {notifications.length > 0 && <div>{notifications.length}</div>}
+                            <IoIosNotifications className={cx('icon', { shake: isShaking })} />
+                            {unreadNotiCount > 0 && !isNotiOpen && <div>{unreadNotiCount}</div>}
                         </div>
                     </>
                 ) : (
@@ -212,7 +261,7 @@ const Header = () => {
                 id={id}
                 open={open}
                 anchorEl={anchorEl}
-                onClose={handleClose}
+                onClose={handleCloseNotifications}
                 anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'left',

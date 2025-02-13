@@ -176,9 +176,35 @@
                 cursor: pointer;
             }
 
+            @keyframes shake {
+                0% {
+                    transform: rotate(0deg);
+                }
+                20% {
+                    transform: rotate(-10deg);
+                }
+                40% {
+                    transform: rotate(10deg);
+                }
+                60% {
+                    transform: rotate(-10deg);
+                }
+                80% {
+                    transform: rotate(10deg);
+                }
+                100% {
+                    transform: rotate(0deg);
+                }
+            }
+
             & .icon {
                 font-size: 32px;
                 color: var(--primaryColor);
+                transition: transform 0.3s ease-in-out;
+
+                &.shake {
+                    animation: shake 0.5s ease-in-out 4; /* 4 x 0.5s = 2s -> loop 2s */
+                }
             }
 
             & div {
