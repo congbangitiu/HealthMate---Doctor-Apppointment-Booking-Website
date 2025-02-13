@@ -244,37 +244,6 @@
         display: flex;
         flex-direction: column;
         gap: 15px;
-
-        & .notification {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-
-            & img {
-                width: 50px;
-                height: 50px;
-                object-fit: cover;
-                border-radius: 100px;
-            }
-
-            & .details {
-                display: flex;
-                flex-direction: column;
-                gap: 2px;
-
-                & p:first-child {
-                    font-size: 16px;
-                    font-weight: 500;
-                }
-
-                & p:last-child {
-                    font-size: 14px;
-                    color: var(--darkGrayColor);
-                    font-weight: 500;
-                }
-            }
-        }
     }
 }
 

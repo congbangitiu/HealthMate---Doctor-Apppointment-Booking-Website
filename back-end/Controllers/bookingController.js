@@ -71,7 +71,6 @@ const sendConfirmationEmail = async (userEmail, bookingInfo) => {
     }
 };
 
-// Create booking when user chooses cash payment
 export const createBooking = async (req, res) => {
     try {
         const { doctorId, userId, timeSlot, ticketPrice, paymentMethod } = req.body;
@@ -110,9 +109,10 @@ export const createBooking = async (req, res) => {
             timeSlot,
         });
 
-        await newBooking.save();
+        // Save booking to database
+        const savedBooking = await newBooking.save();
 
-        // Remove the set timeSlot from the doctor's free time list
+        // Remove the booked timeSlot from the doctor's available slots
         await Doctor.updateOne({ _id: doctorId }, { $pull: { timeSlots: timeSlot } });
 
         // Increment the total number of patients for the doctor
@@ -128,7 +128,17 @@ export const createBooking = async (req, res) => {
             isPaid: false,
         });
 
-        res.status(201).json({ success: true, message: 'Booking created successfully', booking: newBooking });
+        // Emit event to notify the doctor in real-time
+        req.io.emit('new-booking', {
+            bookingId: savedBooking._id,
+            doctorId: doctorId,
+            userId: userId,
+            timeSlot: timeSlot,
+            doctorName: doctor.fullname,
+            userName: user.fullname,
+        });
+
+        res.status(201).json({ success: true, message: 'Booking created successfully', booking: savedBooking });
     } catch (error) {
         console.error('Error creating booking:', error);
         res.status(500).json({ success: false, message: 'Error creating booking', error: error.message });

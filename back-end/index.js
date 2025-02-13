@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import http from 'http';
 import { Server } from 'socket.io';
 import chatSocketHandler from './WebSocket/chatSocket.js';
+import bookingSocketHandler from './WebSocket/bookingSocket.js';
 import authRoute from './Routes/auth.js';
 import userRoute from './Routes/user.js';
 import doctorRoute from './Routes/doctor.js';
@@ -73,6 +74,7 @@ app.use('/api/v1/chats', chatRoute);
 
 // Attach Socket.IO logic
 chatSocketHandler(io);
+bookingSocketHandler(io);
 
 // Start the server and connect to the database
 server.listen(port, () => {

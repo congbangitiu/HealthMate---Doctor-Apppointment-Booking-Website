@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import logo from '../../assets/images/logo.png';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import classNames from 'classnames/bind';
@@ -13,11 +13,18 @@ import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
 import { authContext } from '../../context/AuthContext';
 import ConfirmLogout from '../ConfirmLogout/ConfirmLogout';
+import NotificationItem from '../NotificationItem/NotificationItem';
+import { BASE_URL } from '../../../config';
+import useFetchData from '../../hooks/useFetchData';
+
+import { io } from 'socket.io-client';
 
 const cx = classNames.bind(styles);
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
+// Create a single global socket instance
+const socket = io(import.meta.env.VITE_REACT_PUBLIC_SOCKET_URL);
 
 const navLinks = [
     {
@@ -46,6 +53,8 @@ const Header = () => {
     const location = useLocation();
     const { user, role, token } = useContext(authContext);
     const [showConfirmLogout, setShowConfirmLogout] = useState(false);
+    const [notifications, setNotifications] = useState([]);
+    const { data } = useFetchData(`${BASE_URL}/doctors/appointments/my-appointments`);
 
     const isActive = (path) => {
         return location.pathname === path || (location.pathname === '/' && path === '/home');
@@ -80,6 +89,38 @@ const Header = () => {
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
+
+    useEffect(() => {
+        if (role === 'doctor') {
+            socket.emit('join-room', { doctorId: user._id });
+            console.log(`Doctor ${user._id} joined room`);
+        }
+
+        // Sort by createdAt and limit to 6 notifications initially
+        setNotifications(data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 6));
+
+        socket.on('booking-notification', (appointment) => {
+            setNotifications((prevNotifications) => {
+                // Add new notification and sort
+                const updatedNotifications = [
+                    {
+                        id: appointment.bookingId,
+                        user: appointment.user,
+                        timeSlot: appointment.timeSlot,
+                        createdAt: appointment.createdAt,
+                    },
+                    ...prevNotifications,
+                ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+                // Keep only the latest 6 notifications
+                return updatedNotifications.slice(0, 6);
+            });
+        });
+
+        return () => {
+            socket.off('booking-notification');
+        };
+    }, [user, role, data]);
 
     return (
         <div className={cx('container')}>
@@ -136,7 +177,7 @@ const Header = () => {
                             onClick={handleClick}
                         >
                             <IoIosNotifications className={cx('icon')} />
-                            <div>1</div>
+                            {notifications.length > 0 && <div>{notifications.length}</div>}
                         </div>
                     </>
                 ) : (
@@ -179,175 +220,19 @@ const Header = () => {
                 sx={{
                     '& .MuiPaper-root': {
                         borderRadius: '10px',
-                        marginTop: '15px',
+                        marginTop: '20px',
                         boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)',
                     },
                 }}
                 className={cx('notification-wrapper')}
             >
                 <div className={cx('notifications')}>
-                    {role === 'doctor' && (
-                        <>
-                            <div className={cx('notification')}>
-                                <img
-                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
-                                    alt=""
-                                />
-                                <div className={cx('details')}>
-                                    <p>
-                                        <b>Nguyen Van A</b> has booked an appointment
-                                    </p>
-                                    <p>10 minutes ago</p>
-                                </div>
-                            </div>
-                            <div className={cx('notification')}>
-                                <img
-                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
-                                    alt=""
-                                />
-                                <div className={cx('details')}>
-                                    <p>
-                                        <b>Nguyen Van A</b> has booked an appointment
-                                    </p>
-                                    <p>10 minutes ago</p>
-                                </div>
-                            </div>
-                            <div className={cx('notification')}>
-                                <img
-                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
-                                    alt=""
-                                />
-                                <div className={cx('details')}>
-                                    <p>
-                                        <b>Nguyen Van A</b> has booked an appointment
-                                    </p>
-                                    <p>10 minutes ago</p>
-                                </div>
-                            </div>
-                            <div className={cx('notification')}>
-                                <img
-                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
-                                    alt=""
-                                />
-                                <div className={cx('details')}>
-                                    <p>
-                                        <b>Nguyen Van A</b> has booked an appointment
-                                    </p>
-                                    <p>10 minutes ago</p>
-                                </div>
-                            </div>
-                            <div className={cx('notification')}>
-                                <img
-                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
-                                    alt=""
-                                />
-                                <div className={cx('details')}>
-                                    <p>
-                                        <b>Nguyen Van A</b> has booked an appointment
-                                    </p>
-                                    <p>10 minutes ago</p>
-                                </div>
-                            </div>
-                            <div className={cx('notification')}>
-                                <img
-                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
-                                    alt=""
-                                />
-                                <div className={cx('details')}>
-                                    <p>
-                                        <b>Nguyen Van A</b> has booked an appointment
-                                    </p>
-                                    <p>10 minutes ago</p>
-                                </div>
-                            </div>
-                            <div className={cx('notification')}>
-                                <img
-                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
-                                    alt=""
-                                />
-                                <div className={cx('details')}>
-                                    <p>
-                                        <b>Nguyen Van A</b> has booked an appointment
-                                    </p>
-                                    <p>10 minutes ago</p>
-                                </div>
-                            </div>
-                            <div className={cx('notification')}>
-                                <img
-                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
-                                    alt=""
-                                />
-                                <div className={cx('details')}>
-                                    <p>
-                                        <b>Nguyen Van A</b> has booked an appointment
-                                    </p>
-                                    <p>10 minutes ago</p>
-                                </div>
-                            </div>
-                            <div className={cx('notification')}>
-                                <img
-                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
-                                    alt=""
-                                />
-                                <div className={cx('details')}>
-                                    <p>
-                                        <b>Nguyen Van A</b> has booked an appointment
-                                    </p>
-                                    <p>10 minutes ago</p>
-                                </div>
-                            </div>
-                        </>
-                    )}
+                    {role === 'doctor' &&
+                        notifications.map((notification) => (
+                            <NotificationItem key={notification.id} notification={notification} />
+                        ))}
                     {role === 'patient' && (
                         <>
-                            <div className={cx('notification')}>
-                                <img
-                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
-                                    alt=""
-                                />
-                                <div className={cx('details')}>
-                                    <p>
-                                        <b>Dr. John Smith</b> has prescribed your medication
-                                    </p>
-                                    <p>10 minutes ago</p>
-                                </div>
-                            </div>
-                            <div className={cx('notification')}>
-                                <img
-                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
-                                    alt=""
-                                />
-                                <div className={cx('details')}>
-                                    <p>
-                                        <b>Dr. John Smith</b> has prescribed your medication
-                                    </p>
-                                    <p>10 minutes ago</p>
-                                </div>
-                            </div>
-                            <div className={cx('notification')}>
-                                <img
-                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
-                                    alt=""
-                                />
-                                <div className={cx('details')}>
-                                    <p>
-                                        <b>Dr. John Smith</b> has prescribed your medication
-                                    </p>
-                                    <p>10 minutes ago</p>
-                                </div>
-                            </div>
-                            <div className={cx('notification')}>
-                                <img
-                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
-                                    alt=""
-                                />
-                                <div className={cx('details')}>
-                                    <p>
-                                        <b>Dr. John Smith</b> has prescribed your medication
-                                    </p>
-                                    <p>10 minutes ago</p>
-                                </div>
-                            </div>
                             <div className={cx('notification')}>
                                 <img
                                     src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"

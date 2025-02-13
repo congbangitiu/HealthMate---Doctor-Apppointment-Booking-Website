@@ -1,0 +1,30 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+
+    & img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 100px;
+    }
+
+    & .details {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        & p:first-child {
+            font-size: 15px;
+            font-weight: 500;
+            width: 340px;
+        }
+
+        & p:last-child {
+            font-size: 14px;
+            color: var(--darkGrayColor);
+        }
+    }
+}
