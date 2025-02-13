@@ -44,12 +44,7 @@ const connectDB = async () => {
     }
 };
 
-
-// Define webhook route for Stripe before calling express.json()
-app.post('/api/v1/bookings/webhook/stripe', express.raw({ type: 'application/json' }), stripeWebhook);
-
-// Middleware
-app.use(express.json());
+// Middleware setup (ensure express.json() does NOT affect Stripe webhook)
 app.use(cookieParser());
 app.use(cors(corsOptions));
 
@@ -58,6 +53,12 @@ app.use((req, res, next) => {
     req.io = io;
     next();
 });
+
+// Define webhook route for Stripe BEFORE calling express.json()
+app.post('/api/v1/bookings/webhook/stripe', express.raw({ type: 'application/json' }), stripeWebhook);
+
+// JSON parsing middleware (MUST be after Stripe webhook)
+app.use(express.json());
 
 // Routes
 app.get('/', (req, res) => {

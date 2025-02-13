@@ -65,6 +65,7 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
 
                 // Redirect to success page immediately
                 window.location.href = '/checkout-success';
+
             } else if (selectedPaymentMethod === 'E-Wallet') {
                 // 💡 If payment method is E-Wallet, go to Stripe Checkout
                 const appointmentRes = await fetch(`${BASE_URL}/bookings/checkout-session/${doctorId}`, {
@@ -80,7 +81,7 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
                 if (!appointmentRes.ok) {
                     throw new Error(appointmentData.message || 'Failed to create checkout session.');
                 }
-
+                
                 if (appointmentData.session.url) {
                     // Remove booked time slot from available slots
                     setTimeSlots((prevSlots) => prevSlots.filter((slot) => slot !== selectedSlot));

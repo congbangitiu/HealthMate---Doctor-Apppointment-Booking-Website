@@ -20,7 +20,7 @@ const bookingSocketHandler = (io) => {
                     return;
                 }
 
-                const { doctor, user, timeSlot, ticketPrice, paymentMethod, isPaid } = booking;
+                const { doctor, user, timeSlot, ticketPrice, paymentMethod, isPaid, createdAt } = booking;
 
                 // Check if the doctor has joined the room
                 const rooms = io.sockets.adapter.rooms;
@@ -40,7 +40,7 @@ const bookingSocketHandler = (io) => {
                     ticketPrice,
                     paymentMethod,
                     isPaid,
-                    createdAt: booking.createdAt,
+                    createdAt,
                 });
 
                 console.log(`Booking notification sent to doctor ${doctor._id}`);

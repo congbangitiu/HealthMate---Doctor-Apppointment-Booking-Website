@@ -71,6 +71,7 @@ const sendConfirmationEmail = async (userEmail, bookingInfo) => {
     }
 };
 
+// Create checkout session when user chooses cash payment
 export const createBooking = async (req, res) => {
     try {
         const { doctorId, userId, timeSlot, ticketPrice, paymentMethod } = req.body;
@@ -183,7 +184,8 @@ export const stripeWebhook = async (req, res) => {
                 timeSlot: parsedTimeSlot,
                 session: session.id,
             });
-            await newBooking.save();
+
+            const savedBooking = await newBooking.save();
 
             // Remove booked time slot from doctor's available slots
             await Doctor.updateOne({ _id: doctorId }, { $pull: { timeSlots: parsedTimeSlot } });
@@ -207,6 +209,21 @@ export const stripeWebhook = async (req, res) => {
                 ticketPrice,
                 paymentMethod,
                 isPaid: true,
+            });
+
+            // Emit event to notify the doctor in real-time
+            req.io.to(doctor._id.toString()).emit('booking-notification', {
+                bookingId: savedBooking._id,
+                user: {
+                    id: user._id,
+                    fullname: user.fullname,
+                    photo: user.photo,
+                },
+                timeSlot: parsedTimeSlot,
+                ticketPrice,
+                paymentMethod,
+                isPaid: true,
+                createdAt: savedBooking.createdAt,
             });
         }
 
