@@ -7,10 +7,8 @@ import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
 import convertTime from '../../../utils/convertTime';
 import formatDate from '../../../utils/formatDate';
-import { io } from 'socket.io-client';
 
 const cx = classNames.bind(styles);
-const socket = io(import.meta.env.VITE_REACT_PUBLIC_SOCKET_URL);
 
 const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticketPrice, setTimeSlots }) => {
     const [loading, setLoading] = useState(false);
@@ -57,15 +55,12 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
 
                 localStorage.setItem('appointmentId', bookingData.booking._id);
 
-                // Emit the new booking event to notify the doctor
-                socket.emit('new-booking', { bookingId: bookingData.booking._id });
-
                 toast.success('Booking successful!');
                 setTimeSlots((prevSlots) => prevSlots.filter((slot) => slot !== selectedSlot));
 
                 // Redirect to success page immediately
                 window.location.href = '/checkout-success';
-
+                
             } else if (selectedPaymentMethod === 'E-Wallet') {
                 // 💡 If payment method is E-Wallet, go to Stripe Checkout
                 const appointmentRes = await fetch(`${BASE_URL}/bookings/checkout-session/${doctorId}`, {
@@ -81,7 +76,7 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
                 if (!appointmentRes.ok) {
                     throw new Error(appointmentData.message || 'Failed to create checkout session.');
                 }
-                
+
                 if (appointmentData.session.url) {
                     // Remove booked time slot from available slots
                     setTimeSlots((prevSlots) => prevSlots.filter((slot) => slot !== selectedSlot));

@@ -130,13 +130,18 @@ export const createBooking = async (req, res) => {
         });
 
         // Emit event to notify the doctor in real-time
-        req.io.emit('new-booking', {
+        req.io.to(doctor._id.toString()).emit('booking-notification', {
             bookingId: savedBooking._id,
-            doctorId: doctorId,
-            userId: userId,
-            timeSlot: timeSlot,
-            doctorName: doctor.fullname,
-            userName: user.fullname,
+            user: {
+                id: user._id,
+                fullname: user.fullname,
+                photo: user.photo,
+            },
+            timeSlot,
+            ticketPrice,
+            paymentMethod,
+            isPaid: false,
+            createdAt: savedBooking.createdAt,
         });
 
         res.status(201).json({ success: true, message: 'Booking created successfully', booking: savedBooking });
