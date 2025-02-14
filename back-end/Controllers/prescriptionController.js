@@ -31,7 +31,7 @@ export const getPrescriptionByAppointmentId = async (req, res) => {
     }
 };
 
-export const updatePrescription = async (req, res) => {
+export const updatePrescriptionByAppointmentId = async (req, res) => {
     const { appointmentId } = req.params;
     try {
         const updatedPrescription = await Prescription.findOneAndUpdate({ appointment: appointmentId }, req.body, {

@@ -144,8 +144,6 @@ const PrescriptionEdit = ({
         }
     };
 
-    console.log(note);
-
     return (
         <div className={cx('container')}>
             <form className={cx('prescription')} onSubmit={submitPrescription}>

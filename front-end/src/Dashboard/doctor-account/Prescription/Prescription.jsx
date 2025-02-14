@@ -40,7 +40,14 @@ const Prescription = () => {
                     return;
                 }
 
-                const resPrescription = await fetch(`${BASE_URL}/prescriptions/${id}`);
+                const resPrescription = await fetch(`${BASE_URL}/prescriptions/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
                 const prescriptionData = await resPrescription.json();
 
                 if (prescriptionData.success) {
