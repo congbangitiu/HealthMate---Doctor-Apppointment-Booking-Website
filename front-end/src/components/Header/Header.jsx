@@ -89,7 +89,7 @@ const Header = () => {
                 const response = await fetch(`${BASE_URL}/bookings/${user._id}/unread-bookings`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-                
+
                 const data = await response.json();
                 if (response.ok) {
                     setUnreadNotiCount(data.unreadCount);
@@ -104,7 +104,7 @@ const Header = () => {
             socket.emit('join-room', { doctorId: user._id });
         }
 
-        socket.on('booking-notification', (appointment) => {
+        socket.on('booking-notification', () => {
             setUnreadNotiCount((prev) => prev + 1);
         });
 
@@ -275,28 +275,15 @@ const Header = () => {
                 }}
                 className={cx('notification-wrapper')}
             >
-                <div className={cx('notifications')}>
-                    {role === 'doctor' &&
-                        notifications.map((notification) => (
-                            <NotificationItem key={notification.id} notification={notification} />
+                {notifications.length > 0 ? (
+                    <div className={cx('notifications')}>
+                        {notifications.map((notification) => (
+                            <NotificationItem key={notification.id} notification={notification} role={role} />
                         ))}
-                    {role === 'patient' && (
-                        <>
-                            <div className={cx('notification')}>
-                                <img
-                                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
-                                    alt=""
-                                />
-                                <div className={cx('details')}>
-                                    <p>
-                                        <b>Dr. John Smith</b> has prescribed your medication
-                                    </p>
-                                    <p>10 minutes ago</p>
-                                </div>
-                            </div>
-                        </>
-                    )}
-                </div>
+                    </div>
+                ) : (
+                    <div className={cx('no-noti')}>There is no booking yet!</div>
+                )}
             </Popover>
         </div>
     );

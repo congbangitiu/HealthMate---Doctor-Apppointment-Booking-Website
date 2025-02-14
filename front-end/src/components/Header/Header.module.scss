@@ -265,6 +265,11 @@
 
 // CSS outside the container because it is a component of an external library
 .notification-wrapper {
+    & .no-noti {
+        padding: 15px 20px;
+        margin-right: 60px;
+    }
+
     & .notifications {
         padding: 15px 20px;
         display: flex;

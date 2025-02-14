@@ -8,7 +8,7 @@ import convertTime from '../../utils/convertTime';
 
 const cx = classNames.bind(styles);
 
-const NotificationItem = ({ notification }) => {
+const NotificationItem = ({ notification, role }) => {
     const [timeAgo, setTimeAgo] = useState(formatTimeAgo(notification.createdAt));
 
     useEffect(() => {
@@ -26,21 +26,42 @@ const NotificationItem = ({ notification }) => {
 
     return (
         <div className={cx('container')}>
-            <img src={notification.user.photo} alt={notification.user.fullname} />
-            <div className={cx('details')}>
-                <p>
-                    <b>{notification.user.fullname}</b> has booked an appointment on{' '}
-                    <b>{formatDate(notification.timeSlot.day)}</b> at{' '}
-                    <b>{convertTime(notification.timeSlot.startingTime)}</b>
-                </p>
-                <p>{timeAgo}</p>
-            </div>
+            {role === 'doctor' && (
+                <>
+                    <img src={notification.user.photo} alt={notification.user.fullname} />
+                    <div className={cx('details')}>
+                        <p>
+                            <b>{notification.user.fullname}</b> has booked an appointment on{' '}
+                            <b>{formatDate(notification.timeSlot.day)}</b> at{' '}
+                            <b>{convertTime(notification.timeSlot.startingTime)}</b>
+                        </p>
+                        <p>{timeAgo}</p>
+                    </div>
+                </>
+            )}
+
+            {role === 'patient' && (
+                <>
+                    <img
+                        src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+                        alt=""
+                    />
+                    <div className={cx('details')}>
+                        <p>
+                            <b>Dr. John Smith</b> has completed your appointment on <b>[Date]</b> at <b>[Time]</b> and
+                            issued your prescription.
+                        </p>
+                        <p>10 minutes ago</p>
+                    </div>
+                </>
+            )}
         </div>
     );
 };
 
 NotificationItem.propTypes = {
     notification: PropTypes.object.isRequired,
+    role: PropTypes.string.isRequired,
 };
 
 export default NotificationItem;
