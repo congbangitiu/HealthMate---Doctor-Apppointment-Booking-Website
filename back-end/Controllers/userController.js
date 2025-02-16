@@ -1,6 +1,7 @@
 import User from '../Models/UserSchema.js';
 import Booking from '../Models/BookingSchema.js';
 import Doctor from '../Models/DoctorSchema.js';
+import Prescription from '../Models/PrescriptionSchema.js';
 import bcrypt from 'bcryptjs';
 
 export const updateUser = async (req, res) => {
@@ -78,6 +79,30 @@ export const getAllUsers = async (req, res) => {
             success: false,
             message: 'All users are not found !!!',
         });
+    }
+};
+
+// Patient get all his/her prescriptions
+export const getAllMyPrescriptions = async (req, res) => {
+    try {
+        // Find all prescriptions based on patient's appointment
+        const bookings = await Booking.find({ user: req.userId }).select('_id doctor timeSlot');
+        const appointmentIds = bookings.map((booking) => booking._id);
+
+        // Get all prescriptions related to patient appointments
+        const prescriptions = await Prescription.find({ appointment: { $in: appointmentIds } }).populate({
+            path: 'appointment',
+            select: 'doctor timeSlot',
+            populate: { path: 'doctor', select: 'fullname photo' },
+        });
+
+        if (!prescriptions || prescriptions.length === 0) {
+            return res.status(404).json({ success: false, message: 'No prescriptions found' });
+        }
+
+        res.status(200).json({ success: true, data: prescriptions });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
 };
 

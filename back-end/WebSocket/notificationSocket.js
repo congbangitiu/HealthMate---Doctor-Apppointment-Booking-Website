@@ -1,8 +1,13 @@
-const bookingSocketHandler = (io) => {
+const notificationSocketHandler = (io) => {
     io.on('connection', (socket) => {
         // When a doctor connects, they join their respective room
-        socket.on('join-room', ({ doctorId }) => {
+        socket.on('doctor-join-room', ({ doctorId }) => {
             socket.join(doctorId);
+        });
+
+        socket.on('user-join-room', ({ userId }) => {
+            socket.join(userId);
+            console.log(`User ${userId} joined their room`);
         });
 
         // Handle client disconnection
@@ -12,4 +17,4 @@ const bookingSocketHandler = (io) => {
     });
 };
 
-export default bookingSocketHandler;
+export default notificationSocketHandler;

@@ -55,8 +55,14 @@ const Header = () => {
     const { user, role, token } = useContext(authContext);
     const [showConfirmLogout, setShowConfirmLogout] = useState(false);
     const [notifications, setNotifications] = useState([]);
-    const { data } = useFetchData(`${BASE_URL}/doctors/appointments/my-appointments`);
-    const [unreadNotiCount, setUnreadNotiCount] = useState(0);
+    const { data: appointmentData } = useFetchData(
+        role === 'doctor' ? `${BASE_URL}/doctors/appointments/my-appointments` : null,
+    );
+    const { data: prescriptionData } = useFetchData(
+        role === 'patient' ? `${BASE_URL}/users/appointments/my-prescriptions` : null,
+    );
+    const [unreadAppointments, setUnreadAppointments] = useState(0);
+    const [unreadPrescriptions, setUnreadPrescriptions] = useState(0);
     const [isNotiOpen, setIsNotiOpen] = useState(false);
     const [isShaking, setIsShaking] = useState(false);
 
@@ -84,92 +90,191 @@ const Header = () => {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     useEffect(() => {
-        const fetchUnreadCount = async () => {
+        const fetchUnreadCounts = async () => {
             try {
-                const response = await fetch(`${BASE_URL}/bookings/${user._id}/unread-bookings`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
+                if (role === 'doctor') {
+                    const response = await fetch(`${BASE_URL}/bookings/${user._id}/unread-bookings`, {
+                        headers: { Authorization: `Bearer ${token}` },
+                    });
 
-                const data = await response.json();
-                if (response.ok) {
-                    setUnreadNotiCount(data.unreadCount);
+                    const data = await response.json();
+                    if (response.ok) {
+                        setUnreadAppointments(data.unreadCount);
+                    }
+                } else if (role === 'patient') {
+                    const response = await fetch(`${BASE_URL}/prescriptions/${user._id}/unread-prescriptions`, {
+                        headers: { Authorization: `Bearer ${token}` },
+                    });
+
+                    const data = await response.json();
+                    if (response.ok) {
+                        setUnreadPrescriptions(data.unreadCount);
+                    }
                 }
             } catch (error) {
-                console.error('Error fetching unread bookings:', error);
+                console.error('Error fetching unread notifications:', error);
             }
         };
 
-        if (role === 'doctor') {
-            fetchUnreadCount();
-            socket.emit('join-room', { doctorId: user._id });
+        if (user) {
+            fetchUnreadCounts();
+            socket.emit(role === 'doctor' ? 'doctor-join-room' : 'user-join-room', { userId: user._id });
         }
 
         socket.on('booking-notification', () => {
-            setUnreadNotiCount((prev) => prev + 1);
+            if (role === 'doctor') {
+                setUnreadAppointments((prev) => prev + 1);
+            }
+        });
+
+        socket.on('prescription-notification', () => {
+            if (role === 'patient') {
+                setUnreadPrescriptions((prev) => prev + 1);
+            }
         });
 
         return () => {
             socket.off('booking-notification');
+            socket.off('prescription-notification');
         };
     }, [user, role]);
+
+    const markNotificationsAsRead = async () => {
+        try {
+            let response;
+            if (role === 'doctor') {
+                response = await fetch(`${BASE_URL}/bookings/${user._id}/mark-bookings-read`, {
+                    method: 'POST',
+                    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+                });
+                if (response.ok) setUnreadAppointments(0);
+            } else if (role === 'patient') {
+                response = await fetch(`${BASE_URL}/prescriptions/${user._id}/mark-prescriptions-read`, {
+                    method: 'POST',
+                    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+                });
+                if (response.ok) setUnreadPrescriptions(0);
+            }
+
+            if (!response.ok) throw new Error('Failed to mark notifications as read.');
+        } catch (error) {
+            console.error('Error marking notifications as read:', error);
+        }
+    };
 
     const handleOpenNotifications = async (event) => {
         setAnchorEl(event.currentTarget);
         setIsNotiOpen(true);
-        setUnreadNotiCount(0);
         setIsShaking(false);
-
-        await fetch(`${BASE_URL}/bookings/${user._id}/mark-bookings-read`, {
-            method: 'POST',
-            headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-        });
+        await markNotificationsAsRead();
     };
 
-    const handleCloseNotifications = () => {
+    const handleCloseNotifications = async () => {
         setAnchorEl(null);
         setIsNotiOpen(false);
+        await markNotificationsAsRead();
     };
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
+    // Update notifications from API when component mounts
     useEffect(() => {
-        if (role === 'doctor') {
-            socket.emit('join-room', { doctorId: user._id });
+        let formattedData = [];
+
+        if (role === 'doctor' && appointmentData) {
+            formattedData = appointmentData.map((item) => ({
+                id: item._id,
+                user: item.user,
+                timeSlot: item.timeSlot,
+                createdAt: item.createdAt,
+                type: 'booking',
+            }));
+        } else if (role === 'patient' && prescriptionData) {
+            formattedData = prescriptionData.map((item) => ({
+                id: item._id,
+                doctor: item.appointment.doctor,
+                timeSlot: item.appointment.timeSlot,
+                createdAt: item.createdAt,
+                type: 'prescription',
+            }));
         }
 
-        // Sort by createdAt and limit to 6 notifications initially
-        setNotifications(data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 6));
+        setNotifications(formattedData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 6));
+    }, [role, appointmentData, prescriptionData]);
 
-        socket.on('booking-notification', (appointment) => {
-            // Play notification sound when a new booking arrives
-            const audio = new Audio(notificationSound);
-            audio.play().catch((error) => console.error('Error playing sound:', error));
+    // Handle realtime notifications from socket.io
+    const updateNotifications = (newNotification) => {
+        setNotifications((prevNotifications) => {
+            // Add new notification to the top of the list and sort by createdAt
+            const updatedNotifications = [newNotification, ...prevNotifications]
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .slice(0, 6);
 
-            setNotifications((prevNotifications) => {
-                // Add new notification and sort
-                const updatedNotifications = [
-                    {
-                        id: appointment.bookingId,
-                        user: appointment.user,
-                        timeSlot: appointment.timeSlot,
-                        createdAt: appointment.createdAt,
-                    },
-                    ...prevNotifications,
-                ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-                // Keep only the latest 6 notifications
-                return updatedNotifications.slice(0, 6);
-            });
-
-            setUnreadNotiCount((prevCount) => prevCount + 1);
-            setIsShaking(true);
+            return updatedNotifications;
         });
+
+        if (newNotification.type === 'booking' && role === 'doctor') {
+            setUnreadAppointments((prev) => prev + 1);
+        } else if (newNotification.type === 'prescription' && role === 'patient') {
+            setUnreadPrescriptions((prev) => prev + 1);
+        }
+
+        setIsShaking(true);
+    };
+
+    // Play notification sound when a new booking arrives
+    const playNotificationSound = () => {
+        const audio = new Audio(notificationSound);
+        audio.play().catch((error) => console.error('Error playing sound:', error));
+    };
+
+    useEffect(() => {
+        if (!user) return;
+
+        if (role === 'doctor') {
+            socket.emit('doctor-join-room', { doctorId: user._id });
+
+            socket.off('booking-notification'); // Remove previous event listener
+            socket.on('booking-notification', (appointment) => {
+                playNotificationSound();
+
+                const newNotification = {
+                    id: appointment.bookingId,
+                    user: appointment.user,
+                    timeSlot: appointment.timeSlot,
+                    createdAt: appointment.createdAt,
+                    type: 'booking',
+                };
+
+                updateNotifications(newNotification);
+            });
+        }
+
+        if (role === 'patient') {
+            socket.emit('user-join-room', { userId: user._id });
+
+            socket.off('prescription-notification'); // Remove previous event listener
+            socket.on('prescription-notification', (prescription) => {
+                playNotificationSound();
+
+                const newNotification = {
+                    id: prescription.bookingId,
+                    doctor: prescription.doctor,
+                    timeSlot: prescription.timeSlot,
+                    createdAt: prescription.createdAt,
+                    type: 'prescription',
+                };
+
+                updateNotifications(newNotification);
+            });
+        }
 
         return () => {
             socket.off('booking-notification');
+            socket.off('prescription-notification');
         };
-    }, [user, role, data]);
+    }, [user, role]);
 
     return (
         <div className={cx('container')}>
@@ -226,7 +331,12 @@ const Header = () => {
                             onClick={handleOpenNotifications}
                         >
                             <IoIosNotifications className={cx('icon', { shake: isShaking })} />
-                            {unreadNotiCount > 0 && !isNotiOpen && <div>{unreadNotiCount}</div>}
+                            {role === 'doctor' && unreadAppointments > 0 && !isNotiOpen && (
+                                <div>{unreadAppointments}</div>
+                            )}
+                            {role === 'patient' && unreadPrescriptions > 0 && !isNotiOpen && (
+                                <div>{unreadPrescriptions}</div>
+                            )}
                         </div>
                     </>
                 ) : (
@@ -282,7 +392,7 @@ const Header = () => {
                         ))}
                     </div>
                 ) : (
-                    <div className={cx('no-noti')}>There is no booking yet!</div>
+                    <div className={cx('no-noti')}>There is no notification yet!</div>
                 )}
             </Popover>
         </div>

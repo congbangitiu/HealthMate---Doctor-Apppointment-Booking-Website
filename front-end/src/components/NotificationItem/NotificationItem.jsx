@@ -26,7 +26,7 @@ const NotificationItem = ({ notification, role }) => {
 
     return (
         <div className={cx('container')}>
-            {role === 'doctor' && (
+            {role === 'doctor' && notification.type === 'booking' && (
                 <>
                     <img src={notification.user.photo} alt={notification.user.fullname} />
                     <div className={cx('details')}>
@@ -40,18 +40,16 @@ const NotificationItem = ({ notification, role }) => {
                 </>
             )}
 
-            {role === 'patient' && (
+            {role === 'patient' && notification.type === 'prescription' && (
                 <>
-                    <img
-                        src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
-                        alt=""
-                    />
+                    <img src={notification.doctor.photo} alt={notification.doctor.fullname} />
                     <div className={cx('details')}>
                         <p>
-                            <b>Dr. John Smith</b> has completed your appointment on <b>[Date]</b> at <b>[Time]</b> and
-                            issued your prescription.
+                            <b>Dr. {notification.doctor.fullname}</b> has issued your prescription for your appointment
+                            on <b>{formatDate(notification.timeSlot.day)}</b> at{' '}
+                            <b>{convertTime(notification.timeSlot.startingTime)}</b>
                         </p>
-                        <p>10 minutes ago</p>
+                        <p>{timeAgo}</p>
                     </div>
                 </>
             )}
