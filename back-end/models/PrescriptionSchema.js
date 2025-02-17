@@ -8,6 +8,14 @@ const medicationSchema = new mongoose.Schema({
     },
 });
 
+const historySchema = new mongoose.Schema(
+    {
+        action: { type: String, enum: ['create', 'update'] },
+        timestamp: { type: Date, default: Date.now },
+    },
+    { _id: false },
+);
+
 const prescriptionSchema = new mongoose.Schema(
     {
         appointment: {
@@ -22,6 +30,7 @@ const prescriptionSchema = new mongoose.Schema(
             type: Boolean,
             default: true,
         },
+        actionHistory: [historySchema],
     },
     { timestamps: true },
 );

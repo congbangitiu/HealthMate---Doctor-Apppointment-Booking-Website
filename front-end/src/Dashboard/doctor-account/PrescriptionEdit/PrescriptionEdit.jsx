@@ -88,6 +88,7 @@ const PrescriptionEdit = ({
         const finalUrl = createdTime ? urlPUT : urlPOST;
 
         const method = createdTime ? 'PUT' : 'POST';
+        const action = createdTime ? 'update' : 'create';
 
         try {
             setLoadingBtnSavePres(true);
@@ -103,6 +104,7 @@ const PrescriptionEdit = ({
                     diseaseName,
                     medications,
                     note,
+                    action,
                 }),
             });
 

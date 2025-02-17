@@ -45,8 +45,11 @@ const NotificationItem = ({ notification, role }) => {
                     <img src={notification.doctor.photo} alt={notification.doctor.fullname} />
                     <div className={cx('details')}>
                         <p>
-                            <b>Dr. {notification.doctor.fullname}</b> has issued your prescription for your appointment
-                            on <b>{formatDate(notification.timeSlot.day)}</b> at{' '}
+                            <b>Dr. {notification.doctor.fullname}</b>
+                            {notification.action === 'create'
+                                ? ' has issued your prescription '
+                                : ' has updated your prescription '}
+                            for your appointment on <b>{formatDate(notification.timeSlot.day)}</b> at{' '}
                             <b>{convertTime(notification.timeSlot.startingTime)}</b>
                         </p>
                         <p>{timeAgo}</p>

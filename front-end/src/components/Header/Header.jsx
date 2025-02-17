@@ -137,7 +137,7 @@ const Header = () => {
             socket.off('booking-notification');
             socket.off('prescription-notification');
         };
-    }, [user, role]);
+    }, [token, user, role]);
 
     const markNotificationsAsRead = async () => {
         try {
@@ -175,6 +175,19 @@ const Header = () => {
         await markNotificationsAsRead();
     };
 
+    // Play notification sound when a new booking arrives
+    const playNotificationSound = () => {
+        const audio = new Audio(notificationSound);
+        audio.play().catch((error) => console.error('Error playing sound:', error));
+    };
+
+    const triggerShake = () => {
+        setIsShaking(true);
+        setTimeout(() => {
+            setIsShaking(false);
+        }, 2000);
+    };
+
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
@@ -191,54 +204,83 @@ const Header = () => {
                 type: 'booking',
             }));
         } else if (role === 'patient' && prescriptionData) {
-            formattedData = prescriptionData.map((item) => ({
-                id: item._id,
-                doctor: item.appointment.doctor,
-                timeSlot: item.appointment.timeSlot,
-                createdAt: item.createdAt,
-                type: 'prescription',
-            }));
+            // Flatten the actionHistory array to display each action as a separate notification
+            formattedData = prescriptionData.flatMap((item) => {
+                if (item.actionHistory && Array.isArray(item.actionHistory)) {
+                    return item.actionHistory.map((action, index) => ({
+                        id: `${item._id}-${index}`,
+                        doctor: item.appointment.doctor,
+                        timeSlot: item.appointment.timeSlot,
+                        createdAt: action.timestamp,
+                        action: action.action,
+                        type: 'prescription',
+                    }));
+                }
+
+                // If there is no actionHistory, there is only 1 default message
+                return {
+                    id: item._id,
+                    doctor: item.appointment.doctor,
+                    timeSlot: item.appointment.timeSlot,
+                    action: item.action,
+                    createdAt: item.createdAt,
+                    type: 'prescription',
+                };
+            });
         }
 
-        setNotifications(formattedData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 6));
+        setNotifications(
+            formattedData
+                .sort((a, b) => {
+                    if (a.action === 'create' && b.action === 'update') return -1;
+                    return new Date(b.createdAt) - new Date(a.createdAt); // Sort by time if same action type
+                })
+                .slice(0, 6),
+        );
     }, [role, appointmentData, prescriptionData]);
-
-    // Handle realtime notifications from socket.io
-    const updateNotifications = (newNotification) => {
-        setNotifications((prevNotifications) => {
-            // Add new notification to the top of the list and sort by createdAt
-            const updatedNotifications = [newNotification, ...prevNotifications]
-                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-                .slice(0, 6);
-
-            return updatedNotifications;
-        });
-
-        if (newNotification.type === 'booking' && role === 'doctor') {
-            setUnreadAppointments((prev) => prev + 1);
-        } else if (newNotification.type === 'prescription' && role === 'patient') {
-            setUnreadPrescriptions((prev) => prev + 1);
-        }
-
-        setIsShaking(true);
-    };
-
-    // Play notification sound when a new booking arrives
-    const playNotificationSound = () => {
-        const audio = new Audio(notificationSound);
-        audio.play().catch((error) => console.error('Error playing sound:', error));
-    };
 
     useEffect(() => {
         if (!user) return;
 
+        const updateNotifications = (newNotification) => {
+            setNotifications((prevNotifications) => {
+                if (newNotification.type === 'prescription' && newNotification.actionHistory) {
+                    const lastAction = newNotification.actionHistory[newNotification.actionHistory.length - 1];
+
+                    const latestNotification = {
+                        id: `${newNotification.id}-${newNotification.actionHistory.length - 1}`,
+                        doctor: newNotification.doctor,
+                        timeSlot: newNotification.timeSlot,
+                        createdAt: lastAction.timestamp,
+                        action: lastAction.action,
+                        type: 'prescription',
+                    };
+
+                    return [latestNotification, ...prevNotifications]
+                        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                        .slice(0, 6);
+                }
+
+                return [newNotification, ...prevNotifications]
+                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                    .slice(0, 6);
+            });
+
+            if (newNotification.type === 'booking' && role === 'doctor') {
+                setUnreadAppointments((prev) => prev + 1);
+            } else if (newNotification.type === 'prescription' && role === 'patient') {
+                setUnreadPrescriptions((prev) => prev + 1);
+            }
+
+            triggerShake();
+            playNotificationSound();
+        };
+
         if (role === 'doctor') {
             socket.emit('doctor-join-room', { doctorId: user._id });
 
-            socket.off('booking-notification'); // Remove previous event listener
+            socket.off('booking-notification'); // Remove old event listener before adding new one
             socket.on('booking-notification', (appointment) => {
-                playNotificationSound();
-
                 const newNotification = {
                     id: appointment.bookingId,
                     user: appointment.user,
@@ -254,16 +296,16 @@ const Header = () => {
         if (role === 'patient') {
             socket.emit('user-join-room', { userId: user._id });
 
-            socket.off('prescription-notification'); // Remove previous event listener
+            socket.off('prescription-notification'); // Remove old event listener before adding new one
             socket.on('prescription-notification', (prescription) => {
-                playNotificationSound();
-
                 const newNotification = {
                     id: prescription.bookingId,
                     doctor: prescription.doctor,
                     timeSlot: prescription.timeSlot,
+                    message: prescription.message,
                     createdAt: prescription.createdAt,
                     type: 'prescription',
+                    actionHistory: prescription.actionHistory,
                 };
 
                 updateNotifications(newNotification);

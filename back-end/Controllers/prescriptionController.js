@@ -3,7 +3,10 @@ import Prescription from '../Models/PrescriptionSchema.js';
 
 export const createPrescription = async (req, res) => {
     try {
-        const newPrescription = new Prescription(req.body);
+        const newPrescription = new Prescription({
+            ...req.body,
+            actionHistory: [{ action: 'create', timestamp: new Date() }],
+        });
         await newPrescription.save();
 
         // Get the booking details
@@ -20,6 +23,7 @@ export const createPrescription = async (req, res) => {
                 photo: booking.doctor.photo,
             },
             timeSlot: booking.timeSlot,
+            actionHistory: newPrescription.actionHistory,
             createdAt: newPrescription.createdAt,
         });
 
@@ -53,13 +57,37 @@ export const getPrescriptionByAppointmentId = async (req, res) => {
 export const updatePrescriptionByAppointmentId = async (req, res) => {
     const { appointmentId } = req.params;
     try {
-        const updatedPrescription = await Prescription.findOneAndUpdate({ appointment: appointmentId }, req.body, {
-            new: true,
-            runValidators: true,
-        });
+        const updatedPrescription = await Prescription.findOneAndUpdate(
+            { appointment: appointmentId },
+            {
+                $set: req.body,
+                $push: { actionHistory: { action: 'update', timestamp: new Date() } },
+            },
+            { new: true, runValidators: true },
+        );
+
         if (!updatedPrescription) {
             return res.status(404).json({ success: false, message: 'Prescription not found' });
         }
+
+        // Get the booking details
+        const booking = await Booking.findById(req.body.appointment).populate('user doctor');
+        if (!booking) {
+            return res.status(404).json({ success: false, message: 'Appointment not found' });
+        }
+
+        // Notify the patient
+        req.io.to(booking.user._id.toString()).emit('prescription-notification', {
+            doctor: {
+                id: booking.doctor._id,
+                fullname: booking.doctor.fullname,
+                photo: booking.doctor.photo,
+            },
+            timeSlot: booking.timeSlot,
+            actionHistory: updatedPrescription.actionHistory,
+            createdAt: updatedPrescription.updatedAt,
+        });
+
         res.status(200).json({
             success: true,
             message: 'Prescription updated successfully',
