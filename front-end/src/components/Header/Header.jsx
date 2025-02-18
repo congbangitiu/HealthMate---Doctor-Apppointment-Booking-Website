@@ -198,6 +198,7 @@ const Header = () => {
         if (role === 'doctor' && appointmentData) {
             formattedData = appointmentData.map((item) => ({
                 id: item._id,
+                appointmentId: item._id,
                 user: item.user,
                 timeSlot: item.timeSlot,
                 createdAt: item.createdAt,
@@ -209,6 +210,7 @@ const Header = () => {
                 if (item.actionHistory && Array.isArray(item.actionHistory)) {
                     return item.actionHistory.map((action, index) => ({
                         id: `${item._id}-${index}`,
+                        appointmentId: item.appointment._id,
                         doctor: item.appointment.doctor,
                         timeSlot: item.appointment.timeSlot,
                         createdAt: action.timestamp,
@@ -220,6 +222,7 @@ const Header = () => {
                 // If there is no actionHistory, there is only 1 default message
                 return {
                     id: item._id,
+                    appointmentId: item.appointment._id,
                     doctor: item.appointment.doctor,
                     timeSlot: item.appointment.timeSlot,
                     action: item.action,
@@ -249,6 +252,7 @@ const Header = () => {
 
                     const latestNotification = {
                         id: `${newNotification.id}-${newNotification.actionHistory.length - 1}`,
+                        appointmentId: newNotification.appointmentId,
                         doctor: newNotification.doctor,
                         timeSlot: newNotification.timeSlot,
                         createdAt: lastAction.timestamp,
@@ -283,6 +287,7 @@ const Header = () => {
             socket.on('booking-notification', (appointment) => {
                 const newNotification = {
                     id: appointment.bookingId,
+                    appointmentId: appointment.bookingId,
                     user: appointment.user,
                     timeSlot: appointment.timeSlot,
                     createdAt: appointment.createdAt,
@@ -299,7 +304,8 @@ const Header = () => {
             socket.off('prescription-notification'); // Remove old event listener before adding new one
             socket.on('prescription-notification', (prescription) => {
                 const newNotification = {
-                    id: prescription.bookingId,
+                    id: `${prescription.appointmentId}-${prescription.actionHistory.length - 1}`,
+                    appointmentId: prescription.appointmentId,
                     doctor: prescription.doctor,
                     timeSlot: prescription.timeSlot,
                     message: prescription.message,

@@ -193,7 +193,7 @@ const Prescription = () => {
                                     <img src={Watermark} alt="" />
                                     <img src={appointment?.doctor?.signature} alt="" />
                                 </span>
-                                <p>John Smith</p>
+                                <p>{appointment?.doctor?.fullname}</p>
                             </div>
                         </div>
                     )}

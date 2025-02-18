@@ -3,6 +3,12 @@
     justify-content: center;
     align-items: center;
     gap: 15px;
+    padding: 10px 15px;
+
+    &:hover {
+        background-color: var(--extremeLightGrayColor);
+        cursor: pointer;
+    }
 
     & img {
         width: 50px;

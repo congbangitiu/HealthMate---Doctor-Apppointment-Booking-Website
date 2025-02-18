@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import formatTimeAgo from '../../utils/formatTimeAgo';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
@@ -9,6 +10,7 @@ import convertTime from '../../utils/convertTime';
 const cx = classNames.bind(styles);
 
 const NotificationItem = ({ notification, role }) => {
+    const navigate = useNavigate();
     const [timeAgo, setTimeAgo] = useState(formatTimeAgo(notification.createdAt));
 
     useEffect(() => {
@@ -24,8 +26,21 @@ const NotificationItem = ({ notification, role }) => {
         return () => clearInterval(interval);
     }, [notification.createdAt]);
 
+    const handleMoveToPrescription = () => {
+        if (notification.appointmentId) {
+            navigate(
+                `/${role === 'doctor' ? 'doctors' : 'users'}/appointments/my-appointments/${
+                    notification.appointmentId
+                }`,
+            );
+        }
+    };
+
+    console.log(notification);
+    
+
     return (
-        <div className={cx('container')}>
+        <div className={cx('container')} onClick={handleMoveToPrescription}>
             {role === 'doctor' && notification.type === 'booking' && (
                 <>
                     <img src={notification.user.photo} alt={notification.user.fullname} />

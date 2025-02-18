@@ -17,6 +17,7 @@ export const createPrescription = async (req, res) => {
 
         // Notify the patient
         req.io.to(booking.user._id.toString()).emit('prescription-notification', {
+            appointmentId: booking._id,
             doctor: {
                 id: booking.doctor._id,
                 fullname: booking.doctor.fullname,
@@ -78,6 +79,7 @@ export const updatePrescriptionByAppointmentId = async (req, res) => {
 
         // Notify the patient
         req.io.to(booking.user._id.toString()).emit('prescription-notification', {
+            appointmentId: booking._id,
             doctor: {
                 id: booking.doctor._id,
                 fullname: booking.doctor.fullname,
