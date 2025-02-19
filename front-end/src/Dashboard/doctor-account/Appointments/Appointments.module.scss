@@ -7,10 +7,15 @@
         text-align: center;
     }
 
+    & .selection {
+        margin-top: 40px;
+    }
+
     & .container {
         width: 100%;
         overflow-x: auto;
         border-radius: 10px;
+        margin-top: 50px;
 
         & table {
             width: 100%;
@@ -51,40 +56,47 @@
             & tbody tr:not(.cancelledStatus):hover {
                 background-color: var(--lightGreenColor);
             }
+
+            & .link {
+                width: 100%;
+                padding: 12px;
+            }
+
+            & a {
+                text-decoration: none;
+                color: inherit; /* This makes sure the link looks like normal text */
+                display: block; /* This makes the link fill the cell */
+            }
+
+            & .pending {
+                color: var(--yellowColor);
+                font-weight: 500;
+            }
+
+            & .done {
+                color: var(--primaryColor);
+                font-weight: 500;
+            }
+
+            & .cancelled {
+                color: red;
+                font-weight: 500;
+            }
+
+            & .captitalized {
+                text-transform: capitalize;
+            }
+
+            & .cancelledStatus {
+                cursor: not-allowed !important;
+            }
         }
 
-        & .link {
-            width: 100%;
-            padding: 12px;
-        }
-
-        & a {
-            text-decoration: none;
-            color: inherit; /* This makes sure the link looks like normal text */
-            display: block; /* This makes the link fill the cell */
-        }
-
-        & .pending {
-            color: var(--yellowColor);
+        & h4 {
+            font-size: 20px;
             font-weight: 500;
-        }
-
-        & .done {
-            color: var(--primaryColor);
-            font-weight: 500;
-        }
-
-        & .cancelled {
-            color: red;
-            font-weight: 500;
-        }
-
-        & .captitalized {
-            text-transform: capitalize;
-        }
-
-        & .cancelledStatus {
-            cursor: not-allowed !important;
+            text-align: center;
+            color: var(--darkGrayColor);
         }
     }
 }

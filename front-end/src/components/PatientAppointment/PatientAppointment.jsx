@@ -6,14 +6,10 @@ import { FaPhoneAlt } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io';
 import formatDate from './../../utils/formatDate';
 import convertTime from './../../utils/convertTime';
-import useFetchData from '../../hooks/useFetchData';
-import { BASE_URL } from '../../../config';
 
 const cx = classNames.bind(styles);
 
 const PatientAppointment = ({ appointment }) => {
-    const { data: doctor } = useFetchData(`${BASE_URL}/doctors/${appointment.doctor._id}`);
-
     const getStatusStyle = (status) => {
         switch (status) {
             case 'done':
@@ -32,12 +28,12 @@ const PatientAppointment = ({ appointment }) => {
 
     return (
         <div className={cx('container')}>
-            <img src={doctor.photo} alt="" />
+            <img src={appointment.doctor.photo} alt="" />
             <div className={cx('info')}>
                 <div className={cx('upperPart')}>
                     <div>
-                        <h4>Dr. {doctor.fullname || 'Loading ...'}</h4>
-                        <span>{doctor.specialization || 'Loading ...'}</span>
+                        <h4>Dr. {appointment.doctor.fullname}</h4>
+                        <span>{appointment.doctor.specialization}</span>
                     </div>
                     <div style={{ color: statusStyle.color }}>
                         {StatusIcon && <StatusIcon className={cx('icon')} style={{ color: statusStyle.color }} />}
@@ -48,11 +44,11 @@ const PatientAppointment = ({ appointment }) => {
                     <div>
                         <span>
                             <MdEmail className={cx('icon')} />
-                            {doctor.email || 'Loading ...'}
+                            {appointment.doctor.email}
                         </span>
                         <span>
                             <FaPhoneAlt className={cx('icon')} />
-                            {doctor.phone || 'Loading ...'}
+                            {'0' + appointment.doctor.phone}
                         </span>
                     </div>
                     <div>

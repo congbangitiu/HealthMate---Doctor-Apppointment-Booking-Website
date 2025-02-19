@@ -59,7 +59,7 @@ bookingSchema.pre(/^find/, function (next) {
         select: 'fullname email phone gender photo dateOfBirth address',
     }).populate({
         path: 'doctor',
-        select: 'fullname email phone photo signature',
+        select: 'fullname email phone photo signature specialization',
     });
     next();
 });

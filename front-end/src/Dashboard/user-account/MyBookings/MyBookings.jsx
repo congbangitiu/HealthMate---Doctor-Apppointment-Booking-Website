@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './MyBookings.module.scss';
@@ -8,6 +8,7 @@ import Loader from '../../../components/Loader/Loader';
 import Error from '../../../components/Error/Error';
 import PatientAppointment from '../../../components/PatientAppointment/PatientAppointment';
 import ConfirmCancel from '../ConfirmCancel/ConfirmCancel';
+import Selections from '../../../components/Selections/Selections';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
@@ -22,10 +23,51 @@ const MyBookings = () => {
     const [showConfirmCancel, setShowConfirmCancel] = useState(false);
     const [selectedAppointment, setSelectedAppointment] = useState(null);
 
+    const [selectedDoctor, setSelectedDoctor] = useState(null);
+    const [selectedAppointmentStatus, setSelectedAppointmentStatus] = useState(null);
+    const [filteredAppointments, setFilteredAppointments] = useState([]);
+
+    useEffect(() => {
+        let updatedAppointments = appointments;
+
+        // Filter by doctor
+        if (selectedDoctor && selectedDoctor.value !== 'all') {
+            updatedAppointments = updatedAppointments.filter(
+                (appointment) => appointment.doctor?.fullname === selectedDoctor.value,
+            );
+        }
+
+        // Filter by appointment status
+        if (selectedAppointmentStatus && selectedAppointmentStatus.value !== 'all') {
+            updatedAppointments = updatedAppointments.filter(
+                (appointment) => appointment.status === selectedAppointmentStatus.value,
+            );
+        }
+
+        setFilteredAppointments(updatedAppointments);
+    }, [selectedDoctor, selectedAppointmentStatus, appointments]);
+
     const handleDeleteClick = (appointment) => {
         setSelectedAppointment(appointment);
         setShowConfirmCancel(true);
     };
+
+    const doctorsOptions = [
+        { value: 'all', label: 'All Doctors' },
+        ...Array.from(new Set(appointments.map((appointment) => appointment.doctor?.fullname)))
+            .filter((fullname) => fullname) // Remove value undefined/null
+            .map((fullname) => ({
+                value: fullname,
+                label: `Dr. ${fullname}`,
+            })),
+    ];
+
+    const statusOptions = [
+        { value: 'all', label: 'All Statuses' },
+        { value: 'pending', label: 'Pending' },
+        { value: 'done', label: 'Done' },
+        { value: 'cancelled', label: 'Cancelled' },
+    ];
 
     return (
         <div className={cx('container')}>
@@ -36,29 +78,47 @@ const MyBookings = () => {
             ) : (
                 !loading &&
                 !error && (
-                    <div className={cx('appointments')}>
-                        {appointments.map((appointment) => (
-                            <div key={appointment._id}>
-                                {appointment?.status === 'cancelled' ? (
-                                    <div className={cx('link', 'cancelled')}>
-                                        <PatientAppointment appointment={appointment} />
+                    <>
+                        <div className={cx('selections')}>
+                            <Selections
+                                selectedDoctor={selectedDoctor}
+                                setSelectedDoctor={setSelectedDoctor}
+                                doctorsOptions={doctorsOptions}
+                                selectedAppointmentStatus={selectedAppointmentStatus}
+                                setSelectedAppointmentStatus={setSelectedAppointmentStatus}
+                                appointmentsOptions={statusOptions}
+                                hidePatient={true}
+                                justify="space-around"
+                            />
+                        </div>
+                        <div className={cx('appointments')}>
+                            {filteredAppointments.length > 0 ? (
+                                filteredAppointments.map((appointment) => (
+                                    <div key={appointment._id}>
+                                        {appointment?.status === 'cancelled' ? (
+                                            <div className={cx('link', 'cancelled')}>
+                                                <PatientAppointment appointment={appointment} />
+                                            </div>
+                                        ) : (
+                                            <Link
+                                                to={`/users/appointments/my-appointments/${appointment._id}`}
+                                                className={cx('link', { pending: appointment?.status === 'pending' })}
+                                            >
+                                                <PatientAppointment appointment={appointment} />
+                                            </Link>
+                                        )}
+                                        {appointment?.status === 'pending' && (
+                                            <span className={cx('icon')} onClick={() => handleDeleteClick(appointment)}>
+                                                <FaRegTrashAlt />
+                                            </span>
+                                        )}
                                     </div>
-                                ) : (
-                                    <Link
-                                        to={`/users/appointments/my-appointments/${appointment._id}`}
-                                        className={cx('link', { pending: appointment?.status === 'pending' })}
-                                    >
-                                        <PatientAppointment appointment={appointment} />
-                                    </Link>
-                                )}
-                                {appointment?.status === 'pending' && (
-                                    <span className={cx('icon')} onClick={() => handleDeleteClick(appointment)}>
-                                        <FaRegTrashAlt />
-                                    </span>
-                                )}
-                            </div>
-                        ))}
-                    </div>
+                                ))
+                            ) : (
+                                <h4>No appointments found!</h4>
+                            )}
+                        </div>
+                    </>
                 )
             )}
 

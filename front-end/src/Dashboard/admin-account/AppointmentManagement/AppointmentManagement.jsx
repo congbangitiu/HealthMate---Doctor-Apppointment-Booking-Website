@@ -2,49 +2,17 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './AppointmentManagement.module.scss';
-import Select from 'react-select';
+import Selections from '../../../components/Selections/Selections';
 import { PropTypes } from 'prop-types';
 import convertTime from './../../../utils/convertTime';
 import Pagination from '../../../components/Pagination/Pagination';
 
 const cx = classNames.bind(styles);
 
-const customStyles = {
-    control: (provided) => ({
-        ...provided,
-        border: '2px solid var(--primaryColor)',
-        borderRadius: '5px',
-        boxShadow: 'none',
-        width: '250px',
-        height: '45px',
-        display: 'flex',
-        alignItems: 'center',
-        '&:hover': {
-            cursor: 'text',
-        },
-    }),
-    option: (provided, state) => ({
-        ...provided,
-        backgroundColor: state.isSelected
-            ? 'var(--primaryColor)'
-            : state.isFocused
-            ? 'var(--lightGreenColor)'
-            : 'white',
-        color: state.isSelected ? 'white' : 'black',
-        '&:hover': {
-            backgroundColor: 'var(--lightGreenColor)',
-        },
-    }),
-    menu: (provided) => ({
-        ...provided,
-        zIndex: 9999,
-    }),
-};
-
 const AppointmentManagement = ({ users, doctors, appointments }) => {
     const [selectedDoctor, setSelectedDoctor] = useState(null);
     const [selectedPatient, setSelectedPatient] = useState(null);
-    const [selectedAppointment, setSelectedAppointment] = useState(null);
+    const [selectedAppointmentStatus, setSelectedAppointmentStatus] = useState(null);
     const [filteredAppointments, setFilteredAppointments] = useState(appointments);
 
     const [currentPage, setCurrentPage] = useState(0);
@@ -95,14 +63,14 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
         }
 
         // Filter by selected status
-        if (selectedAppointment && selectedAppointment.value !== 'all') {
+        if (selectedAppointmentStatus && selectedAppointmentStatus.value !== 'all') {
             updatedAppointments = updatedAppointments.filter(
-                (appointment) => appointment.status === selectedAppointment.value,
+                (appointment) => appointment.status === selectedAppointmentStatus.value,
             );
         }
 
         setFilteredAppointments(updatedAppointments);
-    }, [selectedDoctor, selectedPatient, selectedAppointment, appointments]);
+    }, [selectedDoctor, selectedPatient, selectedAppointmentStatus, appointments]);
 
     useEffect(() => {
         const offset = currentPage * itemsPerPage;
@@ -115,36 +83,18 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
             <div className={cx('upper-part')}>
                 <h4>Appointments ({filteredAppointments.length})</h4>
                 <div className={cx('selections')}>
-                    <div className={cx('selection')}>
-                        <h4>Doctor</h4>
-                        <Select
-                            options={doctorsOptions}
-                            styles={customStyles}
-                            placeholder={doctorsOptions[0].label}
-                            value={selectedDoctor}
-                            onChange={setSelectedDoctor}
-                        />
-                    </div>
-                    <div className={cx('selection')}>
-                        <h4>Patient</h4>
-                        <Select
-                            options={patientsOptions}
-                            styles={customStyles}
-                            placeholder={patientsOptions[0].label}
-                            value={selectedPatient}
-                            onChange={setSelectedPatient}
-                        />
-                    </div>
-                    <div className={cx('selection')}>
-                        <h4>Status</h4>
-                        <Select
-                            options={appointmentsOptions}
-                            styles={customStyles}
-                            placeholder={appointmentsOptions[0].label}
-                            value={selectedAppointment}
-                            onChange={setSelectedAppointment}
-                        />
-                    </div>
+                    <Selections
+                        selectedDoctor={selectedDoctor}
+                        setSelectedDoctor={setSelectedDoctor}
+                        doctorsOptions={doctorsOptions}
+                        selectedPatient={selectedPatient}
+                        setSelectedPatient={setSelectedPatient}
+                        patientsOptions={patientsOptions}
+                        selectedAppointmentStatus={selectedAppointmentStatus}
+                        setSelectedAppointmentStatus={setSelectedAppointmentStatus}
+                        appointmentsOptions={appointmentsOptions}
+                        justify="space-between"
+                    />
                 </div>
             </div>
 

@@ -1,0 +1,20 @@
+.container {
+    display: flex;
+    align-items: center;
+
+    & .selection {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+
+        & h4 {
+            font-size: 20px !important;
+            font-weight: 600 !important;
+            color: black !important;
+        }
+    }
+
+    & .hide {
+        display: none;
+    }
+}
