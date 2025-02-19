@@ -196,14 +196,29 @@ const Header = () => {
         let formattedData = [];
 
         if (role === 'doctor' && appointmentData) {
-            formattedData = appointmentData.map((item) => ({
-                id: item._id,
-                appointmentId: item._id,
-                user: item.user,
-                timeSlot: item.timeSlot,
-                createdAt: item.createdAt,
-                type: 'booking',
-            }));
+            formattedData = appointmentData.map((item) => {
+                // Check if statusHistory exists and has data
+                const latestStatusObj =
+                    Array.isArray(item.statusHistory) && item.statusHistory.length > 0
+                        ? item.statusHistory[item.statusHistory.length - 1]
+                        : null;
+
+                // Determine the appropriate `createdAt`
+                const createdAtTimestamp =
+                    latestStatusObj && latestStatusObj.status === 'cancelled'
+                        ? latestStatusObj.timestamp
+                        : item.createdAt;
+
+                return {
+                    id: item._id,
+                    appointmentId: item._id,
+                    user: item.user,
+                    timeSlot: item.timeSlot,
+                    createdAt: createdAtTimestamp,
+                    type: 'booking',
+                    status: latestStatusObj ? latestStatusObj.status : item.status, // Get the last status from statusHistory if available
+                };
+            });
         } else if (role === 'patient' && prescriptionData) {
             // Flatten the actionHistory array to display each action as a separate notification
             formattedData = prescriptionData.flatMap((item) => {
@@ -283,6 +298,7 @@ const Header = () => {
         if (role === 'doctor') {
             socket.emit('doctor-join-room', { doctorId: user._id });
 
+            // Listen for announcements when patients make appointments
             socket.off('booking-notification'); // Remove old event listener before adding new one
             socket.on('booking-notification', (appointment) => {
                 const newNotification = {
@@ -292,6 +308,23 @@ const Header = () => {
                     timeSlot: appointment.timeSlot,
                     createdAt: appointment.createdAt,
                     type: 'booking',
+                    status: appointment.status,
+                };
+
+                updateNotifications(newNotification);
+            });
+
+            // Listen for announcements when doctors cancel appointments
+            socket.off('cancelled-notification'); // Remove old event listener before adding new one
+            socket.on('cancelled-notification', (appointment) => {
+                const newNotification = {
+                    id: `cancelled-${appointment.appointmentId}`,
+                    appointmentId: appointment.appointmentId,
+                    user: appointment.user,
+                    timeSlot: appointment.timeSlot,
+                    createdAt: appointment.createdAt,
+                    type: 'booking',
+                    status: appointment.status,
                 };
 
                 updateNotifications(newNotification);
@@ -321,8 +354,11 @@ const Header = () => {
         return () => {
             socket.off('booking-notification');
             socket.off('prescription-notification');
+            socket.off('cancelled-notification');
         };
     }, [user, role]);
+
+    // console.log(notifications);
 
     return (
         <div className={cx('container')}>

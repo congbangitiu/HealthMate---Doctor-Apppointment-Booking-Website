@@ -303,7 +303,7 @@ export const updateAppointmentStatus = async (req, res) => {
     const { status } = req.body;
 
     try {
-        const appointment = await Booking.findByIdAndUpdate(id, { status }, { new: true }).populate('doctor');
+        const appointment = await Booking.findById(id).populate('doctor').populate('user');
 
         if (!appointment) {
             return res.status(404).json({
@@ -311,6 +311,10 @@ export const updateAppointmentStatus = async (req, res) => {
                 message: 'Appointment not found',
             });
         }
+
+        // Update new state and save change history
+        appointment.status = status;
+        appointment.statusHistory.push({ status, timestamp: new Date() });
 
         // Only add the time slot back to the doctor's available slots if the appointment is cancelled
         if (status === 'cancelled') {
@@ -325,8 +329,24 @@ export const updateAppointmentStatus = async (req, res) => {
 
             const { timeSlot } = appointment;
             doctor.timeSlots.push(timeSlot);
+
             await doctor.save();
+
+            // Send real-time notifications to your doctor
+            req.io.to(doctor._id.toString()).emit('cancelled-notification', {
+                appointmentId: appointment._id,
+                user: {
+                    id: appointment.user._id,
+                    fullname: appointment.user.fullname,
+                    photo: appointment.user.photo,
+                },
+                timeSlot: appointment.timeSlot,
+                status,
+                createdAt: new Date().toISOString(),
+            });
         }
+
+        await appointment.save();
 
         res.status(200).json({
             success: true,

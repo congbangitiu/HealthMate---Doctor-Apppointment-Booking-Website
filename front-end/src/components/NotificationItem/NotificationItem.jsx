@@ -27,6 +27,7 @@ const NotificationItem = ({ notification, role }) => {
     }, [notification.createdAt]);
 
     const handleMoveToPrescription = () => {
+        if (notification.status === 'cancelled') return;
         if (notification.appointmentId) {
             navigate(
                 `/${role === 'doctor' ? 'doctors' : 'users'}/appointments/my-appointments/${
@@ -36,19 +37,24 @@ const NotificationItem = ({ notification, role }) => {
         }
     };
 
-    console.log(notification);
-    
-
     return (
-        <div className={cx('container')} onClick={handleMoveToPrescription}>
-            {role === 'doctor' && notification.type === 'booking' && (
+        <div
+            className={cx('container', {
+                cancelledStatus: notification.status === 'cancelled',
+                doneStatus: notification.status === 'done',
+            })}
+            onClick={handleMoveToPrescription}
+        >
+            {role === 'doctor' && notification.type === 'booking' && notification.status !== 'done' && (
                 <>
                     <img src={notification.user.photo} alt={notification.user.fullname} />
                     <div className={cx('details')}>
                         <p>
-                            <b>{notification.user.fullname}</b> has booked an appointment on{' '}
-                            <b>{formatDate(notification.timeSlot.day)}</b> at{' '}
-                            <b>{convertTime(notification.timeSlot.startingTime)}</b>
+                            <b>{notification.user.fullname}</b> has{' '}
+                            {notification.status === 'pending' ? <b>booked</b> : <b>cancelled</b>}{' '}
+                            {notification.status === 'pending' ? 'an' : 'the'} appointment on{' '}
+                            <b>{formatDate(notification.timeSlot?.day)}</b> at{' '}
+                            <b>{convertTime(notification.timeSlot?.startingTime)}</b>
                         </p>
                         <p>{timeAgo}</p>
                     </div>
@@ -60,11 +66,9 @@ const NotificationItem = ({ notification, role }) => {
                     <img src={notification.doctor.photo} alt={notification.doctor.fullname} />
                     <div className={cx('details')}>
                         <p>
-                            <b>Dr. {notification.doctor.fullname}</b>
-                            {notification.action === 'create'
-                                ? ' has issued your prescription '
-                                : ' has updated your prescription '}
-                            for your appointment on <b>{formatDate(notification.timeSlot.day)}</b> at{' '}
+                            <b>Dr. {notification.doctor.fullname}</b> has{' '}
+                            {notification.action === 'create' ? <b>issued</b> : <b>updated</b>} your prescription for
+                            your appointment on <b>{formatDate(notification.timeSlot.day)}</b> at{' '}
                             <b>{convertTime(notification.timeSlot.startingTime)}</b>
                         </p>
                         <p>{timeAgo}</p>

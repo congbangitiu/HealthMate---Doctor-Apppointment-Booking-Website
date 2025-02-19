@@ -1,5 +1,17 @@
 import mongoose from 'mongoose';
 
+const statusHistorySchema = new mongoose.Schema({
+    status: {
+        type: String,
+        enum: ['pending', 'done', 'cancelled'],
+        required: true,
+    },
+    timestamp: {
+        type: Date,
+        default: Date.now,
+    },
+});
+
 const bookingSchema = new mongoose.Schema(
     {
         doctor: {
@@ -18,6 +30,7 @@ const bookingSchema = new mongoose.Schema(
             enum: ['pending', 'done', 'cancelled'],
             default: 'pending',
         },
+        statusHistory: [statusHistorySchema],
         isPaid: {
             type: Boolean,
             default: false,

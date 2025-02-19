@@ -5,6 +5,14 @@
     gap: 15px;
     padding: 10px 15px;
 
+    &.cancelledStatus {
+        cursor: not-allowed !important;
+    }
+
+    &.doneStatus {
+        display: none;
+    }
+
     &:hover {
         background-color: var(--extremeLightGrayColor);
         cursor: pointer;
