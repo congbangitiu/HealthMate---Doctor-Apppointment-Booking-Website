@@ -14,10 +14,11 @@ const Selections = ({
     patientsOptions,
     selectedAppointmentStatus,
     setSelectedAppointmentStatus,
-    appointmentsOptions,
+    appointmentsStatusOptions,
+    selectedSchedule,
+    setSelectedSchedule,
     hidePatient,
     hideDoctor,
-    justify,
 }) => {
     const customStyles = {
         control: (provided) => ({
@@ -51,8 +52,13 @@ const Selections = ({
         }),
     };
 
+    const scheduleOptions = [
+        { value: 'newest', label: 'Newest to Oldest' },
+        { value: 'oldest', label: 'Oldest to Newest' },
+    ];
+
     return (
-        <div className={cx('container')} style={{ justifyContent: justify }}>
+        <div className={cx('container')}>
             {doctorsOptions && setSelectedDoctor && (
                 <div className={cx('selection', { hide: hideDoctor })}>
                     <h4>Doctor</h4>
@@ -80,11 +86,22 @@ const Selections = ({
             )}
 
             <div className={cx('selection')}>
+                <h4>Schedule</h4>
+                <Select
+                    options={scheduleOptions || []}
+                    styles={customStyles}
+                    placeholder="Select Schedule"
+                    value={selectedSchedule}
+                    onChange={setSelectedSchedule}
+                />
+            </div>
+
+            <div className={cx('selection')}>
                 <h4>Status</h4>
                 <Select
-                    options={appointmentsOptions}
+                    options={appointmentsStatusOptions}
                     styles={customStyles}
-                    placeholder={appointmentsOptions[0].label}
+                    placeholder={appointmentsStatusOptions?.[0]?.label || 'Select Status'}
                     value={selectedAppointmentStatus}
                     onChange={setSelectedAppointmentStatus}
                 />
@@ -104,11 +121,13 @@ Selections.propTypes = {
 
     selectedAppointmentStatus: PropTypes.object.isRequired,
     setSelectedAppointmentStatus: PropTypes.func.isRequired,
-    appointmentsOptions: PropTypes.array.isRequired,
+    appointmentsStatusOptions: PropTypes.array.isRequired,
+
+    selectedSchedule: PropTypes.object.isRequired,
+    setSelectedSchedule: PropTypes.func.isRequired,
 
     hidePatient: PropTypes.bool,
     hideDoctor: PropTypes.bool,
-    justify: PropTypes.string,
 };
 
 Selections.defaultProps = {

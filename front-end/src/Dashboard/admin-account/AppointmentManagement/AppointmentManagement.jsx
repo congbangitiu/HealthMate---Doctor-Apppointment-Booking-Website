@@ -5,6 +5,7 @@ import styles from './AppointmentManagement.module.scss';
 import Selections from '../../../components/Selections/Selections';
 import { PropTypes } from 'prop-types';
 import convertTime from './../../../utils/convertTime';
+import formatDate from './../../../utils/formatDate';
 import Pagination from '../../../components/Pagination/Pagination';
 
 const cx = classNames.bind(styles);
@@ -13,6 +14,10 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
     const [selectedDoctor, setSelectedDoctor] = useState(null);
     const [selectedPatient, setSelectedPatient] = useState(null);
     const [selectedAppointmentStatus, setSelectedAppointmentStatus] = useState(null);
+    const [selectedSchedule, setSelectedSchedule] = useState({
+        value: 'newest',
+        label: 'Newest to Oldest',
+    });
     const [filteredAppointments, setFilteredAppointments] = useState(appointments);
 
     const [currentPage, setCurrentPage] = useState(0);
@@ -38,7 +43,7 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
         })),
     ];
 
-    const appointmentsOptions = [
+    const appointmentsStatusOptions = [
         { value: 'all', label: 'All Appointments' },
         { value: 'pending', label: 'Pending' },
         { value: 'done', label: 'Done' },
@@ -46,7 +51,7 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
     ];
 
     useEffect(() => {
-        let updatedAppointments = appointments;
+        let updatedAppointments = [...appointments];
 
         // Filter by selected doctor
         if (selectedDoctor && selectedDoctor.value !== 'all') {
@@ -69,8 +74,36 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
             );
         }
 
+        // Sort by Schedule
+        if (selectedSchedule && selectedSchedule.value) {
+            updatedAppointments.sort((a, b) => {
+                if (selectedSchedule.value === 'newest') {
+                    // Newest to Oldest
+                    if (a.timeSlot.day !== b.timeSlot.day) {
+                        return new Date(b.timeSlot.day) - new Date(a.timeSlot.day);
+                    }
+                    return (
+                        new Date(`1970-01-01T${b.timeSlot.startingTime}:00Z`) -
+                        new Date(`1970-01-01T${a.timeSlot.startingTime}:00Z`)
+                    );
+                } else if (selectedSchedule.value === 'oldest') {
+                    // Oldest to Newest
+                    if (a.timeSlot.day !== b.timeSlot.day) {
+                        return new Date(a.timeSlot.day) - new Date(b.timeSlot.day);
+                    }
+                    return (
+                        new Date(`1970-01-01T${a.timeSlot.startingTime}:00Z`) -
+                        new Date(`1970-01-01T${b.timeSlot.startingTime}:00Z`)
+                    );
+                }
+                return 0;
+            });
+
+            updatedAppointments = [...updatedAppointments];
+        }
+
         setFilteredAppointments(updatedAppointments);
-    }, [selectedDoctor, selectedPatient, selectedAppointmentStatus, appointments]);
+    }, [selectedDoctor, selectedPatient, selectedAppointmentStatus, selectedSchedule, appointments]);
 
     useEffect(() => {
         const offset = currentPage * itemsPerPage;
@@ -92,8 +125,9 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
                         patientsOptions={patientsOptions}
                         selectedAppointmentStatus={selectedAppointmentStatus}
                         setSelectedAppointmentStatus={setSelectedAppointmentStatus}
-                        appointmentsOptions={appointmentsOptions}
-                        justify="space-between"
+                        appointmentsStatusOptions={appointmentsStatusOptions}
+                        selectedSchedule={selectedSchedule}
+                        setSelectedSchedule={setSelectedSchedule}
                     />
                 </div>
             </div>
@@ -198,11 +232,11 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
                                         {appointment.timeSlot ? (
                                             appointment.status === 'cancelled' ? (
                                                 <Link className={cx('cancelledStatus')}>
-                                                    {appointment.timeSlot.day || 'No date'}
+                                                    {formatDate(appointment.timeSlot.day) || 'No date'}
                                                 </Link>
                                             ) : (
                                                 <Link to={`/users/appointments/my-appointments/${appointment._id}`}>
-                                                    {appointment.timeSlot.day || 'No date'}
+                                                    {formatDate(appointment.timeSlot.day) || 'No date'}
                                                 </Link>
                                             )
                                         ) : (
@@ -282,7 +316,7 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
                         </tbody>
                     </table>
                 ) : (
-                    <div className={cx('no-appointment')}>No appointments found!</div>
+                    <div className={cx('no-appointment')}>No appointments match your selection!</div>
                 )}
             </div>
 

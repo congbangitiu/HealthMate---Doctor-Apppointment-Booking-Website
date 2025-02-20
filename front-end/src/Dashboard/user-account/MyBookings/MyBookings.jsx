@@ -26,6 +26,10 @@ const MyBookings = () => {
 
     const [selectedDoctor, setSelectedDoctor] = useState(null);
     const [selectedAppointmentStatus, setSelectedAppointmentStatus] = useState(null);
+    const [selectedSchedule, setSelectedSchedule] = useState({
+        value: 'newest',
+        label: 'Newest to Oldest',
+    });
     const [filteredAppointments, setFilteredAppointments] = useState([]);
 
     const [currentPage, setCurrentPage] = useState(0);
@@ -33,7 +37,7 @@ const MyBookings = () => {
     const itemsPerPage = 5;
 
     useEffect(() => {
-        let updatedAppointments = appointments;
+        let updatedAppointments = [...appointments];
 
         // Filter by doctor
         if (selectedDoctor && selectedDoctor.value !== 'all') {
@@ -49,8 +53,36 @@ const MyBookings = () => {
             );
         }
 
+        // Sort by Schedule
+        if (selectedSchedule && selectedSchedule.value) {
+            updatedAppointments.sort((a, b) => {
+                if (selectedSchedule.value === 'newest') {
+                    // Newest to Oldest
+                    if (a.timeSlot.day !== b.timeSlot.day) {
+                        return new Date(b.timeSlot.day) - new Date(a.timeSlot.day);
+                    }
+                    return (
+                        new Date(`1970-01-01T${b.timeSlot.startingTime}:00Z`) -
+                        new Date(`1970-01-01T${a.timeSlot.startingTime}:00Z`)
+                    );
+                } else if (selectedSchedule.value === 'oldest') {
+                    // Oldest to Newest
+                    if (a.timeSlot.day !== b.timeSlot.day) {
+                        return new Date(a.timeSlot.day) - new Date(b.timeSlot.day);
+                    }
+                    return (
+                        new Date(`1970-01-01T${a.timeSlot.startingTime}:00Z`) -
+                        new Date(`1970-01-01T${b.timeSlot.startingTime}:00Z`)
+                    );
+                }
+                return 0;
+            });
+
+            updatedAppointments = [...updatedAppointments];
+        }
+
         setFilteredAppointments(updatedAppointments);
-    }, [selectedDoctor, selectedAppointmentStatus, appointments]);
+    }, [selectedDoctor, selectedAppointmentStatus, selectedSchedule, appointments]);
 
     const handleDeleteClick = (appointment) => {
         setSelectedAppointment(appointment);
@@ -67,7 +99,7 @@ const MyBookings = () => {
             })),
     ];
 
-    const statusOptions = [
+    const appointmentsStatusOptions = [
         { value: 'all', label: 'All Statuses' },
         { value: 'pending', label: 'Pending' },
         { value: 'done', label: 'Done' },
@@ -89,9 +121,10 @@ const MyBookings = () => {
                     doctorsOptions={doctorsOptions}
                     selectedAppointmentStatus={selectedAppointmentStatus}
                     setSelectedAppointmentStatus={setSelectedAppointmentStatus}
-                    appointmentsOptions={statusOptions}
+                    appointmentsStatusOptions={appointmentsStatusOptions}
+                    selectedSchedule={selectedSchedule}
+                    setSelectedSchedule={setSelectedSchedule}
                     hidePatient={true}
-                    justify="space-around"
                 />
             </div>
             {loading ? (
@@ -126,7 +159,7 @@ const MyBookings = () => {
                                     </div>
                                 ))
                             ) : (
-                                <h4>You did not book any doctor yet!</h4>
+                                <h4>No appointments match your selection!</h4>
                             )}
                         </div>
 

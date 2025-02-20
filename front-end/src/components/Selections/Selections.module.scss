@@ -1,14 +1,15 @@
 .container {
     display: flex;
+    justify-content: space-between;
     align-items: center;
 
     & .selection {
         display: flex;
-        align-items: center;
-        gap: 15px;
+        flex-direction: column;
+        gap: 2px;
 
         & h4 {
-            font-size: 20px !important;
+            font-size: 18px !important;
             font-weight: 600 !important;
             color: black !important;
         }

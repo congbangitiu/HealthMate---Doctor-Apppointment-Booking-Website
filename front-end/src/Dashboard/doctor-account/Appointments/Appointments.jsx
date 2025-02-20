@@ -26,6 +26,10 @@ const Appointments = () => {
 
     const [selectedPatient, setSelectedPatient] = useState(null);
     const [selectedAppointmentStatus, setSelectedAppointmentStatus] = useState(null);
+    const [selectedSchedule, setSelectedSchedule] = useState({
+        value: 'newest',
+        label: 'Newest to Oldest',
+    });
     const [filteredAppointments, setFilteredAppointments] = useState([]);
 
     const [currentPage, setCurrentPage] = useState(0);
@@ -49,8 +53,36 @@ const Appointments = () => {
             );
         }
 
+        // Sort by Schedule
+        if (selectedSchedule && selectedSchedule.value) {
+            updatedAppointments.sort((a, b) => {
+                if (selectedSchedule.value === 'newest') {
+                    // Newest to Oldest
+                    if (a.timeSlot.day !== b.timeSlot.day) {
+                        return new Date(b.timeSlot.day) - new Date(a.timeSlot.day);
+                    }
+                    return (
+                        new Date(`1970-01-01T${b.timeSlot.startingTime}:00Z`) -
+                        new Date(`1970-01-01T${a.timeSlot.startingTime}:00Z`)
+                    );
+                } else if (selectedSchedule.value === 'oldest') {
+                    // Oldest to Newest
+                    if (a.timeSlot.day !== b.timeSlot.day) {
+                        return new Date(a.timeSlot.day) - new Date(b.timeSlot.day);
+                    }
+                    return (
+                        new Date(`1970-01-01T${a.timeSlot.startingTime}:00Z`) -
+                        new Date(`1970-01-01T${b.timeSlot.startingTime}:00Z`)
+                    );
+                }
+                return 0;
+            });
+
+            updatedAppointments = [...updatedAppointments];
+        }
+
         setFilteredAppointments(updatedAppointments);
-    }, [selectedPatient, selectedAppointmentStatus, appointments]);
+    }, [selectedPatient, selectedAppointmentStatus, selectedSchedule, appointments]);
 
     const patientsOptions = [
         { value: 'all', label: 'All Patients' },
@@ -62,7 +94,7 @@ const Appointments = () => {
             })),
     ];
 
-    const statusOptions = [
+    const appointmentsStatusOptions = [
         { value: 'all', label: 'All Statuses' },
         { value: 'pending', label: 'Pending' },
         { value: 'done', label: 'Done' },
@@ -85,9 +117,10 @@ const Appointments = () => {
                     patientsOptions={patientsOptions}
                     selectedAppointmentStatus={selectedAppointmentStatus}
                     setSelectedAppointmentStatus={setSelectedAppointmentStatus}
-                    appointmentsOptions={statusOptions}
+                    appointmentsStatusOptions={appointmentsStatusOptions}
+                    selectedSchedule={selectedSchedule}
+                    setSelectedSchedule={setSelectedSchedule}
                     hideDoctor={true}
-                    justify="space-around"
                 />
             </div>
             {loading ? (
@@ -277,7 +310,7 @@ const Appointments = () => {
                             </tbody>
                         </table>
                     ) : (
-                        <div className={cx('no-appointment')}>No appointments found!</div>
+                        <div className={cx('no-appointment')}>No appointments match your selection!</div>
                     )}
                 </div>
             )}
