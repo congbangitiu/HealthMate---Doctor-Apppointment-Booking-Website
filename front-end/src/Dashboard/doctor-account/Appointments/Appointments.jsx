@@ -10,6 +10,7 @@ import { BASE_URL } from '../../../../config';
 import Loader from '../../../components/Loader/Loader';
 import Error from '../../../components/Error/Error';
 import Selections from '../../../components/Selections/Selections';
+import Pagination from '../../../components/Pagination/Pagination';
 
 const cx = classNames.bind(styles);
 
@@ -26,6 +27,10 @@ const Appointments = () => {
     const [selectedPatient, setSelectedPatient] = useState(null);
     const [selectedAppointmentStatus, setSelectedAppointmentStatus] = useState(null);
     const [filteredAppointments, setFilteredAppointments] = useState([]);
+
+    const [currentPage, setCurrentPage] = useState(0);
+    const [currentItems, setCurrentItems] = useState([]);
+    const itemsPerPage = 5;
 
     useEffect(() => {
         let updatedAppointments = appointments;
@@ -64,6 +69,12 @@ const Appointments = () => {
         { value: 'cancelled', label: 'Cancelled' },
     ];
 
+    useEffect(() => {
+        const offset = currentPage * itemsPerPage;
+        const items = filteredAppointments.slice(offset, offset + itemsPerPage);
+        setCurrentItems(items);
+    }, [currentPage, filteredAppointments, itemsPerPage]);
+
     return (
         <div className={cx('container-parent')}>
             <h1>MY APPOINTMENTS</h1>
@@ -76,7 +87,7 @@ const Appointments = () => {
                     setSelectedAppointmentStatus={setSelectedAppointmentStatus}
                     appointmentsOptions={statusOptions}
                     hideDoctor={true}
-                    justify = 'space-around'
+                    justify="space-around"
                 />
             </div>
             {loading ? (
@@ -98,7 +109,7 @@ const Appointments = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredAppointments?.map((appointment) => (
+                                {currentItems?.map((appointment) => (
                                     <tr
                                         key={appointment._id}
                                         className={cx({ cancelledStatus: appointment.status === 'cancelled' })}
@@ -266,9 +277,18 @@ const Appointments = () => {
                             </tbody>
                         </table>
                     ) : (
-                        <h4>No appointments found!</h4>
+                        <div className={cx('no-appointment')}>No appointments found!</div>
                     )}
                 </div>
+            )}
+
+            {!loading && filteredAppointments.length > itemsPerPage && (
+                <Pagination
+                    data={filteredAppointments}
+                    itemsPerPage={itemsPerPage}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                />
             )}
         </div>
     );

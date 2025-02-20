@@ -9,6 +9,7 @@ import Error from '../../../components/Error/Error';
 import PatientAppointment from '../../../components/PatientAppointment/PatientAppointment';
 import ConfirmCancel from '../ConfirmCancel/ConfirmCancel';
 import Selections from '../../../components/Selections/Selections';
+import Pagination from '../../../components/Pagination/Pagination';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
@@ -26,6 +27,10 @@ const MyBookings = () => {
     const [selectedDoctor, setSelectedDoctor] = useState(null);
     const [selectedAppointmentStatus, setSelectedAppointmentStatus] = useState(null);
     const [filteredAppointments, setFilteredAppointments] = useState([]);
+
+    const [currentPage, setCurrentPage] = useState(0);
+    const [currentItems, setCurrentItems] = useState([]);
+    const itemsPerPage = 5;
 
     useEffect(() => {
         let updatedAppointments = appointments;
@@ -69,8 +74,26 @@ const MyBookings = () => {
         { value: 'cancelled', label: 'Cancelled' },
     ];
 
+    useEffect(() => {
+        const offset = currentPage * itemsPerPage;
+        const items = filteredAppointments.slice(offset, offset + itemsPerPage);
+        setCurrentItems(items);
+    }, [currentPage, filteredAppointments, itemsPerPage]);
+
     return (
         <div className={cx('container')}>
+            <div className={cx('selections')}>
+                <Selections
+                    selectedDoctor={selectedDoctor}
+                    setSelectedDoctor={setSelectedDoctor}
+                    doctorsOptions={doctorsOptions}
+                    selectedAppointmentStatus={selectedAppointmentStatus}
+                    setSelectedAppointmentStatus={setSelectedAppointmentStatus}
+                    appointmentsOptions={statusOptions}
+                    hidePatient={true}
+                    justify="space-around"
+                />
+            </div>
             {loading ? (
                 <Loader />
             ) : error ? (
@@ -79,21 +102,9 @@ const MyBookings = () => {
                 !loading &&
                 !error && (
                     <>
-                        <div className={cx('selections')}>
-                            <Selections
-                                selectedDoctor={selectedDoctor}
-                                setSelectedDoctor={setSelectedDoctor}
-                                doctorsOptions={doctorsOptions}
-                                selectedAppointmentStatus={selectedAppointmentStatus}
-                                setSelectedAppointmentStatus={setSelectedAppointmentStatus}
-                                appointmentsOptions={statusOptions}
-                                hidePatient={true}
-                                justify="space-around"
-                            />
-                        </div>
                         <div className={cx('appointments')}>
                             {filteredAppointments.length > 0 ? (
-                                filteredAppointments.map((appointment) => (
+                                currentItems.map((appointment) => (
                                     <div key={appointment._id}>
                                         {appointment?.status === 'cancelled' ? (
                                             <div className={cx('link', 'cancelled')}>
@@ -115,14 +126,21 @@ const MyBookings = () => {
                                     </div>
                                 ))
                             ) : (
-                                <h4>No appointments found!</h4>
+                                <h4>You did not book any doctor yet!</h4>
                             )}
                         </div>
+
+                        {!loading && filteredAppointments.length > itemsPerPage && (
+                            <Pagination
+                                data={filteredAppointments}
+                                itemsPerPage={itemsPerPage}
+                                currentPage={currentPage}
+                                setCurrentPage={setCurrentPage}
+                            />
+                        )}
                     </>
                 )
             )}
-
-            {!loading && !error && appointments.length === 0 && <h4>You did not book any doctor yet!</h4>}
 
             <Dialog
                 open={showConfirmCancel && selectedAppointment}

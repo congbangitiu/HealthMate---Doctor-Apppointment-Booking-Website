@@ -5,16 +5,12 @@ import { PropTypes } from 'prop-types';
 
 const cx = classNames.bind(styles);
 
-const Pagination = ({ data, itemsPerPage, currentPage, setCurrentPage, setCurrentItems }) => {
+const Pagination = ({ data, itemsPerPage, currentPage, setCurrentPage }) => {
     const pageCount = Math.ceil(data.length / itemsPerPage);
 
     const handlePageClick = (event) => {
         const selectedPage = event.selected;
         setCurrentPage(selectedPage);
-
-        const offset = selectedPage * itemsPerPage;
-        const currentItems = data.slice(offset, offset + itemsPerPage);
-        setCurrentItems(currentItems);
 
         window.scrollTo({
             top: 0,

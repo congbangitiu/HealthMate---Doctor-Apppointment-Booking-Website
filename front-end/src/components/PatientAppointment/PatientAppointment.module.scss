@@ -85,6 +85,7 @@
                     align-items: center;
                     gap: 10px;
                     font-size: 16px;
+                    color: var(--darkGrayColor);
 
                     & .icon {
                         color: var(--primaryColor);
@@ -97,7 +98,7 @@
 
                 & h4 {
                     font-size: 16px;
-                    color: var(--darkGrayColor);
+                    color: black;
                 }
 
                 & h4:first-child {
