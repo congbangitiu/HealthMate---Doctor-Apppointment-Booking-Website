@@ -1,0 +1,188 @@
+.container {
+    width: 370px;
+    height: 520px;
+    background-color: var(--whiteColor);
+    display: flex;
+    flex-direction: column;
+
+    & header {
+        background-color: var(--primaryColor);
+        color: var(--whiteColor);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+
+        & div:first-child {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            & img {
+                width: 35px;
+            }
+
+            & h4 {
+                font-size: 18px;
+                font-weight: 700;
+            }
+        }
+
+        & div:last-child {
+            padding: 5px;
+            border-radius: 50px;
+
+            &:active {
+                background-color: var(--extremeLightGrayColor);
+                opacity: 0.3;
+            }
+
+            & .icon {
+                font-size: 20px;
+                color: var(--whiteColor);
+
+                &:hover {
+                    cursor: pointer;
+                    opacity: 0.8;
+                }
+            }
+        }
+    }
+
+    & main {
+        flex: 1;
+        overflow-y: auto;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        // Customize scroll bar
+        &::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        &::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 5px var(--grayColor);
+            border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: var(--lightGreenColor);
+            border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+            background-color: var(--primaryColor);
+            cursor: pointer;
+        }
+
+        & .message-wrapper {
+            color: black;
+            display: flex;
+            flex-direction: column;
+
+            &.model-message {
+                align-items: flex-start;
+
+                & div p {
+                    text-align: left;
+                }
+            }
+
+            &.user-message {
+                align-items: flex-end;
+
+                & div p {
+                    text-align: right;
+                }
+            }
+
+            & .message {
+                max-width: 80%;
+                display: flex;
+                align-items: flex-end;
+                gap: 5px;
+
+                & img {
+                    width: 20px;
+                }
+
+                & div {
+                    background-color: var(--lightGreenColor);
+                    padding: 5px 10px;
+                    border-radius: 10px;
+                    font-size: 15px;
+
+                    &.error {
+                        color: red;
+                    }
+                }
+
+                & .loading {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
+                    padding: 10px;
+                }
+            }
+
+            & .suggestions {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 10px;
+
+                & div {
+                    width: 75%;
+                    padding: 5px;
+                    background-color: var(--extremeLightGreenColor);
+                    margin-left: 25px;
+                    border-radius: 10px;
+                    color: var(--darkGrayColor);
+
+                    &:hover {
+                        cursor: pointer;
+                        background-color: var(--extremeLightGrayColor);
+                    }
+                }
+            }
+        }
+    }
+
+    & footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+
+        & input {
+            width: 90%;
+            border: 2px solid var(--lightGreenColor);
+            outline: none;
+            font-size: 14px;
+            padding: 6px 15px;
+            border-radius: 50px;
+
+            &:focus {
+                border-color: var(--primaryColor);
+            }
+        }
+
+        & .icon {
+            font-size: 25px;
+            color: var(--primaryColor);
+
+            &:hover {
+                cursor: pointer;
+                opacity: 0.8;
+            }
+
+            &.disabled {
+                color: var(--grayColor);
+                cursor: not-allowed;
+            }
+        }
+    }
+}

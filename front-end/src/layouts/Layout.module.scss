@@ -3,9 +3,9 @@
 
     & .fab-container {
         position: fixed;
-        bottom: 50px;
-        right: 50px;
-        z-index: 50;
+        bottom: 20px;
+        right: 20px;
+        z-index: 250;
         width: 50px;
         height: 50px;
         border-radius: 50%;
@@ -70,6 +70,10 @@
                 transition: all 0.3s;
                 cursor: pointer;
 
+                &:active {
+                    transform: scale(0.8);
+                }
+
                 & .icon-1 {
                     color: var(--whiteColor);
                     font-size: 25px;
@@ -90,6 +94,26 @@
                 top: 30px;
                 right: -20px;
             }
+        }
+    }
+
+    & .chatbot-wrapper {
+        position: fixed;
+        width: max-content;
+        bottom: 85px;
+        right: 20px;
+        z-index: 200;
+        transform: scale(0.9);
+        opacity: 0;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        transform-origin: bottom right;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 0 10px var(--darkGrayColor);
+
+        &.show {
+            transform: scale(1);
+            opacity: 1;
         }
     }
 }
