@@ -1,4 +1,4 @@
-import patientAvatar from '../../assets/images/patient-avatar.png';
+import patientAvatar from '../../../assets/images/patient-avatar.png';
 
 const comments = [
     {

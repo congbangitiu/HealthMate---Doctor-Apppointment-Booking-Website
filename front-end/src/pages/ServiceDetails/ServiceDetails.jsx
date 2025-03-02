@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './ServiceDetails.module.scss';
-import Treatments from '../../assets/data/services';
+import Treatments from '../../assets/data/mock-data/services';
 import DoctorCard from './../../components/DoctorCard/DoctorCard';
 import { BASE_URL } from '../../../config';
 import useFetchData from '../../hooks/useFetchData';

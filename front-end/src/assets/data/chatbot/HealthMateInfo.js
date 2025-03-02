@@ -1,4 +1,4 @@
-export const HealthmateInfo = `
+export const HealthMateInfo = `
     INTRODUCTION
     In today's fast-paced world, where health and well-being have become paramount, the need for reliable and efficient healthcare solutions is more pressing than ever. HealthMate is here to bridge that gap, providing a seamless platform that connects patients with experienced healthcare professionals. Our mission is simple: to make healthcare accessible, efficient, and trustworthy for everyone.
 

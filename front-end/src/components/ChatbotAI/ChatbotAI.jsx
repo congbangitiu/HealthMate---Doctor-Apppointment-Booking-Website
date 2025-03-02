@@ -6,9 +6,9 @@ import { IoMdSend } from 'react-icons/io';
 import { FaChevronDown, FaStopCircle } from 'react-icons/fa';
 import ChatbotLogo from '../../assets/images/Chatbot-Logo.png';
 import BeatLoader from 'react-spinners/BeatLoader';
-import { HealthmateInfo } from '../../assets/data/HealthmateInfo';
-import { diseaseInfo } from '../../assets/data/diseaseInfo';
-import { webInstructions } from '../../assets/data/webInstructions';
+import { HealthMateInfo } from '../../assets/data/chatbot/HealthMateInfo';
+import { diseaseInfo } from '../../assets/data/chatbot/diseaseInfo';
+import { webInstructions } from '../../assets/data/chatbot/webInstructions';
 import Typewriter from 'typewriter-effect';
 import { authContext } from '../../context/AuthContext';
 import extractName from '../../utils/extractName';
@@ -24,7 +24,7 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
         {
             hideInChat: true,
             role: 'model',
-            text: HealthmateInfo,
+            text: HealthMateInfo,
         },
     ]);
     const [inputValue, setInputValue] = useState('');
@@ -59,7 +59,7 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
         You are an intelligent chatbot named HealthAid representing HealthMate, a healthcare platform that connects patients with experienced healthcare professionals. Your task is to provide precise and relevant answers to user inquiries about HealthMate based on the following information.
 
         Context: 
-        - HealthMate infomation: ${HealthmateInfo}       
+        - HealthMate infomation: ${HealthMateInfo}       
         - Disease and symptoms infomation: ${diseaseInfo}
         - How to use website: ${webInstructions}
         

@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Home.module.scss';
-import '../../GlobalStyle.css';
 
 import Introduction from '../../components/Introduction/Introduction';
 import About from '../../components/About/About';

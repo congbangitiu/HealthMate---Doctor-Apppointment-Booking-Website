@@ -10,7 +10,7 @@ import 'swiper/css/scrollbar';
 import 'swiper/css';
 import 'swiper/css/bundle';
 import { HiStar } from 'react-icons/hi';
-import Comments from '../../assets/data/comments';
+import Comments from '../../assets/data/mock-data/comments';
 
 const cx = classNames.bind(styles);
 

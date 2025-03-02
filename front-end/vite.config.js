@@ -8,8 +8,8 @@ export default defineConfig({
         viteStaticCopy({
             targets: [
                 {
-                    src: 'src/assets/data/Healmate_Appointment_Record_2023.csv',
-                    dest: 'data',
+                    src: 'src/assets/data/mock-data/Healmate_Appointment_Record_2023.csv',
+                    dest: 'mock-data',
                 },
             ],
         }),

@@ -3,8 +3,7 @@ import classNames from 'classnames/bind';
 import styles from './TreatmentService.module.scss';
 import { IoIosMore } from 'react-icons/io';
 import { Link } from 'react-router-dom';
-
-import Treatments from '../../assets/data/services';
+import Treatments from '../../assets/data/mock-data/services';
 
 const cx = classNames.bind(styles);
 

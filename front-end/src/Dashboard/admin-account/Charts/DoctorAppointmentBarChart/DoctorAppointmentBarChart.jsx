@@ -13,7 +13,7 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
 
     useEffect(() => {
         const loadCSVData = async () => {
-            const response = await fetch('/data/Healmate_Appointment_Record_2023.csv');
+            const response = await fetch('/mock-data/Healmate_Appointment_Record_2023.csv');
             const rawData = await response.text();
             const parsedData = d3.csvParse(rawData);
             setData(parsedData);
