@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './DoctorCard.module.scss';
 import { FaStar } from 'react-icons/fa';
-import { FaLongArrowAltRight } from 'react-icons/fa';
+import truncateText from './../../utils/truncateText';
 
 const cx = classNames.bind(styles);
 
 const DoctorCard = ({ doctor }) => {
     return (
-        <div className={cx('container')}>
+        <Link to={`/doctors/${doctor._id}`} className={cx('container')}>
             <img src={doctor.photo} alt="" />
             <h4>Dr. {doctor.fullname}</h4>
             <div className={cx('expertise-rating')}>
@@ -21,19 +21,10 @@ const DoctorCard = ({ doctor }) => {
                 </div>
             </div>
             <div className={cx('details')}>
-                <div>
-                    <p className={cx('patients')}>+{doctor.totalPatients} patients</p>
-                    <p className={cx('office')}>
-                        {doctor.experiences[0]?.hospital.length > 25
-                            ? doctor.experiences[0]?.hospital.slice(0, 25) + ' ...'
-                            : doctor.experiences[0]?.hospital}
-                    </p>
-                </div>
-                <Link to={`/doctors/${doctor._id}`} className={cx('icon-wrapper')}>
-                    <FaLongArrowAltRight className={cx('arrow-icon')} />
-                </Link>
+                <p className={cx('patients')}>+{doctor.totalPatients} patients</p>
+                <p className={cx('office')}>{truncateText(doctor.experiences[0]?.hospital, 34)}</p>
             </div>
-        </div>
+        </Link>
     );
 };
 

@@ -38,6 +38,8 @@
             & p {
                 font-size: 16px;
                 color: var(--darkGrayColor);
+                display: flex;
+                gap: 5px;
             }
         }
     }

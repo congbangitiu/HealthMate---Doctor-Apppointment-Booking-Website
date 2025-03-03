@@ -7,6 +7,7 @@ import Error from '../../../components/Error/Error';
 import { IoMdMale, IoMdFemale } from 'react-icons/io';
 import { PropTypes } from 'prop-types';
 import Pagination from '../../../components/Pagination/Pagination';
+import InfoToolTip from '../../../components/InfoToolTip/InfoToolTip';
 
 const cx = classNames.bind(styles);
 
@@ -56,6 +57,7 @@ const PatientManagement = ({ users, setDebouncedQuery, loading, error }) => {
                                 <div className={cx('info')}>
                                     <div
                                         className={cx({
+                                            gender: true,
                                             male: patient.gender === 'male',
                                             female: patient.gender === 'female',
                                         })}
@@ -65,7 +67,7 @@ const PatientManagement = ({ users, setDebouncedQuery, loading, error }) => {
                                     </div>
 
                                     {patient.bloodType && (
-                                        <div>
+                                        <div className={cx('blood-type')}>
                                             <div>{patient.bloodType}</div>
                                             <p>Blood type</p>
                                         </div>
@@ -87,11 +89,21 @@ const PatientManagement = ({ users, setDebouncedQuery, loading, error }) => {
                                 )}
                                 <div>
                                     <p>Phone</p>
-                                    <div>{patient.phone}</div>
+                                    <div>0{patient.phone}</div>
                                 </div>
                                 <div>
                                     <p>Email</p>
-                                    <div>{patient.email}</div>
+                                    <InfoToolTip
+                                        text={patient.email}
+                                        maxLength={26}
+                                        customStyle={{
+                                            backgroundColor: 'var(--primaryColor)',
+                                            color: 'var(--whiteColor)',
+                                            padding: '2px 10px',
+                                            borderRadius: '100px',
+                                            marginTop: '0px',
+                                        }}
+                                    />
                                 </div>
 
                                 {patient.address && (

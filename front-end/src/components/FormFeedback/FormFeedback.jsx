@@ -99,7 +99,7 @@ const FormFeedback = ({ setShowFormFeedback }) => {
             </div>
 
             <button type="submit" className={cx('submit-btn')} onClick={handleSubmitReview}>
-                {loading ? <SyncLoader size={6} color="#ffffff" /> : 'Submit feedback'}
+                {loading ? <SyncLoader size={6} color="#ffffff" /> : 'Submit'}
             </button>
         </form>
     );

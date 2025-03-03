@@ -5,7 +5,7 @@ import { BASE_URL, token } from '../../../config';
 import classNames from 'classnames/bind';
 import styles from './FeedbackDoctor.module.scss';
 import { HiStar } from 'react-icons/hi';
-import { SlLike, SlDislike } from 'react-icons/sl';
+import { SlLike} from 'react-icons/sl';
 import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
 import FormFeedback from '../FormFeedback/FormFeedback';
@@ -99,10 +99,6 @@ const FeedbackDoctor = ({ reviews, totalRating, role }) => {
                                 <div className={cx('react')}>
                                     <SlLike />
                                     <p>Like</p>
-                                </div>
-                                <div className={cx('react')}>
-                                    <SlDislike />
-                                    <p>Dislike</p>
                                 </div>
                             </div>
                         </div>

@@ -14,6 +14,7 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import SyncLoader from 'react-spinners/SyncLoader';
 import { FaCircleExclamation } from 'react-icons/fa6';
+import InfoToolTip from '../../../components/InfoToolTip/InfoToolTip';
 
 const cx = classNames.bind(styles);
 
@@ -76,19 +77,19 @@ const Prescription = () => {
                         <ErrorSign errorMessage={error} />
                     ) : (
                         <>
-                            <img src={appointment?.user?.photo} alt="" />
-                            <h1>{appointment?.user?.fullname}</h1>
+                            <img src={appointment?.doctor?.photo} alt="" />
+                            <h1>Dr. {appointment?.doctor?.fullname}</h1>
                             <p>
-                                <b>Email:</b> {appointment?.user?.email}
+                                <b>Email:</b>{' '}
+                                <InfoToolTip
+                                    text={appointment?.doctor?.email}
+                                    maxLength={20}
+                                    customStyle={{ fontSize: '16px', color: 'var(--darkGrayColor)' }}
+                                />
                             </p>
                             <p>
-                                <b>Phone number:</b> {appointment?.user?.phone}
+                                <b>Phone number:</b> 0{appointment?.doctor?.phone}
                             </p>
-                            {appointment?.user?.dateOfBirth && (
-                                <p>
-                                    <b>Date of birth:</b> {appointment?.user?.dateOfBirth}
-                                </p>
-                            )}
                         </>
                     )}
                 </div>
@@ -99,14 +100,24 @@ const Prescription = () => {
                         <ErrorSign errorMessage={error} />
                     ) : (
                         <>
-                            <img src={appointment?.doctor?.photo} alt="" />
-                            <h1>Dr. {appointment?.doctor?.fullname}</h1>
+                            <img src={appointment?.user?.photo} alt="" />
+                            <h1>{appointment?.user?.fullname}</h1>
                             <p>
-                                <b>Email:</b> {appointment?.doctor?.email}
+                                <b>Email:</b>
+                                <InfoToolTip
+                                    text={appointment?.user?.email}
+                                    maxLength={20}
+                                    customStyle={{ fontSize: '16px', color: 'var(--darkGrayColor)' }}
+                                />
                             </p>
                             <p>
-                                <b>Phone number:</b> {appointment?.doctor?.phone}
+                                <b>Phone number:</b> 0{appointment?.user?.phone}
                             </p>
+                            {appointment?.user?.dateOfBirth && (
+                                <p>
+                                    <b>Date of birth:</b> {appointment?.user?.dateOfBirth}
+                                </p>
+                            )}
                         </>
                     )}
                 </div>
@@ -145,7 +156,7 @@ const Prescription = () => {
                                 <b>Address:</b> {appointment?.user?.address}
                             </p>
                             <p>
-                                <b>Phone number:</b> {appointment?.user?.phone}
+                                <b>Phone number:</b> 0{appointment?.user?.phone}
                             </p>
                         </span>
                         {prescription?.createdAt && (

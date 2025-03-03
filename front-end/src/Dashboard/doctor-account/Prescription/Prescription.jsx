@@ -8,6 +8,7 @@ import Loader from '../../../components/Loader/Loader';
 import ErrorSign from '../../../components/Error/Error';
 import PrescriptionEdit from '../PrescriptionEdit/PrescriptionEdit';
 import PrescriptionView from '../PrescriptionView/PrescriptionView';
+import InfoToolTip from '../../../components/InfoToolTip/InfoToolTip';
 
 const cx = classNames.bind(styles);
 
@@ -84,10 +85,15 @@ const Prescription = () => {
                             <img src={appointment?.user?.photo} alt="" />
                             <h1>{appointment?.user?.fullname}</h1>
                             <p>
-                                <b>Email:</b> {appointment?.user?.email}
+                                <b>Email:</b>{' '}
+                                <InfoToolTip
+                                    text={appointment?.user?.email}
+                                    maxLength={20}
+                                    customStyle={{ fontSize: '16px', color: 'var(--darkGrayColor)' }}
+                                />
                             </p>
                             <p>
-                                <b>Phone number:</b> {appointment?.user?.phone}
+                                <b>Phone number:</b> 0{appointment?.user?.phone}
                             </p>
                             {appointment?.user?.dateOfBirth && (
                                 <p>
@@ -107,10 +113,15 @@ const Prescription = () => {
                             <img src={appointment?.doctor?.photo} alt="" />
                             <h1>Dr. {appointment?.doctor?.fullname}</h1>
                             <p>
-                                <b>Email:</b> {appointment?.doctor?.email}
+                                <b>Email:</b>{' '}
+                                <InfoToolTip
+                                    text={appointment?.doctor?.email}
+                                    maxLength={20}
+                                    customStyle={{ fontSize: '16px', color: 'var(--darkGrayColor)' }}
+                                />
                             </p>
                             <p>
-                                <b>Phone number:</b> {appointment?.doctor?.phone}
+                                <b>Phone number:</b> 0{appointment?.doctor?.phone}
                             </p>
                         </>
                     )}

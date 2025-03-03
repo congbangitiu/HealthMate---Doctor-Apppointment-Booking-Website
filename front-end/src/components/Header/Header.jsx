@@ -358,8 +358,6 @@ const Header = () => {
         };
     }, [user, role]);
 
-    // console.log(notifications);
-
     return (
         <div className={cx('container')}>
             {/* Logo */}
@@ -472,7 +470,12 @@ const Header = () => {
                 {notifications.length > 0 ? (
                     <div className={cx('notifications')}>
                         {notifications.map((notification) => (
-                            <NotificationItem key={notification.id} notification={notification} role={role} />
+                            <NotificationItem
+                                key={notification.id}
+                                notification={notification}
+                                role={role}
+                                handleCloseNotifications={handleCloseNotifications}
+                            />
                         ))}
                     </div>
                 ) : (

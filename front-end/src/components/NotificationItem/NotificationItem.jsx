@@ -9,7 +9,7 @@ import convertTime from '../../utils/convertTime';
 
 const cx = classNames.bind(styles);
 
-const NotificationItem = ({ notification, role }) => {
+const NotificationItem = ({ notification, role, handleCloseNotifications }) => {
     const navigate = useNavigate();
     const [timeAgo, setTimeAgo] = useState(formatTimeAgo(notification.createdAt));
 
@@ -35,6 +35,7 @@ const NotificationItem = ({ notification, role }) => {
                 }`,
             );
         }
+        handleCloseNotifications();
     };
 
     return (
@@ -82,6 +83,7 @@ const NotificationItem = ({ notification, role }) => {
 NotificationItem.propTypes = {
     notification: PropTypes.object.isRequired,
     role: PropTypes.string.isRequired,
+    handleCloseNotifications: PropTypes.func.isRequired,
 };
 
 export default NotificationItem;
