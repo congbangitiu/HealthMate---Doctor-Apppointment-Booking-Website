@@ -7,7 +7,6 @@ const notificationSocketHandler = (io) => {
 
         socket.on('user-join-room', ({ userId }) => {
             socket.join(userId);
-            console.log(`User ${userId} joined their room`);
         });
 
         // Handle client disconnection

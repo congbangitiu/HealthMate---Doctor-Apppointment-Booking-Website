@@ -1,0 +1,98 @@
+.container {
+    & header {
+        font-size: 22px;
+        font-weight: 700;
+        padding: 5px 15px;
+        margin-top: 10px;
+    }
+
+    & .notifications {
+        display: flex;
+        flex-direction: column;
+
+        & .notification {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 15px;
+
+            &.cancelledStatus {
+                cursor: not-allowed !important;
+            }
+
+            &.doneStatus {
+                display: none;
+            }
+
+            &:hover {
+                background-color: var(--extremeLightGrayColor);
+                cursor: pointer;
+            }
+
+            & img {
+                width: 50px;
+                height: 50px;
+                object-fit: cover;
+                border-radius: 100px;
+            }
+
+            & .details {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+
+                & p:first-child {
+                    font-size: 14px;
+                    font-weight: 500;
+                    width: 330px;
+                }
+
+                & p:last-child {
+                    font-size: 12px;
+                    color: var(--darkGrayColor);
+                }
+            }
+
+            & .unreadMark {
+                width: 10px;
+                height: 10px;
+                background-color: var(--primaryColor);
+                border-radius: 50px;
+            }
+
+            & .readMark {
+                width: 10px;
+                height: 10px;
+                background-color: var(--whiteColor);
+                border-radius: 50px;
+            }
+        }
+    }
+
+    & .no-noti {
+        width: 380px;
+        height: max-content;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 15px;
+
+        & div {
+            padding: 15px;
+            background-color: var(--extremeLightGrayColor);
+            border-radius: 100px;
+
+            & .icon {
+                font-size: 30px;
+                color: var(--darkGrayColor);
+            }
+        }
+        & p {
+            color: var(--darkGrayColor);
+            text-align: center;
+            font-size: 14px;
+        }
+    }
+}

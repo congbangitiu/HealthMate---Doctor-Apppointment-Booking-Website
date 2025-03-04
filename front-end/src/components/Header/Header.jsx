@@ -13,7 +13,7 @@ import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
 import { authContext } from '../../context/AuthContext';
 import ConfirmLogout from '../ConfirmLogout/ConfirmLogout';
-import NotificationItem from '../NotificationItem/NotificationItem';
+import Notifications from '../Notifications/Notifications';
 import { BASE_URL } from '../../../config';
 import useFetchData from '../../hooks/useFetchData';
 import notificationSound from '../../assets/sounds/notificationSound.wav';
@@ -143,17 +143,17 @@ const Header = () => {
         try {
             let response;
             if (role === 'doctor') {
+                setUnreadAppointments(0);
                 response = await fetch(`${BASE_URL}/bookings/${user._id}/mark-bookings-read`, {
                     method: 'POST',
                     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
                 });
-                if (response.ok) setUnreadAppointments(0);
             } else if (role === 'patient') {
+                setUnreadPrescriptions(0);
                 response = await fetch(`${BASE_URL}/prescriptions/${user._id}/mark-prescriptions-read`, {
                     method: 'POST',
                     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
                 });
-                if (response.ok) setUnreadPrescriptions(0);
             }
 
             if (!response.ok) throw new Error('Failed to mark notifications as read.');
@@ -270,10 +270,14 @@ const Header = () => {
                         appointmentId: newNotification.appointmentId,
                         doctor: newNotification.doctor,
                         timeSlot: newNotification.timeSlot,
+                        status: newNotification.status,
                         createdAt: lastAction.timestamp,
                         action: lastAction.action,
                         type: 'prescription',
                     };
+
+                    console.log('latestNotification.action: ', latestNotification.action);
+                    
 
                     return [latestNotification, ...prevNotifications]
                         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -465,22 +469,12 @@ const Header = () => {
                         boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)',
                     },
                 }}
-                className={cx('notification-wrapper')}
             >
-                {notifications.length > 0 ? (
-                    <div className={cx('notifications')}>
-                        {notifications.map((notification) => (
-                            <NotificationItem
-                                key={notification.id}
-                                notification={notification}
-                                role={role}
-                                handleCloseNotifications={handleCloseNotifications}
-                            />
-                        ))}
-                    </div>
-                ) : (
-                    <div className={cx('no-noti')}>There is no notification yet!</div>
-                )}
+                <Notifications
+                    notifications={notifications}
+                    role={role}
+                    handleCloseNotifications={handleCloseNotifications}
+                />
             </Popover>
         </div>
     );

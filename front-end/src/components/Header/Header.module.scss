@@ -128,7 +128,7 @@
                 font-weight: 600;
                 color: var(--primaryColor);
             }
-            
+
             & p {
                 font-size: 14px;
                 color: var(--darkGrayColor);
@@ -264,18 +264,6 @@
     align-items: center;
 }
 
-// CSS outside the container because it is a component of an external library
-.notification-wrapper {
-    & .no-noti {
-        padding: 15px 20px;
-        margin-right: 60px;
-    }
-
-    & .notifications {
-        display: flex;
-        flex-direction: column;
-    }
-}
 
 // Responsive design
 @media only screen and (max-width: 1024px) {

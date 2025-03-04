@@ -143,6 +143,7 @@ export const createBooking = async (req, res) => {
             paymentMethod,
             isPaid: false,
             unread: true,
+            status: 'pending',
             createdAt: savedBooking.createdAt,
         });
 
@@ -232,6 +233,7 @@ export const stripeWebhook = async (req, res) => {
                 paymentMethod,
                 isPaid: true,
                 unread: true,
+                status: 'pending',
                 createdAt: savedBooking.createdAt,
             });
         }
