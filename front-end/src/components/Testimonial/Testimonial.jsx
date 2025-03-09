@@ -1,8 +1,5 @@
-import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './Testimonial.module.scss';
-import '../../GlobalStyle.css';
-
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css/pagination';

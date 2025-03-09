@@ -1,6 +1,6 @@
+import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Introduction.module.scss';
-import '../../GlobalStyle.css';
 import Doctor1 from '../../assets/images/hero-img01.png';
 import Doctor2 from '../../assets/images/hero-img02.png';
 import Doctor3 from '../../assets/images/hero-img03.png';
@@ -45,7 +45,9 @@ const Introduction = () => {
                     user-friendly platform empowers you to take control of your well-being, connecting you with trusted
                     doctors and personalized health solutions.
                 </p>
-                <button className={cx('request-appointment')}>Request an appointment</button>
+                <Link to={'/doctors'}>
+                    <button className={cx('request-appointment')}>Schedule a Visit</button>
+                </Link>
                 <div className={cx('statistics')}>
                     {Statistics.map((item) => (
                         <div key={item.id} className={cx('statistic')}>

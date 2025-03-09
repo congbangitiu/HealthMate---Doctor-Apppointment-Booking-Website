@@ -1,4 +1,4 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Treatment.module.scss';
 import '../../GlobalStyle.css';
@@ -21,7 +21,7 @@ const Treatment = () => {
                         an appointment time.
                     </p>
                 </div>
-                <button className={cx('more-details')}>Learn more</button>
+                <Link to={'/doctors'}><button className={cx('more-details')}>Start Your Consultation</button></Link>
             </div>
             <div className={cx('info')}>
                 <img src={Doctor5} alt="" />

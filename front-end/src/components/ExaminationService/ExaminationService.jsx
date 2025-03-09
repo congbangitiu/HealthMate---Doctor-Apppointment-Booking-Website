@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './ExaminationService.module.scss';
 import { FaLongArrowAltRight } from 'react-icons/fa';
@@ -22,15 +23,15 @@ const ExaminationService = () => {
                         Comprehensive care, from doctor to diagnosis. Our health system is with you every step of the
                         way.
                     </p>
-                    <div>
+                    <Link to="/doctors" className={cx('arrow-icon-wrapper')}>
                         <FaLongArrowAltRight className={cx('arrow-icon')} />
-                    </div>
+                    </Link>
                 </div>
                 <div className={cx('service')}>
                     <img src={ExaminationService2} alt="" />
                     <h4>Find a Location</h4>
                     <p>From consultation to care, our health system delivers unmatched expertise, wherever you are.</p>
-                    <div>
+                    <div className={cx('arrow-icon-wrapper')}>
                         <FaLongArrowAltRight className={cx('arrow-icon')} />
                     </div>
                 </div>
@@ -40,9 +41,9 @@ const ExaminationService = () => {
                     <p>
                         Your journey to health starts here. Our system provides expert care from the clinic to the lab.
                     </p>
-                    <div>
+                    <Link to="/doctors" className={cx('arrow-icon-wrapper')}>
                         <FaLongArrowAltRight className={cx('arrow-icon')} />
-                    </div>
+                    </Link>
                 </div>
             </div>
         </div>

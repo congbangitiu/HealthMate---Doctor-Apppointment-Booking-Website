@@ -9,6 +9,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import { HealthMateInfo } from '../../assets/data/chatbot/HealthMateInfo';
 import { diseaseInfo } from '../../assets/data/chatbot/diseaseInfo';
 import { webInstructions } from '../../assets/data/chatbot/webInstructions';
+import { responseInstructions } from '../../assets/data/chatbot/responseInstructions';
 import Typewriter from 'typewriter-effect';
 import { authContext } from '../../context/AuthContext';
 import extractName from '../../utils/extractName';
@@ -17,7 +18,7 @@ const cx = classNames.bind(styles);
 
 const ChatbotAI = ({ setIsShowChatbot }) => {
     // Get user and role information from authContext
-    const { user, role } = useContext(authContext);
+    const { token, user, role } = useContext(authContext);
 
     // State management
     const [chatHistory, setChatHistory] = useState([
@@ -55,54 +56,57 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
 
     // Generate prompt for API request
     const generatePrompt = (text) => {
-        return `
+        const isNotLoggedIn = !token || token === 'null' || token === 'undefined';
+        const isAskingAuthentication = (question) => {
+            const lowerQ = question.toLowerCase();
+            return (
+                lowerQ.includes('sign in') ||
+                lowerQ.includes('sign up') ||
+                lowerQ.includes('log in') ||
+                lowerQ.includes('register') ||
+                lowerQ.includes('how to sign in') ||
+                lowerQ.includes('how to sign up')
+            );
+        };
+
+        let prompt = `
         You are an intelligent chatbot named HealthAid representing HealthMate, a healthcare platform that connects patients with experienced healthcare professionals. Your task is to provide precise and relevant answers to user inquiries about HealthMate based on the following information.
-
+    
         Context: 
-        - HealthMate infomation: ${HealthMateInfo}       
-        - Disease and symptoms infomation: ${diseaseInfo}
-        - How to use website: ${webInstructions}
-        
-        Guidelines:
-        - Answer Directly and Confidently:
-            + Provide clear and concise answers without revealing that you are referencing a data source.
-            + Maintain a natural conversational flow to enhance user experience.
-        - Contextual Understanding:
-            + If a question is indirectly answered, use logical reasoning to give a relevant and coherent response.
-            + Only provide answers that are logically consistent with the context given.
-
-        Handling Unknowns: 
-        - If the information is not available, respond with: "I'm sorry, but I don't have the information on that right now."
-        - Offer helpful alternatives, like suggesting the user visit HealthMate's website or contact customer support.
-
-        Privacy and Role-Based Access Control: Respect User Privacy and Role Permissions, always check the user's role before providing information:
-            - Patients:
-                + Can only access their own appointment details, prescriptions, and general website usage information.
-                + Cannot access other patients' information, doctors' schedules (except for available booking slots), or administrative data such as financial reports, user registrations, or staff ratings.
-                + If a patient asks about sensitive or unauthorized data, respond with: 
-                    "I'm sorry, but I don't have permission to provide that information."
-            - Doctors:
-                + Can access their own schedule, appointments, and patient feedback directly related to their services.
-                + Cannot access other doctors' schedules, ratings, or financial data.
-                + Cannot access administrative data such as user registrations or overall platform statistics.
-                + If a doctor asks about restricted data, respond with:
-                    "I'm sorry, but that information is not accessible to you."
-            - Admins:
-                + Have the highest access level and can view statistics about appointments, financials, and user registrations.
-                + Can access information across the platform but must still respect individual user privacy (e.g., not disclosing personal patient details).
-
-        Handling Unauthorized Access Requests:
-        - If a user asks for information outside of their role's permission, respond with:
-            "I'm sorry, but I can't provide that information due to privacy and security policies."
-        - If the question is about sensitive or administrative data, suggest contacting the appropriate department, e.g.:
-            "For further details, please contact HealthMate's administration team."
-        
-        Maintain Brand Voice: Use a professional yet approachable tone, reflecting HealthMate's values of trustworthiness, reliability, and care.
-
-        With role ${
-            role === 'admin' ? 'admin' : role === 'doctor' ? 'doctor' : 'patient'
-        }, using the following instructions to address this query: ${text}
+            - HealthMate Information: ${HealthMateInfo}       
+            - Disease and Symptoms Information: ${diseaseInfo}
+            - How to Use the Website: ${webInstructions}
+            - How to respond: ${responseInstructions}
         `;
+
+        if (isNotLoggedIn) {
+            if (isAskingAuthentication) {
+                prompt += `
+                    Since the user has not signed in, but they are asking about authentication process (sign in / sign up). 
+                    Please provide an instructions from part A in "webInstructions".
+                    The user's question is: "${text}"
+                `;
+            } else {
+                prompt += `
+                    Since the user is not logged in, you only need to provide a *short answer* to their question. Additionally, please encourage the user to log in (or create an account) for a more detailed and personalized experience (just write a sentence encouraging the user to log in, no need to write detailed steps). The user's question is: "${text}"
+                `;
+            }
+        } else {
+            const userRole = role === 'admin' ? 'admin' : role === 'doctor' ? 'doctor' : 'patient';
+            prompt += ` With role ${userRole}, please provide an answer to this question: "${text}" `;
+        }
+
+        return prompt;
+    };
+
+    // Format the response
+    const formatListResponse = (text) => {
+        return text
+            .replace(/\n\*/g, '\n   *') // Format bullet points (*) by adding indentation
+            .replace(/\n-/g, '\n   -') // Format dash lists (-) by adding indentation
+            .replace(/\*\s/g, '\n   * ') // Ensure bullet points (*) start with proper spacing
+            .replace(/-\s/g, '\n   - ') // Ensure dash lists (-) start with proper spacing
+            .replace(/\n\d+\./g, (match) => `\n   ${match.trim()}`); // Format numbered lists (1., 2., 3.) with indentation
     };
 
     // Send API request and update chat history
@@ -129,7 +133,9 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
             }
 
             // Extract and format the bot's response
-            const apiResponseText = data.candidates[0].content.parts[0].text.replace(/\*\*(.*?)\*\*/g, '$1').trim();
+            let apiResponseText = data.candidates[0].content.parts[0].text.replace(/\*\*(.*?)\*\*/g, '$1').trim();
+            apiResponseText = formatListResponse(apiResponseText);
+
             updateHistory(apiResponseText);
             setIsThinking(false);
             setIsTyping(true);
@@ -228,9 +234,18 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
                     <div className={cx('message')}>
                         <img src={ChatbotLogo} />
                         <div>
-                            Hi {role === 'doctor' && 'Dr.'}
-                            {extractName(user.fullname)}, I&apos;m <b>HealthAid</b> - HealthMate Assistant! How can I
-                            help you today?
+                            {!token || token === 'null' || token === 'undefined' ? (
+                                <>
+                                    Hi there! I&apos;m <b>HealthAid</b> - HealthMate Assistant! How can I help you
+                                    today?
+                                </>
+                            ) : (
+                                <>
+                                    Hi {role === 'doctor' ? 'Dr. ' : ''}
+                                    {extractName(user?.fullname)}, I&apos;m <b>HealthAid</b> - HealthMate Assistant! How
+                                    can I help you today?
+                                </>
+                            )}
                         </div>
                     </div>
 
@@ -282,7 +297,11 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
 
                                                     typewriter
                                                         .changeDelay(15)
-                                                        .typeString(chat.text)
+                                                        .typeString(
+                                                            chat.text
+                                                                .replace(/\n\s*\*/g, '<br />*') // Replace newlines before bullet points (*) with a single line break to ensure proper formatting
+                                                                .replace(/\n\s*\d+\./g, '<br />'), // Replace newlines before numbered lists (e.g., "1.") with a single line break to maintain proper spacing
+                                                        )
                                                         .callFunction(() => {
                                                             // Scroll to the bottom when text is being typed
                                                             if (chatBodyRef.current) {

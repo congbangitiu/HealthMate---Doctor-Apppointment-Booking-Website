@@ -164,7 +164,7 @@
                 & .icon {
                     color: var(--whiteColor);
                     transition: transform 0.3s;
-                    font-size: 22px;
+                    font-size: 18px;
                     transform: translateX(25%);
                 }
 
@@ -175,6 +175,7 @@
                     transition: opacity 0.3s, max-width 0.3s;
                     margin-left: 10px;
                     color: var(--whiteColor);
+                    font-size: 16px;
                 }
 
                 &:hover .text {
@@ -255,8 +256,8 @@
                     margin-top: 10px;
                     background-color: var(--primaryColor);
                     border-radius: 5px;
-                    width: 200px;
-                    height: 50px;
+                    width: 180px;
+                    height: 45px;
 
                     &:hover {
                         cursor: pointer;
@@ -269,7 +270,8 @@
 
                     & label {
                         color: var(--whiteColor);
-                        font-size: 18px;
+                        font-size: 16px;
+                        font-weight: 500;
                     }
                 }
             }

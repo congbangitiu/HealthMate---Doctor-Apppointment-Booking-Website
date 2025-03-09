@@ -174,7 +174,7 @@ const PrescriptionEdit = ({
                             <b>Address:</b> {appointment?.user?.address}
                         </p>
                         <p>
-                            <b>Phone number:</b> {appointment?.user?.phone}
+                            <b>Phone number:</b> 0{appointment?.user?.phone}
                         </p>
                     </span>
                     <div className={cx('disease')}>
@@ -264,7 +264,7 @@ const PrescriptionEdit = ({
                             <label htmlFor="customSignature">
                                 {loadingBtnUploadSign ? (
                                     <button>
-                                        <SyncLoader size={10} color="#ffffff" />
+                                        <SyncLoader size={6} color="#ffffff" />
                                     </button>
                                 ) : appointment?.doctor?.signature ? (
                                     'Replace signature'

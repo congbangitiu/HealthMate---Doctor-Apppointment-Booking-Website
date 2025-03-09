@@ -80,7 +80,7 @@ const PrescriptionView = ({ appointment, prescription }) => {
                             <b>Address:</b> {appointment?.user?.address}
                         </p>
                         <p>
-                            <b>Phone number:</b> {appointment?.user?.phone}
+                            <b>Phone number:</b> 0{appointment?.user?.phone}
                         </p>
                     </span>
                     <p>

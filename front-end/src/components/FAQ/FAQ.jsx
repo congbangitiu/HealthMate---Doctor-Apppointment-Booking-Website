@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './FAQ.module.scss';
-import '../../GlobalStyle.css';
 import FAQs from '../../assets/data/mock-data/faqs';
 import Doctor6 from '../../assets/images/faq-img.png';
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';

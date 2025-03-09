@@ -6,6 +6,7 @@ import convertTime from '../../utils/convertTime';
 import ConfirmBooking from '../../Dashboard/user-account/ConfirmBooking/ConfirmBooking';
 import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
+import formatDate from '../../utils/formatDate';
 
 const cx = classNames.bind(styles);
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -25,36 +26,49 @@ const SidePanel = ({ doctorId, ticketPrice, timeSlots: initialTimeSlots = [], do
         setOpenDialog(false);
     };
 
+    const handleSelectedSlot = (timeSlots) => {
+        if (role === 'patient') {
+            setSelectedSlot(timeSlots);
+        }
+    };
+
     return (
         <div className={cx('container')}>
             <div className={cx('price')}>
                 <h4>Ticket price</h4>
                 <h3>${ticketPrice}</h3>
             </div>
+            <h4>Available Time Slots:</h4>
             <div className={cx('slots')}>
-                <h4>Available Time Slots:</h4>
-                {timeSlots?.map((timeSlot, index) => (
-                    <div
-                        key={index}
-                        className={cx('slot', { selected: selectedSlot === timeSlot })}
-                        onClick={() => setSelectedSlot(timeSlot)}
-                    >
-                        {role === 'patient' && (
-                            <input
-                                type="radio"
-                                name="timeSlot"
-                                value={index}
-                                checked={selectedSlot === timeSlot}
-                                onChange={() => setSelectedSlot(timeSlot)}
-                            />
-                        )}
+                {timeSlots.length > 0 ? (
+                    timeSlots?.map((timeSlot, index) => (
+                        <div
+                            key={index}
+                            className={cx('slot', { selected: selectedSlot === timeSlot })}
+                            onClick={() => handleSelectedSlot(timeSlot)}
+                        >
+                            {role === 'patient' && (
+                                <input
+                                    type="radio"
+                                    name="timeSlot"
+                                    value={index}
+                                    checked={selectedSlot === timeSlot}
+                                    onChange={() => handleSelectedSlot(timeSlot)}
+                                />
+                            )}
 
-                        <p>{timeSlot.day}</p>
-                        <p>
-                            {convertTime(timeSlot.startingTime)} - {convertTime(timeSlot.endingTime)}
-                        </p>
-                    </div>
-                ))}
+                            <p>{formatDate(timeSlot.day)}</p>
+                            <p>
+                                {convertTime(timeSlot.startingTime)} - {convertTime(timeSlot.endingTime)}
+                            </p>
+                        </div>
+                    ))
+                ) : (
+                    <p className={cx('no-slot')}>
+                        Dr. {doctorName} is fully booked at the moment. We’re working to add more slots - please check back
+                        later!
+                    </p>
+                )}
             </div>
             {role === 'patient' && timeSlots.length > 0 && (
                 <div className={cx('booking-btn-wrapper')}>

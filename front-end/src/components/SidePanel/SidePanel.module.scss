@@ -1,7 +1,7 @@
 .container {
     padding: 20px 30px;
     border-radius: 10px;
-    width: 30%;
+    width: 400px;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
 
     & .price {
@@ -18,28 +18,70 @@
         }
     }
 
-    & .slots {
+    & > h4 {
+        font-size: 18px;
+        margin-bottom: 10px;
         margin-top: 10px;
+    }
 
-        & h4 {
-            font-size: 18px;
-            margin-bottom: 10px;
+    & .slots {
+        max-height: 140px;
+        overflow: auto;
+        border-top: 2px dashed var(--lightGrayColor);
+        border-bottom: 2px dashed var(--lightGrayColor);
+
+        // Customize scroll bar
+        &::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        &::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 5px var(--grayColor);
+            border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: var(--lightGreenColor);
+            border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+            background-color: var(--primaryColor);
+            cursor: pointer;
         }
 
         & .slot {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-areas: 'radio date time ';
+            grid-template-columns: auto 1.5fr 2fr;
             align-items: center;
-            margin-top: 5px;
+            padding: 5px 0;
             border-radius: 5px;
 
+            & input[type='radio'] {
+                grid-area: radio;
+                margin-right: 20px;
+            }
+
             & p {
+                font-size: 16px;
                 color: var(--darkGrayColor);
             }
 
+            & p:first-of-type {
+                grid-area: date;
+            }
+
+            & p:last-of-type {
+                grid-area: time;
+            }
+
             &.selected {
+                background-color: var(--primaryLightColor);
+
                 & p {
                     color: var(--primaryColor);
+                    font-weight: 600;
                 }
 
                 & input[type='radio']:checked {
@@ -49,17 +91,18 @@
 
             &:hover {
                 cursor: pointer;
+                background-color: var(--primaryLightColor);
 
                 & p {
                     color: var(--primaryColor);
                 }
             }
         }
-    }
 
-    & .empty-slot {
-        text-align: center;
-        color: var(--darkGrayColor);
+        & .no-slot {
+            margin: 10px 0;
+            color: var(--darkGrayColor);
+        }
     }
 
     & .booking-btn-wrapper {
@@ -70,7 +113,7 @@
         & .booking-btn {
             background-color: var(--primaryColor);
             color: var(--whiteColor);
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 500;
             padding: 8px 12px;
             border-radius: 5px;

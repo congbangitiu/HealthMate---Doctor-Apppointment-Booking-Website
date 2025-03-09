@@ -133,7 +133,7 @@ const Login = () => {
                         <p className={cx('forgot')}>Forgot Password</p>
                     </div>
                     <button disabled={loading} className={cx('login-btn')}>
-                        {loading ? <SyncLoader size={10} color="#ffffff" /> : 'Sign in'}
+                        {loading ? <SyncLoader size={8} color="#ffffff" /> : 'Sign in'}
                     </button>
 
                     <div className={cx('other-account')}>

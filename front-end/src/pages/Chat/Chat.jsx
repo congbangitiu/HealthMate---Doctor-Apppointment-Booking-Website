@@ -27,6 +27,13 @@ const Chat = () => {
 
     const isFirstLoad = useRef(true);
 
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }, []);
+
     // Notify server user is online
     useEffect(() => {
         if (user?._id) {

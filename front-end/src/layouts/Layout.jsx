@@ -6,9 +6,9 @@ import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
 import Routers from '../routes/Routers';
 import ChatbotAI from '../components/ChatbotAI/ChatbotAI';
+import ChatbotLogo from '../assets/images/Chatbot-Logo.png';
+import ChatIcon from '../assets/images/chat-icon.svg';
 import { FaPlus } from 'react-icons/fa6';
-import { IoMdChatbubbles } from 'react-icons/io';
-import { GiArtificialHive } from 'react-icons/gi';
 
 const cx = classNames.bind(styles);
 
@@ -33,8 +33,8 @@ const Layout = () => {
 
             <main>
                 <Routers />
-                {/* Only show the more-info section if the user is logged in */}
-                {user && (
+                
+                {user ? (
                     <div className={cx('fab-container', { hovered: isHovered })} onMouseLeave={handleMouseLeave}>
                         <div className={cx('fab-button', { rotate: isHovered })} onMouseEnter={handleMouseEnter}>
                             <FaPlus className={cx('icon')} />
@@ -42,19 +42,22 @@ const Layout = () => {
 
                         <div className={cx('fab-options')}>
                             <Link to="/chats" className={cx('icon-wrapper')}>
-                                <IoMdChatbubbles className={cx('icon-1')} />
+                                <img src={ChatIcon} alt="Chat icon" />
                             </Link>
                             <div className={cx('icon-wrapper')} onClick={() => setIsShowChatbot(!isShowChatbot)}>
-                                <GiArtificialHive className={cx('icon-2')} />
+                                <img src={ChatbotLogo} alt="Chatbot logo" />
                             </div>
                         </div>
                     </div>
-                )}
-                {user && (
-                    <div className={cx('chatbot-wrapper', { show: isShowChatbot })}>
-                        <ChatbotAI setIsShowChatbot={setIsShowChatbot} />
+                ) : (
+                    <div className={cx('chatbot-icon-wrapper')} onClick={() => setIsShowChatbot(!isShowChatbot)}>
+                        <img src={ChatbotLogo} alt="Chatbot logo" />
                     </div>
                 )}
+
+                <div className={cx('chatbot-wrapper', { show: isShowChatbot })}>
+                    <ChatbotAI setIsShowChatbot={setIsShowChatbot} />
+                </div>
             </main>
 
             <Footer />

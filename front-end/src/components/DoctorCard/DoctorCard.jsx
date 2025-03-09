@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './DoctorCard.module.scss';
 import { FaStar } from 'react-icons/fa';
-import truncateText from './../../utils/truncateText';
+import InfoToolTip from './../InfoToolTip/InfoToolTip';
 
 const cx = classNames.bind(styles);
 
@@ -22,7 +22,9 @@ const DoctorCard = ({ doctor }) => {
             </div>
             <div className={cx('details')}>
                 <p className={cx('patients')}>+{doctor.totalPatients} patients</p>
-                <p className={cx('office')}>{truncateText(doctor.experiences[0]?.hospital, 34)}</p>
+                <p className={cx('office')}>
+                    <InfoToolTip text={doctor.experiences[0]?.hospital} maxLength={34} />
+                </p>
             </div>
         </Link>
     );

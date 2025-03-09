@@ -5,7 +5,7 @@ import { BASE_URL, token } from '../../../config';
 import classNames from 'classnames/bind';
 import styles from './FeedbackDoctor.module.scss';
 import { HiStar } from 'react-icons/hi';
-import { SlLike} from 'react-icons/sl';
+import { SlLike } from 'react-icons/sl';
 import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
 import FormFeedback from '../FormFeedback/FormFeedback';
@@ -15,7 +15,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const FeedbackDoctor = ({ reviews, totalRating, role }) => {
+const FeedbackDoctor = ({ reviews, role }) => {
     const [showFormFeedback, setShowFormFeedback] = useState(false);
     const [usersInfo, setUsersInfo] = useState({});
     const [sortCriteria, setSortCriteria] = useState('Newest');
@@ -67,7 +67,7 @@ const FeedbackDoctor = ({ reviews, totalRating, role }) => {
     return (
         <div className={cx('container')}>
             <div className={cx('intro')}>
-                <h4>All reviews ({totalRating})</h4>
+                <h4>All reviews ({reviews.length})</h4>
                 <div className={cx('sort')}>
                     <label htmlFor="priorities">Sorted by: </label>
                     <select name="" id="priorities" value={sortCriteria} onChange={handleSortChange}>
@@ -79,31 +79,37 @@ const FeedbackDoctor = ({ reviews, totalRating, role }) => {
             </div>
 
             <div className={cx('feedback')}>
-                {sortedReviews.map((review, index) => (
-                    <div key={index} className={cx('user')}>
-                        <img src={review?.user?.photo} alt="" />
-                        <div className={cx('details')}>
-                            <div className={cx('name-time')}>
-                                <p className={cx('name')}>
-                                    {usersInfo[review.user._id]?.data.fullname || 'Loading...'}
-                                </p>
-                                <p className={cx('time')}>{formatDate(review?.createdAt)}</p>
-                            </div>
-                            <div className={cx('rating')}>
-                                {[...Array(review?.rating).keys()].map((_, index) => (
-                                    <HiStar key={index} className={cx('star')} />
-                                ))}
-                            </div>
-                            <p className={cx('comment')}>{review?.reviewText}</p>
-                            <div className={cx('reaction')}>
-                                <div className={cx('react')}>
-                                    <SlLike />
-                                    <p>Like</p>
+                {reviews.length > 0 ? (
+                    sortedReviews.map((review, index) => (
+                        <div key={index} className={cx('user')}>
+                            <img src={review?.user?.photo} alt="" />
+                            <div className={cx('details')}>
+                                <div className={cx('name-time')}>
+                                    <p className={cx('name')}>
+                                        {usersInfo[review.user._id]?.data.fullname || 'Loading...'}
+                                    </p>
+                                    <p className={cx('time')}>{formatDate(review?.createdAt)}</p>
+                                </div>
+                                <div className={cx('rating')}>
+                                    {[...Array(review?.rating).keys()].map((_, index) => (
+                                        <HiStar key={index} className={cx('star')} />
+                                    ))}
+                                </div>
+                                <p className={cx('comment')}>{review?.reviewText}</p>
+                                <div className={cx('reaction')}>
+                                    <div className={cx('react')}>
+                                        <SlLike />
+                                        <p>Like</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                ) : (
+                    <p className={cx('no-feedback')}>
+                        There is no review for this doctor yet. Be the first to share your experience!
+                    </p>
+                )}
             </div>
 
             {!showFormFeedback && role === 'patient' && (

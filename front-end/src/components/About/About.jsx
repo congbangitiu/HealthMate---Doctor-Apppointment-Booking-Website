@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './About.module.scss';
 import Doctor4 from '../../assets/images/about.png';
@@ -24,7 +25,7 @@ const About = () => {
                     platform and cutting-edge technology ensure that you receive the best possible healthcare
                     experience, making us a trusted name in the industry.
                 </p>
-                <button className={cx('more-details')}>Learn more</button>
+                <Link to={'/services'}><button className={cx('more-details')}>Discover More</button></Link>
             </div>
         </div>
     );

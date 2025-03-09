@@ -7,11 +7,10 @@
     & h2 {
         font-size: 50px;
         font-weight: 700;
-        margin-bottom: 10px;
     }
 
     & p {
-        font-size: 20px;
+        font-size: 18px;
         text-align: justify;
     }
 
@@ -20,54 +19,55 @@
         gap: 30px;
         margin-top: 50px;
         position: relative;
-    }
 
-    & .comment {
-        width: 99%;
-        padding: 20px;
-        border-radius: 20px;
-        background-color: transparent;
-    }
+        & .comment {
+            width: 99%;
+            padding: 20px;
+            border-radius: 20px;
+            background-color: transparent;
 
-    & .patient {
-        display: flex;
-        align-items: center;
-        gap: 15px;
+            & .patient {
+                display: flex;
+                align-items: center;
+                gap: 15px;
 
-        & img {
-            width: 40px;
-            height: 40px;
+                & img {
+                    width: 40px;
+                    height: 40px;
+                }
+
+                & .name-rating {
+                    & .name {
+                        font-size: 18px;
+                        font-weight: 500;
+                    }
+
+                    & .rating {
+                        display: flex;
+                        gap: 3px;
+                        margin-top: 2px;
+
+                        & .star-icon {
+                            width: 20px;
+                            height: 20px;
+
+                            &.star-active {
+                                color: var(--yellowColor);
+                            }
+
+                            &.star-disabled {
+                                color: var(--grayColor);
+                            }
+                        }
+                    }
+                }
+            }
+
+            & .text {
+                font-size: 16px;
+                margin-top: 10px;
+                text-align: left;
+            }
         }
-    }
-
-    & .name-rating {
-        & .name {
-            font-size: 18px !important;
-            font-weight: 500;
-        }
-
-        & .rating {
-            display: flex;
-            gap: 3px;
-            margin-top: 2px;
-        }
-    }
-
-    & .star-icon {
-        width: 20px;
-        height: 20px;
-    }
-
-    & .star-active {
-        color: var(--yellowColor);
-    }
-
-    & .star-disabled {
-        color: var(--grayColor);
-    }
-
-    & .text {
-        font-size: 14px !important;
-        margin-top: 10px;
     }
 }

@@ -108,6 +108,12 @@
                 }
             }
         }
+
+        & .no-feedback {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--darkGrayColor);
+        }
     }
 
     & .feedback-btn-wrapper {

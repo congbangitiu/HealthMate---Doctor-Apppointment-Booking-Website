@@ -9,13 +9,14 @@
     & .notifications {
         display: flex;
         flex-direction: column;
+        padding: 5px 0 10px 0;
 
         & .notification {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 15px;
-            padding: 10px 15px;
+            padding: 5px 15px;
 
             &.cancelledStatus {
                 cursor: not-allowed !important;
@@ -53,20 +54,6 @@
                     color: var(--darkGrayColor);
                 }
             }
-
-            & .unreadMark {
-                width: 10px;
-                height: 10px;
-                background-color: var(--primaryColor);
-                border-radius: 50px;
-            }
-
-            & .readMark {
-                width: 10px;
-                height: 10px;
-                background-color: var(--whiteColor);
-                border-radius: 50px;
-            }
         }
     }
 
@@ -89,6 +76,7 @@
                 color: var(--darkGrayColor);
             }
         }
+
         & p {
             color: var(--darkGrayColor);
             text-align: center;

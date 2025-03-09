@@ -6,21 +6,26 @@
     margin-top: 50px;
 
     & .content {
-        width: 700px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
 
         & h2 {
-            font-size: 40px;
+            font-size: 50px;
             font-weight: 700;
-            line-height: 45px;
+            line-height: 60px;
             text-align: center;
+            width: 700px;
         }
 
         & p {
-            font-size: 15px;
+            font-size: 18px;
             font-weight: 500;
             text-align: center;
             line-height: 30px;
             margin-top: 10px;
+            color: var(--darkGrayColor);
         }
     }
 
@@ -36,19 +41,19 @@
             align-items: center;
 
             & h4 {
-                font-size: 20px;
+                font-size: 22px;
                 font-weight: 700;
                 margin-top: 20px;
             }
 
             & p {
-                font-size: 12px;
+                font-size: 16px;
                 font-weight: 500;
                 margin-top: 10px;
                 text-align: center;
             }
 
-            & div {
+            & .arrow-icon-wrapper {
                 padding: 8px;
                 border-radius: 50px;
                 border: 2px solid #000;
@@ -58,10 +63,10 @@
                     cursor: pointer;
                     background-color: #d3d3d3;
                 }
-            }
 
-            & .arrow-icon {
-                font-size: 20px;
+                & .arrow-icon {
+                    font-size: 20px;
+                }
             }
         }
     }

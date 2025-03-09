@@ -369,7 +369,7 @@ const Register = () => {
                     </div>
 
                     <button disabled={loading} className={cx('register-btn')}>
-                        {loading ? <SyncLoader size={10} color="#ffffff" /> : 'Sign up'}
+                        {loading ? <SyncLoader size={8} color="#ffffff" /> : 'Sign up'}
                     </button>
 
                     <div className={cx('other-account')}>
