@@ -6,7 +6,7 @@ const faqs = [
     },
     {
         id: 2,
-        question: 'What happens if I need to go to a hospital?',
+        question: 'What if I need hospital care?',
         answer: 'If your condition requires hospital care, our team will coordinate your transfer and ensure continuity of care. We collaborate closely with hospitals to provide seamless transitions and the best possible outcomes for our patients.',
     },
     {

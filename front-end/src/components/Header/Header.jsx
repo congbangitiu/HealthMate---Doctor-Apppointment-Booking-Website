@@ -5,12 +5,12 @@ import { NavLink, Link, useLocation } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Header.module.scss';
 import { BiMenu } from 'react-icons/bi';
-import { IoIosClose, IoMdHome, IoIosLogOut, IoIosNotifications } from 'react-icons/io';
+import { IoMdHome, IoIosLogOut, IoIosNotifications } from 'react-icons/io';
+import { GoDotFill } from 'react-icons/go';
+import { RxHamburgerMenu } from 'react-icons/rx';
 import { FaUserDoctor } from 'react-icons/fa6';
 import { MdMedicalServices, MdContactSupport } from 'react-icons/md';
-import Popover from '@mui/material/Popover';
-import Dialog from '@mui/material/Dialog';
-import Slide from '@mui/material/Slide';
+import { Popover, Dialog, Drawer, Slide, useMediaQuery } from '@mui/material';
 import { authContext } from '../../context/AuthContext';
 import ConfirmLogout from '../ConfirmLogout/ConfirmLogout';
 import Notifications from '../Notifications/Notifications';
@@ -27,31 +27,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 // Create a single global socket instance
 const socket = io(import.meta.env.VITE_REACT_PUBLIC_SOCKET_URL);
 
-const navLinks = [
-    {
-        path: '/home',
-        icon: IoMdHome,
-        content: 'Home',
-    },
-    {
-        path: '/doctors',
-        icon: FaUserDoctor,
-        content: 'Doctors',
-    },
-    {
-        path: '/services',
-        icon: MdMedicalServices,
-        content: 'Services',
-    },
-    {
-        path: '/contact',
-        icon: MdContactSupport,
-        content: 'Contact',
-    },
-];
-
 const Header = () => {
     const location = useLocation();
+    const isMobile = useMediaQuery('(max-width:768px)');
     const { user, role, token } = useContext(authContext);
     const [showConfirmLogout, setShowConfirmLogout] = useState(false);
     const [notifications, setNotifications] = useState([]);
@@ -65,6 +43,30 @@ const Header = () => {
     const [unreadPrescriptions, setUnreadPrescriptions] = useState(0);
     const [isNotiOpen, setIsNotiOpen] = useState(false);
     const [isShaking, setIsShaking] = useState(false);
+    const [isShowMenuMobile, setIsShowMenuMobile] = useState(false);
+
+    const navLinks = [
+        {
+            path: '/home',
+            icon: IoMdHome,
+            content: 'Home',
+        },
+        {
+            path: '/doctors',
+            icon: FaUserDoctor,
+            content: 'Doctors',
+        },
+        {
+            path: '/services',
+            icon: MdMedicalServices,
+            content: 'Services',
+        },
+        {
+            path: '/contact',
+            icon: MdContactSupport,
+            content: 'Contact',
+        },
+    ];
 
     const isActive = (path) => {
         return location.pathname === path || (location.pathname === '/' && path === '/home');
@@ -86,8 +88,6 @@ const Header = () => {
         else if (role === 'patient') window.location.href = '/users/profile/me';
         else if (role === 'doctor') window.location.href = '/doctors/profile/me';
     };
-
-    const [anchorEl, setAnchorEl] = React.useState(null);
 
     useEffect(() => {
         const fetchUnreadCounts = async () => {
@@ -162,6 +162,10 @@ const Header = () => {
         }
     };
 
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+
     const handleOpenNotifications = async (event) => {
         setAnchorEl(event.currentTarget);
         setIsNotiOpen(true);
@@ -187,9 +191,6 @@ const Header = () => {
             setIsShaking(false);
         }, 2000);
     };
-
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
 
     // Update notifications from API when component mounts
     useEffect(() => {
@@ -277,7 +278,6 @@ const Header = () => {
                     };
 
                     console.log('latestNotification.action: ', latestNotification.action);
-                    
 
                     return [latestNotification, ...prevNotifications]
                         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -364,23 +364,17 @@ const Header = () => {
 
     return (
         <div className={cx('container')}>
-            {/* Logo */}
-            <img className={cx('logo')} src={logo} alt="Logo" />
+            <div>
+                <RxHamburgerMenu className={cx('hamburger-icon')} onClick={() => setIsShowMenuMobile(true)} />
+                <img className={cx('logo')} src={logo} alt="Logo" />
+            </div>
 
             {/* Menu */}
             <div className={cx('navigation')}>
-                <input className={cx('nav-input')} type="checkbox" id="nav-mobile-input" hidden />
-                <label htmlFor="nav-mobile-input" className={cx('overlay')}></label>
                 <ul className={cx('menu')}>
-                    <div className={cx('close-icon-wrapper')}>
-                        <label htmlFor="nav-mobile-input">
-                            <IoIosClose className={cx('close-icon')} />
-                        </label>
-                    </div>
                     {navLinks.map((link, index) => (
                         <li key={index}>
                             <NavLink to={link.path} className={cx('link', { active: isActive(link.path) })}>
-                                {React.createElement(link.icon, { className: cx('link-icon') })}
                                 {link.content}
                             </NavLink>
                         </li>
@@ -453,29 +447,82 @@ const Header = () => {
                 </div>
             </Dialog>
 
-            <Popover
-                id={id}
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleCloseNotifications}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
+            {!isMobile ? (
+                <Popover
+                    id={id}
+                    open={open}
+                    anchorEl={anchorEl}
+                    onClose={handleCloseNotifications}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    sx={{
+                        '& .MuiPaper-root': {
+                            borderRadius: '10px',
+                            marginTop: '20px',
+                            boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)',
+                            width: '420px',
+                        },
+                    }}
+                >
+                    <Notifications
+                        notifications={notifications}
+                        role={role}
+                        handleCloseNotifications={handleCloseNotifications}
+                    />
+                </Popover>
+            ) : (
+                <Drawer
+                    id={id}
+                    open={open}
+                    anchor="right"
+                    onClose={handleCloseNotifications}
+                    sx={{
+                        '& .MuiPaper-root': {
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'space-between',
+                        },
+                    }}
+                >
+                    <Notifications
+                        notifications={notifications}
+                        role={role}
+                        handleCloseNotifications={handleCloseNotifications}
+                    />
+                </Drawer>
+            )}
+
+            <Drawer
+                open={isShowMenuMobile}
+                onClose={() => setIsShowMenuMobile(false)}
                 sx={{
                     '& .MuiPaper-root': {
-                        borderRadius: '10px',
-                        marginTop: '20px',
-                        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)',
+                        width: '70%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
                     },
                 }}
             >
-                <Notifications
-                    notifications={notifications}
-                    role={role}
-                    handleCloseNotifications={handleCloseNotifications}
-                />
-            </Popover>
+                <div className={cx('menu-mobile')}>
+                    {navLinks.map((link, index) => (
+                        <li key={index} onClick={() => setIsShowMenuMobile(false)}>
+                            <NavLink to={link.path} className={cx('link', { active: isActive(link.path) })}>
+                                {React.createElement(link.icon, { className: cx('link-icon') })}
+                                {link.content}
+                            </NavLink>
+                        </li>
+                    ))}
+                </div>
+                <div className={cx('policy')}>
+                    <p>Privacy Policy</p>
+                    <GoDotFill className={cx('icon')} />
+                    <p>Terms of Services</p>
+                </div>
+            </Drawer>
         </div>
     );
 };

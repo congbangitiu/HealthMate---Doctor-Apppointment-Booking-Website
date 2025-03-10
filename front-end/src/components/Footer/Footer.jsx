@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Footer.module.scss';
@@ -90,21 +89,23 @@ const Footer = () => {
         <div className={cx('container')}>
             <div className={cx('left-part')}>
                 <img src={Logo} alt="" />
-                <p>
-                    Copyright ©2024 developed by <b>@CongBang</b> all right reserved
-                </p>
-
-                <div className={cx('social-medias')}>
-                    {SocialMedias.map((socialMedia) => {
-                        const Icon = socialMedia.icon;
-                        return (
-                            <a key={socialMedia.id} href={socialMedia.link}>
-                                <div className={cx('social-icon-wrapper')}>
-                                    <Icon className={cx('social-icon')} div />
-                                </div>
-                            </a>
-                        );
-                    })}
+                <div>
+                    <p>
+                        Copyright ©2024 developed by <b>@CongBang</b> all right reserved
+                    </p>
+    
+                    <div className={cx('social-medias')}>
+                        {SocialMedias.map((socialMedia) => {
+                            const Icon = socialMedia.icon;
+                            return (
+                                <a key={socialMedia.id} href={socialMedia.link}>
+                                    <div className={cx('social-icon-wrapper')}>
+                                        <Icon className={cx('social-icon')} div />
+                                    </div>
+                                </a>
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
             <div className={cx('right-part')}>

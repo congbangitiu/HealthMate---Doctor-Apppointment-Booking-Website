@@ -46,7 +46,7 @@
                 & p:first-child {
                     font-size: 14px;
                     font-weight: 500;
-                    width: 330px;
+                    // width: 330px;
                 }
 
                 & p:last-child {
@@ -81,6 +81,40 @@
             color: var(--darkGrayColor);
             text-align: center;
             font-size: 14px;
+        }
+    }
+}
+
+// Responsive design
+@media only screen and (max-width: 768px) {
+    .container {
+        & header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            & .icon {
+                font-size: 26px;
+            }
+        }
+
+        & .notifications {
+            & .notification {
+                padding: 10px 15px !important;
+
+                & img {
+                    transform: translateY(-25%);
+                }
+
+                & .details {
+                    & p:first-child {
+                        font-size: 16px !important;
+                    }
+                    & p:last-child {
+                        font-size: 14px !important;
+                    }
+                }
+            }
         }
     }
 }

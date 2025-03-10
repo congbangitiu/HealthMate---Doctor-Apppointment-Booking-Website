@@ -11,7 +11,6 @@
 
     & p {
         font-size: 18px;
-        text-align: justify;
     }
 
     & .content {
@@ -21,7 +20,7 @@
         position: relative;
 
         & .comment {
-            width: 99%;
+            width: 100%;
             padding: 20px;
             border-radius: 20px;
             background-color: transparent;
@@ -67,6 +66,30 @@
                 font-size: 16px;
                 margin-top: 10px;
                 text-align: left;
+            }
+        }
+    }
+}
+
+// Responsive
+@media only screen and (max-width: 768px) {
+    .container {
+        padding-bottom: 50px;
+        flex-direction: column;
+        margin-top: 50px;
+
+        & h2 {
+            font-size: 32px;
+        }
+
+        & p {
+            font-size: 16px;
+        }
+
+        & .content {
+            & .comment {
+                padding: 0;
+                border-radius: 0;
             }
         }
     }

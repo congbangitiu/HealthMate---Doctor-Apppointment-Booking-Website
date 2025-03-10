@@ -5,7 +5,6 @@ import FAQs from '../../assets/data/mock-data/faqs';
 import Doctor6 from '../../assets/images/faq-img.png';
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
 
-
 const cx = classNames.bind(styles);
 
 const FAQ = () => {
@@ -32,6 +31,7 @@ const FAQ = () => {
                         <div
                             key={FAQ.id}
                             className={`${cx('faq')} ${openIndexes.includes(index) ? cx('open') : cx('close')}`}
+                            onClick={() => toggleAccordion(index)}
                         >
                             <div className={cx('question')}>
                                 <p>{FAQ.question}</p>

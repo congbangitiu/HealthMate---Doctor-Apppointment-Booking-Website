@@ -6,12 +6,14 @@ import styles from './Notifications.module.scss';
 import formatTimeAgo from '../../utils/formatTimeAgo';
 import formatDate from '../../utils/formatDate';
 import convertTime from '../../utils/convertTime';
-import { IoIosNotifications } from 'react-icons/io';
+import { IoIosNotifications, IoIosArrowBack } from 'react-icons/io';
+import { useMediaQuery } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
 const Notifications = ({ notifications, role, handleCloseNotifications }) => {
     const navigate = useNavigate();
+    const isMobile = useMediaQuery('(max-width:768px)');
     const [timeAgoMap, setTimeAgoMap] = useState({});
 
     useEffect(() => {
@@ -41,11 +43,12 @@ const Notifications = ({ notifications, role, handleCloseNotifications }) => {
         handleCloseNotifications();
     };
 
-    console.log('notifications: ', notifications);
-
     return (
         <div className={cx('container')}>
-            <header>Notifications</header>
+            <header>
+                {isMobile && <IoIosArrowBack className={cx('icon')} onClick={handleCloseNotifications} />}
+                Notifications
+            </header>
             {notifications.length > 0 ? (
                 <div className={cx('notifications')}>
                     {notifications.map((notification) => (
