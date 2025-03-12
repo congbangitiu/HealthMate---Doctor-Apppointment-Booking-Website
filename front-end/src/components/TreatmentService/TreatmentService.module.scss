@@ -44,7 +44,7 @@
             box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
             background-color: #fff;
             width: 350px;
-            height: 370px;
+            min-height: 370px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
 
             &:hover {
@@ -78,25 +78,6 @@
         }
     }
 
-    & .more-details {
-        font-size: 18px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 5px;
-        margin-top: 10px;
-
-        &:hover {
-            cursor: pointer;
-            text-decoration: underline;
-        }
-
-        & p {
-            font-size: 16px;
-            color: var(--greenColor);
-        }
-    }
-
     & button {
         display: flex;
         justify-content: center;
@@ -112,6 +93,38 @@
 
         &:hover {
             opacity: 0.7;
+        }
+    }
+}
+
+// Responsive
+@media only screen and (max-width: 768px) {
+    .container {
+        margin-top: 0;
+        width: 100%;
+
+        & .content {
+            margin-top: 70px;
+            width: 100%;
+
+            & h2 {
+                font-size: 32px;
+                line-height: normal;
+                width: 100%;
+            }
+
+            & p {
+                font-size: 14px;
+                line-height: normal;
+            }
+        }
+
+        & .services {
+            grid-template-columns: 1fr;
+        }
+
+        & button {
+            width: 60%;
         }
     }
 }

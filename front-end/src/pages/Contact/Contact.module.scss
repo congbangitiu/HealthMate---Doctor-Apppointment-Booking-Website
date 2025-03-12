@@ -26,29 +26,29 @@
 
         & .fields {
             display: grid;
-            grid-template-columns: auto auto;
+            grid-template-columns: repeat(2, 1fr);
             gap: 20px 40px;
-        }
 
-        & .info {
-            display: flex;
-            flex-direction: column;
+            & .info {
+                display: flex;
+                flex-direction: column;
 
-            & label {
-                font-weight: 500;
-                color: var(--primaryColor);
-            }
+                & label {
+                    font-weight: 500;
+                    color: var(--primaryColor);
+                }
 
-            & input {
-                border: 2px solid var(--darkGrayColor);
-                border-radius: 5px;
-                padding: 10px;
-                width: 100%;
-                margin-top: 2px;
+                & input {
+                    border: 2px solid var(--darkGrayColor);
+                    border-radius: 5px;
+                    padding: 10px;
+                    width: 100%;
+                    margin-top: 2px;
 
-                &:focus {
-                    outline: none;
-                    caret-color: var(--primaryColor);
+                    &:focus {
+                        outline: none;
+                        caret-color: var(--primaryColor);
+                    }
                 }
             }
         }
@@ -83,7 +83,7 @@
 
             & .submit-btn {
                 padding: 10px 0;
-                width: 150px;
+                width: 250px;
                 background-color: var(--primaryColor);
                 border-radius: 5px;
                 color: var(--whiteColor);
@@ -93,6 +93,36 @@
                 &:hover {
                     cursor: pointer;
                     opacity: 0.8;
+                }
+            }
+        }
+    }
+}
+
+// Responsive
+@media only screen and (max-width: 768px) {
+    .container {
+        padding: 80px 20px 50px 20px;
+
+        & h2 {
+            font-size: 32px;
+        }
+
+        & p {
+            font-size: 14px;
+        }
+
+        & form {
+            margin-top: 30px;
+            width: 100%;
+
+            & .fields {
+                grid-template-columns: 1fr;
+            }
+
+            & .submit-btn-wrapper  {
+                & .submit-btn {
+                    width: 100%;
                 }
             }
         }

@@ -71,3 +71,34 @@
         }
     }
 }
+
+// Responsive
+@media only screen and (max-width: 768px) {
+    .container {
+        margin-top: 0;
+        width: 100%;
+
+        & .content {
+            width: 100%;
+
+            & h2 {
+                font-size: 32px;
+                line-height: normal;
+                width: 100%;
+            }
+
+            & p {
+                font-size: 14px;
+                line-height: normal;
+            }
+        }
+
+        & .services {
+            flex-direction: column;
+
+            & .arrow-icon-wrapper {
+                padding: 12px !important;
+            }
+        }
+    }
+}
