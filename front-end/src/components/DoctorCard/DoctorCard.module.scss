@@ -76,3 +76,29 @@
         }
     }
 }
+
+// Responsive
+@media only screen and (max-width: 768px) {
+    .container {
+        & h4 {
+            font-size: 24px;
+        }
+
+        & .expertise-rating {
+            & .expertise,
+            & .rating {
+                font-size: 18px;
+            }
+        }
+
+        & .details {
+            & .patients {
+                font-size: 18px;
+            }
+
+            & .office {
+                font-size: 16px;
+            }
+        }
+    }
+}

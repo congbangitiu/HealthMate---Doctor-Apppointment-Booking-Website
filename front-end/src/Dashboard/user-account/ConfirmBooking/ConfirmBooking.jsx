@@ -133,26 +133,28 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
                 </p>
                 <span>
                     <b>Payment method: </b>
-                    <p onClick={() => setSelectedPaymentMethod('E-Wallet')}>
-                        <input
-                            type="radio"
-                            name="payment"
-                            value="E-Wallet"
-                            checked={selectedPaymentMethod === 'E-Wallet'}
-                            onChange={() => setSelectedPaymentMethod('E-Wallet')}
-                        />
-                        E-Wallet
-                    </p>
-                    <p onClick={() => setSelectedPaymentMethod('Cash')}>
-                        <input
-                            type="radio"
-                            name="payment"
-                            value="Cash"
-                            checked={selectedPaymentMethod === 'Cash'}
-                            onChange={() => setSelectedPaymentMethod('Cash')}
-                        />
-                        Cash
-                    </p>
+                    <span>
+                        <p onClick={() => setSelectedPaymentMethod('E-Wallet')}>
+                            <input
+                                type="radio"
+                                name="payment"
+                                value="E-Wallet"
+                                checked={selectedPaymentMethod === 'E-Wallet'}
+                                onChange={() => setSelectedPaymentMethod('E-Wallet')}
+                            />
+                            E-Wallet
+                        </p>
+                        <p onClick={() => setSelectedPaymentMethod('Cash')}>
+                            <input
+                                type="radio"
+                                name="payment"
+                                value="Cash"
+                                checked={selectedPaymentMethod === 'Cash'}
+                                onChange={() => setSelectedPaymentMethod('Cash')}
+                            />
+                            Cash
+                        </p>
+                    </span>
                 </span>
             </div>
 

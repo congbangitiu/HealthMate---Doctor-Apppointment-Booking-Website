@@ -92,3 +92,38 @@
         }
     }
 }
+
+// Responsive
+@media only screen and (max-width: 768px) {
+    .container {
+        padding: 20px;
+
+        & .close-icon-wrapper {
+            & .close-icon {
+                margin-right: 0;
+            }
+        }
+
+        & h1 {
+            font-size: 25px;
+        }
+
+        & .voting {
+            margin-top: 20px;
+        }
+
+        & .suggestion {
+            margin-top: 15px;
+
+            & textarea {
+                margin-top: 10px;
+                height: 120px;
+                padding: 10px 15px;
+            }
+        }
+
+        & .submit-btn {
+            width: 100%;
+        }
+    }
+}

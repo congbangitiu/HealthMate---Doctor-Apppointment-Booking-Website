@@ -112,7 +112,7 @@ const FeedbackDoctor = ({ reviews, role }) => {
                 )}
             </div>
 
-            {!showFormFeedback && role === 'patient' && (
+            {role === 'patient' && (
                 <div className={cx('feedback-btn-wrapper')}>
                     <button className={cx('feedback-btn')} onClick={() => setShowFormFeedback(true)}>
                         Give your feedback

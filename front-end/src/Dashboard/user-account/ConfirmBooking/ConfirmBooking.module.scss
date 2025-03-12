@@ -41,10 +41,10 @@
             & p {
                 font-size: 18px;
                 color: var(--darkGrayColor);
-            }
 
-            & p:last-child {
-                margin-top: 5px;
+                &:last-child {
+                    margin-top: 5px;
+                }
             }
         }
     }
@@ -65,18 +65,24 @@
                 font-size: 18px;
             }
 
-            & p {
-                font-size: 18px;
-                
-                &:hover {
-                    cursor: pointer;
-                }
+            & span {
+                display: flex;
+                justify-content: space-between;
+                gap: 25px;
 
-                & input {
-                    margin-right: 5px;
+                & p {
+                    font-size: 18px;
 
-                    &:checked {
-                        accent-color: var(--primaryColor);
+                    &:hover {
+                        cursor: pointer;
+                    }
+
+                    & input {
+                        margin-right: 5px;
+
+                        &:checked {
+                            accent-color: var(--primaryColor);
+                        }
                     }
                 }
             }
@@ -103,6 +109,60 @@
             background-color: var(--lightGrayColor);
             cursor: not-allowed;
             opacity: 1;
+        }
+    }
+}
+
+// Responsive
+@media only screen and (max-width: 768px) {
+    .container {
+        padding: 30px;
+        gap: 20px;
+
+        & h1 {
+            font-size: 20px;
+        }
+
+        & .appointment {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--darkGrayColor);
+            border-radius: 10px;
+
+            & img {
+                display: none;
+            }
+
+            & div {
+                & h2 {
+                    font-size: 20px;
+                    margin-bottom: 5px;
+                    text-align: center;
+                }
+
+                & p {
+                    font-size: 16px;
+
+                    &:last-child {
+                        margin-top: 0;
+                    }
+                }
+            }
+        }
+
+        & .payment-method {
+            & span {
+                flex-direction: column;
+
+                & span {
+                    flex-direction: row;
+                    justify-content: space-around;
+                }
+            }
+        }
+
+        & button {
+            width: 100%;
         }
     }
 }

@@ -2,6 +2,7 @@
     display: flex;
     align-items: center;
     gap: 30px;
+    padding-top: 25px;
 
     & img {
         width: 200px;
@@ -78,6 +79,48 @@
 
         & .description {
             font-size: 16px;
+        }
+    }
+}
+
+// Responsive
+@media only screen and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        gap: 20px;
+
+        & img {
+            width: 100%;
+            height: max-content;
+        }
+
+        & .info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            & .name-expertise {
+                justify-content: space-between;
+                flex-direction: column;
+                gap: 10px;
+
+                & h4 {
+                    font-size: 25px;
+                }
+            }
+
+            & .rating {
+                text-align: center;
+                margin-top: 10px;
+
+                & p {
+                    font-size: 20px;
+                }
+            }
+
+            & .description {
+                font-size: 18px;
+            }
         }
     }
 }

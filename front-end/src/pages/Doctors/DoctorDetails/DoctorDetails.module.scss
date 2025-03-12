@@ -7,18 +7,18 @@
         justify-content: space-between;
         align-items: center;
 
+        & h4 {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--irisBlueColor);
+        }
+
         &.pending {
             background-color: var(--lightYellowColor);
         }
 
         &.rejected {
             background-color: var(--lightRedColor);
-        }
-
-        & h4 {
-            font-size: 18px;
-            font-weight: 500;
-            color: var(--irisBlueColor);
         }
 
         & .buttons {
@@ -107,6 +107,44 @@
                 background-color: var(--primaryColor);
                 border-top-left-radius: 5px;
                 border-top-right-radius: 5px;
+            }
+        }
+    }
+}
+
+// Responsive
+@media only screen and (max-width: 768px) {
+    .container-parent {
+        padding: 60px 0 50px 0;
+
+        & .verification {
+            flex-direction: column;
+            gap: 10px;
+
+            & .buttons {
+                width: 100%;
+                justify-content: space-around;
+                gap: 0;
+
+                & button {
+                    width: 140px;
+                }
+            }
+        }
+
+        & .container {
+            padding: 0 20px;
+
+            & .doctor-slots {
+                flex-direction: column;
+
+                & span {
+                    width: 100%;
+                }
+            }
+
+            & .bar {
+                margin-top: 0;
             }
         }
     }
