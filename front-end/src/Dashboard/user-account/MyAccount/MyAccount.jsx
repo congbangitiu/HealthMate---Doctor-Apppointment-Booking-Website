@@ -9,8 +9,7 @@ import ChangePassword from '../ChangePassword/ChangePassword';
 import Loader from '../../../components/Loader/Loader';
 import Error from '../../../components/Error/Error';
 import ConfirmLogout from '../../../components/ConfirmLogout/ConfirmLogout';
-import Dialog from '@mui/material/Dialog';
-import Slide from '@mui/material/Slide';
+import { Dialog, Slide, Drawer, useMediaQuery } from '@mui/material';
 
 import useFetchProfile from '../../../hooks/useFetchData';
 import { BASE_URL } from '../../../../config';
@@ -21,10 +20,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const MyAccount = () => {
+    const isMobile = useMediaQuery('(max-width:768px)');
     const { data: userData, loading, error } = useFetchProfile(`${BASE_URL}/users/profile/me`);
     const [showFormUpdateInfo, setShowFormUpdateInfo] = useState(false);
     const [showFormChangePassword, setShowFormChangePassword] = useState(false);
     const [showConfirmLogout, setShowConfirmLogout] = useState(false);
+    const [showProfileMobile, setShowProfileMobile] = useState(false);
 
     return (
         <div className={cx('container-parent')}>
@@ -34,7 +35,12 @@ const MyAccount = () => {
                 <Error errorMessage={error} />
             ) : (
                 <div className={cx('container')}>
-                    {!loading && !error && (
+                    {isMobile && (
+                        <div className={cx('profile-mobile-btn')} onClick={() => setShowProfileMobile(true)}>
+                            Profile {'>>'}
+                        </div>
+                    )}
+                    {!loading && !error && !isMobile && (
                         <div className={cx('info')}>
                             <img src={userData.photo} alt="" />
                             <h1>{userData.fullname}</h1>
@@ -79,6 +85,57 @@ const MyAccount = () => {
                         <h1>MY APPOINTMENTS</h1>
                         <MyBookings />
                     </div>
+
+                    <Drawer
+                        anchor="left"
+                        open={showProfileMobile}
+                        onClose={() => setShowProfileMobile(false)}
+                        BackdropProps={{ style: { top: '60px' } }}
+                        sx={{
+                            '& .MuiPaper-root': {
+                                width: '85%',
+                                top: '60px',
+                            },
+                        }}
+                    >
+                        <div className={cx('info')}>
+                            <img src={userData.photo} alt="" />
+                            <h1>{userData.fullname}</h1>
+                            <h4>{userData.username}</h4>
+                            {userData.dateOfBirth && (
+                                <p>
+                                    <b>Date of birth:</b> {userData.dateOfBirth}
+                                </p>
+                            )}
+                            <p>
+                                <b>Email:</b> {userData.email}
+                            </p>
+                            <p>
+                                <b>Phone number:</b> (+84) {userData.phone}
+                            </p>
+                            {userData.address && (
+                                <p>
+                                    <b>Address:</b> {userData.address}
+                                </p>
+                            )}
+                            {userData.bloodType && (
+                                <p>
+                                    <b>Blood type:</b> {userData.bloodType}
+                                </p>
+                            )}
+                            <div>
+                                <button onClick={() => setShowFormUpdateInfo(true)}>
+                                    Change information <TbStatusChange />
+                                </button>
+                                <button onClick={() => setShowFormChangePassword(true)}>
+                                    Change password <TbStatusChange />
+                                </button>
+                                <button onClick={() => setShowConfirmLogout(true)}>
+                                    Logout <MdLogout />
+                                </button>
+                            </div>
+                        </div>
+                    </Drawer>
 
                     <Dialog
                         open={showFormUpdateInfo}

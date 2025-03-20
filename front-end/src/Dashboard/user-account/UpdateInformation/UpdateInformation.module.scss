@@ -41,7 +41,7 @@
         & .fields {
             width: 100%;
             display: grid;
-            grid-template-columns: auto auto;
+            grid-template-columns: repeat(2, 1fr);
             gap: 20px;
 
             & .authentication {
@@ -160,6 +160,68 @@
 
             &:hover {
                 opacity: 0.8;
+            }
+        }
+    }
+}
+
+// Responsive
+@media only screen and (max-width: 768px) {
+    .container {
+        overflow-y: auto;
+        padding: 0;
+
+        & .close-icon-wrapper {
+            margin-top: 0;
+
+            & .close-icon {
+                margin-right: 0;
+            }
+        }
+
+        & h1 {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        & form {
+            & .fields {
+                grid-template-columns: 1fr;
+                gap: 10px;
+
+                & .authentication {
+                    & .info {
+                        & .icon {
+                            font-size: 20px;
+                        }
+                    }
+                }
+            }
+
+            & .selection {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+
+                & .choose {
+                    width: 100%;
+
+                    & select {
+                        flex: 1;
+                    }
+                }
+
+                & .upload-photo {
+                    width: 100%;
+
+                    & label {
+                        flex: 1;
+                    }
+                }
+            }
+
+            & .submit-btn {
+                width: 100%;
             }
         }
     }

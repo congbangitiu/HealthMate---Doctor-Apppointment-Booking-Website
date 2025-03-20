@@ -127,7 +127,7 @@ const Prescription = () => {
                 {!prescription?.createdAt && (
                     <div className={cx('pending-noti')}>
                         <FaCircleExclamation className={cx('icon')} />
-                        Your doctor has not prescribed any medication yet !
+                        Dr. {appointment?.doctor?.fullname} has not prescribed your medication yet !
                     </div>
                 )}
                 <div id="prescription" className={cx('prescription')}>

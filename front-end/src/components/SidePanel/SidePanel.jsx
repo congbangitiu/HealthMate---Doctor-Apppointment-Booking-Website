@@ -4,8 +4,7 @@ import classNames from 'classnames/bind';
 import styles from './SidePanel.module.scss';
 import convertTime from '../../utils/convertTime';
 import ConfirmBooking from '../../Dashboard/user-account/ConfirmBooking/ConfirmBooking';
-import Dialog from '@mui/material/Dialog';
-import Slide from '@mui/material/Slide';
+import { Dialog, Slide, useMediaQuery } from '@mui/material';
 import formatDate from '../../utils/formatDate';
 
 const cx = classNames.bind(styles);
@@ -14,6 +13,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const SidePanel = ({ doctorId, ticketPrice, timeSlots: initialTimeSlots = [], doctorPhoto, doctorName, role }) => {
+    const isMobile = useMediaQuery('(max-width:768px)');
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [timeSlots, setTimeSlots] = useState(initialTimeSlots);
     const [openDialog, setOpenDialog] = useState(false);
@@ -65,8 +65,8 @@ const SidePanel = ({ doctorId, ticketPrice, timeSlots: initialTimeSlots = [], do
                     ))
                 ) : (
                     <p className={cx('no-slot')}>
-                        Dr. {doctorName} is fully booked at the moment. We’re working to add more slots - please check back
-                        later!
+                        Dr. {doctorName} is fully booked at the moment. We’re working to add more slots - please check
+                        back later!
                     </p>
                 )}
             </div>
@@ -88,10 +88,10 @@ const SidePanel = ({ doctorId, ticketPrice, timeSlots: initialTimeSlots = [], do
                 keepMounted
                 onClose={handleCloseDialog}
                 aria-describedby="alert-dialog-slide-description"
-                className={cx('booking-confirmation')}
                 sx={{
                     '& .MuiPaper-root': {
                         borderRadius: '16px',
+                        width: !isMobile ? 'max-content' : '90%',
                     },
                 }}
             >

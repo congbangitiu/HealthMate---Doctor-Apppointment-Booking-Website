@@ -19,3 +19,19 @@
         display: none;
     }
 }
+
+@media only screen and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+
+        & .selection {
+            width: 100%;
+
+            & h4 {
+                font-size: 20px !important;
+            }
+        }
+    }
+}

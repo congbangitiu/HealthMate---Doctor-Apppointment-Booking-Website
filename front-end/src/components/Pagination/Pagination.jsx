@@ -2,10 +2,12 @@ import styles from './Pagination.module.scss';
 import classNames from 'classnames/bind';
 import Paginate from 'react-paginate';
 import { PropTypes } from 'prop-types';
+import { useMediaQuery } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
 const Pagination = ({ data, itemsPerPage, currentPage, setCurrentPage }) => {
+    const isMobile = useMediaQuery('(max-width:768px)');
     const pageCount = Math.ceil(data.length / itemsPerPage);
 
     const handlePageClick = (event) => {
@@ -21,8 +23,8 @@ const Pagination = ({ data, itemsPerPage, currentPage, setCurrentPage }) => {
     return (
         <div className={cx('container')}>
             <Paginate
-                previousLabel={'Previous'}
-                nextLabel={'Next'}
+                previousLabel={!isMobile ? 'Previous' : '<'}
+                nextLabel={!isMobile ? 'Next' : '>'}
                 breakLabel={'...'}
                 breakClassName={'break-me'}
                 pageCount={pageCount}
@@ -32,6 +34,8 @@ const Pagination = ({ data, itemsPerPage, currentPage, setCurrentPage }) => {
                 activeClassName={cx('active')}
                 disabledClassName={cx('disabled')}
                 forcePage={currentPage}
+                marginPagesDisplayed={!isMobile ? 3 : 2}
+                pageRangeDisplayed={!isMobile ? 2 : 1}
             />
         </div>
     );

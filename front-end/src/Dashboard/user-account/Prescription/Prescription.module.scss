@@ -107,18 +107,23 @@
                 flex-direction: column;
                 gap: 10px;
 
+                & p {
+                    font-size: 20px;
+                }
+
                 & span {
                     display: flex;
                     justify-content: space-between;
-                    text-transform: capitalize;
+
+                    &:nth-child(2) {
+                        & p:nth-child(2) {
+                            text-transform: capitalize;
+                        }
+                    }
 
                     & p {
                         font-size: 20px;
                     }
-                }
-
-                & p {
-                    font-size: 20px;
                 }
             }
 
@@ -270,6 +275,117 @@
                 justify-content: center;
                 align-items: center;
                 gap: 20px;
+            }
+        }
+    }
+}
+
+// Responsive design
+@media only screen and (max-width: 768px) {
+    .container {
+        padding: 80px 20px 40px 20px;
+
+        & .application {
+            display: none;
+        }
+
+        & .prescription-wrapper {
+            width: 100%;
+
+            & .pending-noti {
+                align-items: flex-start;
+
+                & .icon {
+                    margin-top: 2px;
+                    width: 30px;
+                }
+            }
+
+            & .prescription {
+                & .brand {
+                    gap: 10px;
+
+                    & img {
+                        width: 70px;
+                        height: 70px;
+                    }
+
+                    & div {
+                        & h4 {
+                            font-size: 18px;
+                        }
+
+                        & p {
+                            font-size: 16px;
+                        }
+                    }
+                }
+
+                & h1 {
+                    font-size: 25px;
+                }
+
+                & .patient-info {
+                    gap: 0;
+
+                    & p {
+                        font-size: 18px;
+                    }
+
+                    & span {
+                        flex-direction: column;
+
+                        & p {
+                            font-size: 18px;
+                        }
+                    }
+                }
+
+                & .medications {
+                    & table {
+                        font-size: 16px;
+                    }
+
+                    & h4 {
+                        font-size: 18px;
+                    }
+                }
+
+                & .confirmation {
+                    margin-top: 25px;
+
+                    & > div {
+                        transform: translateX(12.5%);
+
+                        & h4 {
+                            font-size: 18px;
+                        }
+
+                        & span {
+                            align-items: center;
+
+                            & img:first-child {
+                                width: 90px;
+                                height: 90px;
+                            }
+
+                            & img:last-child {
+                                width: 120px;
+                                top: 20px;
+                                left: 90px;
+                            }
+                        }
+
+                        & p {
+                            font-size: 18px;
+                            font-weight: 500;
+                        }
+                    }
+                }
+            }
+
+            & button {
+                display: none;
             }
         }
     }

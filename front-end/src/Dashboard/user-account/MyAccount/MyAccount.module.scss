@@ -7,6 +7,20 @@
         background-position: center;
         background-size: cover;
         gap: 50px;
+        position: relative;
+
+        & .profile-mobile-btn {
+            position: absolute;
+            top: -10px;
+            left: -25px;
+            background-color: var(--primaryColor);
+            padding: 5px 10px;
+            font-size: 16px;
+            color: var(--whiteColor);
+            font-weight: 600;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
 
         & .info {
             display: flex;
@@ -117,5 +131,110 @@
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+}
+
+// Responsive
+@media only screen and (max-width: 768px) {
+    .container-parent {
+        padding: 80px 20px 0 20px;
+
+        & .container {
+            flex-direction: column;
+
+            & .info {
+                width: 100%;
+                display: none;
+            }
+
+            & .bookings {
+                width: 100%;
+
+                & h1 {
+                    margin-top: 25px;
+                    margin-bottom: 10px;
+                }
+            }
+        }
+    }
+
+    .info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+
+        & img {
+            width: 70%;
+            border-radius: 10px;
+            border: 5px solid var(--primaryColor);
+            object-fit: cover;
+            aspect-ratio: 1/1;
+        }
+
+        & h1 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        & h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--darkGrayColor);
+        }
+
+        & p {
+            font-size: 16px;
+            color: var(--darkGrayColor);
+        }
+
+        & div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            margin-top: 30px;
+
+            & button {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+                background-color: var(--primaryColor);
+                width: 100%;
+                padding: 10px 0;
+                border-radius: 5px;
+                color: var(--whiteColor);
+                font-size: 16px;
+
+                &:hover {
+                    cursor: pointer;
+                    opacity: 0.8;
+                }
+            }
+
+            & button:last-child {
+                background-color: black;
+            }
+        }
+    }
+
+    .form-update {
+        &.update-info {
+            width: 90%;
+            height: 90%;
+            padding: 20px;
+        }
+
+        &.change-password {
+            width: 90%;
+        }
+
+        &.logout {
+            width: 80%;
+        }
     }
 }

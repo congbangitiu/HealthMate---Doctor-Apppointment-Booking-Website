@@ -45,3 +45,42 @@
         }
     }
 }
+
+/* 📌 Responsive */
+@media only screen and (max-width: 768px) {
+    .container {
+        margin-top: 40px;
+    }
+
+    .pagination {
+        gap: 4px;
+
+        & li {
+            margin: 0 2px;
+
+            & a {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+        }
+
+        /* 📌 Ẩn chữ "Previous" & "Next" trên mobile */
+        & .previous a,
+        & .next a {
+            display: none;
+        }
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .pagination {
+        & li {
+            margin: 0 1px;
+
+            & a {
+                padding: 6px 8px;
+                font-size: 12px;
+            }
+        }
+    }
+}

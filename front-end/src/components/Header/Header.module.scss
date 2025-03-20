@@ -373,9 +373,14 @@
 
     .menu-mobile {
         margin-top: 20px;
+
         & li {
             list-style: none;
             padding: 15px 30px;
+
+            &:last-child {
+                border-bottom: 2px solid var(--darkGrayColor);
+            }
 
             & .link {
                 display: flex;
@@ -386,6 +391,23 @@
                 &.active {
                     color: var(--primaryColor);
                 }
+            }
+        }
+
+        & .logout-mobile {
+            display: flex;
+            align-items: center;
+            margin: 40px 0 0 30px;
+            padding: 12px;
+            width: calc(100% - 60px);
+            gap: 12px;
+            font-size: 18px;
+            border-radius: 10px;
+            background-color: black;
+            color: var(--whiteColor);
+
+            & .icon {
+                font-size: 22px;
             }
         }
     }
@@ -406,5 +428,9 @@
             font-size: 8px;
             color: var(--darkGrayColor);
         }
+    }
+
+    .logout {
+        width: 80%;
     }
 }

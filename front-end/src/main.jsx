@@ -6,23 +6,32 @@ import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthContextProvider } from './context/AuthContext.jsx';
+import { useMediaQuery } from '@mui/material';
+
+const ToastWrapper = () => {
+    const isMobile = useMediaQuery('(max-width:768px)');
+
+    return (
+        <ToastContainer
+            theme="dark"
+            autoClose={3000}
+            closeOnClick
+            pauseOnHover={false}
+            style={{
+                position: 'fixed',
+                top: !isMobile ? '105px' : '60px',
+                right: '3px',
+                zIndex: 9999,
+            }}
+        />
+    );
+};
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
         <BrowserRouter>
             <AuthContextProvider>
-                <ToastContainer
-                    theme="dark"
-                    autoClose={3000}
-                    closeOnClick
-                    pauseOnHover={false}
-                    style={{
-                        position: 'fixed',
-                        top: '105px',
-                        right: '3px',
-                        zIndex: 9999,
-                    }}
-                />
+                <ToastWrapper />
                 <App />
             </AuthContextProvider>
         </BrowserRouter>

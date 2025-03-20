@@ -516,6 +516,9 @@ const Header = () => {
                             </NavLink>
                         </li>
                     ))}
+                    <button className={cx('logout-mobile')} onClick={() => setShowConfirmLogout(true)}>
+                        <IoIosLogOut className={cx('icon')}/> Logout
+                    </button>
                 </div>
                 <div className={cx('policy')}>
                     <p>Privacy Policy</p>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './MyBookings.module.scss';
 import useFetchData from '../../../hooks/useFetchData';
@@ -11,8 +11,7 @@ import ConfirmCancel from '../ConfirmCancel/ConfirmCancel';
 import Selections from '../../../components/Selections/Selections';
 import Pagination from '../../../components/Pagination/Pagination';
 import { FaRegTrashAlt } from 'react-icons/fa';
-import Dialog from '@mui/material/Dialog';
-import Slide from '@mui/material/Slide';
+import { Dialog, Slide } from '@mui/material';
 
 const cx = classNames.bind(styles);
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -20,6 +19,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const MyBookings = () => {
+    const navigate = useNavigate();
+
     const { data: appointments, loading, error } = useFetchData(`${BASE_URL}/users/appointments/my-appointments`);
     const [showConfirmCancel, setShowConfirmCancel] = useState(false);
     const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -84,7 +85,7 @@ const MyBookings = () => {
         setFilteredAppointments(updatedAppointments);
     }, [selectedDoctor, selectedAppointmentStatus, selectedSchedule, appointments]);
 
-    const handleDeleteClick = (appointment) => {
+    const handleDelete = (appointment) => {
         setSelectedAppointment(appointment);
         setShowConfirmCancel(true);
     };
@@ -141,18 +142,26 @@ const MyBookings = () => {
                                     <div key={appointment._id}>
                                         {appointment?.status === 'cancelled' ? (
                                             <div className={cx('link', 'cancelled')}>
-                                                <PatientAppointment appointment={appointment} />
+                                                <PatientAppointment
+                                                    appointment={appointment}
+                                                    handleDelete={handleDelete}
+                                                />
                                             </div>
                                         ) : (
-                                            <Link
-                                                to={`/users/appointments/my-appointments/${appointment._id}`}
+                                            <div
                                                 className={cx('link', { pending: appointment?.status === 'pending' })}
+                                                onClick={() =>
+                                                    navigate(`/users/appointments/my-appointments/${appointment._id}`)
+                                                }
                                             >
-                                                <PatientAppointment appointment={appointment} />
-                                            </Link>
+                                                <PatientAppointment
+                                                    appointment={appointment}
+                                                    handleDelete={handleDelete}
+                                                />
+                                            </div>
                                         )}
                                         {appointment?.status === 'pending' && (
-                                            <span className={cx('icon')} onClick={() => handleDeleteClick(appointment)}>
+                                            <span className={cx('icon')} onClick={() => handleDelete(appointment)}>
                                                 <FaRegTrashAlt />
                                             </span>
                                         )}

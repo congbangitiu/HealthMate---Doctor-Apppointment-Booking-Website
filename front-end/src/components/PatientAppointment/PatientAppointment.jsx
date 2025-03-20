@@ -6,10 +6,14 @@ import { FaPhoneAlt } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io';
 import formatDate from './../../utils/formatDate';
 import convertTime from './../../utils/convertTime';
+import { FaRegTrashAlt } from 'react-icons/fa';
+import { useMediaQuery } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
-const PatientAppointment = ({ appointment }) => {
+const PatientAppointment = ({ appointment, handleDelete }) => {
+    const isMobile = useMediaQuery('(max-width:768px)');
+
     const getStatusStyle = (status) => {
         switch (status) {
             case 'done':
@@ -26,6 +30,11 @@ const PatientAppointment = ({ appointment }) => {
     const statusStyle = getStatusStyle(appointment.status);
     const StatusIcon = statusStyle.icon;
 
+    const handleDeleteForMobile = (e, appointment) => {
+        e.stopPropagation();
+        handleDelete(appointment);
+    };
+
     return (
         <div className={cx('container')}>
             <img src={appointment.doctor.photo} alt="" />
@@ -39,6 +48,11 @@ const PatientAppointment = ({ appointment }) => {
                         {StatusIcon && <StatusIcon className={cx('icon')} style={{ color: statusStyle.color }} />}
                         {appointment.status}{' '}
                     </div>
+                    {isMobile && appointment?.status === 'pending' && (
+                        <span className={cx('cancel-icon')} onClick={(e) => handleDeleteForMobile(e, appointment)}>
+                            <FaRegTrashAlt />
+                        </span>
+                    )}
                 </div>
                 <div className={cx('lowerPart')}>
                     <div>
@@ -66,6 +80,7 @@ const PatientAppointment = ({ appointment }) => {
 
 PatientAppointment.propTypes = {
     appointment: PropTypes.object.isRequired,
+    handleDelete: PropTypes.func.isRequired,
 };
 
 export default PatientAppointment;

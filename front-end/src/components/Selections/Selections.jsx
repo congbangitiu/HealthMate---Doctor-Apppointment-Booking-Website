@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import Select from 'react-select';
 import styles from './Selections.module.scss';
+import { useMediaQuery } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
@@ -20,13 +21,14 @@ const Selections = ({
     hidePatient,
     hideDoctor,
 }) => {
+    const isMobile = useMediaQuery('(max-width:768px)');
     const customStyles = {
         control: (provided) => ({
             ...provided,
             border: '2px solid var(--primaryColor)',
             borderRadius: '5px',
             boxShadow: 'none',
-            width: '250px',
+            width: !isMobile ? '250px' : '100%',
             height: '45px',
             display: 'flex',
             alignItems: 'center',
