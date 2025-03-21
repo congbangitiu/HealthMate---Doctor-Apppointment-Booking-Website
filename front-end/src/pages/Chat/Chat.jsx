@@ -7,6 +7,7 @@ import SidebarChat from '../../components/SidebarChat/SidebarChat';
 import ContentChat from '../../components/ContentChat/ContentChat';
 import { token } from '../../../config';
 import { authContext } from '../../context/AuthContext';
+import { useMediaQuery } from '@mui/material';
 
 // Import socket.io-client ONCE here
 import { io } from 'socket.io-client';
@@ -17,6 +18,7 @@ const cx = classNames.bind(styles);
 const socket = io(import.meta.env.VITE_REACT_PUBLIC_SOCKET_URL);
 
 const Chat = () => {
+    const isMobile = useMediaQuery('(max-width:768px)');
     const user = JSON.parse(localStorage.getItem('user'));
     const { role } = useContext(authContext);
 
@@ -279,16 +281,26 @@ const Chat = () => {
 
     return (
         <div className={cx('container')}>
-            <SidebarChat
-                chats={userChats}
-                selectedChat={selectedChat}
-                handleSelectChat={handleSelectChat}
-                role={role}
-                userId={user?._id}
-                isLoading={isLoading}
-                isError={isError}
-            />
-            <ContentChat selectedChat={selectedChat} setSelectedChat={setSelectedChat} userId={user?._id} role={role} />
+            {(!isMobile || !selectedChat) && (
+                <SidebarChat
+                    chats={userChats}
+                    selectedChat={selectedChat}
+                    handleSelectChat={handleSelectChat}
+                    role={role}
+                    userId={user?._id}
+                    isLoading={isLoading}
+                    isError={isError}
+                />
+            )}
+            {(!isMobile || selectedChat) && (
+                <ContentChat
+                    selectedChat={selectedChat}
+                    setSelectedChat={setSelectedChat}
+                    userId={user?._id}
+                    role={role}
+                    isMobile={isMobile}
+                />
+            )}
         </div>
     );
 };

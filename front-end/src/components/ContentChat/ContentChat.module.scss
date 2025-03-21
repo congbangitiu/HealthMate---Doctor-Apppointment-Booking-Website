@@ -183,12 +183,12 @@
                     padding: 10px 15px;
 
                     & div:first-child {
-                        padding: 6px;
+                        padding: 10px;
                         background-color: var(--lightGrayColor);
-                        border-radius: 100px;
+                        border-radius: 10px;
 
                         & .icon {
-                            font-size: 22px;
+                            font-size: 24px;
                             color: black;
                         }
                     }
@@ -379,16 +379,16 @@
 
                     & img,
                     & video {
-                        width: 100px;
-                        height: 100px;
+                        width: 80px;
+                        height: 80px;
                         object-fit: cover;
                         border-radius: 10px;
                         border: 1px solid var(--darkGrayColor);
                     }
 
                     & .document {
-                        width: 100px;
-                        height: 100px;
+                        width: 80px;
+                        height: 80px;
                         display: flex;
                         flex-direction: column;
                         justify-content: center;
@@ -402,11 +402,11 @@
                             text-transform: uppercase;
                             font-weight: bold;
                             color: var(--darkGrayColor);
-                            font-size: 20px;
+                            font-size: 18px;
                             line-height: 18px;
                         }
                         & .document-icon {
-                            font-size: 45px;
+                            font-size: 40px;
                             color: var(--darkGrayColor);
                         }
                     }
@@ -493,6 +493,67 @@
             bottom: 70px;
             right: 50px;
             z-index: 10;
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .container {
+        width: 100%;
+        padding-top: 65px;
+
+        & .header-part {
+            & .info {
+                gap: 10px;
+
+                & .icon {
+                    font-size: 22px;
+                }
+            }
+
+            & .actions {
+                gap: 15px;
+            }
+        }
+
+        & .footer-part {
+            gap: 10px;
+
+            & .edit-file-type {
+                & .file-part {
+                    padding: 10px;
+                    gap: 10px;
+
+                    & .file-wrapper {
+                        & img,
+                        & video,
+                        & .document {
+                            width: 70px;
+                            height: 70px;
+                        }
+
+                        & .document {
+                            & h4 {
+                                font-size: 16px;
+                            }
+                            
+                            & .document-icon {
+                                font-size: 35px;
+                            }
+                        }
+
+                        & .icon {
+                            right: 2px;
+                            top: 2px;
+                        }
+                    }
+                }
+            }
+
+            & .picker {
+                position: absolute;
+                right: 20px;
+            }
         }
     }
 }

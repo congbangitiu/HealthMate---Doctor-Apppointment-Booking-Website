@@ -136,7 +136,10 @@
 
             & .intro {
                 width: 100%;
-
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+                
                 & div {
                     display: flex;
                     justify-content: space-between;
@@ -182,6 +185,47 @@
                             font-weight: 500;
                             color: var(--whiteColor);
                             margin-top: 5px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .container {
+        width: 100%;
+        padding-top: 70px;
+
+        & .chats {
+            & .chat {
+                & .img-wrapper {
+                    width: 70px;
+                    height: 60px;
+
+                    & div {
+                        width: 18px;
+                        height: 18px;
+                    }
+                }
+
+                & .intro {
+                    & div {
+                        &:first-child {
+                            & h4 {
+                                font-size: 18px;
+                            }
+
+                            & p {
+                                font-size: 16px;
+                            }
+                        }
+
+                        &:last-child {
+                            & p {
+                                font-size: 16px;
+                            }
                         }
                     }
                 }

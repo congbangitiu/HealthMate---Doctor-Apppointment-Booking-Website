@@ -22,13 +22,14 @@ import { Image } from 'antd';
 import formatTimestamp from '../../utils/formatTimestamp';
 import convertFileSize from '../../utils/convertFileSize';
 import truncateText from '../../utils/truncateText';
+import { IoIosArrowBack } from 'react-icons/io';
 
 import { io } from 'socket.io-client';
 const socket = io(import.meta.env.VITE_REACT_PUBLIC_SOCKET_URL);
 
 const cx = classNames.bind(styles);
 
-const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
+const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile }) => {
     const [openPicker, setOpenPicker] = useState(false);
     const [activeMenuIndex, setActiveMenuIndex] = useState(null);
     const [activeBubbleIndex, setActiveBubbleIndex] = useState(null);
@@ -390,6 +391,7 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
         <div className={cx('container')}>
             <div className={cx('header-part')}>
                 <div className={cx('info')}>
+                    {isMobile && <IoIosArrowBack className={cx('icon')} onClick={() => setSelectedChat(null)} />}
                     <div className={cx('img-wrapper')}>
                         <img src={role === 'doctor' ? selectedChat.user.photo : selectedChat.doctor.photo} alt="" />
                         {role === 'doctor'
@@ -465,10 +467,14 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role }) => {
                                                 <IoDocumentText className={cx('icon')} />
                                             </div>
                                             <div>
-                                                <h4>
-                                                    {truncateText(msg.documentDetails.documentName, 30)}.
-                                                    {msg.documentDetails.documentType}
-                                                </h4>
+                                                {!isMobile ? (
+                                                    <h4>
+                                                        {truncateText(msg.documentDetails.documentName, 30)}.
+                                                        {msg.documentDetails.documentType}
+                                                    </h4>
+                                                ) : (
+                                                    <h4>{msg.documentDetails.documentType.toUpperCase()} file</h4>
+                                                )}
                                                 <p>{convertFileSize(msg.documentDetails.documentSize)}</p>
                                             </div>
                                             <div
@@ -623,6 +629,7 @@ ContentChat.propTypes = {
     userId: PropTypes.string,
     setSelectedChat: PropTypes.func,
     role: PropTypes.string,
+    isMobile: PropTypes.bool,
 };
 
 export default ContentChat;
