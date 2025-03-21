@@ -112,7 +112,7 @@
                     background-color: var(--lightGreenColor);
                     padding: 5px 10px;
                     border-radius: 10px;
-                    font-size: 15px;
+                    font-size: 14px;
 
                     &.error {
                         color: red;
@@ -141,6 +141,7 @@
                     margin-left: 25px;
                     border-radius: 10px;
                     color: var(--darkGrayColor);
+                    font-size: 14px;
 
                     &:hover {
                         cursor: pointer;
@@ -182,6 +183,39 @@
             &.disabled {
                 color: var(--grayColor);
                 cursor: not-allowed;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        width: 100%;
+        height: 100%;
+
+        & main {
+            & .message-wrapper {
+                & .message {
+                    & div {
+                        font-size: 16px;
+                    }
+                }
+
+                & .suggestions {
+                    & div {
+                        font-size: 16px;
+                    }
+                }
+            }
+        }
+
+        & footer {
+            & input {
+                font-size: 16px;
+            }
+
+            & .icon {
+                font-size: 28px;
             }
         }
     }

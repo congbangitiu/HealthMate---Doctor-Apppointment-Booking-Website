@@ -9,10 +9,12 @@ import ChatbotAI from '../components/ChatbotAI/ChatbotAI';
 import ChatbotLogo from '../assets/images/Chatbot-Logo.png';
 import ChatIcon from '../assets/images/chat-icon.svg';
 import { FaPlus } from 'react-icons/fa6';
+import { Drawer, useMediaQuery } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
 const Layout = () => {
+    const isMobile = useMediaQuery('(max-width:768px)');
     const [isHovered, setIsHovered] = useState(false);
     const user = useMemo(() => JSON.parse(localStorage.getItem('user')), []); // Memoize user
     const [isShowChatbot, setIsShowChatbot] = useState(false);
@@ -33,7 +35,7 @@ const Layout = () => {
 
             <main>
                 <Routers />
-                
+
                 {user ? (
                     <div className={cx('fab-container', { hovered: isHovered })} onMouseLeave={handleMouseLeave}>
                         <div className={cx('fab-button', { rotate: isHovered })} onMouseEnter={handleMouseEnter}>
@@ -55,9 +57,24 @@ const Layout = () => {
                     </div>
                 )}
 
-                <div className={cx('chatbot-wrapper', { show: isShowChatbot })}>
-                    <ChatbotAI setIsShowChatbot={setIsShowChatbot} />
-                </div>
+                {!isMobile ? (
+                    <div className={cx('chatbot-wrapper', { show: isShowChatbot })}>
+                        <ChatbotAI setIsShowChatbot={setIsShowChatbot} />
+                    </div>
+                ) : (
+                    <Drawer
+                        open={isShowChatbot}
+                        anchor="bottom"
+                        sx={{
+                            '& .MuiPaper-root': {
+                                width: '100%',
+                                height: '100%',
+                            },
+                        }}
+                    >
+                        <ChatbotAI setIsShowChatbot={setIsShowChatbot} />
+                    </Drawer>
+                )}
             </main>
 
             <Footer />
