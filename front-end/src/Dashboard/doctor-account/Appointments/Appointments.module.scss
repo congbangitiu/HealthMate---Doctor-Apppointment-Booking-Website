@@ -104,3 +104,20 @@
         }
     }
 }
+
+@media only screen and (max-width: 768px) {
+    .container-parent {
+        & h1 {
+            margin-bottom: 0;
+            margin-top: 50px;
+        }
+
+        & .selection {
+            margin-top: 20px;
+        }
+        
+        & .container {
+
+        }
+    }
+}

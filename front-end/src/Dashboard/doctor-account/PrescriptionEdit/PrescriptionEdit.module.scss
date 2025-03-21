@@ -109,6 +109,8 @@
                     &:last-child {
                         margin-top: 20px;
                         margin-left: 18px;
+                        display: flex;
+                        flex-wrap: wrap;
 
                         & input {
                             width: 50px;
@@ -121,6 +123,45 @@
                             -webkit-appearance: none;
                             margin: 0;
                         }
+                    }
+                }
+
+                & .delete {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 10px;
+                    border-radius: 100px;
+                    transition: all 0.3s;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    cursor: pointer;
+                    background-color: red;
+
+                    &:hover {
+                        padding-right: 20px;
+                    }
+
+                    & .icon {
+                        color: var(--whiteColor);
+                        transition: transform 0.3s;
+                        font-size: 18px;
+                        transform: translateX(25%);
+                    }
+
+                    & .text {
+                        display: inline-block;
+                        max-width: 0;
+                        opacity: 0;
+                        transition: opacity 0.3s, max-width 0.3s;
+                        margin-left: 10px;
+                        color: var(--whiteColor);
+                        font-size: 16px;
+                    }
+
+                    &:hover .text {
+                        max-width: 100px;
+                        opacity: 1;
                     }
                 }
             }
@@ -143,45 +184,6 @@
                 font-size: 20px;
                 font-weight: 500;
                 color: var(--primaryColor);
-            }
-
-            & .delete {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding: 10px;
-                border-radius: 100px;
-                transition: all 0.3s;
-                overflow: hidden;
-                white-space: nowrap;
-                cursor: pointer;
-                background-color: red;
-
-                &:hover {
-                    padding-right: 20px;
-                }
-
-                & .icon {
-                    color: var(--whiteColor);
-                    transition: transform 0.3s;
-                    font-size: 18px;
-                    transform: translateX(25%);
-                }
-
-                & .text {
-                    display: inline-block;
-                    max-width: 0;
-                    opacity: 0;
-                    transition: opacity 0.3s, max-width 0.3s;
-                    margin-left: 10px;
-                    color: var(--whiteColor);
-                    font-size: 16px;
-                }
-
-                &:hover .text {
-                    max-width: 100px;
-                    opacity: 1;
-                }
             }
         }
 
@@ -289,6 +291,140 @@
 
             &:hover {
                 opacity: 0.7;
+            }
+        }
+    }
+}
+
+// Responsive design
+@media only screen and (max-width: 768px) {
+    .container {
+        & .prescription {
+            width: 100%;
+
+            & .brand {
+                gap: 10px;
+
+                & img {
+                    width: 70px;
+                    height: 70px;
+                }
+
+                & div {
+                    & h4 {
+                        font-size: 18px;
+                    }
+
+                    & p {
+                        font-size: 16px;
+                    }
+                }
+            }
+
+            & h1 {
+                font-size: 25px;
+            }
+
+            & .patient-info {
+                gap: 0;
+
+                & p {
+                    font-size: 18px;
+                }
+
+                & span {
+                    flex-direction: column;
+
+                    & p {
+                        font-size: 18px;
+                    }
+                }
+
+                & .disease {
+                    & b {
+                        font-size: 18px;
+                    }
+
+                    & input {
+                        font-size: 18px;
+                        height: 35px;
+                    }
+                }
+            }
+
+            & .medications {
+                gap: 30px;
+
+                & .medication {
+                    flex-direction: column;
+                    align-items: flex-end;
+
+                    & div {
+                        & div {
+                            & input {
+                                font-size: 18px;
+                                width: 260px;
+                            }
+                        }
+                    }
+
+                    & .delete {
+                        margin: 0 !important;
+                    }
+                }
+
+                & button {
+                    margin-top: 0;
+                    font-size: 16px;
+                    width: 150px;
+                    height: 45px;
+                }
+
+                & h4 {
+                    font-size: 18px;
+                }
+            }
+
+            & .note {
+                & b {
+                    font-size: 18px;
+                }
+
+                & textarea {
+                    font-size: 18px;
+                }
+            }
+
+            & .confirmation {
+                margin-top: 25px;
+
+                & > div {
+                    transform: translateX(12.5%);
+
+                    & h4 {
+                        font-size: 18px;
+                    }
+
+                    & span {
+                        align-items: center;
+
+                        & img:first-child {
+                            width: 90px;
+                            height: 90px;
+                        }
+
+                        & img:last-child {
+                            width: 120px;
+                            top: 20px;
+                            left: 90px;
+                        }
+                    }
+
+                    & p {
+                        font-size: 18px;
+                        font-weight: 500;
+                    }
+                }
             }
         }
     }

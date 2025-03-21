@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './Appointments.module.scss';
 import { Link } from 'react-router-dom';
@@ -325,10 +324,6 @@ const Appointments = () => {
             )}
         </div>
     );
-};
-
-Appointments.propTypes = {
-    appointments: PropTypes.object.isRequired,
 };
 
 export default Appointments;

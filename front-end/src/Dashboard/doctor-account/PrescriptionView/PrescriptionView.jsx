@@ -118,7 +118,7 @@ const PrescriptionView = ({ appointment, prescription }) => {
                 </div>
                 <div className={cx('confirmation')}>
                     <div>
-                        <h4>HealthMate, {formatDate(prescription?.updatedAt)}</h4>
+                        <h4>HealthMate{prescription?.updatedAt && ', ' + formatDate(prescription?.updatedAt)}</h4>
                         <span>
                             <img src={Watermark} alt="" />
                             <img src={appointment?.doctor?.signature} alt="" />

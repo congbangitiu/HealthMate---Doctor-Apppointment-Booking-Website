@@ -9,6 +9,7 @@ import formatDate from './../../../utils/formatDate';
 import { toast } from 'react-toastify';
 import { BASE_URL, token } from '../../../../config';
 import { PropTypes } from 'prop-types';
+import { useMediaQuery } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
@@ -24,6 +25,7 @@ const PrescriptionEdit = ({
     id,
     createdTime,
 }) => {
+    const isMobile = useMediaQuery('(max-width:768px)');
     const [loadingBtnUploadSign, setLoadingBtnUploadSign] = useState(false);
     const [loadingBtnSavePres, setLoadingBtnSavePres] = useState(false);
 
@@ -193,7 +195,7 @@ const PrescriptionEdit = ({
                                 <div>
                                     <div>
                                         <p>{index + 1}.</p>
-                                        <p>Name of medicine: </p>
+                                        <p>Name {isMobile ? ' :' : 'of medicine:'} </p>
                                         <input
                                             type="text"
                                             value={medication.name}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './ProfileSetting.module.scss';
 import { FaRegTrashAlt } from 'react-icons/fa';
-import { MdOutlineModeEditOutline } from 'react-icons/md';
+import { MdOutlineModeEditOutline, MdFileUpload } from 'react-icons/md';
 import { LiaSaveSolid } from 'react-icons/lia';
 import { uploadImageToCloudinary } from '../../../utils/uploadCloudinary';
 import { BASE_URL, token } from '../../../../config';
@@ -12,7 +12,7 @@ import SyncLoader from 'react-spinners/SyncLoader';
 
 const cx = classNames.bind(styles);
 
-const ProfileSetting = ({ doctorData }) => {
+const ProfileSetting = ({ doctorData, isMobile }) => {
     useEffect(() => {
         window.scrollTo({
             top: 0,
@@ -295,7 +295,13 @@ const ProfileSetting = ({ doctorData }) => {
                             onChange={handleUploadAvatar}
                         />
                         <label htmlFor="customAvatar">
-                            {loadingAvatar ? <SyncLoader size={7} color="#ffffff" /> : 'Upload photo'}
+                            {loadingAvatar ? (
+                                <SyncLoader size={7} color="#ffffff" />
+                            ) : isMobile ? (
+                                <MdFileUpload />
+                            ) : (
+                                'Upload photo'
+                            )}
                         </label>
                         <p>(Notice: 1:1 scale photo)</p>
                     </div>
@@ -309,7 +315,13 @@ const ProfileSetting = ({ doctorData }) => {
                             onChange={handleUploadSignature}
                         />
                         <label htmlFor="customSignature">
-                            {loadingSignature ? <SyncLoader size={7} color="#ffffff" /> : 'Upload signature'}
+                            {loadingSignature ? (
+                                <SyncLoader size={7} color="#ffffff" />
+                            ) : isMobile ? (
+                                <MdFileUpload />
+                            ) : (
+                                'Upload signature'
+                            )}
                         </label>
                         <p>(Notice: Remove background )</p>
                     </div>
@@ -608,6 +620,7 @@ const ProfileSetting = ({ doctorData }) => {
 
 ProfileSetting.propTypes = {
     doctorData: PropTypes.object.isRequired,
+    isMobile: PropTypes.bool.isRequired,
 };
 
 export default ProfileSetting;

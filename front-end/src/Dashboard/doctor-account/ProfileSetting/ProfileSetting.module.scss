@@ -344,3 +344,67 @@
         font-size: 16px;
     }
 }
+
+@media only screen and (max-width: 768px) {
+    .container {
+        padding-top: 50px;
+
+        & .title {
+            font-size: 22px;
+
+            &.other {
+                margin-top: 40px;
+            }
+        }
+
+        & .upperPart {
+            grid-template-columns: 1fr;
+
+            & .leftPart,
+            & .rightPart {
+                & .info {
+                    margin-top: 15px;
+                }
+            }
+
+            & .upload {
+                & label {
+                    font-size: 30px;
+                    width: 70px !important;
+                }
+            }
+        }
+
+        & .selection {
+            flex-direction: column;
+
+            & .field {
+                & select {
+                    & option {
+                        font-size: 10px;
+                    }
+                }
+            }
+        }
+
+        & .details {
+            margin-top: 15px;
+
+            & .credentials {
+                grid-template-columns: 1fr;
+                gap: 10px 0;
+            }
+
+            & .timeSlots {
+                & .schedule {
+                    flex-direction: column;
+                    gap: 10px;
+                }
+            }
+        }
+
+        & .submit-btn {
+            margin-top: 30px;
+        }
+    }
+}
