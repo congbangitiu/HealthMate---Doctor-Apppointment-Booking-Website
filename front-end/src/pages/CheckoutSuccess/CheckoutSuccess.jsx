@@ -8,10 +8,12 @@ import confetti from 'canvas-confetti';
 import { BASE_URL, token } from '../../../config';
 import convertTime from '../../utils/convertTime';
 import formatDate from '../../utils/formatDate';
+import { useMediaQuery } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
 const CheckoutSuccess = () => {
+    const isMobile = useMediaQuery('(max-width:768px)');
     const [appointment, setAppointment] = useState(null);
     const [loading, setLoading] = useState(true);
     // Get the session_id from the URL
@@ -104,6 +106,47 @@ const CheckoutSuccess = () => {
                 <p>
                     <b>🔔 Reminder:</b> Kindly arrive on time for your appointment to ensure a smooth experience.
                 </p>
+
+                {isMobile && (
+                    <div className={cx('lower-part')}>
+                        <h2>Appointment details</h2>
+                        <div className={cx('appointment-details')}>
+                            <span>
+                                <p>Doctor</p>
+                                <p>{appointment?.doctor?.fullname || 'N/A'}</p>
+                            </span>
+                            <span>
+                                <p>Date</p>
+                                <p>{formatDate(appointment?.timeSlot?.day) || 'N/A'}</p>
+                            </span>
+                            <span>
+                                <p>Time</p>
+                                <p>
+                                    {appointment?.timeSlot?.startingTime
+                                        ? convertTime(appointment.timeSlot.startingTime)
+                                        : 'N/A'}{' '}
+                                    -{' '}
+                                    {appointment?.timeSlot?.endingTime
+                                        ? convertTime(appointment.timeSlot.endingTime)
+                                        : 'N/A'}
+                                </p>
+                            </span>
+
+                            <span>
+                                <p>Price</p>
+                                <p>${appointment?.ticketPrice || 'N/A'}</p>
+                            </span>
+                            <span>
+                                <p>Payment Method</p>
+                                <p>{appointment?.paymentMethod.toUpperCase() || 'N/A'}</p>
+                            </span>
+                            <span>
+                                <p>Payment Status</p>
+                                <p>{appointment?.isPaid ? 'Paid' : 'Unpaid'}</p>
+                            </span>
+                        </div>
+                    </div>
+                )}
                 <div className={cx('navigation-buttons')}>
                     <Link to="/users/profile/me" className={cx('button-1')}>
                         View all appointments
@@ -113,55 +156,57 @@ const CheckoutSuccess = () => {
                     </Link>
                 </div>
             </div>
-            <div className={cx('right-part')}>
-                <div className={cx('upper-part')}>
-                    <div>
-                        {loading ? <p>Loading...</p> : <h2>${appointment?.ticketPrice}</h2>}
-                        <p>Payment success!</p>
+            {!isMobile && (
+                <div className={cx('right-part')}>
+                    <div className={cx('upper-part')}>
+                        <div>
+                            {loading ? <p>Loading...</p> : <h2>${appointment?.ticketPrice}</h2>}
+                            <p>Payment success!</p>
+                        </div>
+                        <div className={cx('icon-wrapper')}>
+                            <MdDone className={cx('icon')} />
+                        </div>
                     </div>
-                    <div className={cx('icon-wrapper')}>
-                        <MdDone className={cx('icon')} />
-                    </div>
-                </div>
-                <div className={cx('lower-part')}>
-                    <h2>Appointment details</h2>
-                    <div className={cx('appointment-details')}>
-                        <span>
-                            <p>Doctor</p>
-                            <p>{appointment?.doctor?.fullname || 'N/A'}</p>
-                        </span>
-                        <span>
-                            <p>Date</p>
-                            <p>{formatDate(appointment?.timeSlot?.day) || 'N/A'}</p>
-                        </span>
-                        <span>
-                            <p>Time</p>
-                            <p>
-                                {appointment?.timeSlot?.startingTime
-                                    ? convertTime(appointment.timeSlot.startingTime)
-                                    : 'N/A'}{' '}
-                                -{' '}
-                                {appointment?.timeSlot?.endingTime
-                                    ? convertTime(appointment.timeSlot.endingTime)
-                                    : 'N/A'}
-                            </p>
-                        </span>
+                    <div className={cx('lower-part')}>
+                        <h2>Appointment details</h2>
+                        <div className={cx('appointment-details')}>
+                            <span>
+                                <p>Doctor</p>
+                                <p>{appointment?.doctor?.fullname || 'N/A'}</p>
+                            </span>
+                            <span>
+                                <p>Date</p>
+                                <p>{formatDate(appointment?.timeSlot?.day) || 'N/A'}</p>
+                            </span>
+                            <span>
+                                <p>Time</p>
+                                <p>
+                                    {appointment?.timeSlot?.startingTime
+                                        ? convertTime(appointment.timeSlot.startingTime)
+                                        : 'N/A'}{' '}
+                                    -{' '}
+                                    {appointment?.timeSlot?.endingTime
+                                        ? convertTime(appointment.timeSlot.endingTime)
+                                        : 'N/A'}
+                                </p>
+                            </span>
 
-                        <span>
-                            <p>Price</p>
-                            <p>${appointment?.ticketPrice || 'N/A'}</p>
-                        </span>
-                        <span>
-                            <p>Payment Method</p>
-                            <p>{appointment?.paymentMethod.toUpperCase() || 'N/A'}</p>
-                        </span>
-                        <span>
-                            <p>Payment Status</p>
-                            <p>{appointment?.isPaid ? 'Paid' : 'Unpaid'}</p>
-                        </span>
+                            <span>
+                                <p>Price</p>
+                                <p>${appointment?.ticketPrice || 'N/A'}</p>
+                            </span>
+                            <span>
+                                <p>Payment Method</p>
+                                <p>{appointment?.paymentMethod.toUpperCase() || 'N/A'}</p>
+                            </span>
+                            <span>
+                                <p>Payment Status</p>
+                                <p>{appointment?.isPaid ? 'Paid' : 'Unpaid'}</p>
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };
