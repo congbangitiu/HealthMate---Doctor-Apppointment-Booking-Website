@@ -3,7 +3,7 @@
 
     & .items {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: repeat(4, 1fr);
         gap: 20px;
 
         & .item {
@@ -81,7 +81,7 @@
 
         & .wrapper-childrens {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, 1fr);
             gap: 50px;
             margin-top: 50px;
 
@@ -168,6 +168,24 @@
                             font-size: 20px;
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .container {
+        & .items {
+            grid-template-columns: 1fr;
+        }
+
+        & .wrapper {
+            & .wrapper-childrens {
+                grid-template-columns: 1fr;
+
+                & .top-doctors {
+                    padding: 0;
                 }
             }
         }

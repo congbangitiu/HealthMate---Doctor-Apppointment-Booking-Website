@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './RevenueManagement.module.scss';
 import TimeRevenueBarChart from '../Charts/TimeRevenueBarChart/TimeRevenueBarChart';
@@ -13,6 +14,13 @@ const RevenueManagement = ({ appointments, doctors }) => {
     };
 
     const totalRevenue = calculateRevenue();
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }, []);
 
     return (
         <div className={cx('container')}>

@@ -131,3 +131,35 @@
         }
     }
 }
+
+@media only screen and (max-width: 768px) {
+    .container {
+        & .upper-part {
+            & h4 {
+                font-size: 25px;
+            }
+
+            & .selections {
+                margin-top: 15px;
+            }
+        }
+
+        & .lower-part {
+            overflow: auto;
+
+            & .appointment-table {
+                & .info-cell {
+                    & .avatar {
+                        display: none;
+                    }
+
+                    & div {
+                        div:last-child {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

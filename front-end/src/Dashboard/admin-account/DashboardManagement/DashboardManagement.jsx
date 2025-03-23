@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './DashboardManagement.module.scss';
@@ -66,6 +67,13 @@ const DashboardManagement = ({ users, doctors, appointments }) => {
         return genderCount;
     };
     const genderCount = countGenderByRole(patients, officialDoctors);
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }, []);
 
     return (
         <div className={cx('container')}>

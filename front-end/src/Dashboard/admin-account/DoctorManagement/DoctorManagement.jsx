@@ -5,7 +5,8 @@ import classNames from 'classnames/bind';
 import styles from './DoctorManagement.module.scss';
 import { BASE_URL, token } from '../../../../config';
 import { FaStar, FaLongArrowAltRight } from 'react-icons/fa';
-import { Dialog } from '@mui/material';
+import { PiSmileySad } from 'react-icons/pi';
+import { Dialog, useMediaQuery } from '@mui/material';
 import roundNumber from '../../../utils/roundNumber';
 import Loader from '../../../components/Loader/Loader';
 import Error from '../../../components/Error/Error';
@@ -18,6 +19,7 @@ import { PropTypes } from 'prop-types';
 const cx = classNames.bind(styles);
 
 const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
+    const isMobile = useMediaQuery('(max-width:768px)');
     const [query, setQuery] = useState('');
     const [doctorChart, setDoctorChart] = useState('');
     const [isActiveDoctor, setIsActiveDoctor] = useState();
@@ -25,6 +27,13 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
     const [loadingReject, setLoadingReject] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
     const chartRef = useRef(null);
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }, []);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -225,8 +234,10 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
                                             <span>{roundNumber(doctor.averageRating, 1)}</span>
                                         </div>
                                     </div>
-                                    <h4>Dr. {doctor.fullname}</h4>
-                                    <p>{doctor.specialization}</p>
+                                    <div className={cx('info')}>
+                                        <h4>Dr. {doctor.fullname}</h4>
+                                        <p>{doctor.specialization}</p>
+                                    </div>
                                     <div className={cx('buttons')}>
                                         <Link to={`/doctors/${doctor._id}`}>
                                             <button>Details</button>
@@ -249,9 +260,20 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
                                 },
                             }}
                         >
-                            <div ref={chartRef}>
-                                {doctorChart !== '' && <DoctorAppointmentBarChart doctorChart={doctorChart} />}
-                            </div>
+                            {!isMobile ? (
+                                <div ref={chartRef}>
+                                    {doctorChart !== '' && <DoctorAppointmentBarChart doctorChart={doctorChart} />}
+                                </div>
+                            ) : (
+                                <div className={cx('device-warning')}>
+                                    <PiSmileySad className={cx('icon')} />
+                                    <p>
+                                        Chart analytics are NOT available on mobile devices. Please switch to a desktop
+                                        for full access to data visualizations and in-depth insights to better manage
+                                        the system.
+                                    </p>
+                                </div>
+                            )}
                         </Dialog>
                     </div>
                 </div>

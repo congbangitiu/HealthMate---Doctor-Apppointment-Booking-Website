@@ -111,6 +111,13 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
         setCurrentItems(items);
     }, [currentPage, filteredAppointments, itemsPerPage]);
 
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }, []);
+
     return (
         <div className={cx('container')}>
             <div className={cx('upper-part')}>

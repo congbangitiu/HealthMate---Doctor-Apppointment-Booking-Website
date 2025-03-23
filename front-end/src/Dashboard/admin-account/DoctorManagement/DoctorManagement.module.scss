@@ -247,6 +247,11 @@
                                     justify-content: center;
                                     align-items: flex-start;
                                     margin-bottom: 0;
+
+                                    & p {
+                                        color: var(--darkGrayColor);
+                                        font-size: 18px;
+                                    }
                                 }
 
                                 & .icon-wrapper {
@@ -311,7 +316,7 @@
 
             & .doctors {
                 display: grid;
-                grid-template-columns: 1fr 1fr 1fr 1fr;
+                grid-template-columns: repeat(4, 1fr);
                 gap: 30px;
                 width: 100%;
                 margin-top: 20px;
@@ -338,7 +343,7 @@
                         & .rating {
                             position: absolute;
                             bottom: 0;
-                            margin-left: 50%;
+                            left: 50%;
                             transform: translate(-50%, 55%);
                             background-color: var(--whiteColor);
                             display: flex;
@@ -361,17 +366,21 @@
                         }
                     }
 
-                    & h4 {
-                        margin-top: 28px;
-                        font-size: 22px;
-                        font-weight: 600;
-                    }
+                    & .info {
+                        text-align: center;
 
-                    & p {
-                        margin-top: 5px;
-                        font-size: 16px;
-                        font-weight: 600;
-                        color: var(--darkGrayColor);
+                        & h4 {
+                            margin-top: 28px;
+                            font-size: 22px;
+                            font-weight: 600;
+                        }
+
+                        & p {
+                            margin-top: 5px;
+                            font-size: 16px;
+                            font-weight: 600;
+                            color: var(--darkGrayColor);
+                        }
                     }
 
                     & .buttons {
@@ -402,6 +411,200 @@
                     box-shadow: 0 0 10px var(--yellowColor);
                 }
             }
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .container {
+        & .lower-part {
+            margin-top: 40px;
+
+            & .pending-doctors {
+                & .title {
+                    font-size: 25px;
+                }
+
+                & .doctors {
+                    & .doctor-card {
+                        & .doctor {
+                            & img {
+                                display: none;
+                            }
+
+                            & .info {
+                                & div:first-child {
+                                    flex-direction: column;
+
+                                    & div {
+                                        gap: 10px;
+                                    }
+
+                                    & + h4 {
+                                        display: none;
+                                    }
+                                }
+
+                                & div:last-child {
+                                    margin-top: 10px;
+                                }
+                            }
+                        }
+
+                        & .buttons {
+                            margin-top: 15px;
+                            gap: 0;
+                            justify-content: space-between;
+
+                            & button {
+                                width: 140px;
+                                height: 45px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            & .rejected-doctors {
+                margin-top: 30px;
+
+                & .title {
+                    font-size: 25px;
+                }
+
+                & .doctors {
+                    & .doctor-card {
+                        & .doctor {
+                            & img {
+                                display: none;
+                            }
+
+                            & .info {
+                                & div:first-child {
+                                    flex-direction: column;
+
+                                    & div {
+                                        gap: 10px;
+                                    }
+
+                                    & + h4 {
+                                        display: none;
+                                    }
+                                }
+
+                                & div:last-child {
+                                    margin-top: 10px;
+                                }
+                            }
+                        }
+
+                        & .buttons {
+                            margin-top: 15px;
+                            gap: 0;
+                            justify-content: space-between;
+
+                            & button {
+                                width: 100%;
+                                height: 45px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            & .official-doctors {
+                margin-top: 40px;
+
+                & .title {
+                    font-size: 25px;
+                }
+
+                & .doctors {
+                    grid-template-columns: 1fr;
+
+                    & .doctor {
+                        display: grid;
+                        grid-template-columns: 100px 1fr;
+                        grid-template-rows: auto auto;
+                        grid-template-areas:
+                            'img-rating info'
+                            'buttons buttons';
+                        gap: 10px 0;
+                        align-items: center;
+                        padding: 16px;
+
+                        & > div:first-child {
+                            grid-area: img-rating;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            position: relative;
+
+                            & img {
+                                width: 80px;
+                                height: 80px;
+                                border-radius: 50%;
+                                object-fit: cover;
+                            }
+
+                            & .rating {
+                                width: 60px;
+                                height: 25px;
+                                transform: translate(-50%, 45%);
+
+                                .star {
+                                    font-size: 16px;
+                                }
+
+                                span {
+                                    font-size: 14px;
+                                }
+                            }
+                        }
+
+                        & .info {
+                            grid-area: info;
+
+                            h4 {
+                                margin-top: 0;
+                                font-size: 20px;
+                            }
+
+                            p {
+                                margin-top: 5px;
+                                font-size: 18px;
+                                color: var(--darkGrayColor);
+                            }
+                        }
+
+                        & .buttons {
+                            grid-area: buttons;
+
+                            button {
+                                width: 150px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .device-warning {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        padding: 20px;
+
+        & .icon {
+            font-size: 60px;
+            color: var(--darkGrayColor);
+        }
+
+        & p {
+            font-size: 18px;
         }
     }
 }

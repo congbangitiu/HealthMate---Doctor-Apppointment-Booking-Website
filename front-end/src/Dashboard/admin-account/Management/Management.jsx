@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Management.module.scss';
 import Tabs from '../Tabs/Tabs';
@@ -9,10 +9,18 @@ import AppointmentManagement from '../AppointmentManagement/AppointmentManagemen
 import RevenueManagement from '../RevenueManagement/RevenueManagement';
 import { BASE_URL } from '../../../../config';
 import useFetchData from '../../../hooks/useFetchData';
+import { Dialog, Slide, Drawer, useMediaQuery } from '@mui/material';
+import { FaCircleExclamation } from 'react-icons/fa6';
 
 const cx = classNames.bind(styles);
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const Management = () => {
+    const isMobile = useMediaQuery('(max-width:768px)');
+    const [isShowTab, setIsShowTab] = useState(false);
+    const [isShowWarningDevice, setIsShowWarningDevice] = useState(false);
     const [activeTab, setActiveTab] = useState('dashboard');
     const [debouncedQuery, setDebouncedQuery] = useState('');
     const {
@@ -27,10 +35,39 @@ const Management = () => {
     } = useFetchData(`${BASE_URL}/doctors?query=${debouncedQuery}`);
     const { data: appointments } = useFetchData(`${BASE_URL}/bookings`);
 
+    useEffect(() => {
+        setIsShowWarningDevice(true);
+    }, [isMobile]);
+
     return (
         <div className={cx('container')}>
+            {isMobile && (
+                <div className={cx('management-mobile-btn')} onClick={() => setIsShowTab(true)}>
+                    Management {'>>'}
+                </div>
+            )}
             <div className={cx('inner')}>
-                <Tabs activeTab={activeTab} setActiveTab={setActiveTab} doctors={doctors} />
+                {!isMobile ? (
+                    <Tabs activeTab={activeTab} setActiveTab={setActiveTab} doctors={doctors} />
+                ) : (
+                    <Drawer
+                        open={isShowTab}
+                        anchor="left"
+                        onClose={() => setIsShowTab(false)}
+                        sx={{
+                            '& .MuiPaper-root': {
+                                width: 'max-content',
+                            },
+                        }}
+                    >
+                        <Tabs
+                            activeTab={activeTab}
+                            setActiveTab={setActiveTab}
+                            doctors={doctors}
+                            setIsShowTab={setIsShowTab}
+                        />
+                    </Drawer>
+                )}
 
                 <div className={cx('content')}>
                     {activeTab === 'dashboard' && (
@@ -58,6 +95,29 @@ const Management = () => {
                     {activeTab === 'revenue' && <RevenueManagement doctors={doctors} appointments={appointments} />}
                 </div>
             </div>
+
+            {isMobile && (
+                <Dialog
+                    open={isShowWarningDevice}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    aria-describedby="alert-dialog-slide-description"
+                    sx={{
+                        '& .MuiPaper-root': {
+                            borderRadius: '10px',
+                        },
+                    }}
+                >
+                    <div className={cx('warning-devices')}>
+                        <FaCircleExclamation className={cx('icon')} />
+                        <p>
+                            Some features in Dashboard Management are only available on desktop. For the full admin
+                            experience and better usability, please use a desktop browser.
+                        </p>
+                        <button onClick={() => setIsShowWarningDevice(false)}>I know</button>
+                    </div>
+                </Dialog>
+            )}
         </div>
     );
 };

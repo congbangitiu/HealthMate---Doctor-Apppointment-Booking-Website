@@ -34,6 +34,13 @@ const PatientManagement = ({ users, setDebouncedQuery, loading, error }) => {
         setCurrentItems(items);
     }, [currentPage, patients]);
 
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }, []);
+
     return (
         <div className={cx('container')}>
             <AdminSearch

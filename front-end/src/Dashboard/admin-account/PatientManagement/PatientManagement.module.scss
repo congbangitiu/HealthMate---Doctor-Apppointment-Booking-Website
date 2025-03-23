@@ -4,7 +4,7 @@
     & .patients {
         margin-top: 80px;
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 1fr);
         gap: 30px;
 
         & .patient {
@@ -94,6 +94,26 @@
                         padding: 2px 10px;
                         border-radius: 100px;
                         margin-top: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .container {
+        & .patients {
+            margin-top: 50px;
+            grid-template-columns: 1fr;
+
+            & .patient {
+                flex-direction: column-reverse;
+                gap: 5px;
+
+                & .left-part {
+                    & img {
+                        display: none;
                     }
                 }
             }

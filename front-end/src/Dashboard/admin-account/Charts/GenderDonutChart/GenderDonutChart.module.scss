@@ -29,3 +29,17 @@
         justify-content: center;
     }
 }
+
+@media only screen and (max-width: 768px) {
+    .container {
+        padding: 0;
+
+        & .intro {
+            & select {
+                & option {
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+}
