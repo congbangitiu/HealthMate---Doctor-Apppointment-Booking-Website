@@ -111,7 +111,7 @@ const ExaminationFormView = ({ appointment, examination }) => {
                 <h2>Ultrasound Results</h2>
                 <div className={cx('ultrasound-photos')}>
                     <Image.PreviewGroup>
-                        {examination.ultrasoundPhotos.map((photo, index) => (
+                        {examination.ultrasoundPhotos?.map((photo, index) => (
                             <Image key={index} width={150} height={100} src={photo} />
                         ))}
                     </Image.PreviewGroup>
@@ -125,7 +125,7 @@ const ExaminationFormView = ({ appointment, examination }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {Object.entries(examination.ultrasoundResults).map(([organ, result], index) => (
+                            {Object.entries(examination.ultrasoundResults || '').map(([organ, result], index) => (
                                 <tr key={index}>
                                     <td>{organ}</td>
                                     <td>{result}</td>

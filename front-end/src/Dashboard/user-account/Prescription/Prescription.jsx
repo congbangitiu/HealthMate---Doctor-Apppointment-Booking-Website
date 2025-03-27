@@ -14,7 +14,6 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import SyncLoader from 'react-spinners/SyncLoader';
 import { FaCircleExclamation } from 'react-icons/fa6';
-import InfoToolTip from '../../../components/InfoToolTip/InfoToolTip';
 
 const cx = classNames.bind(styles);
 
@@ -68,168 +67,120 @@ const Prescription = () => {
     };
 
     useEffect(() => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth',
-            });
-        }, []);
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }, []);
 
     return (
-        <div className={cx('container')}>
-            <div className={cx('application')}>
-                <div className={cx('info')}>
-                    {loading ? (
-                        <Loader />
-                    ) : error ? (
-                        <ErrorSign errorMessage={error} />
-                    ) : (
-                        <>
-                            <img src={appointment?.doctor?.photo} alt="" />
-                            <h1>Dr. {appointment?.doctor?.fullname}</h1>
-                            <p>
-                                <b>Email:</b>{' '}
-                                <InfoToolTip
-                                    text={appointment?.doctor?.email}
-                                    maxLength={20}
-                                    customStyle={{ fontSize: '16px', color: 'var(--darkGrayColor)' }}
-                                />
-                            </p>
-                            <p>
-                                <b>Phone number:</b> 0{appointment?.doctor?.phone}
-                            </p>
-                        </>
+        <>
+            {loading ? (
+                <Loader />
+            ) : error ? (
+                <ErrorSign />
+            ) : (
+                <div className={cx('container')}>
+                    {!prescription?.createdAt && (
+                        <div className={cx('pending-noti')}>
+                            <FaCircleExclamation className={cx('icon')} />
+                            Dr. {appointment?.doctor?.fullname} has not prescribed your medication yet !
+                        </div>
                     )}
-                </div>
-                <div className={cx('info')}>
-                    {loading ? (
-                        <Loader />
-                    ) : error ? (
-                        <ErrorSign errorMessage={error} />
-                    ) : (
-                        <>
-                            <img src={appointment?.user?.photo} alt="" />
-                            <h1>{appointment?.user?.fullname}</h1>
+                    <div id="prescription" className={cx('prescription')}>
+                        <div className={cx('brand')}>
+                            <img src={Logo} alt="" />
+                            <div>
+                                <h4>HEALTHMATE</h4>
+                                <p>Your Wellness - Our Priority</p>
+                            </div>
+                        </div>
+                        <h1>PRESCRIPTION</h1>
+                        <div className={cx('patient-info')}>
                             <p>
-                                <b>Email:</b>
-                                <InfoToolTip
-                                    text={appointment?.user?.email}
-                                    maxLength={20}
-                                    customStyle={{ fontSize: '16px', color: 'var(--darkGrayColor)' }}
-                                />
+                                <b>Patient&apos;s full name:</b> {appointment?.user?.fullname}
                             </p>
-                            <p>
-                                <b>Phone number:</b> 0{appointment?.user?.phone}
-                            </p>
-                            {appointment?.user?.dateOfBirth && (
+                            <span>
                                 <p>
                                     <b>Date of birth:</b> {appointment?.user?.dateOfBirth}
                                 </p>
-                            )}
-                        </>
-                    )}
-                </div>
-            </div>
-
-            <div className={cx('prescription-wrapper')}>
-                {!prescription?.createdAt && (
-                    <div className={cx('pending-noti')}>
-                        <FaCircleExclamation className={cx('icon')} />
-                        Dr. {appointment?.doctor?.fullname} has not prescribed your medication yet !
-                    </div>
-                )}
-                <div id="prescription" className={cx('prescription')}>
-                    <div className={cx('brand')}>
-                        <img src={Logo} alt="" />
-                        <div>
-                            <h4>HEALTHMATE</h4>
-                            <p>Your Wellness - Our Priority</p>
-                        </div>
-                    </div>
-                    <h1>PRESCRIPTION</h1>
-                    <div className={cx('patient-info')}>
-                        <p>
-                            <b>Patient&apos;s full name:</b> {appointment?.user?.fullname}
-                        </p>
-                        <span>
-                            <p>
-                                <b>Date of birth:</b> {appointment?.user?.dateOfBirth}
-                            </p>
-                            <p>
-                                <b>Gender:</b> {appointment?.user?.gender}
-                            </p>
-                        </span>
-                        <span>
-                            <p>
-                                <b>Address:</b> {appointment?.user?.address}
-                            </p>
-                            <p>
-                                <b>Phone number:</b> 0{appointment?.user?.phone}
-                            </p>
-                        </span>
-                        {prescription?.createdAt && (
-                            <>
                                 <p>
-                                    <b>Disease:</b> {prescription?.diseaseName}
+                                    <b>Gender:</b> {appointment?.user?.gender}
                                 </p>
-                                <div className={cx('medications')}>
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>No.</th>
-                                                <th>Name of Medicine</th>
-                                                <th>Quantity Per Time</th>
-                                                <th>Times Per Day</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {prescription?.medications?.map((medication, index) => (
-                                                <tr key={index}>
-                                                    <td>{index + 1}</td>
-                                                    <td>{medication.name}</td>
-                                                    <td>{medication.dosage?.quantityPerTime}</td>
-                                                    <td>{medication.dosage?.timesPerDay}</td>
+                            </span>
+                            <span>
+                                <p>
+                                    <b>Address:</b> {appointment?.user?.address}
+                                </p>
+                                <p>
+                                    <b>Phone number:</b> 0{appointment?.user?.phone}
+                                </p>
+                            </span>
+                            {prescription?.createdAt && (
+                                <>
+                                    <p>
+                                        <b>Disease:</b> {prescription?.diseaseName}
+                                    </p>
+                                    <div className={cx('medications')}>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>No.</th>
+                                                    <th>Name of Medicine</th>
+                                                    <th>Quantity Per Time</th>
+                                                    <th>Times Per Day</th>
                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                    <h4>
-                                        <b>Total types of medications:</b> {prescription?.medications?.length}
-                                    </h4>
+                                            </thead>
+                                            <tbody>
+                                                {prescription?.medications?.map((medication, index) => (
+                                                    <tr key={index}>
+                                                        <td>{index + 1}</td>
+                                                        <td>{medication.name}</td>
+                                                        <td>{medication.dosage?.quantityPerTime}</td>
+                                                        <td>{medication.dosage?.timesPerDay}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                        <h4>
+                                            <b>Total types of medications:</b> {prescription?.medications?.length}
+                                        </h4>
+                                    </div>
+                                    <p>
+                                        <b>Note: </b>
+                                        {prescription?.note}
+                                    </p>
+                                </>
+                            )}
+                        </div>
+                        {prescription?.createdAt && (
+                            <div className={cx('confirmation')}>
+                                <div>
+                                    <h4>HealthMate, {formatDate(prescription?.updatedAt)}</h4>
+                                    <span>
+                                        <img src={Watermark} alt="" />
+                                        <img src={appointment?.doctor?.signature} alt="" />
+                                    </span>
+                                    <p>{appointment?.doctor?.fullname}</p>
                                 </div>
-                                <p>
-                                    <b>Note: </b>
-                                    {prescription?.note}
-                                </p>
-                            </>
+                            </div>
                         )}
                     </div>
+
                     {prescription?.createdAt && (
-                        <div className={cx('confirmation')}>
-                            <div>
-                                <h4>HealthMate, {formatDate(prescription?.updatedAt)}</h4>
-                                <span>
-                                    <img src={Watermark} alt="" />
-                                    <img src={appointment?.doctor?.signature} alt="" />
-                                </span>
-                                <p>{appointment?.doctor?.fullname}</p>
-                            </div>
-                        </div>
+                        <button onClick={handleDownloadPDF}>
+                            {loadingBtn ? (
+                                <SyncLoader size={10} color="#ffffff" />
+                            ) : (
+                                <p>
+                                    Download to PDF <TbDownload className={cx('icon')} />
+                                </p>
+                            )}
+                        </button>
                     )}
                 </div>
-
-                {prescription?.createdAt && (
-                    <button onClick={handleDownloadPDF}>
-                        {loadingBtn ? (
-                            <SyncLoader size={10} color="#ffffff" />
-                        ) : (
-                            <p>
-                                Download to PDF <TbDownload className={cx('icon')} />
-                            </p>
-                        )}
-                    </button>
-                )}
-            </div>
-        </div>
+            )}
+        </>
     );
 };
 

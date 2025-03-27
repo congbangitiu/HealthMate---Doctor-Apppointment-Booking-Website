@@ -90,32 +90,34 @@ const MedicalRecords = () => {
                 </div>
             </div>
             <section>
-                <Tabs
-                    value={activeTab}
-                    onChange={handleChangeTab}
-                    textColor="inherit"
-                    indicatorColor="inherit"
-                    sx={{
-                        '& .MuiTab-root': {
-                            color: 'var(--irisBlueColor)',
-                            fontSize: '14px',
-                            padding: '0',
-                            margin: '0 30px 0 0',
-                        },
-                        '& .Mui-selected': {
-                            color: 'var(--irisBlueColor)',
-                            fontSize: '14px',
-                        },
-                        '& .MuiTabs-indicator': {
-                            backgroundColor: 'var(--irisBlueColor)',
-                            height: '3px',
-                        },
-                    }}
-                    style={{}}
-                >
-                    <Tab value="examination-form" label="Examination Form" />
-                    <Tab value="prescription" label="Prescription" />
-                </Tabs>
+                <div className={cx('tabs')}>
+                    <Tabs
+                        value={activeTab}
+                        onChange={handleChangeTab}
+                        textColor="inherit"
+                        indicatorColor="inherit"
+                        sx={{
+                            '& .MuiTab-root': {
+                                color: 'var(--irisBlueColor)',
+                                fontSize: '14px',
+                                padding: '0',
+                                margin: '0 30px 0 0',
+                            },
+                            '& .Mui-selected': {
+                                color: 'var(--irisBlueColor)',
+                                fontSize: '14px',
+                            },
+                            '& .MuiTabs-indicator': {
+                                backgroundColor: 'var(--irisBlueColor)',
+                                height: '3px',
+                            },
+                        }}
+                        style={{}}
+                    >
+                        <Tab value="examination-form" label="Examination Form" />
+                        <Tab value="prescription" label="Prescription" />
+                    </Tabs>
+                </div>
                 {activeTab === 'examination-form' ? <ExaminationForm /> : <Prescription />}
             </section>
         </div>

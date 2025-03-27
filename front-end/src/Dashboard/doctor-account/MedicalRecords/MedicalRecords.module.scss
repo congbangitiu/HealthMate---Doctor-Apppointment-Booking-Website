@@ -47,5 +47,9 @@
     & section {
         padding: 0;
         flex: 1;
+
+        & .tabs {
+            border-bottom: 2px solid var(--darkGrayColor);
+        }
     }
 }

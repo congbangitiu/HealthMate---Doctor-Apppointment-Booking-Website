@@ -13,7 +13,7 @@ import Dashboard from '../Dashboard/doctor-account/Dashboard/Dashboard';
 import CheckoutSucess from '../pages/CheckoutSuccess/CheckoutSuccess';
 import ProtectedRoute from './ProtectedRoute';
 import CompleteSignUp from '../pages/CompleteSignUp/CompleteSignUp';
-import PrescriptionPatient from '../Dashboard/user-account/Prescription/Prescription';
+import MedicalRecordsPatient from '../Dashboard/user-account/MedicalRecords/MedicalRecords';
 import MedicalRecordsDoctor from '../Dashboard/doctor-account/MedicalRecords/MedicalRecords';
 import Management from '../Dashboard/admin-account/Management/Management';
 import Chat from '../pages/Chat/Chat';
@@ -46,7 +46,7 @@ const Routers = () => {
                 path="/users/appointments/my-appointments/:id"
                 element={
                     <ProtectedRoute allowedRoles={['patient', 'admin']}>
-                        <PrescriptionPatient />
+                        <MedicalRecordsPatient />
                     </ProtectedRoute>
                 }
             />
