@@ -8,7 +8,6 @@ import Loader from '../../../components/Loader/Loader';
 import ErrorSign from '../../../components/Error/Error';
 import PrescriptionEdit from '../PrescriptionEdit/PrescriptionEdit';
 import PrescriptionView from '../PrescriptionView/PrescriptionView';
-import InfoToolTip from '../../../components/InfoToolTip/InfoToolTip';
 
 const cx = classNames.bind(styles);
 
@@ -74,90 +73,38 @@ const Prescription = () => {
 
     return (
         <div className={cx('container')}>
-            <div className={cx('application')}>
-                <div className={cx('info')}>
-                    {loading ? (
-                        <Loader />
-                    ) : error ? (
-                        <ErrorSign errorMessage={error} />
-                    ) : (
-                        <>
-                            <img src={appointment?.user?.photo} alt="" />
-                            <h1>{appointment?.user?.fullname}</h1>
-                            <p>
-                                <b>Email:</b>{' '}
-                                <InfoToolTip
-                                    text={appointment?.user?.email}
-                                    maxLength={20}
-                                    customStyle={{ fontSize: '16px', color: 'var(--darkGrayColor)' }}
-                                />
-                            </p>
-                            <p>
-                                <b>Phone number:</b> 0{appointment?.user?.phone}
-                            </p>
-                            {appointment?.user?.dateOfBirth && (
-                                <p>
-                                    <b>Date of birth:</b> {appointment?.user?.dateOfBirth}
-                                </p>
-                            )}
-                        </>
-                    )}
-                </div>
-                <div className={cx('info')}>
-                    {loading ? (
-                        <Loader />
-                    ) : error ? (
-                        <ErrorSign errorMessage={error} />
-                    ) : (
-                        <>
-                            <img src={appointment?.doctor?.photo} alt="" />
-                            <h1>Dr. {appointment?.doctor?.fullname}</h1>
-                            <p>
-                                <b>Email:</b>{' '}
-                                <InfoToolTip
-                                    text={appointment?.doctor?.email}
-                                    maxLength={20}
-                                    customStyle={{ fontSize: '16px', color: 'var(--darkGrayColor)' }}
-                                />
-                            </p>
-                            <p>
-                                <b>Phone number:</b> 0{appointment?.doctor?.phone}
-                            </p>
-                        </>
-                    )}
-                </div>
+            <div className={cx('toggle')}>
+                {!toggle ? <h4>Edit mode</h4> : <h4>View mode</h4>}
+                <label className={cx('switch')}>
+                    <input type="checkbox" checked={toggle} onChange={() => setToggle((prevState) => !prevState)} />
+                    <div className={cx('slider')} />
+                    <div className={cx('slider-card')}>
+                        <div className={cx('slider-card-face', 'slider-card-front')} />
+                        <div className={cx('slider-card-face', 'slider-card-back')} />
+                    </div>
+                </label>
             </div>
 
-            <div className={cx('prescription')}>
-                <div className={cx('toggle')}>
-                    {!toggle ? <h4>Edit mode</h4> : <h4>View mode</h4>}
-                    <label className={cx('switch')}>
-                        <input type="checkbox" checked={toggle} onChange={() => setToggle((prevState) => !prevState)} />
-                        <div className={cx('slider')} />
-                        <div className={cx('slider-card')}>
-                            <div className={cx('slider-card-face', 'slider-card-front')} />
-                            <div className={cx('slider-card-face', 'slider-card-back')} />
-                        </div>
-                    </label>
-                </div>
-
-                {!toggle ? (
-                    <PrescriptionEdit
-                        appointment={appointment}
-                        setAppointment={setAppointment}
-                        diseaseName={diseaseName}
-                        setDiseaseName={setDiseaseName}
-                        note={note}
-                        setNote={setNote}
-                        medications={medications}
-                        setMedications={setMedications}
-                        id={id}
-                        createdTime={createdTime}
-                    />
-                ) : (
-                    <PrescriptionView appointment={appointment} prescription={prescription} />
-                )}
-            </div>
+            {loading ? (
+                <Loader />
+            ) : error ? (
+                <ErrorSign />
+            ) : !toggle ? (
+                <PrescriptionEdit
+                    appointment={appointment}
+                    setAppointment={setAppointment}
+                    diseaseName={diseaseName}
+                    setDiseaseName={setDiseaseName}
+                    note={note}
+                    setNote={setNote}
+                    medications={medications}
+                    setMedications={setMedications}
+                    id={id}
+                    createdTime={createdTime}
+                />
+            ) : (
+                <PrescriptionView appointment={appointment} prescription={prescription} />
+            )}
         </div>
     );
 };

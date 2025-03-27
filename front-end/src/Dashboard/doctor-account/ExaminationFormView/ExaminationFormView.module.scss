@@ -1,0 +1,340 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    & .examination {
+        width: 100%;
+        margin-top: 15px;
+
+        & div:first-child {
+            display: flex;
+            align-items: center;
+
+            & .brand {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                width: 100%;
+
+                & img {
+                    width: 100px;
+                    height: 100px;
+                }
+
+                & div {
+                    & h4 {
+                        font-size: 20px;
+                        font-weight: 600;
+                        color: var(--irisBlueColor);
+                    }
+
+                    & p {
+                        font-size: 18px;
+                        color: var(--irisBlueColor);
+                    }
+                }
+            }
+        }
+
+        & h1 {
+            font-size: 30px;
+            font-weight: 500;
+            color: var(--primaryColor);
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        & .patient-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            & span {
+                display: flex;
+                justify-content: space-between;
+
+                & p {
+                    font-size: 20px;
+                }
+            }
+
+            & p {
+                font-size: 20px;
+            }
+
+            & .gender {
+                text-transform: capitalize;
+            }
+        }
+
+        & .examination {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            & span {
+                display: flex;
+                font-size: 20px;
+                gap: 5px;
+            }
+        }
+
+        & h2 {
+            font-size: 25px;
+            font-weight: 600;
+            color: var(--primaryColor);
+            margin: 40px 0 10px 0;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        & .ultrasound-photos {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        & .ultrasound-results {
+            margin-top: 30px;
+
+            & table {
+                border-collapse: separate;
+                border-spacing: 0;
+                border: 1px solid var(--primaryColor);
+                border-radius: 10px;
+                font-size: 18px;
+
+                & thead {
+                    background-color: var(--primaryColor);
+
+                    & > tr > th {
+                        font-weight: 500 !important;
+
+                        &:first-child {
+                            border-top-left-radius: 10px;
+                        }
+
+                        &:last-child {
+                            border-top-right-radius: 10px;
+                        }
+                    }
+                }
+
+                & th,
+                & td {
+                    border: 1px solid var(--primaryColor);
+                    text-align: center;
+                }
+
+                & th {
+                    padding: 10px;
+                    background-color: var(--primaryColor);
+                    color: var(--whiteColor);
+                }
+
+                & tr:nth-child(even) {
+                    background-color: #f2f2f2;
+                }
+
+                & tbody {
+                    & tr:last-of-type {
+                        & td:first-child {
+                            border-bottom-left-radius: 10px;
+                            width: 20%;
+                        }
+                        & td:last-child {
+                            border-bottom-right-radius: 10px;
+                        }
+                    }
+
+                    & > tr > td {
+                        padding: 5px;
+                    }
+                }
+            }
+        }
+
+        & .confirmation {
+            width: 100%;
+            display: flex;
+            margin-top: 50px;
+            justify-content: flex-end;
+
+            & > div {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                & h4 {
+                    font-size: 20px;
+                    font-weight: 500;
+                    color: var(--irisBlueColor);
+                }
+
+                & span {
+                    position: relative;
+                    margin: 5px 0;
+                    width: 300px;
+                    display: flex;
+                    flex-direction: column;
+
+                    & img + img {
+                        position: absolute;
+                        z-index: 1;
+                    }
+
+                    & img:first-child {
+                        width: 150px;
+                        height: 150px;
+                    }
+
+                    & img:last-child {
+                        width: 200px;
+                        top: 30px;
+                        left: 40px;
+                    }
+                }
+
+                & p {
+                    font-size: 20px;
+                    font-weight: 500;
+                }
+            }
+        }
+    }
+
+    & button {
+        width: 300px;
+        height: 50px;
+        padding: 10px;
+        background-color: var(--primaryColor);
+        color: var(--whiteColor);
+        font-size: 20px;
+        font-weight: 500;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-top: 50px;
+
+        &:hover {
+            opacity: 0.7;
+        }
+
+        & .icon {
+            font-size: 25px;
+        }
+
+        & p {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+    }
+}
+
+// Responsive design
+@media only screen and (max-width: 768px) {
+    .container {
+        width: 100%;
+
+        & .pending-noti {
+            align-items: flex-start;
+
+            & .icon {
+                margin-top: 2px;
+                width: 30px;
+            }
+        }
+
+        & .prescription {
+            & .brand {
+                gap: 10px;
+
+                & img {
+                    width: 70px;
+                    height: 70px;
+                }
+
+                & div {
+                    & h4 {
+                        font-size: 18px;
+                    }
+
+                    & p {
+                        font-size: 16px;
+                    }
+                }
+            }
+
+            & h1 {
+                font-size: 25px;
+            }
+
+            & .patient-info {
+                gap: 0;
+
+                & p {
+                    font-size: 18px;
+                }
+
+                & span {
+                    flex-direction: column;
+
+                    & p {
+                        font-size: 18px;
+                    }
+                }
+            }
+
+            & .medications {
+                & table {
+                    font-size: 16px;
+                }
+
+                & h4 {
+                    font-size: 18px;
+                }
+            }
+
+            & .confirmation {
+                margin-top: 25px;
+
+                & > div {
+                    transform: translateX(12.5%);
+
+                    & h4 {
+                        font-size: 18px;
+                    }
+
+                    & span {
+                        align-items: center;
+
+                        & img:first-child {
+                            width: 90px;
+                            height: 90px;
+                        }
+
+                        & img:last-child {
+                            width: 120px;
+                            top: 20px;
+                            left: 90px;
+                        }
+                    }
+
+                    & p {
+                        font-size: 18px;
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+
+        & button {
+            display: none;
+        }
+    }
+}

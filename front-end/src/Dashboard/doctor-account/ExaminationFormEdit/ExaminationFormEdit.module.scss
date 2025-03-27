@@ -1,0 +1,205 @@
+.container {
+    margin-top: 15px;
+
+    & .examination-form {
+        & .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+
+            & img {
+                width: 100px;
+                height: 100px;
+            }
+
+            & div {
+                & h4 {
+                    font-size: 20px;
+                    font-weight: 600;
+                    color: var(--primaryColor);
+                }
+
+                & p {
+                    font-size: 18px;
+                    color: var(--primaryColor);
+                }
+            }
+        }
+
+        & h1 {
+            font-size: 30px;
+            font-weight: 500;
+            color: var(--primaryColor);
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        & .patient-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            & span {
+                display: flex;
+                justify-content: space-between;
+
+                & p {
+                    font-size: 20px;
+                }
+            }
+
+            & p {
+                font-size: 20px;
+            }
+
+            & .gender {
+                text-transform: capitalize;
+            }
+        }
+
+        & h2 {
+            font-size: 25px;
+            font-weight: 600;
+            color: var(--primaryColor);
+            margin: 40px 0 20px 0;
+            text-align: center;
+        }
+
+        & .examination,
+        & .ultrasound-results {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            & div {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+
+                & b {
+                    font-size: 20px;
+                }
+
+                & input {
+                    outline: none;
+                    border: 2px solid var(--primaryColor);
+                    border-radius: 5px;
+                    padding: 5px 10px;
+                    font-size: 20px;
+                    flex: 1;
+                }
+            }
+        }
+
+        & .conclusion {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 30px;
+
+            & b {
+                font-size: 20px;
+            }
+
+            & textarea {
+                outline: none;
+                border: 2px solid var(--primaryColor);
+                border-radius: 5px;
+                padding: 5px 10px;
+                font-size: 20px;
+                height: 100px;
+            }
+        }
+
+        & .confirmation {
+            width: 100%;
+            display: flex;
+            margin-top: 50px;
+            justify-content: flex-end;
+
+            & > div {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                & h4 {
+                    font-size: 20px;
+                    font-weight: 500;
+                    color: var(--irisBlueColor);
+                }
+
+                & span {
+                    position: relative;
+                    margin: 5px 0;
+                    width: 300px;
+                    display: flex;
+                    flex-direction: column;
+
+                    & img + img {
+                        position: absolute;
+                        z-index: 1;
+                    }
+
+                    & img:first-child {
+                        width: 150px;
+                        height: 150px;
+                    }
+
+                    & img:last-child {
+                        width: 200px;
+                        top: 30px;
+                        left: 40px;
+                    }
+                }
+
+                & p {
+                    font-size: 20px;
+                    font-weight: 500;
+                }
+
+                & div {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin-top: 10px;
+                    background-color: var(--primaryColor);
+                    border-radius: 5px;
+                    width: 180px;
+                    height: 45px;
+
+                    &:hover {
+                        cursor: pointer;
+                        opacity: 0.8;
+                    }
+
+                    & input {
+                        display: none;
+                    }
+
+                    & label {
+                        color: var(--whiteColor);
+                        font-size: 16px;
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+
+        & .submit-btn {
+            background-color: var(--primaryColor) !important;
+            color: var(--whiteColor);
+            width: 100%;
+            height: 50px;
+            font-size: 18px;
+            font-weight: 500;
+            border-radius: 5px;
+            margin-top: 50px;
+
+            &:hover {
+                opacity: 0.7;
+            }
+        }
+    }
+}

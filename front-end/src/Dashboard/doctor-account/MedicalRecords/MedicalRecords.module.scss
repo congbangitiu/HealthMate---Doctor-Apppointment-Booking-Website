@@ -1,0 +1,51 @@
+.container {
+    display: flex;
+    background-image: url(../../assets/images/Blur.png);
+    padding: 140px 150px 100px 150px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    gap: 100px;
+
+    & .application {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        width: 300px;
+
+        & .info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-shadow: 0 0 5px var(--darkGrayColor);
+            border-radius: 10px;
+
+            & img {
+                border-radius: 10px;
+                border: 5px solid var(--primaryColor);
+                object-fit: cover;
+                aspect-ratio: 1/1;
+            }
+
+            & h1 {
+                font-size: 20px;
+                font-weight: 600;
+                margin: 10px 0;
+            }
+
+            & p {
+                font-size: 16px;
+                color: var(--darkGrayColor);
+                display: flex;
+                gap: 5px;
+            }
+        }
+    }
+
+    & section {
+        padding: 0;
+        flex: 1;
+    }
+}

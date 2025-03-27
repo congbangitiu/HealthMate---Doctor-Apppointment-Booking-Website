@@ -196,13 +196,13 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
                             <option value="O-">O-</option>
                         </select>
                     </div>
-                    <div className={cx('choose')}>
+                    {/* <div className={cx('choose')}>
                         <h4>You are a: </h4>
                         <select name="role" value={formData.role} onChange={handleInputChange}>
                             <option value="patient">Patient</option>
                             <option value="doctor">Doctor</option>
                         </select>
-                    </div>
+                    </div> */}
                     <div className={cx('upload-photo')}>
                         {formData.photo && <img src={formData.photo} alt="" />}
                         <input

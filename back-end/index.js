@@ -13,6 +13,7 @@ import doctorRoute from './Routes/doctor.js';
 import reviewRoute from './Routes/review.js';
 import bookingRoute from './Routes/booking.js';
 import prescriptionRoute from './Routes/prescription.js';
+import examinationRoute from './Routes/examination.js';
 import chatRoute from './Routes/chat.js';
 import { stripeWebhook } from './Controllers/bookingController.js';
 
@@ -71,6 +72,7 @@ app.use('/api/v1/doctors', doctorRoute);
 app.use('/api/v1/reviews', reviewRoute);
 app.use('/api/v1/bookings', bookingRoute);
 app.use('/api/v1/prescriptions', prescriptionRoute);
+app.use('/api/v1/examinations', examinationRoute);
 app.use('/api/v1/chats', chatRoute);
 
 // Attach Socket.IO logic

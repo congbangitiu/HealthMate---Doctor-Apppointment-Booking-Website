@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Prescription.module.scss';
@@ -66,6 +66,13 @@ const Prescription = () => {
             setLoadingBtn(false);
         });
     };
+
+    useEffect(() => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth',
+            });
+        }, []);
 
     return (
         <div className={cx('container')}>
