@@ -8,6 +8,7 @@ import Loader from '../../../components/Loader/Loader';
 import ErrorSign from '../../../components/Error/Error';
 import PrescriptionEdit from '../PrescriptionEdit/PrescriptionEdit';
 import PrescriptionView from '../PrescriptionView/PrescriptionView';
+import ToggleButton from '../../../components/ToggleButton/ToggleButton';
 
 const cx = classNames.bind(styles);
 
@@ -73,17 +74,7 @@ const Prescription = () => {
 
     return (
         <div className={cx('container')}>
-            <div className={cx('toggle')}>
-                {!toggle ? <h4>Edit mode</h4> : <h4>View mode</h4>}
-                <label className={cx('switch')}>
-                    <input type="checkbox" checked={toggle} onChange={() => setToggle((prevState) => !prevState)} />
-                    <div className={cx('slider')} />
-                    <div className={cx('slider-card')}>
-                        <div className={cx('slider-card-face', 'slider-card-front')} />
-                        <div className={cx('slider-card-face', 'slider-card-back')} />
-                    </div>
-                </label>
-            </div>
+            <ToggleButton toggle={toggle} setToggle={setToggle} />
 
             {loading ? (
                 <Loader />

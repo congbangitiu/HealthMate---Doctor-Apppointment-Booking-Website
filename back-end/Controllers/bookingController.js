@@ -11,7 +11,7 @@ import convertTime from '../../front-end/src/utils/convertTime.js';
 dotenv.config();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-const sendConfirmationEmail = async (userEmail, bookingInfo) => {
+const sendBookingConfirmationEmail = async (userEmail, bookingInfo) => {
     try {
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
@@ -121,7 +121,7 @@ export const createBooking = async (req, res) => {
         await Doctor.updateOne({ _id: doctorId }, { $inc: { totalPatients: 1 } });
 
         // Send confirmation email to user
-        await sendConfirmationEmail(user.email, {
+        await sendBookingConfirmationEmail(user.email, {
             userName: user.fullname,
             doctorName: doctor.fullname,
             timeSlot,
@@ -151,6 +151,143 @@ export const createBooking = async (req, res) => {
     } catch (error) {
         console.error('Error creating booking:', error);
         res.status(500).json({ success: false, message: 'Error creating booking', error: error.message });
+    }
+};
+
+const sendReExaminationConfirmationEmail = async (userEmail, bookingInfo) => {
+    try {
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            auth: {
+                user: process.env.EMAIL_USERNAME,
+                pass: process.env.EMAIL_PASSWORD,
+            },
+        });
+
+        const mailOptions = {
+            from: `"HealthMate" <${process.env.EMAIL_USERNAME}>`,
+            to: userEmail,
+            subject: 'HealthMate - Re-Examination Appointment Confirmation',
+            html: `
+                <p style="color: #000000;">Dear ${bookingInfo.userName},</p>
+                <p style="color: #000000;">This is a re-examination appointment scheduled by your doctor, ${
+                    bookingInfo.doctorName
+                }, with the following details:</p>
+                <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+                    <tr>
+                        <th style="text-align: left;">Doctor</th>
+                        <td>${bookingInfo.doctorName}</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left;">Date</th>
+                        <td>${formatDate(bookingInfo.timeSlot.day)}</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left;">Time</th>
+                        <td>${convertTime(bookingInfo.timeSlot.startingTime)} - ${convertTime(
+                bookingInfo.timeSlot.endingTime,
+            )}</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left;">Price</th>
+                        <td>Free (Re-examination)</td> 
+                    </tr>
+                </table>
+                <p style="color: #000000;"><strong>Please make sure to arrive on time for your re-examination appointment. You are requested to return earlier if you experience any abnormal symptoms. The re-examination should be conducted within 10 working days from the date of this appointment, unless otherwise specified.</strong></p>
+                <p style="color: #000000; font-style: italic; margin-top: 20px">Best regards,</p>
+                <strong style="color: #000000;">HealthMate Clinic</strong>
+                <p style="color: #4e545f; font-style: italic">CONFIDENTIALITY NOTICE: This email is intended only for the person(s) named in the message body. Unless otherwise indicated, it contains information that is confidential, privileged, and/or exempt from disclosure under applicable law. If you have received this message in error, please notify the sender and delete the message.</p>
+            `,
+        };
+
+        await transporter.sendMail(mailOptions);
+    } catch (error) {
+        console.error('Error sending email:', error);
+    }
+};
+
+export const createReExaminationBooking = async (req, res) => {
+    try {
+        const { doctorId, userId, timeSlot, currentBookingId } = req.body;
+
+        // Check if doctor exists
+        const doctor = await Doctor.findById(doctorId);
+        if (!doctor) {
+            return res.status(404).json({ success: false, message: 'Doctor not found' });
+        }
+
+        // Check if user exists
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        // Check if current booking exists
+        const currentBooking = await Booking.findById(currentBookingId);
+        if (!currentBooking) {
+            return res.status(404).json({ success: false, message: 'Current booking not found' });
+        }
+
+        // Update nextAppointmentTimeSlot of the current booking
+        currentBooking.nextAppointmentTimeSlot = timeSlot;
+        await currentBooking.save();
+
+        // Create new re-examination booking
+        const newBooking = new Booking({
+            doctor: doctorId,
+            user: userId,
+            ticketPrice: '0',
+            paymentMethod: 'free',
+            isPaid: true,
+            timeSlot,
+            unread: true,
+            isReExamination: true,
+            parentBooking: currentBookingId,
+        });
+
+        // Save the new booking to database
+        const savedBooking = await newBooking.save();
+
+        // Increment the total number of patients for the doctor
+        await Doctor.updateOne({ _id: doctorId }, { $inc: { totalPatients: 1 } });
+
+        // Send confirmation email to user
+        await sendReExaminationConfirmationEmail(user.email, {
+            userName: user.fullname,
+            doctorName: doctor.fullname,
+            timeSlot,
+            ticketPrice: '0',
+        });
+
+        // Emit event to notify the user in real-time
+        req.io.to(user._id.toString()).emit('re-examination-notification', {
+            bookingId: savedBooking._id,
+            doctor: {
+                id: doctor._id,
+                fullname: doctor.fullname,
+                photo: doctor.photo,
+            },
+            timeSlot: timeSlot,
+            createdAt: savedBooking.createdAt,
+            type: 're-examination',
+            status: 'scheduled',
+            isReExamination: true,
+        });
+
+        res.status(201).json({
+            success: true,
+            message: 'Re-examination booking created successfully',
+            booking: savedBooking,
+        });
+    } catch (error) {
+        console.error('Error creating re-examination booking:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error creating re-examination booking',
+            error: error.message,
+        });
     }
 };
 
@@ -364,6 +501,57 @@ export const updateAppointmentStatus = async (req, res) => {
     }
 };
 
+// Update nextAppointmentTimeSlot of current appointment and timeSlot of the re-examination appointment
+export const updateAppointmentTimeSlot = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { nextAppointmentTimeSlot } = req.body;
+
+        const booking = await Booking.findById(id);
+        if (!booking) {
+            return res.status(404).json({ success: false, message: 'Booking not found' });
+        }
+
+        const validateTimeSlot = (slot) => {
+            if (!slot.day || !slot.startingTime || !slot.endingTime) {
+                throw new Error('Invalid time slot: day, startingTime, and endingTime are required');
+            }
+            if (slot.startingTime >= slot.endingTime) {
+                throw new Error('Starting time must be earlier than ending time');
+            }
+            const today = new Date().toISOString().split('T')[0];
+            if (slot.day < today) {
+                throw new Error('Date must be in the future');
+            }
+        };
+
+        // Update next Appointment Time Slot and follow-up appointment if any
+        if (nextAppointmentTimeSlot) {
+            validateTimeSlot(nextAppointmentTimeSlot);
+            booking.nextAppointmentTimeSlot = nextAppointmentTimeSlot;
+
+            // Find related follow-up appointment (based on parentBooking)
+            const reExaminationBooking = await Booking.findOne({
+                parentBooking: id,
+                isReExamination: true,
+            });
+
+            if (reExaminationBooking) {
+                // Update the timeSlot of the follow-up appointment
+                reExaminationBooking.timeSlot = nextAppointmentTimeSlot;
+                await reExaminationBooking.save();
+            }
+        }
+
+        const updatedBooking = await booking.save();
+
+        res.status(200).json({ success: true, message: 'Booking updated successfully', data: updatedBooking });
+    } catch (error) {
+        console.error('Error updating booking:', error);
+        res.status(500).json({ success: false, message: 'Error updating booking', error: error.message });
+    }
+};
+
 export const getAllAppointments = async (req, res) => {
     try {
         const appointments = await Booking.find({});
@@ -424,6 +612,7 @@ export const countUnreadAppointments = async (req, res) => {
         const unreadBookings = await Booking.countDocuments({
             doctor: req.params.doctorId,
             unread: true,
+            isReExamination: false,
         });
 
         res.json({ unreadCount: unreadBookings });

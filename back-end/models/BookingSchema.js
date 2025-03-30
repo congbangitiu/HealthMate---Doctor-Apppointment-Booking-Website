@@ -12,6 +12,15 @@ const statusHistorySchema = new mongoose.Schema({
     },
 });
 
+const timeSlotSchema = new mongoose.Schema(
+    {
+        day: { type: String, required: true },
+        startingTime: { type: String, required: true },
+        endingTime: { type: String, required: true },
+    },
+    { _id: false },
+);
+
 const bookingSchema = new mongoose.Schema(
     {
         doctor: {
@@ -37,17 +46,23 @@ const bookingSchema = new mongoose.Schema(
         },
         paymentMethod: {
             type: String,
-            enum: ['e-wallet', 'cash'],
+            enum: ['e-wallet', 'cash', 'free'],
         },
-        timeSlot: {
-            day: { type: String, required: true },
-            startingTime: { type: String, required: true },
-            endingTime: { type: String, required: true },
-        },
+        timeSlot: timeSlotSchema,
+        nextAppointmentTimeSlot: timeSlotSchema,
         session: { type: String },
         unread: {
             type: Boolean,
             default: true,
+        },
+        isReExamination: {
+            type: Boolean,
+            default: false,
+        },
+        parentBooking: {
+            type: mongoose.Types.ObjectId,
+            ref: 'Booking',
+            default: null,
         },
     },
     { timestamps: true },

@@ -1,0 +1,17 @@
+.container {
+    & .pending-noti {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        background-color: var(--lightYellowColor);
+        border-radius: 5px;
+        width: 100%;
+        margin-top: 10px;
+
+        & .icon {
+            color: var(--darkYellowColor);
+            font-size: 20px;
+        }
+    }
+}

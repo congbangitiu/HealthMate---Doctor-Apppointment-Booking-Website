@@ -3,36 +3,30 @@
     flex-direction: column;
     align-items: center;
 
-    & .examination {
+    & .re-examination {
         width: 100%;
-        margin-top: 15px;
 
-        & div:first-child {
+        & .brand {
             display: flex;
             align-items: center;
+            gap: 15px;
+            width: 100%;
 
-            & .brand {
-                display: flex;
-                align-items: center;
-                gap: 15px;
-                width: 100%;
+            & img {
+                width: 100px;
+                height: 100px;
+            }
 
-                & img {
-                    width: 100px;
-                    height: 100px;
+            & div {
+                & h4 {
+                    font-size: 20px;
+                    font-weight: 600;
+                    color: var(--irisBlueColor);
                 }
 
-                & div {
-                    & h4 {
-                        font-size: 20px;
-                        font-weight: 600;
-                        color: var(--irisBlueColor);
-                    }
-
-                    & p {
-                        font-size: 18px;
-                        color: var(--irisBlueColor);
-                    }
+                & p {
+                    font-size: 18px;
+                    color: var(--irisBlueColor);
                 }
             }
         }
@@ -65,96 +59,6 @@
 
             & .gender {
                 text-transform: capitalize;
-            }
-        }
-
-        & .examination {
-            margin-top: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-
-            & span {
-                display: flex;
-                font-size: 20px;
-                gap: 5px;
-            }
-        }
-
-        & h2 {
-            font-size: 25px;
-            font-weight: 600;
-            color: var(--primaryColor);
-            margin: 40px 0 10px 0;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        & .ultrasound-photos {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        & .ultrasound-results {
-            margin-top: 30px;
-
-            & table {
-                border-collapse: separate;
-                border-spacing: 0;
-                border: 1px solid var(--primaryColor);
-                border-radius: 10px;
-                font-size: 18px;
-                width: 100%;
-
-                & thead {
-                    background-color: var(--primaryColor);
-
-                    & > tr > th {
-                        font-weight: 500 !important;
-
-                        &:first-child {
-                            border-top-left-radius: 10px;
-                        }
-
-                        &:last-child {
-                            border-top-right-radius: 10px;
-                        }
-                    }
-                }
-
-                & th,
-                & td {
-                    border: 1px solid var(--primaryColor);
-                    text-align: center;
-                }
-
-                & th {
-                    padding: 10px;
-                    background-color: var(--primaryColor);
-                    color: var(--whiteColor);
-                }
-
-                & tr:nth-child(even) {
-                    background-color: #f2f2f2;
-                }
-
-                & tbody {
-                    & tr:last-of-type {
-                        & td:first-child {
-                            border-bottom-left-radius: 10px;
-                            width: 20%;
-                        }
-                        & td:last-child {
-                            border-bottom-right-radius: 10px;
-                        }
-                    }
-
-                    & > tr > td {
-                        padding: 5px;
-                    }
-                }
             }
         }
 
@@ -204,6 +108,83 @@
                     font-weight: 500;
                 }
             }
+        }
+    }
+
+    & .notice {
+        margin-top: 5px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        & div:first-child {
+            display: flex;
+            gap: 5px;
+            font-size: 20px;
+        }
+
+        & table {
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 1px solid var(--primaryColor);
+            border-radius: 10px;
+            font-size: 18px;
+            margin-top: 10px;
+            table-layout: fixed;
+
+            & thead {
+                background-color: var(--primaryColor);
+
+                & > tr > th {
+                    font-weight: 500 !important;
+
+                    &:first-child {
+                        border-top-left-radius: 10px;
+                    }
+
+                    &:last-child {
+                        border-top-right-radius: 10px;
+                    }
+                }
+            }
+
+            & th,
+            & td {
+                border: 1px solid var(--primaryColor);
+                text-align: center;
+                width: calc(100% / 3);
+            }
+
+            & th {
+                padding: 10px;
+                background-color: var(--primaryColor);
+                color: var(--whiteColor);
+            }
+
+            & tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            & tbody {
+                & tr:last-of-type {
+                    & td:first-child {
+                        border-bottom-left-radius: 10px;
+                        width: 20%;
+                    }
+                    & td:last-child {
+                        border-bottom-right-radius: 10px;
+                    }
+                }
+
+                & > tr > td {
+                    padding: 5px;
+                }
+            }
+        }
+
+        & div:last-child {
+            font-size: 20px;
+            margin-top: 10px;
         }
     }
 

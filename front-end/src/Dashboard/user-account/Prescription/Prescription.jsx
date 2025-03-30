@@ -7,7 +7,6 @@ import Watermark from '../../../assets/images/watermark30.png';
 import { BASE_URL } from '../../../../config';
 import useFetchData from '../../../hooks/useFetchData';
 import Loader from '../../../components/Loader/Loader';
-import ErrorSign from '../../../components/Error/Error';
 import formatDate from '../../../utils/formatDate';
 import { TbDownload } from 'react-icons/tb';
 import html2canvas from 'html2canvas';
@@ -22,7 +21,6 @@ const Prescription = () => {
     const {
         data: appointment,
         loading,
-        error,
     } = useFetchData(`${BASE_URL}/users/appointments/my-appointments/${appointmentId}`);
 
     const { data: prescription } = useFetchData(`${BASE_URL}/prescriptions/${appointmentId}`);
@@ -77,8 +75,6 @@ const Prescription = () => {
         <>
             {loading ? (
                 <Loader />
-            ) : error ? (
-                <ErrorSign />
             ) : (
                 <div className={cx('container')}>
                     {!prescription?.createdAt && (

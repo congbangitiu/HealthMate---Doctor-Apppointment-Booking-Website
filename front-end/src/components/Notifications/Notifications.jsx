@@ -60,21 +60,24 @@ const Notifications = ({ notifications, role, handleCloseNotifications }) => {
                             })}
                             onClick={() => handleMoveToPrescription(notification)}
                         >
-                            {role === 'doctor' && notification.type === 'booking' && notification.status !== 'done' && (
-                                <>
-                                    <img src={notification.user.photo} alt={notification.user.fullname} />
-                                    <div className={cx('details')}>
-                                        <p>
-                                            <b>{notification.user.fullname}</b> has{' '}
-                                            {notification.status === 'pending' ? <b>booked</b> : <b>cancelled</b>}{' '}
-                                            {notification.status === 'pending' ? 'an' : 'the'} appointment on{' '}
-                                            <b>{formatDate(notification.timeSlot?.day)}</b> at{' '}
-                                            <b>{convertTime(notification.timeSlot?.startingTime)}</b>
-                                        </p>
-                                        <p>{timeAgoMap[notification.id]}</p>
-                                    </div>
-                                </>
-                            )}
+                            {role === 'doctor' &&
+                                notification.type === 'booking' &&
+                                notification.status !== 'done' &&
+                                !notification.isReExamination && (
+                                    <>
+                                        <img src={notification.user.photo} alt={notification.user.fullname} />
+                                        <div className={cx('details')}>
+                                            <p>
+                                                <b>{notification.user.fullname}</b> has{' '}
+                                                {notification.status === 'pending' ? <b>booked</b> : <b>cancelled</b>}{' '}
+                                                {notification.status === 'pending' ? 'an' : 'the'} appointment on{' '}
+                                                <b>{formatDate(notification.timeSlot?.day)}</b> at{' '}
+                                                <b>{convertTime(notification.timeSlot?.startingTime)}</b>
+                                            </p>
+                                            <p>{timeAgoMap[notification.id]}</p>
+                                        </div>
+                                    </>
+                                )}
 
                             {role === 'patient' && notification.type === 'prescription' && (
                                 <>
@@ -84,6 +87,21 @@ const Notifications = ({ notifications, role, handleCloseNotifications }) => {
                                             <b>Dr. {notification.doctor.fullname}</b> has{' '}
                                             {notification.action === 'create' ? <b>issued</b> : <b>updated</b>} the
                                             prescription for your appointment on{' '}
+                                            <b>{formatDate(notification.timeSlot.day)}</b> at{' '}
+                                            <b>{convertTime(notification.timeSlot.startingTime)}</b>
+                                        </p>
+                                        <p>{timeAgoMap[notification.id]}</p>
+                                    </div>
+                                </>
+                            )}
+
+                            {role === 'patient' && notification.isReExamination && (
+                                <>
+                                    <img src={notification.doctor.photo} alt={notification.doctor.fullname} />
+                                    <div className={cx('details')}>
+                                        <p>
+                                            <b>Dr. {notification.doctor.fullname}</b> has scheduled a{' '}
+                                            <b>follow-up appointment</b> for you on{' '}
                                             <b>{formatDate(notification.timeSlot.day)}</b> at{' '}
                                             <b>{convertTime(notification.timeSlot.startingTime)}</b>
                                         </p>

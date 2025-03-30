@@ -34,7 +34,7 @@ const Header = () => {
     const [showConfirmLogout, setShowConfirmLogout] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const { data: appointmentData } = useFetchData(
-        role === 'doctor' ? `${BASE_URL}/doctors/appointments/my-appointments` : null,
+        `${BASE_URL}/${role === 'doctor' ? 'doctors' : 'users'}/appointments/my-appointments`,
     );
     const { data: prescriptionData } = useFetchData(
         role === 'patient' ? `${BASE_URL}/users/appointments/my-prescriptions` : null,
@@ -197,32 +197,36 @@ const Header = () => {
         let formattedData = [];
 
         if (role === 'doctor' && appointmentData) {
-            formattedData = appointmentData.map((item) => {
-                // Check if statusHistory exists and has data
-                const latestStatusObj =
-                    Array.isArray(item.statusHistory) && item.statusHistory.length > 0
-                        ? item.statusHistory[item.statusHistory.length - 1]
-                        : null;
+            formattedData = appointmentData
+                // Filter out follow-up appointments from the start
+                .filter((item) => !item.isReExamination)
+                .map((item) => {
+                    // Check if statusHistory exists and has data
+                    const latestStatusObj =
+                        Array.isArray(item.statusHistory) && item.statusHistory.length > 0
+                            ? item.statusHistory[item.statusHistory.length - 1]
+                            : null;
 
-                // Determine the appropriate `createdAt`
-                const createdAtTimestamp =
-                    latestStatusObj && latestStatusObj.status === 'cancelled'
-                        ? latestStatusObj.timestamp
-                        : item.createdAt;
+                    // Determine the appropriate `createdAt`
+                    const createdAtTimestamp =
+                        latestStatusObj && latestStatusObj.status === 'cancelled'
+                            ? latestStatusObj.timestamp
+                            : item.createdAt;
 
-                return {
-                    id: item._id,
-                    appointmentId: item._id,
-                    user: item.user,
-                    timeSlot: item.timeSlot,
-                    createdAt: createdAtTimestamp,
-                    type: 'booking',
-                    status: latestStatusObj ? latestStatusObj.status : item.status, // Get the last status from statusHistory if available
-                };
-            });
+                    return {
+                        id: item._id,
+                        appointmentId: item._id,
+                        user: item.user,
+                        timeSlot: item.timeSlot,
+                        createdAt: createdAtTimestamp,
+                        type: 'booking',
+                        status: latestStatusObj ? latestStatusObj.status : item.status,
+                        isReExamination: false, 
+                    };
+                });
         } else if (role === 'patient' && prescriptionData) {
             // Flatten the actionHistory array to display each action as a separate notification
-            formattedData = prescriptionData.flatMap((item) => {
+            const prescriptionNotifications = prescriptionData.flatMap((item) => {
                 if (item.actionHistory && Array.isArray(item.actionHistory)) {
                     return item.actionHistory.map((action, index) => ({
                         id: `${item._id}-${index}`,
@@ -246,6 +250,24 @@ const Header = () => {
                     type: 'prescription',
                 };
             });
+
+            formattedData = [...formattedData, ...prescriptionNotifications];
+
+            if (appointmentData) {
+                const reExamNotifications = appointmentData
+                    .filter((item) => item.isReExamination)
+                    .map((item) => ({
+                        id: item._id,
+                        appointmentId: item._id,
+                        doctor: item.doctor,
+                        timeSlot: item.timeSlot,
+                        createdAt: item.createdAt,
+                        type: 're-examination',
+                        status: item.status,
+                        isReExamination: true,
+                    }));
+                formattedData = [...formattedData, ...reExamNotifications];
+            }
         }
 
         setNotifications(
@@ -277,8 +299,6 @@ const Header = () => {
                         type: 'prescription',
                     };
 
-                    console.log('latestNotification.action: ', latestNotification.action);
-
                     return [latestNotification, ...prevNotifications]
                         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                         .slice(0, 6);
@@ -305,17 +325,19 @@ const Header = () => {
             // Listen for announcements when patients make appointments
             socket.off('booking-notification'); // Remove old event listener before adding new one
             socket.on('booking-notification', (appointment) => {
-                const newNotification = {
-                    id: appointment.bookingId,
-                    appointmentId: appointment.bookingId,
-                    user: appointment.user,
-                    timeSlot: appointment.timeSlot,
-                    createdAt: appointment.createdAt,
-                    type: 'booking',
-                    status: appointment.status,
-                };
+                if (!appointment.isReExamination) {
+                    const newNotification = {
+                        id: appointment.bookingId,
+                        appointmentId: appointment.bookingId,
+                        user: appointment.user,
+                        timeSlot: appointment.timeSlot,
+                        createdAt: appointment.createdAt,
+                        type: 'booking',
+                        status: appointment.status,
+                    };
 
-                updateNotifications(newNotification);
+                    updateNotifications(newNotification);
+                }
             });
 
             // Listen for announcements when doctors cancel appointments
@@ -353,11 +375,28 @@ const Header = () => {
 
                 updateNotifications(newNotification);
             });
+
+            socket.off('re-examination-notification');
+            socket.on('re-examination-notification', (booking) => {
+                const newNotification = {
+                    id: booking.bookingId,
+                    appointmentId: booking.bookingId,
+                    doctor: booking.doctor,
+                    timeSlot: booking.timeSlot,
+                    createdAt: booking.createdAt,
+                    type: 're-examination',
+                    isReExamination: true,
+                };
+
+                updateNotifications(newNotification);
+                setUnreadPrescriptions((prev) => prev + 1);
+            });
         }
 
         return () => {
             socket.off('booking-notification');
             socket.off('prescription-notification');
+            socket.off('re-examination-notification');
             socket.off('cancelled-notification');
         };
     }, [user, role]);
@@ -517,7 +556,7 @@ const Header = () => {
                         </li>
                     ))}
                     <button className={cx('logout-mobile')} onClick={() => setShowConfirmLogout(true)}>
-                        <IoIosLogOut className={cx('icon')}/> Logout
+                        <IoIosLogOut className={cx('icon')} /> Logout
                     </button>
                 </div>
                 <div className={cx('policy')}>

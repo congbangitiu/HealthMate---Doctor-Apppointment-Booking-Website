@@ -11,6 +11,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Prescription from '../Prescription/Prescription';
 import ExaminationForm from '../ExaminationForm/ExaminationForm';
+import ReExaminationAppointment from '../ReExaminationAppointment/ReExaminationAppointment';
 
 const cx = classNames.bind(styles);
 
@@ -112,9 +113,18 @@ const MedicalRecords = () => {
                     >
                         <Tab value="examination-form" label="Examination Form" />
                         <Tab value="prescription" label="Prescription" />
+                        {appointment.status === 'done' && appointment.nextAppointmentTimeSlot && (
+                            <Tab value="re-examination-appointment" label="Re-Examination Appointment" />
+                        )}
                     </Tabs>
                 </div>
-                {activeTab === 'examination-form' ? <ExaminationForm appointment={appointment} /> : <Prescription />}
+                {activeTab === 'examination-form' ? (
+                    <ExaminationForm appointment={appointment} />
+                ) : activeTab === 'prescription' ? (
+                    <Prescription />
+                ) : (
+                    <ReExaminationAppointment appointment={appointment} />
+                )}
             </section>
         </div>
     );

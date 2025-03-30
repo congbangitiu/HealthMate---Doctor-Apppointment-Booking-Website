@@ -43,7 +43,7 @@ const ExaminationFormEdit = ({
     createdTime,
 }) => {
     const theme = useTheme();
-    const [loadingBtnSavePres, setLoadingBtnSavePres] = useState(false);
+    const [loadingBtnSave, setLoadingBtnSave] = useState(false);
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [fileList, setFileList] = useState(
@@ -152,7 +152,7 @@ const ExaminationFormEdit = ({
         };
 
         try {
-            setLoadingBtnSavePres(true);
+            setLoadingBtnSave(true);
 
             const response = await fetch(finalUrl, {
                 method,
@@ -174,7 +174,7 @@ const ExaminationFormEdit = ({
         } catch (error) {
             toast.error(error.message || 'An error occurred');
         } finally {
-            setLoadingBtnSavePres(false);
+            setLoadingBtnSave(false);
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth',
@@ -356,7 +356,7 @@ const ExaminationFormEdit = ({
                     </div>
                 </div>
                 <button type="submit" className={cx('submit-btn')}>
-                    {loadingBtnSavePres ? <SyncLoader size={10} color="#ffffff" /> : 'Save examination form'}
+                    {loadingBtnSave ? <SyncLoader size={10} color="#ffffff" /> : 'Save examination form'}
                 </button>
             </form>
         </div>

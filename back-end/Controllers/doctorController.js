@@ -118,18 +118,24 @@ export const getDoctorProfile = async (req, res) => {
 
 export const getAllDoctorAppointments = async (req, res) => {
     try {
-        const appointments = await Booking.find({ doctor: req.userId }).populate('user', '-password');
+        const appointments = await Booking.find({ doctor: req.userId }).populate('user', '-password').lean();
+
+        const formattedAppointments = appointments.map((appointment) => ({
+            ...appointment,
+            isReExamination: appointment.isReExamination || false,
+        }));
 
         res.status(200).json({
             success: true,
             message: 'Appointments are retrieved successfully',
-            data: appointments,
+            data: formattedAppointments,
         });
     } catch (error) {
         console.log(error);
         res.status(500).json({
             success: false,
             message: 'Failed to retrieve appointments',
+            error: error.message,
         });
     }
 };
