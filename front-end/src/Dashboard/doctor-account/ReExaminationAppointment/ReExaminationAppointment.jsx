@@ -6,7 +6,6 @@ import { FaCircleExclamation } from 'react-icons/fa6';
 import useFetchData from '../../../hooks/useFetchData';
 import { BASE_URL } from '../../../../config';
 import Loader from '../../../components/Loader/Loader';
-import ErrorSign from '../../../components/Error/Error';
 import ToggleButton from '../../../components/ToggleButton/ToggleButton';
 import ReExaminationAppointmentEdit from '../ReExaminationAppointmentEdit/ReExaminationAppointmentEdit';
 import ReExaminationAppointmentView from '../ReExaminationAppointmentView/ReExaminationAppointmentView';
@@ -21,7 +20,7 @@ const ReExaminationAppointment = ({ appointment }) => {
         endingTime: '',
     });
 
-    const { data: prescription, loading, error } = useFetchData(`${BASE_URL}/prescriptions/${appointment._id}`);
+    const { data: prescription, loading } = useFetchData(`${BASE_URL}/prescriptions/${appointment._id}`);
 
     useEffect(() => {
         if (appointment && appointment.nextAppointmentTimeSlot) {
@@ -46,8 +45,6 @@ const ReExaminationAppointment = ({ appointment }) => {
 
             {loading ? (
                 <Loader />
-            ) : error ? (
-                <ErrorSign />
             ) : !toggle ? (
                 <ReExaminationAppointmentEdit
                     appointment={appointment}

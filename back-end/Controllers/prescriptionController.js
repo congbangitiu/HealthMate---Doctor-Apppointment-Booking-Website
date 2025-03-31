@@ -128,3 +128,42 @@ export const markPrescriptionsAsRead = async (req, res) => {
         res.status(500).json({ message: 'Error marking prescriptions as read', error });
     }
 };
+
+export const savePDFLink = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { pdfUrl, publicId } = req.body;
+
+        const updatedPrescription = await Prescription.findOneAndUpdate(
+            { _id: id },
+            {
+                $set: {
+                    'pdfInfo.url': pdfUrl,
+                    'pdfInfo.publicId': publicId,
+                    'pdfInfo.updatedAt': new Date(),
+                },
+            },
+            {
+                new: true,
+                runValidators: true,
+            },
+        );
+
+        if (!updatedPrescription) {
+            return res.status(404).json({
+                success: false,
+                message: 'Prescription not found',
+                receivedId: id,
+            });
+        }
+
+        res.json({ success: true, data: updatedPrescription });
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).json({
+            success: false,
+            message: error.message,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
+        });
+    }
+};

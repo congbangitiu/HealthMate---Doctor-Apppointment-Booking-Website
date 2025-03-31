@@ -31,6 +31,15 @@ const prescriptionSchema = new mongoose.Schema(
             default: true,
         },
         actionHistory: [historySchema],
+        pdfInfo: {
+            url: String,
+            publicId: String,
+            createdAt: {
+                type: Date,
+                default: Date.now,
+            },
+            updatedAt: Date,
+        },
     },
     { timestamps: true },
 );

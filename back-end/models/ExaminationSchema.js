@@ -51,6 +51,15 @@ const ExaminationSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        pdfInfo: {
+            url: String,
+            publicId: String,
+            createdAt: {
+                type: Date,
+                default: Date.now,
+            },
+            updatedAt: Date,
+        },
     },
     { timestamps: true },
 );

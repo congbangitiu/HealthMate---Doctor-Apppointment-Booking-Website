@@ -13,15 +13,15 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import SyncLoader from 'react-spinners/SyncLoader';
 import { FaCircleExclamation } from 'react-icons/fa6';
+import { QRCodeSVG } from 'qrcode.react';
 
 const cx = classNames.bind(styles);
 
 const Prescription = () => {
     const { id: appointmentId } = useParams();
-    const {
-        data: appointment,
-        loading,
-    } = useFetchData(`${BASE_URL}/users/appointments/my-appointments/${appointmentId}`);
+    const { data: appointment, loading } = useFetchData(
+        `${BASE_URL}/users/appointments/my-appointments/${appointmentId}`,
+    );
 
     const { data: prescription } = useFetchData(`${BASE_URL}/prescriptions/${appointmentId}`);
 
@@ -80,16 +80,24 @@ const Prescription = () => {
                     {!prescription?.createdAt && (
                         <div className={cx('pending-noti')}>
                             <FaCircleExclamation className={cx('icon')} />
-                            Dr. {appointment?.doctor?.fullname} has not prescribed your medication yet !
+                            Dr. {appointment?.doctor?.fullname} is still finalizing your prescription. Please check back
+                            later to view the full details.
                         </div>
                     )}
                     <div id="prescription" className={cx('prescription')}>
-                        <div className={cx('brand')}>
-                            <img src={Logo} alt="" />
-                            <div>
-                                <h4>HEALTHMATE</h4>
-                                <p>Your Wellness - Our Priority</p>
+                        <div>
+                            <div className={cx('brand')}>
+                                <img src={Logo} alt="" />
+                                <div>
+                                    <h4>HEALTHMATE</h4>
+                                    <p>Your Wellness - Our Priority</p>
+                                </div>
                             </div>
+                            {prescription?.pdfInfo?.url && (
+                                <div className={cx('qr-code')}>
+                                    <QRCodeSVG value={prescription?.pdfInfo?.url} size={60} />
+                                </div>
+                            )}
                         </div>
                         <h1>PRESCRIPTION</h1>
                         <div className={cx('patient-info')}>

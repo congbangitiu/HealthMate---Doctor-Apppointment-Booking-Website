@@ -94,7 +94,13 @@ const Prescription = () => {
                     createdTime={createdTime}
                 />
             ) : (
-                <PrescriptionView appointment={appointment} prescription={prescription} />
+                <PrescriptionView
+                    appointment={appointment}
+                    prescription={prescription}
+                    onPDFUploadSuccess={(pdfInfo) => {
+                        setPrescription((prev) => ({ ...prev, pdfInfo }));
+                    }}
+                />
             )}
         </div>
     );

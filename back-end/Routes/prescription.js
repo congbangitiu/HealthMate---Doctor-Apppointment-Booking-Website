@@ -5,7 +5,8 @@ import {
     getPrescriptionByAppointmentId,
     updatePrescriptionByAppointmentId,
     countUnreadPrescriptions,
-    markPrescriptionsAsRead
+    markPrescriptionsAsRead,
+    savePDFLink,
 } from '../Controllers/prescriptionController.js';
 
 const router = express.Router();
@@ -14,5 +15,6 @@ router.get('/:appointmentId', authenticate, getPrescriptionByAppointmentId);
 router.put('/:appointmentId', authenticate, restrict(['doctor']), updatePrescriptionByAppointmentId);
 router.get('/:userId/unread-prescriptions', authenticate, countUnreadPrescriptions);
 router.post('/:userId/mark-prescriptions-read', authenticate, markPrescriptionsAsRead);
+router.post('/:id/save-pdf-link', authenticate, restrict(['doctor']), savePDFLink);
 
 export default router;

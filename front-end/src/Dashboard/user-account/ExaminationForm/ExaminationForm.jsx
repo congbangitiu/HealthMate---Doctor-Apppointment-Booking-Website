@@ -85,7 +85,7 @@ const ExaminationForm = ({ appointment }) => {
                             </div>
                             {examination.updatedAt && (
                                 <div className={cx('qr-code')}>
-                                    <QRCodeSVG value={`${BASE_URL}/examinations/${appointment?._id}/pdf`} size={60} />
+                                    <QRCodeSVG value={examination?.pdfInfo?.url} size={60} />
                                 </div>
                             )}
                         </div>

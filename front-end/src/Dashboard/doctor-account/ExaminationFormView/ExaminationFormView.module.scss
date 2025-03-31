@@ -3,6 +3,22 @@
     flex-direction: column;
     align-items: center;
 
+    & .pending-noti {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        background-color: var(--lightYellowColor);
+        border-radius: 5px;
+        margin-top: 15px;
+        width: 100%;
+
+        & .icon {
+            color: var(--darkYellowColor);
+            font-size: 20px;
+        }
+    }
+
     & .examination {
         width: 100%;
         margin-top: 15px;

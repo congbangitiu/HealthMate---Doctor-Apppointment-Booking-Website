@@ -85,7 +85,7 @@ const ExaminationForm = ({ appointment }) => {
             {loading ? (
                 <Loader />
             ) : error ? (
-                <ErrorSign errorMessage='Examination form not found!'/>
+                <ErrorSign errorMessage="Examination form not found!" />
             ) : !toggle ? (
                 <ExaminationFormEdit
                     appointmentId={id}
@@ -105,7 +105,13 @@ const ExaminationForm = ({ appointment }) => {
                     createdTime={createdTime}
                 />
             ) : (
-                <ExaminationFormView appointment={appointment} examination={examination} />
+                <ExaminationFormView
+                    appointment={appointment}
+                    examination={examination}
+                    onPDFUploadSuccess={(pdfInfo) => {
+                        setExamination((prev) => ({ ...prev, pdfInfo }));
+                    }}
+                />
             )}
         </div>
     );
