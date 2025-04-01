@@ -14,6 +14,7 @@ import useFetchData from '../../../hooks/useFetchData';
 import { BASE_URL } from '../../../../config';
 import Loader from '../../../components/Loader/Loader';
 import ErrorSign from '../../../components/Error/Error';
+import { QRCodeSVG } from 'qrcode.react';
 
 const cx = classNames.bind(styles);
 
@@ -67,12 +68,19 @@ const ReExaminationAppointment = ({ appointment }) => {
             ) : (
                 <div className={cx('container')}>
                     <div id="re-examination" className={cx('re-examination')}>
-                        <div className={cx('brand')}>
-                            <img src={Logo} alt="" />
-                            <div>
-                                <h4>HEALTHMATE</h4>
-                                <p>Your Wellness - Our Priority</p>
+                        <div>
+                            <div className={cx('brand')}>
+                                <img src={Logo} alt="" />
+                                <div>
+                                    <h4>HEALTHMATE</h4>
+                                    <p>Your Wellness - Our Priority</p>
+                                </div>
                             </div>
+                            {appointment.nextAppointment?.pdfInfo?.url && (
+                                <div className={cx('qr-code')}>
+                                    <QRCodeSVG value={appointment.nextAppointment?.pdfInfo?.url} size={60} />
+                                </div>
+                            )}
                         </div>
                         <h1>RE-EXAMINATION APPOINTMENT FORM</h1>
                         <div className={cx('patient-info')}>
@@ -96,7 +104,7 @@ const ReExaminationAppointment = ({ appointment }) => {
                                 </p>
                             </span>
                         </div>
-                        {appointment.status === 'done' && appointment.nextAppointmentTimeSlot && (
+                        {appointment.status === 'done' && appointment.nextAppointment.timeSlot && (
                             <>
                                 <div className={cx('notice')}>
                                     <div>
@@ -113,11 +121,11 @@ const ReExaminationAppointment = ({ appointment }) => {
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>{formatDate(appointment.nextAppointmentTimeSlot?.day)}</td>
+                                                <td>{formatDate(appointment.nextAppointment.timeSlot?.day)}</td>
                                                 <td>
-                                                    {convertTime(appointment.nextAppointmentTimeSlot?.startingTime)}
+                                                    {convertTime(appointment.nextAppointment.timeSlot?.startingTime)}
                                                 </td>
-                                                <td>{convertTime(appointment.nextAppointmentTimeSlot?.endingTime)}</td>
+                                                <td>{convertTime(appointment.nextAppointment.timeSlot?.endingTime)}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -145,7 +153,7 @@ const ReExaminationAppointment = ({ appointment }) => {
                         )}
                     </div>
 
-                    {appointment.status === 'done' && appointment.nextAppointmentTimeSlot && (
+                    {appointment.status === 'done' && appointment.nextAppointment.timeSlot && (
                         <button onClick={handleDownloadPDF}>
                             {loadingBtn ? (
                                 <SyncLoader size={10} color="#ffffff" />

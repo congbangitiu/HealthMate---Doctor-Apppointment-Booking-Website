@@ -7,27 +7,32 @@
     & .re-examination {
         width: 100%;
 
-        & .brand {
+        & div:first-child {
             display: flex;
             align-items: center;
-            gap: 15px;
-            width: 100%;
 
-            & img {
-                width: 100px;
-                height: 100px;
-            }
+            & .brand {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                width: 100%;
 
-            & div {
-                & h4 {
-                    font-size: 20px;
-                    font-weight: 600;
-                    color: var(--irisBlueColor);
+                & img {
+                    width: 100px;
+                    height: 100px;
                 }
 
-                & p {
-                    font-size: 18px;
-                    color: var(--irisBlueColor);
+                & div {
+                    & h4 {
+                        font-size: 20px;
+                        font-weight: 600;
+                        color: var(--irisBlueColor);
+                    }
+
+                    & p {
+                        font-size: 18px;
+                        color: var(--irisBlueColor);
+                    }
                 }
             }
         }

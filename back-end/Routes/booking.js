@@ -5,7 +5,8 @@ import {
     createReExaminationBooking,
     getCheckoutSession,
     updateAppointmentStatus,
-    updateAppointmentTimeSlot,
+    updateNextAppointmentTimeSlot,
+    savePDFLink,
     getAllAppointments,
     getAppointmentBySessionId,
     getAppointmentById,
@@ -18,7 +19,8 @@ router.post('/create', authenticate, restrict(['patient']), createBooking);
 router.post('/re-examination', authenticate, restrict(['doctor']), createReExaminationBooking);
 router.post('/checkout-session/:doctorId', authenticate, getCheckoutSession);
 router.put('/:id/status', authenticate, restrict(['doctor']), updateAppointmentStatus);
-router.put('/:id/next-time-slot', authenticate, restrict(['doctor']), updateAppointmentTimeSlot);
+router.put('/:id/next-time-slot', authenticate, restrict(['doctor']), updateNextAppointmentTimeSlot);
+router.post('/:id/save-pdf-link', authenticate, restrict(['doctor']), savePDFLink);
 router.get('/', authenticate, restrict(['admin']), getAllAppointments);
 router.get('/:id', authenticate, getAppointmentById);
 router.get('/appointment/:sessionId', authenticate, getAppointmentBySessionId);

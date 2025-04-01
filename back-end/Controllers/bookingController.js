@@ -231,7 +231,9 @@ export const createReExaminationBooking = async (req, res) => {
         }
 
         // Update nextAppointmentTimeSlot of the current booking
-        currentBooking.nextAppointmentTimeSlot = timeSlot;
+        currentBooking.nextAppointment = {
+            timeSlot: timeSlot,
+        };
         await currentBooking.save();
 
         // Create new re-examination booking
@@ -502,7 +504,7 @@ export const updateAppointmentStatus = async (req, res) => {
 };
 
 // Update nextAppointmentTimeSlot of current appointment and timeSlot of the re-examination appointment
-export const updateAppointmentTimeSlot = async (req, res) => {
+export const updateNextAppointmentTimeSlot = async (req, res) => {
     try {
         const { id } = req.params;
         const { nextAppointmentTimeSlot } = req.body;
@@ -526,9 +528,13 @@ export const updateAppointmentTimeSlot = async (req, res) => {
         };
 
         // Update next Appointment Time Slot and follow-up appointment if any
-        if (nextAppointmentTimeSlot) {
+        if (booking.nextAppointment) {
             validateTimeSlot(nextAppointmentTimeSlot);
-            booking.nextAppointmentTimeSlot = nextAppointmentTimeSlot;
+
+            booking.nextAppointment = {
+                timeSlot: nextAppointmentTimeSlot,
+                pdfInfo: booking.nextAppointment.pdfInfo || null,
+            };
 
             // Find related follow-up appointment (based on parentBooking)
             const reExaminationBooking = await Booking.findOne({
@@ -549,6 +555,57 @@ export const updateAppointmentTimeSlot = async (req, res) => {
     } catch (error) {
         console.error('Error updating booking:', error);
         res.status(500).json({ success: false, message: 'Error updating booking', error: error.message });
+    }
+};
+
+// Save PDF link to the next appointment of the parent booking
+export const savePDFLink = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { pdfUrl, publicId } = req.body;
+
+        if (!pdfUrl || !publicId) {
+            return res.status(400).json({
+                success: false,
+                message: 'PDF URL and public ID are required',
+            });
+        }
+
+        const currentBooking = await Booking.findById(id);
+        if (!currentBooking) {
+            return res.status(404).json({
+                success: false,
+                message: 'Booking not found',
+            });
+        }
+
+        const updatedBooking = await Booking.findByIdAndUpdate(
+            id,
+            {
+                $set: {
+                    'nextAppointment.pdfInfo': {
+                        url: pdfUrl,
+                        publicId: publicId,
+                        updatedAt: new Date(),
+                    },
+                    'nextAppointment.timeSlot': currentBooking.nextAppointment?.timeSlot || null,
+                },
+            },
+            { new: true, runValidators: true },
+        );
+
+        res.json({
+            success: true,
+            message: 'PDF link saved successfully',
+            data: updatedBooking,
+        });
+    } catch (error) {
+        console.error('Error', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error saving PDF link',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+        });
     }
 };
 

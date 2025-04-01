@@ -1,18 +1,22 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './ReExaminationAppointment.module.scss';
 import { FaCircleExclamation } from 'react-icons/fa6';
 import useFetchData from '../../../hooks/useFetchData';
-import { BASE_URL } from '../../../../config';
+import { BASE_URL, token } from '../../../../config';
 import Loader from '../../../components/Loader/Loader';
+import { toast } from 'react-toastify';
 import ToggleButton from '../../../components/ToggleButton/ToggleButton';
 import ReExaminationAppointmentEdit from '../ReExaminationAppointmentEdit/ReExaminationAppointmentEdit';
 import ReExaminationAppointmentView from '../ReExaminationAppointmentView/ReExaminationAppointmentView';
 
 const cx = classNames.bind(styles);
 
-const ReExaminationAppointment = ({ appointment }) => {
+const ReExaminationAppointment = () => {
+    const { id } = useParams();
+    const [appointment, setAppointment] = useState(null);
     const [toggle, setToggle] = useState(false);
     const [schedule, setSchedule] = useState({
         day: '',
@@ -20,17 +24,45 @@ const ReExaminationAppointment = ({ appointment }) => {
         endingTime: '',
     });
 
-    const { data: prescription, loading } = useFetchData(`${BASE_URL}/prescriptions/${appointment._id}`);
+    const { data: prescription, loading } = useFetchData(
+        appointment?._id ? `${BASE_URL}/prescriptions/${appointment._id}` : null,
+    );
 
     useEffect(() => {
-        if (appointment && appointment.nextAppointmentTimeSlot) {
+        const fetchData = async () => {
+            try {
+                const resAppointment = await fetch(`${BASE_URL}/doctors/appointments/my-appointments/${id}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                const appointmentData = await resAppointment.json();
+
+                if (appointmentData.success) {
+                    setAppointment(appointmentData.data);
+                } else {
+                    toast.error(appointmentData.message || 'Error fetching appointment data');
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                toast.error('Error fetching data');
+            }
+        };
+
+        fetchData();
+    }, [id]);
+
+    useEffect(() => {
+        if (appointment?.nextAppointment?.timeSlot) {
             setSchedule({
-                day: appointment.nextAppointmentTimeSlot.day,
-                startingTime: appointment.nextAppointmentTimeSlot.startingTime,
-                endingTime: appointment.nextAppointmentTimeSlot.endingTime,
+                day: appointment.nextAppointment.timeSlot.day,
+                startingTime: appointment.nextAppointment.timeSlot.startingTime,
+                endingTime: appointment.nextAppointment.timeSlot.endingTime,
             });
         }
     }, [appointment]);
+
+    if (!appointment) {
+        return <Loader />;
+    }
 
     return (
         <div className={cx('container')}>
@@ -53,14 +85,22 @@ const ReExaminationAppointment = ({ appointment }) => {
                     setSchedule={setSchedule}
                 />
             ) : (
-                <ReExaminationAppointmentView appointment={appointment} prescription={prescription} />
+                <ReExaminationAppointmentView
+                    appointment={appointment}
+                    prescription={prescription}
+                    onPDFUploadSuccess={(pdfInfo) => {
+                        setAppointment((prev) => ({
+                            ...prev,
+                            nextAppointment: {
+                                ...prev.nextAppointment,
+                                pdfInfo,
+                            },
+                        }));
+                    }}
+                />
             )}
         </div>
     );
-};
-
-ReExaminationAppointment.propTypes = {
-    appointment: PropTypes.object.isRequired,
 };
 
 export default ReExaminationAppointment;

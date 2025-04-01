@@ -51,7 +51,7 @@ const ReExaminationAppointmentEdit = ({ appointment, prescription, schedule, set
                 endingTime: schedule.endingTime,
             };
 
-            if (appointment.nextAppointmentTimeSlot) {
+            if (appointment.nextAppointment?.timeSlot) {
                 // Case 1: next Appointment Time Slot already exists
                 // Update the nextAppointmentTimeSlot of the current appointment
                 const updateCurrentBookingResponse = await fetch(
@@ -125,7 +125,7 @@ const ReExaminationAppointmentEdit = ({ appointment, prescription, schedule, set
                 behavior: 'smooth',
             });
             await delay(2000);
-            // window.location.reload();
+            window.location.reload();
         }
     };
 

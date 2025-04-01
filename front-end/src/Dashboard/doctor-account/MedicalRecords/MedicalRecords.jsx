@@ -125,7 +125,7 @@ const MedicalRecords = () => {
                 ) : activeTab === 'prescription' ? (
                     <Prescription />
                 ) : (
-                    <ReExaminationAppointment appointment={appointment} />
+                    <ReExaminationAppointment />
                 )}
             </section>
         </div>

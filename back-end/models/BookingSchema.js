@@ -21,6 +21,26 @@ const timeSlotSchema = new mongoose.Schema(
     { _id: false },
 );
 
+const pdfInfoSchema = new mongoose.Schema(
+    {
+        url: { type: String },
+        publicId: { type: String },
+        createdAt: { type: Date, default: Date.now },
+    },
+    { _id: false },
+);
+
+const nextAppointmentSchema = new mongoose.Schema(
+    {
+        timeSlot: timeSlotSchema,
+        pdfInfo: {
+            type: pdfInfoSchema,
+            default: null,
+        },
+    },
+    { _id: false },
+);
+
 const bookingSchema = new mongoose.Schema(
     {
         doctor: {
@@ -49,7 +69,7 @@ const bookingSchema = new mongoose.Schema(
             enum: ['e-wallet', 'cash', 'free'],
         },
         timeSlot: timeSlotSchema,
-        nextAppointmentTimeSlot: timeSlotSchema,
+        nextAppointment: nextAppointmentSchema,
         session: { type: String },
         unread: {
             type: Boolean,
