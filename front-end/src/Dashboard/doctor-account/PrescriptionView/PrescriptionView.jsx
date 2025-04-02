@@ -4,8 +4,6 @@ import styles from './PrescriptionView.module.scss';
 import Logo from '../../../assets/images/logo.png';
 import Watermark from '../../../assets/images/watermark30.png';
 import { TbDownload } from 'react-icons/tb';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import formatDate from '../../../utils/formatDate';
 import SyncLoader from 'react-spinners/SyncLoader';
 import { BASE_URL, token } from '../../../../config';
@@ -13,6 +11,7 @@ import { PropTypes } from 'prop-types';
 import Loader from '../../../components/Loader/Loader';
 import { QRCodeSVG } from 'qrcode.react';
 import { FaCircleExclamation } from 'react-icons/fa6';
+import { generateAndDownloadPDF, generatePDFBlob } from '../../../utils/handlePDF';
 
 const cx = classNames.bind(styles);
 
@@ -21,40 +20,15 @@ const PrescriptionView = ({ appointment, prescription, onPDFUploadSuccess }) => 
     const [loading, setLoading] = useState(false);
 
     const handleDownloadPDF = async () => {
-        setLoadingBtn(true);
-
-        const input = document.getElementById('prescription');
-        // Specify the id of the element you want to convert to PDF
-        html2canvas(input, {
-            useCORS: true, // This option helps to include external images
-            onclone: (clonedDoc) => {
-                clonedDoc.getElementById('prescription').style.display = 'block';
-            },
-        }).then((canvas) => {
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF('p', 'mm', 'a4');
-
-            const imgWidth = 180; // Adjust the width of the image
-            const pageHeight = pdf.internal.pageSize.getHeight();
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            let heightLeft = imgHeight;
-
-            let position = 15; // Adjust this value to move the image down
-
-            pdf.addImage(imgData, 'PNG', 15, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
-
-            while (heightLeft >= 0) {
-                position = heightLeft - imgHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 15, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-            }
-
-            pdf.save(`HEALTHMATE - PRESCRIPTION - ${appointment?.user?.fullname}`);
-
-            setLoadingBtn(false);
-        });
+        try {
+            await generateAndDownloadPDF(
+                'prescription',
+                `HEALTHMATE - PRESCRIPTION - ${appointment?.user?.fullname}`,
+                setLoadingBtn,
+            );
+        } catch (error) {
+            console.error('Error downloading PDF:', error);
+        }
     };
 
     // Upload PDF to Cloudinary and save the link to the backend
@@ -69,47 +43,10 @@ const PrescriptionView = ({ appointment, prescription, onPDFUploadSuccess }) => 
             setLoading(true);
 
             try {
-                // 1. Capture the prescription form as canvas
-                const input = document.getElementById('prescription');
-                const canvas = await html2canvas(input, {
-                    useCORS: true,
-                    scale: 1.5, // Reduced from 2 to decrease file size
-                    quality: 0.8, // Reduce image quality to shrink PDF size
-                    logging: true,
-                    allowTaint: true,
-                    onclone: (clonedDoc) => {
-                        // Make sure the element is visible when cloned
-                        clonedDoc.getElementById('prescription').style.display = 'block';
-                    },
-                });
+                // 1. Use the generatePDFBlob function to create a PDF blob from the prescription element
+                const pdfBlob = await generatePDFBlob('prescription');
 
-                // 2. Create PDF from canvas
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF('p', 'mm', 'a4'); // Portrait, millimeters, A4 size
-
-                // Calculate PDF dimensions
-                const imgWidth = 180; // Fixed width in mm
-                const pageHeight = pdf.internal.pageSize.getHeight();
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                let heightLeft = imgHeight;
-                let position = 15; // Initial Y position
-
-                // Add first page
-                pdf.addImage(imgData, 'PNG', 15, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-
-                // Add additional pages if content is longer than one page
-                while (heightLeft >= 0) {
-                    position = heightLeft - imgHeight;
-                    pdf.addPage();
-                    pdf.addImage(imgData, 'PNG', 15, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
-                }
-
-                // 3. Prepare for Cloudinary upload
-                const pdfBlob = pdf.output('blob');
-
-                // 4. Upload to Cloudinary
+                // 2. Upload to Cloudinary
                 const formData = new FormData();
                 formData.append('file', pdfBlob, `prescription_${appointment._id}.pdf`);
                 formData.append('upload_preset', import.meta.env.VITE_UPLOAD_PRESET);
@@ -127,7 +64,7 @@ const PrescriptionView = ({ appointment, prescription, onPDFUploadSuccess }) => 
 
                 const cloudinaryData = await cloudinaryRes.json();
 
-                // 5. Save PDF link to backend
+                // 3. Save PDF link to backend
                 const saveRes = await fetch(`${BASE_URL}/prescriptions/${prescription?._id}/save-pdf-link`, {
                     method: 'POST',
                     headers: {

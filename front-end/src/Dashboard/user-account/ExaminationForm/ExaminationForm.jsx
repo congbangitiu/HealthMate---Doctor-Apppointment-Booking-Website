@@ -4,8 +4,6 @@ import classNames from 'classnames/bind';
 import styles from './ExaminationForm.module.scss';
 import { PropTypes } from 'prop-types';
 import { TbDownload } from 'react-icons/tb';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import Logo from '../../../assets/images/logo.png';
 import Watermark from '../../../assets/images/watermark30.png';
 import formatDate from '../../../utils/formatDate';
@@ -16,6 +14,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { BASE_URL } from '../../../../config';
 import useFetchData from '../../../hooks/useFetchData';
 import { FaCircleExclamation } from 'react-icons/fa6';
+import { generateAndDownloadPDF } from '../../../utils/handlePDF';
 
 const cx = classNames.bind(styles);
 
@@ -25,40 +24,15 @@ const ExaminationForm = ({ appointment }) => {
     const { data: examination, loading } = useFetchData(`${BASE_URL}/examinations/${id}`);
 
     const handleDownloadPDF = async () => {
-        setLoadingBtn(true);
-
-        const input = document.getElementById('examination');
-        // Specify the id of the element you want to convert to PDF
-        html2canvas(input, {
-            useCORS: true, // This option helps to include external images
-            onclone: (clonedDoc) => {
-                clonedDoc.getElementById('examination').style.display = 'block';
-            },
-        }).then((canvas) => {
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF('p', 'mm', 'a4');
-
-            const imgWidth = 180; // Adjust the width of the image
-            const pageHeight = pdf.internal.pageSize.getHeight();
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            let heightLeft = imgHeight;
-
-            let position = 15; // Adjust this value to move the image down
-
-            pdf.addImage(imgData, 'PNG', 15, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
-
-            while (heightLeft >= 0) {
-                position = heightLeft - imgHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 15, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-            }
-
-            pdf.save(`HEALTHMATE - EXAMINATION FORM - ${appointment?.user?.fullname}`);
-
-            setLoadingBtn(false);
-        });
+        try {
+            await generateAndDownloadPDF(
+                'examination',
+                `HEALTHMATE - EXAMINATION FORM - ${appointment?.user?.fullname}`,
+                setLoadingBtn,
+            );
+        } catch (error) {
+            console.error('Error downloading PDF:', error);
+        }
     };
 
     return (

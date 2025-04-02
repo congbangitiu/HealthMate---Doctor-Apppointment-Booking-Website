@@ -3,8 +3,6 @@ import classNames from 'classnames/bind';
 import styles from './ExaminationFormView.module.scss';
 import { PropTypes } from 'prop-types';
 import { TbDownload } from 'react-icons/tb';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import Logo from '../../../assets/images/logo.png';
 import Watermark from '../../../assets/images/watermark30.png';
 import formatDate from '../../../utils/formatDate';
@@ -14,6 +12,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { BASE_URL, token } from '../../../../config';
 import Loader from '../../../components/Loader/Loader';
 import { FaCircleExclamation } from 'react-icons/fa6';
+import { generateAndDownloadPDF, generatePDFBlob } from '../../../utils/handlePDF';
 
 const cx = classNames.bind(styles);
 
@@ -23,40 +22,15 @@ const ExaminationFormView = ({ appointment, examination, onPDFUploadSuccess }) =
 
     // Download PDF to system when user click on download button
     const handleDownloadPDF = async () => {
-        setLoadingBtn(true);
-
-        const input = document.getElementById('examination');
-        // Specify the id of the element you want to convert to PDF
-        html2canvas(input, {
-            useCORS: true, // This option helps to include external images
-            onclone: (clonedDoc) => {
-                clonedDoc.getElementById('examination').style.display = 'block';
-            },
-        }).then((canvas) => {
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF('p', 'mm', 'a4');
-
-            const imgWidth = 180; // Adjust the width of the image
-            const pageHeight = pdf.internal.pageSize.getHeight();
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            let heightLeft = imgHeight;
-
-            let position = 15; // Adjust this value to move the image down
-
-            pdf.addImage(imgData, 'PNG', 15, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
-
-            while (heightLeft >= 0) {
-                position = heightLeft - imgHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 15, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-            }
-
-            pdf.save(`HEALTHMATE - EXAMINATION FORM - ${appointment?.user?.fullname}`);
-
-            setLoadingBtn(false);
-        });
+        try {
+            await generateAndDownloadPDF(
+                'examination',
+                `HEALTHMATE - EXAMINATION FORM - ${appointment?.user?.fullname}`,
+                setLoadingBtn,
+            );
+        } catch (error) {
+            console.error('Error downloading PDF:', error);
+        }
     };
 
     // Upload PDF to Cloudinary and save the link to the backend
@@ -71,47 +45,10 @@ const ExaminationFormView = ({ appointment, examination, onPDFUploadSuccess }) =
             setLoading(true);
 
             try {
-                // 1. Capture the examination form as canvas
-                const input = document.getElementById('examination');
-                const canvas = await html2canvas(input, {
-                    useCORS: true,
-                    scale: 1.5, // Reduced from 2 to decrease file size
-                    quality: 0.8, // Reduce image quality to shrink PDF size
-                    logging: true,
-                    allowTaint: true,
-                    onclone: (clonedDoc) => {
-                        // Make sure the element is visible when cloned
-                        clonedDoc.getElementById('examination').style.display = 'block';
-                    },
-                });
+                // 1. Use the generatePDFBlob function to create a PDF blob from the examination element
+                const pdfBlob = await generatePDFBlob('examination');
 
-                // 2. Create PDF from canvas
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF('p', 'mm', 'a4'); // Portrait, millimeters, A4 size
-
-                // Calculate PDF dimensions
-                const imgWidth = 180; // Fixed width in mm
-                const pageHeight = pdf.internal.pageSize.getHeight();
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                let heightLeft = imgHeight;
-                let position = 15; // Initial Y position
-
-                // Add first page
-                pdf.addImage(imgData, 'PNG', 15, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-
-                // Add additional pages if content is longer than one page
-                while (heightLeft >= 0) {
-                    position = heightLeft - imgHeight;
-                    pdf.addPage();
-                    pdf.addImage(imgData, 'PNG', 15, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
-                }
-
-                // 3. Prepare for Cloudinary upload
-                const pdfBlob = pdf.output('blob');
-
-                // 4. Upload to Cloudinary
+                // 2. Upload to Cloudinary
                 const formData = new FormData();
                 formData.append('file', pdfBlob, `examination_${appointment._id}.pdf`);
                 formData.append('upload_preset', import.meta.env.VITE_UPLOAD_PRESET);
@@ -129,7 +66,7 @@ const ExaminationFormView = ({ appointment, examination, onPDFUploadSuccess }) =
 
                 const cloudinaryData = await cloudinaryRes.json();
 
-                // 5. Save PDF link to backend
+                // 3. Save PDF link to backend
                 const saveRes = await fetch(`${BASE_URL}/examinations/${examination?._id}/save-pdf-link`, {
                     method: 'POST',
                     headers: {

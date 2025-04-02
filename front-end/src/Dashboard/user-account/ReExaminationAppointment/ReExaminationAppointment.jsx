@@ -4,8 +4,6 @@ import styles from './ReExaminationAppointment.module.scss';
 import Logo from '../../../assets/images/logo.png';
 import Watermark from '../../../assets/images/watermark30.png';
 import { TbDownload } from 'react-icons/tb';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import formatDate from '../../../utils/formatDate';
 import convertTime from '../../../utils/convertTime';
 import SyncLoader from 'react-spinners/SyncLoader';
@@ -15,6 +13,7 @@ import { BASE_URL } from '../../../../config';
 import Loader from '../../../components/Loader/Loader';
 import ErrorSign from '../../../components/Error/Error';
 import { QRCodeSVG } from 'qrcode.react';
+import { generateAndDownloadPDF } from '../../../utils/handlePDF';
 
 const cx = classNames.bind(styles);
 
@@ -23,40 +22,15 @@ const ReExaminationAppointment = ({ appointment }) => {
     const { data: prescription, loading, error } = useFetchData(`${BASE_URL}/prescriptions/${appointment._id}`);
 
     const handleDownloadPDF = async () => {
-        setLoadingBtn(true);
-
-        const input = document.getElementById('re-examination');
-        // Specify the id of the element you want to convert to PDF
-        html2canvas(input, {
-            useCORS: true, // This option helps to include external images
-            onclone: (clonedDoc) => {
-                clonedDoc.getElementById('re-examination').style.display = 'block';
-            },
-        }).then((canvas) => {
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF('p', 'mm', 'a4');
-
-            const imgWidth = 180; // Adjust the width of the image
-            const pageHeight = pdf.internal.pageSize.getHeight();
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            let heightLeft = imgHeight;
-
-            let position = 15; // Adjust this value to move the image down
-
-            pdf.addImage(imgData, 'PNG', 15, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
-
-            while (heightLeft >= 0) {
-                position = heightLeft - imgHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 15, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-            }
-
-            pdf.save(`HEALTHMATE - RE-EXAMINATION FORM - ${appointment?.user?.fullname}`);
-
-            setLoadingBtn(false);
-        });
+        try {
+            await generateAndDownloadPDF(
+                're-examination',
+                `HEALTHMATE - RE-EXAMINATION FORM - ${appointment?.user?.fullname}`,
+                setLoadingBtn,
+            );
+        } catch (error) {
+            console.error('Error downloading PDF:', error);
+        }
     };
 
     return (
