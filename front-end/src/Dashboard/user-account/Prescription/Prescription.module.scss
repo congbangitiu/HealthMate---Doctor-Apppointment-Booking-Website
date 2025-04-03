@@ -164,6 +164,21 @@
             }
         }
 
+        & .notes {
+            & b {
+                font-size: 20px;
+            }
+
+            & ul {
+                margin-left: 18px;
+
+                & li {
+                    font-size: 20px;
+                    list-style-type: circle;
+                }
+            }
+        }
+
         & .confirmation {
             width: 100%;
             display: flex;

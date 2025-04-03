@@ -10,6 +10,9 @@ import { toast } from 'react-toastify';
 import { BASE_URL, token } from '../../../../config';
 import { PropTypes } from 'prop-types';
 import { useMediaQuery } from '@mui/material';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import { useTheme } from '@mui/material/styles';
 
 const cx = classNames.bind(styles);
 
@@ -18,13 +21,14 @@ const PrescriptionEdit = ({
     setAppointment,
     diseaseName,
     setDiseaseName,
-    note,
-    setNote,
+    doctorAdvice,
+    setDoctorAdvice,
     medications,
     setMedications,
     id,
     createdTime,
 }) => {
+    const theme = useTheme();
     const isMobile = useMediaQuery('(max-width:768px)');
     const [loadingBtnUploadSign, setLoadingBtnUploadSign] = useState(false);
     const [loadingBtnSavePres, setLoadingBtnSavePres] = useState(false);
@@ -40,7 +44,20 @@ const PrescriptionEdit = ({
     };
 
     const addMedication = () => {
-        setMedications([...medications, { name: '', dosage: { timesPerDay: 0, quantityPerTime: 0 } }]);
+        setMedications([
+            ...medications,
+            {
+                name: '',
+                dosage: {
+                    timesPerDay: 0,
+                    quantityPerTime: 0,
+                    totalUnits: 0,
+                    timeOfDay: [],
+                    dosageForm: '',
+                    mealRelation: '',
+                },
+            },
+        ]);
     };
 
     const removeMedication = (index) => {
@@ -105,7 +122,7 @@ const PrescriptionEdit = ({
                     appointment: id,
                     diseaseName,
                     medications,
-                    note,
+                    doctorAdvice,
                     action,
                 }),
             });
@@ -115,7 +132,11 @@ const PrescriptionEdit = ({
                 throw new Error(data.message || 'Error saving prescription');
             }
 
-            toast.success('Prescription saved successfully!');
+            if (action === 'create') {
+                toast.success('Prescription saved successfully!');
+            } else {
+                toast.success('Prescription updated successfully!');
+            }
 
             // Update booking status to "done"
             const resUpdateBooking = await fetch(`${BASE_URL}/bookings/${id}/status`, {
@@ -134,7 +155,9 @@ const PrescriptionEdit = ({
                 throw new Error(updateBookingData.message || 'Error updating booking status');
             }
 
-            toast.success('Appointment status updated successfully!');
+            if (action === 'create') {
+                toast.success('Appointment status updated successfully!');
+            }
         } catch (error) {
             toast.error(error.message || 'An error occurred');
         } finally {
@@ -146,6 +169,58 @@ const PrescriptionEdit = ({
             await delay(2000);
             window.location.reload();
         }
+    };
+
+    const ITEM_HEIGHT = 48;
+    const ITEM_PADDING_TOP = 8;
+    const MenuProps = {
+        PaperProps: {
+            style: {
+                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                width: 'max-content',
+                hover: 'var(--primaryColor)',
+            },
+        },
+    };
+
+    const customStyles = {
+        width: !isMobile ? '200px' : '100%',
+        minWidth: '200px',
+        maxWidth: 'max-content',
+
+        '& .MuiSelect-select': {
+            padding: '8px 10px',
+            fontSize: '20px',
+        },
+        '& .MuiOutlinedInput-notchedOutline': {
+            border: '2px solid var(--primaryColor)',
+            borderRadius: '5px',
+        },
+        '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'var(--primaryColor)',
+        },
+        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'var(--primaryColor)',
+        },
+    };
+
+    const timeOfDayOptions = ['Morning', 'Noon', 'Afternoon'];
+    const mealRelationOptions = ['Before meal', 'After meal'];
+
+    const getTimeOfDayStyles = (option, selectedOptions, theme) => {
+        const options = selectedOptions || [];
+        return {
+            fontWeight: options.includes(option)
+                ? theme.typography.fontWeightMedium
+                : theme.typography.fontWeightRegular,
+        };
+    };
+
+    const getMealRelationStyles = (option, selectedOption, theme) => {
+        return {
+            fontWeight:
+                selectedOption === option ? theme.typography.fontWeightMedium : theme.typography.fontWeightRegular,
+        };
     };
 
     return (
@@ -180,7 +255,7 @@ const PrescriptionEdit = ({
                         </p>
                     </span>
                     <div className={cx('disease')}>
-                        <b>Disease:</b>
+                        <b>Diagnosis:</b>
                         <input
                             type="text"
                             name="diseaseName"
@@ -195,7 +270,7 @@ const PrescriptionEdit = ({
                                 <div>
                                     <div>
                                         <p>{index + 1}.</p>
-                                        <p>Name {isMobile ? ' :' : 'of medicine:'} </p>
+                                        <b>Name {isMobile ? ' :' : 'of medicine:'} </b>
                                         <input
                                             type="text"
                                             value={medication.name}
@@ -204,30 +279,123 @@ const PrescriptionEdit = ({
                                         />
                                     </div>
                                     <div>
-                                        <p>Take</p>
-                                        <input
-                                            type="number"
-                                            value={medication.dosage.quantityPerTime}
-                                            onChange={(e) =>
-                                                handleMedicationChange(index, 'quantityPerTime', e.target.value)
-                                            }
-                                            required
-                                        />
-                                        <p>tablet(s) </p>
-                                        <input
-                                            type="number"
-                                            value={medication.dosage.timesPerDay}
-                                            onChange={(e) =>
-                                                handleMedicationChange(index, 'timesPerDay', e.target.value)
-                                            }
-                                            required
-                                        />
-                                        <p>time(s) a day</p>
+                                        <div>
+                                            <p>Quality Per Time: </p>
+                                            <input
+                                                type="number"
+                                                value={medication.dosage.quantityPerTime}
+                                                onChange={(e) =>
+                                                    handleMedicationChange(index, 'quantityPerTime', e.target.value)
+                                                }
+                                                required
+                                            />
+                                        </div>
+                                        <div>
+                                            <p>Time(s) Per Day: </p>
+                                            <input
+                                                type="number"
+                                                value={medication.dosage.timesPerDay}
+                                                onChange={(e) =>
+                                                    handleMedicationChange(index, 'timesPerDay', e.target.value)
+                                                }
+                                                required
+                                            />
+                                        </div>
+                                        <div>
+                                            <p>Total Units: </p>
+                                            <input
+                                                type="number"
+                                                value={medication.dosage.totalUnits}
+                                                onChange={(e) =>
+                                                    handleMedicationChange(index, 'totalUnits', e.target.value)
+                                                }
+                                                required
+                                            />
+                                        </div>
+                                        <div>
+                                            <p>Time(s) of Day: </p>
+                                            <Select
+                                                labelId="demo-multiple-name-label"
+                                                id="demo-multiple-name"
+                                                multiple
+                                                value={medication.dosage.timeOfDay || []}
+                                                onChange={(e) => {
+                                                    const value =
+                                                        typeof e.target.value === 'string'
+                                                            ? e.target.value.split(',')
+                                                            : e.target.value;
+                                                    handleMedicationChange(index, 'timeOfDay', value);
+                                                }}
+                                                MenuProps={MenuProps}
+                                                sx={customStyles}
+                                            >
+                                                {timeOfDayOptions.map((time) => (
+                                                    <MenuItem
+                                                        key={time}
+                                                        value={time}
+                                                        style={getTimeOfDayStyles(
+                                                            time,
+                                                            medication.dosage.timeOfDay,
+                                                            theme,
+                                                        )}
+                                                        sx={{
+                                                            '&:hover': {
+                                                                backgroundColor: 'var(--lightGreenColor)',
+                                                            },
+                                                        }}
+                                                    >
+                                                        {time}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </div>
+                                        <div>
+                                            <p>Dosage Form: </p>
+                                            <input
+                                                type="text"
+                                                value={medication.dosage.dosageForm}
+                                                onChange={(e) =>
+                                                    handleMedicationChange(index, 'dosageForm', e.target.value)
+                                                }
+                                                required
+                                            />
+                                        </div>
+                                        <div>
+                                            <p>Meal Relation: </p>
+                                            <Select
+                                                labelId="demo-multiple-name-label"
+                                                id="demo-multiple-name"
+                                                value={medication.dosage.mealRelation}
+                                                onChange={(e) =>
+                                                    handleMedicationChange(index, 'mealRelation', e.target.value)
+                                                }
+                                                MenuProps={MenuProps}
+                                                sx={customStyles}
+                                            >
+                                                {mealRelationOptions.map((meal) => (
+                                                    <MenuItem
+                                                        key={meal}
+                                                        value={meal}
+                                                        style={getMealRelationStyles(
+                                                            meal,
+                                                            medication.dosage.mealRelation,
+                                                            theme,
+                                                        )}
+                                                        sx={{
+                                                            '&:hover': {
+                                                                backgroundColor: 'var(--lightGreenColor)',
+                                                            },
+                                                        }}
+                                                    >
+                                                        {meal}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className={cx('delete')} onClick={() => removeMedication(index)}>
                                     <FaRegTrashAlt className={cx('icon')} />
-                                    <p className={cx('text')}>Delete</p>
                                 </div>
                             </div>
                         ))}
@@ -236,15 +404,23 @@ const PrescriptionEdit = ({
                         </button>
                         <h4>Total types of medication: {medications.length}</h4>
                     </div>
-                    <div className={cx('note')}>
-                        <b>Note:</b>
+                    <div className={cx('advice')}>
+                        <b>Doctor Advice:</b>
                         <textarea
                             type="text"
-                            name="note"
+                            name="advice"
                             rows="3"
-                            value={note}
-                            onChange={(e) => setNote(e.target.value)}
+                            value={doctorAdvice}
+                            onChange={(e) => setDoctorAdvice(e.target.value)}
                         />
+                    </div>
+                    <div className={cx('notes')}>
+                        <b>Important Notes:</b>
+                        <ul>
+                            <li>This prescription is valid for one-time dispensing only</li>
+                            <li>Return for re-examination when medication is finished or if no improvement</li>
+                            <li>Kindly bring this prescription for your follow-up consultation</li>
+                        </ul>
                     </div>
                 </div>
                 <div className={cx('confirmation')}>
@@ -290,8 +466,8 @@ PrescriptionEdit.propTypes = {
     setAppointment: PropTypes.func.isRequired,
     diseaseName: PropTypes.string.isRequired,
     setDiseaseName: PropTypes.func.isRequired,
-    note: PropTypes.string.isRequired,
-    setNote: PropTypes.func.isRequired,
+    doctorAdvice: PropTypes.string.isRequired,
+    setDoctorAdvice: PropTypes.func.isRequired,
     medications: PropTypes.array.isRequired,
     setMedications: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,

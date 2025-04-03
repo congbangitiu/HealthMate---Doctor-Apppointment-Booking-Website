@@ -88,13 +88,19 @@
             & .medication {
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
+                gap: 20px;
 
                 & div {
-                    & div {
+                    width: 90%;
+
+                    & div:first-child {
                         display: flex;
                         align-items: center;
                         gap: 5px;
+
+                        & b {
+                            font-size: 20px;
+                        }
 
                         & input {
                             outline: none;
@@ -106,22 +112,44 @@
                         }
                     }
 
-                    &:last-child {
+                    & div:last-child {
                         margin-top: 20px;
                         margin-left: 18px;
-                        display: flex;
+                        display: grid;
+                        grid-template-columns: repeat(2, auto);
                         flex-wrap: wrap;
+                        gap: 10px;
+                        width: calc(100% - 18px);
 
-                        & input {
-                            width: 50px;
-                            text-align: center;
-                            font-size: 20px;
-                        }
-
-                        input[type='number']::-webkit-outer-spin-button,
-                        input[type='number']::-webkit-inner-spin-button {
-                            -webkit-appearance: none;
+                        & div {
+                            display: flex;
+                            align-items: center;
                             margin: 0;
+                            gap: 10px;
+
+                            & input {
+                                width: 50px;
+                                text-align: center;
+                                font-size: 20px;
+                                margin: 0;
+                                outline: none;
+                                border: 2px solid var(--primaryColor);
+                                border-radius: 5px;
+                                padding: 5px 10px;
+                                font-size: 20px;
+                            }
+
+                            & input[type='number']::-webkit-outer-spin-button,
+                            & input[type='number']::-webkit-inner-spin-button {
+                                -webkit-appearance: none;
+                                margin: 0;
+                            }
+
+                            &:nth-child(5) {
+                                & input {
+                                    width: 120px;
+                                }
+                            }
                         }
                     }
                 }
@@ -130,38 +158,21 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    padding: 10px;
+                    padding: 12px;
                     border-radius: 100px;
-                    transition: all 0.3s;
                     overflow: hidden;
                     white-space: nowrap;
                     cursor: pointer;
                     background-color: red;
+                    width: max-content;
 
                     &:hover {
-                        padding-right: 20px;
+                        opacity: 0.8;
                     }
 
                     & .icon {
                         color: var(--whiteColor);
-                        transition: transform 0.3s;
                         font-size: 18px;
-                        transform: translateX(25%);
-                    }
-
-                    & .text {
-                        display: inline-block;
-                        max-width: 0;
-                        opacity: 0;
-                        transition: opacity 0.3s, max-width 0.3s;
-                        margin-left: 10px;
-                        color: var(--whiteColor);
-                        font-size: 16px;
-                    }
-
-                    &:hover .text {
-                        max-width: 100px;
-                        opacity: 1;
                     }
                 }
             }
@@ -187,7 +198,7 @@
             }
         }
 
-        & .note {
+        & .advice {
             margin-top: 10px;
 
             & b {
@@ -202,6 +213,23 @@
                 margin-top: 5px;
                 font-size: 20px;
                 padding: 15px;
+            }
+        }
+
+        & .notes {
+            margin-top: 10px;
+
+            & b {
+                font-size: 20px;
+            }
+
+            & ul {
+                margin-left: 18px;
+                
+                & li {
+                    font-size: 20px;
+                    list-style-type: circle;
+                }
             }
         }
 

@@ -106,7 +106,11 @@ const Prescription = () => {
                                                     <th>No.</th>
                                                     <th>Name of Medicine</th>
                                                     <th>Quantity Per Time</th>
-                                                    <th>Times Per Day</th>
+                                                    <th>Time(s) Per Day</th>
+                                                    <th>Time(s) of Day</th>
+                                                    <th>Meal Relation</th>
+                                                    <th>Total Units</th>
+                                                    <th>Dosage Form</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -116,6 +120,10 @@ const Prescription = () => {
                                                         <td>{medication.name}</td>
                                                         <td>{medication.dosage?.quantityPerTime}</td>
                                                         <td>{medication.dosage?.timesPerDay}</td>
+                                                        <td>{medication.dosage?.timeOfDay.join(', ')}</td>
+                                                        <td>{medication.dosage?.mealRelation}</td>
+                                                        <td>{medication.dosage?.totalUnits}</td>
+                                                        <td>{medication.dosage?.dosageForm}</td>
                                                     </tr>
                                                 ))}
                                             </tbody>
@@ -125,9 +133,20 @@ const Prescription = () => {
                                         </h4>
                                     </div>
                                     <p>
-                                        <b>Note: </b>
-                                        {prescription?.note}
+                                        <b>Doctor Advice: </b>
+                                        {prescription?.doctorAdvice}
                                     </p>
+                                    <div className={cx('notes')}>
+                                        <b>Important Notes:</b>
+                                        <ul>
+                                            <li>This prescription is valid for one-time dispensing only</li>
+                                            <li>
+                                                Return for re-examination when medication is finished or if no
+                                                improvement
+                                            </li>
+                                            <li>Kindly bring this prescription for your follow-up consultation</li>
+                                        </ul>
+                                    </div>
                                 </>
                             )}
                         </div>

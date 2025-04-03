@@ -184,9 +184,9 @@ const ExaminationFormEdit = ({
         }
     };
 
-    const getStyles = (organ, ultrasoundRequest, theme) => {
+    const getStyles = (time, selectedTimes, theme) => {
         return {
-            fontWeight: ultrasoundRequest.includes(organ)
+            fontWeight: selectedTimes.includes(time)
                 ? theme.typography.fontWeightMedium
                 : theme.typography.fontWeightRegular,
         };
@@ -280,7 +280,16 @@ const ExaminationFormEdit = ({
                             }}
                         >
                             {organs.map((organ) => (
-                                <MenuItem key={organ} value={organ} style={getStyles(organ, ultrasoundRequest, theme)}>
+                                <MenuItem
+                                    key={organ}
+                                    value={organ}
+                                    style={getStyles(organ, ultrasoundRequest, theme)}
+                                    sx={{
+                                        '&:hover': {
+                                            backgroundColor: 'var(--lightGreenColor)',
+                                        },
+                                    }}
+                                >
                                     {organ}
                                 </MenuItem>
                             ))}

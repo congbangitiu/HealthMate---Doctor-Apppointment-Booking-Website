@@ -16,9 +16,21 @@ const Prescription = () => {
     const { id } = useParams();
     const [appointment, setAppointment] = useState(null);
     const [prescription, setPrescription] = useState(null);
-    const [medications, setMedications] = useState([{ name: '', dosage: { timesPerDay: 0, quantityPerTime: 0 } }]);
+    const [medications, setMedications] = useState([
+        {
+            name: '',
+            dosage: {
+                timesPerDay: 0,
+                quantityPerTime: 0,
+                totalUnits: 0,
+                timeOfDay: [],
+                dosageForm: '',
+                mealRelation: '',
+            },
+        },
+    ]);
     const [diseaseName, setDiseaseName] = useState('');
-    const [note, setNote] = useState('');
+    const [doctorAdvice, setDoctorAdvice] = useState('');
     const [createdTime, setCreatedTime] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -55,7 +67,7 @@ const Prescription = () => {
                     setPrescription(prescriptionData.data);
                     setMedications(prescriptionData.data.medications);
                     setDiseaseName(prescriptionData.data.diseaseName);
-                    setNote(prescriptionData.data.note);
+                    setDoctorAdvice(prescriptionData.data.doctorAdvice);
                     setCreatedTime(prescriptionData.data.updatedAt);
                 } else {
                     console.log('Prescription not found, creating a new one.');
@@ -86,8 +98,8 @@ const Prescription = () => {
                     setAppointment={setAppointment}
                     diseaseName={diseaseName}
                     setDiseaseName={setDiseaseName}
-                    note={note}
-                    setNote={setNote}
+                    doctorAdvice={doctorAdvice}
+                    setDoctorAdvice={setDoctorAdvice}
                     medications={medications}
                     setMedications={setMedications}
                     id={id}
