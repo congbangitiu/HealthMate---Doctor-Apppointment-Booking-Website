@@ -14,6 +14,10 @@ export default defineConfig({
                     src: 'src/assets/data/mock-data/Healmate_Appointment_Record_2023.csv',
                     dest: 'mock-data',
                 },
+                {
+                    src: 'src/assets/data/mock-data/Medicine.csv',
+                    dest: 'mock-data',
+                },
             ],
         }),
     ],

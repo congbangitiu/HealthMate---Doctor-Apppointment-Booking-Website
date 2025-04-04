@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './PrescriptionEdit.module.scss';
 import Logo from '../../../assets/images/logo.png';
@@ -12,7 +12,10 @@ import { PropTypes } from 'prop-types';
 import { useMediaQuery } from '@mui/material';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 import { useTheme } from '@mui/material/styles';
+import Papa from 'papaparse';
 
 const cx = classNames.bind(styles);
 
@@ -32,15 +35,67 @@ const PrescriptionEdit = ({
     const isMobile = useMediaQuery('(max-width:768px)');
     const [loadingBtnUploadSign, setLoadingBtnUploadSign] = useState(false);
     const [loadingBtnSavePres, setLoadingBtnSavePres] = useState(false);
+    const [medicineOptions, setMedicineOptions] = useState([]);
+    const [customMedications, setCustomMedications] = useState([]);
 
-    const handleMedicationChange = (index, field, value) => {
+    useEffect(() => {
+        const loadMedicineData = async () => {
+            try {
+                const response = await fetch('/mock-data/Medicine.csv');
+                const csvText = await response.text();
+
+                Papa.parse(csvText, {
+                    header: true,
+                    skipEmptyLines: true,
+                    worker: true,
+                    complete: (results) => {
+                        const data = results.data;
+
+                        const options = data
+                            .filter((item) => item.Name && item.Strength && item['Dosage Form'])
+                            .map((item) => ({
+                                label: `${item.Name} ${item.Strength}`,
+                                fullName: `${item.Name} ${item.Strength}`,
+                                dosageForm: item['Dosage Form'],
+                            }));
+
+                        setMedicineOptions(options);
+                    },
+                    error: (err) => {
+                        console.error('PapaParse error:', err);
+                        toast.error('Failed to load medicine data');
+                    },
+                });
+            } catch (err) {
+                console.error('Fetch error:', err);
+                toast.error('Failed to fetch medicine data');
+            }
+        };
+
+        loadMedicineData();
+    }, []);
+
+    const handleMedicationChange = (index, field, value, selectedOption) => {
         const newMedications = [...medications];
+        const newCustomMedications = [...customMedications];
+
         if (field === 'name') {
-            newMedications[index][field] = value;
+            if (selectedOption) {
+                // Choose from options
+                newMedications[index].name = selectedOption.fullName;
+                newMedications[index].dosage.dosageForm = selectedOption.dosageForm;
+                newCustomMedications[index] = false;
+            } else {
+                // Input manually
+                newMedications[index].name = value;
+                newCustomMedications[index] = true;
+            }
         } else {
             newMedications[index].dosage[field] = value;
         }
+
         setMedications(newMedications);
+        setCustomMedications(newCustomMedications);
     };
 
     const addMedication = () => {
@@ -52,16 +107,18 @@ const PrescriptionEdit = ({
                     timesPerDay: 0,
                     quantityPerTime: 0,
                     totalUnits: 0,
-                    timeOfDay: [],
+                    timeOfDay: ['Morning'],
                     dosageForm: '',
-                    mealRelation: '',
+                    mealRelation: 'After meal',
                 },
             },
         ]);
+        setCustomMedications([...customMedications, false]);
     };
 
     const removeMedication = (index) => {
         setMedications(medications.filter((_, i) => i !== index));
+        setCustomMedications(customMedications.filter((_, i) => i !== index));
     };
 
     const handleUploadSignature = async (e) => {
@@ -184,10 +241,6 @@ const PrescriptionEdit = ({
     };
 
     const customStyles = {
-        width: !isMobile ? '200px' : '100%',
-        minWidth: '200px',
-        maxWidth: 'max-content',
-
         '& .MuiSelect-select': {
             padding: '8px 10px',
             fontSize: '20px',
@@ -213,6 +266,7 @@ const PrescriptionEdit = ({
             fontWeight: options.includes(option)
                 ? theme.typography.fontWeightMedium
                 : theme.typography.fontWeightRegular,
+            backgroundColor: selectedOptions.includes(option) ? 'var(--lightGreenColor)' : 'inherit',
         };
     };
 
@@ -220,6 +274,7 @@ const PrescriptionEdit = ({
         return {
             fontWeight:
                 selectedOption === option ? theme.typography.fontWeightMedium : theme.typography.fontWeightRegular,
+            backgroundColor: selectedOption.includes(option) ? 'var(--lightGreenColor)' : 'inherit',
         };
     };
 
@@ -268,17 +323,106 @@ const PrescriptionEdit = ({
                         {medications.map((medication, index) => (
                             <div key={index} className={cx('medication')}>
                                 <div>
-                                    <div>
+                                    <div className={cx('upper-part')}>
                                         <p>{index + 1}.</p>
                                         <b>Name {isMobile ? ' :' : 'of medicine:'} </b>
-                                        <input
-                                            type="text"
-                                            value={medication.name}
-                                            onChange={(e) => handleMedicationChange(index, 'name', e.target.value)}
-                                            required
+                                        <Autocomplete
+                                            disablePortal
+                                            freeSolo
+                                            options={medicineOptions}
+                                            getOptionLabel={(option) => {
+                                                return typeof option === 'string' ? option : option.label || '';
+                                            }}
+                                            value={
+                                                medication.name && {
+                                                    label: medication.name,
+                                                    fullName: medication.name,
+                                                    dosageForm: medication.dosage.dosageForm,
+                                                }
+                                            }
+                                            onChange={(e, value) => {
+                                                if (value) {
+                                                    // If value is string (user input)
+                                                    if (typeof value === 'string') {
+                                                        handleMedicationChange(index, 'name', value);
+                                                        handleMedicationChange(index, 'dosageForm', ''); // Reset dosage form
+                                                    }
+                                                    // If value is an object (selected option)
+                                                    else {
+                                                        handleMedicationChange(index, 'name', value.fullName, value);
+                                                    }
+                                                } else {
+                                                    handleMedicationChange(index, 'name', '');
+                                                    handleMedicationChange(index, 'dosageForm', '');
+                                                }
+                                            }}
+                                            onInputChange={(e, newInputValue) => {
+                                                // Update the input value
+                                                if (
+                                                    newInputValue &&
+                                                    !medicineOptions.some((opt) => opt.fullName === newInputValue)
+                                                ) {
+                                                    handleMedicationChange(index, 'name', newInputValue);
+                                                }
+                                            }}
+                                            isOptionEqualToValue={(option, value) => option.fullName === value.fullName}
+                                            sx={{ flex: 1 }}
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    fullWidth
+                                                    sx={{
+                                                        '& .MuiOutlinedInput-root': {
+                                                            height: '50px',
+                                                            fontSize: '20px',
+                                                            borderRadius: '5px',
+                                                            '& fieldset': {
+                                                                border: '2px solid var(--primaryColor)',
+                                                            },
+                                                            '&:hover fieldset': {
+                                                                border: '2px solid var(--primaryColor)',
+                                                            },
+                                                            '&.Mui-focused fieldset': {
+                                                                border: '2px solid var(--primaryColor)',
+                                                            },
+                                                        },
+                                                        '& .MuiInputBase-input': {
+                                                            padding: '15px',
+                                                            fontSize: '20px',
+                                                        },
+                                                    }}
+                                                />
+                                            )}
+                                            renderOption={(props, option, { selected }) => (
+                                                <li
+                                                    {...props}
+                                                    style={{
+                                                        fontWeight: selected
+                                                            ? theme.typography.fontWeightBold
+                                                            : theme.typography.fontWeightRegular,
+                                                        backgroundColor: selected
+                                                            ? 'var(--lightGreenColor)'
+                                                            : 'inherit',
+                                                    }}
+                                                >
+                                                    {option.label}
+                                                </li>
+                                            )}
+                                            slotProps={{
+                                                paper: {
+                                                    sx: {
+                                                        '& .MuiAutocomplete-option': {
+                                                            fontSize: '18px',
+                                                            '&:hover': {
+                                                                backgroundColor: 'var(--lightGrayColor) !important',
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            }}
                                         />
                                     </div>
-                                    <div>
+                                    <div className={cx('lower-part')}>
                                         <div>
                                             <p>Quality Per Time: </p>
                                             <input
@@ -340,7 +484,7 @@ const PrescriptionEdit = ({
                                                         )}
                                                         sx={{
                                                             '&:hover': {
-                                                                backgroundColor: 'var(--lightGreenColor)',
+                                                                backgroundColor: 'var(--lightGrayColor) !important',
                                                             },
                                                         }}
                                                     >
@@ -357,6 +501,10 @@ const PrescriptionEdit = ({
                                                 onChange={(e) =>
                                                     handleMedicationChange(index, 'dosageForm', e.target.value)
                                                 }
+                                                readOnly={!customMedications[index]}
+                                                style={{
+                                                    cursor: customMedications[index] ? 'text' : 'not-allowed',
+                                                }}
                                                 required
                                             />
                                         </div>
@@ -383,7 +531,7 @@ const PrescriptionEdit = ({
                                                         )}
                                                         sx={{
                                                             '&:hover': {
-                                                                backgroundColor: 'var(--lightGreenColor)',
+                                                                backgroundColor: 'var(--lightGrayColor) !important',
                                                             },
                                                         }}
                                                     >
@@ -399,7 +547,7 @@ const PrescriptionEdit = ({
                                 </div>
                             </div>
                         ))}
-                        <button type="button" onClick={addMedication}>
+                        <button type="button" className={cx('add-button')} onClick={addMedication}>
                             Add medication
                         </button>
                         <h4>Total types of medication: {medications.length}</h4>

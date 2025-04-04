@@ -23,9 +23,9 @@ const Prescription = () => {
                 timesPerDay: 0,
                 quantityPerTime: 0,
                 totalUnits: 0,
-                timeOfDay: [],
+                timeOfDay: ["Morning"],
                 dosageForm: '',
-                mealRelation: '',
+                mealRelation: 'After meal',
             },
         },
     ]);

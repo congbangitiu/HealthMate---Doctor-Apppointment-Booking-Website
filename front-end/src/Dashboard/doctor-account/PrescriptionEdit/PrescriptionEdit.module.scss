@@ -90,10 +90,10 @@
                 align-items: center;
                 gap: 20px;
 
-                & div {
+                & div:first-child {
                     width: 90%;
 
-                    & div:first-child {
+                    & .upper-part {
                         display: flex;
                         align-items: center;
                         gap: 5px;
@@ -101,18 +101,9 @@
                         & b {
                             font-size: 20px;
                         }
-
-                        & input {
-                            outline: none;
-                            border: 2px solid var(--primaryColor);
-                            border-radius: 5px;
-                            padding: 5px 10px;
-                            font-size: 20px;
-                            width: 400px;
-                        }
                     }
 
-                    & div:last-child {
+                    & .lower-part {
                         margin-top: 20px;
                         margin-left: 18px;
                         display: grid;
@@ -135,7 +126,7 @@
                                 outline: none;
                                 border: 2px solid var(--primaryColor);
                                 border-radius: 5px;
-                                padding: 5px 10px;
+                                padding: 5px;
                                 font-size: 20px;
                             }
 
@@ -147,7 +138,7 @@
 
                             &:nth-child(5) {
                                 & input {
-                                    width: 120px;
+                                    width: 110px;
                                 }
                             }
                         }
@@ -177,7 +168,7 @@
                 }
             }
 
-            & button {
+            & .add-button {
                 background-color: var(--darkGrayColor);
                 width: 200px;
                 height: 50px;
@@ -225,7 +216,7 @@
 
             & ul {
                 margin-left: 18px;
-                
+
                 & li {
                     font-size: 20px;
                     list-style-type: circle;
