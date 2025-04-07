@@ -15,11 +15,13 @@ import { BASE_URL } from '../../../../config';
 import useFetchData from '../../../hooks/useFetchData';
 import { FaCircleExclamation } from 'react-icons/fa6';
 import { generateAndDownloadPDF } from '../../../utils/handlePDF';
+import { useMediaQuery } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
 const ExaminationForm = ({ appointment }) => {
     const { id } = useParams();
+    const isMobile = useMediaQuery('(max-width:768px)');
     const [loadingBtn, setLoadingBtn] = useState(false);
     const { data: examination, loading } = useFetchData(`${BASE_URL}/examinations/${id}`);
 
@@ -59,7 +61,7 @@ const ExaminationForm = ({ appointment }) => {
                             </div>
                             {examination.updatedAt && (
                                 <div className={cx('qr-code')}>
-                                    <QRCodeSVG value={examination?.pdfInfo?.url} size={60} />
+                                    <QRCodeSVG value={examination?.pdfInfo?.url} size={isMobile ? 45 : 60} />
                                 </div>
                             )}
                         </div>
@@ -87,7 +89,7 @@ const ExaminationForm = ({ appointment }) => {
                         </div>
                         {examination.createdAt && (
                             <>
-                                <div className={cx('examination')}>
+                                <div className={cx('check-up')}>
                                     <span>
                                         <b>Chief Complaint:</b>
                                         <p>{examination?.chiefComplaint}</p>
@@ -105,7 +107,7 @@ const ExaminationForm = ({ appointment }) => {
                                 <div className={cx('ultrasound-photos')}>
                                     <Image.PreviewGroup>
                                         {examination?.ultrasoundPhotos?.map((photo, index) => (
-                                            <Image key={index} width={150} height={100} src={photo} />
+                                            <Image key={index} width={isMobile ? 170 : 160} height={120} src={photo} />
                                         ))}
                                     </Image.PreviewGroup>
                                 </div>

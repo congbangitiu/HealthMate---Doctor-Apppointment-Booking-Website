@@ -95,7 +95,7 @@
             width: 100%;
             overflow-x: auto;
             border-radius: 10px;
-            margin-top: 20px;
+            margin: 20px 0;
 
             & table {
                 width: 100%;
@@ -104,7 +104,6 @@
                 border: 1px solid var(--primaryColor);
                 border-radius: 10px;
                 font-size: 18px;
-                margin-bottom: 30px;
 
                 & thead {
                     background-color: var(--primaryColor);
@@ -261,25 +260,19 @@
 // Responsive design
 @media only screen and (max-width: 768px) {
     .container {
-        padding: 80px 20px 40px 20px;
+        width: 100%;
 
-        & .application {
-            display: none;
+        & .pending-noti {
+            align-items: flex-start;
+
+            & .icon {
+                margin-top: 2px;
+                width: 30px;
+            }
         }
 
-        & .prescription-wrapper {
-            width: 100%;
-
-            & .pending-noti {
-                align-items: flex-start;
-
-                & .icon {
-                    margin-top: 2px;
-                    width: 30px;
-                }
-            }
-
-            & .prescription {
+        & .prescription {
+            & div:first-child {
                 & .brand {
                     gap: 10px;
 
@@ -298,73 +291,85 @@
                         }
                     }
                 }
+            }
 
-                & h1 {
-                    font-size: 25px;
+            & h1 {
+                font-size: 25px;
+            }
+
+            & .patient-info {
+                gap: 0;
+
+                & p {
+                    font-size: 18px;
                 }
 
-                & .patient-info {
-                    gap: 0;
+                & span {
+                    flex-direction: column;
 
                     & p {
                         font-size: 18px;
                     }
+                }
+            }
 
-                    & span {
-                        flex-direction: column;
+            & .medications {
+                & table {
+                    font-size: 16px;
+                }
+            }
 
-                        & p {
-                            font-size: 18px;
-                        }
-                    }
+            & h4 {
+                font-size: 18px;
+            }
+
+            & .notes {
+                & b {
+                    font-size: 18px;
                 }
 
-                & .medications {
-                    & table {
-                        font-size: 16px;
+                & ul {
+                    & li {
+                        font-size: 18px;
                     }
+                }
+            }
+
+            & .confirmation {
+                margin-top: 25px;
+
+                & > div {
+                    transform: translateX(12.5%);
 
                     & h4 {
                         font-size: 18px;
                     }
-                }
 
-                & .confirmation {
-                    margin-top: 25px;
+                    & span {
+                        align-items: center;
 
-                    & > div {
-                        transform: translateX(12.5%);
-
-                        & h4 {
-                            font-size: 18px;
+                        & img:first-child {
+                            width: 90px;
+                            height: 90px;
                         }
 
-                        & span {
-                            align-items: center;
-
-                            & img:first-child {
-                                width: 90px;
-                                height: 90px;
-                            }
-
-                            & img:last-child {
-                                width: 120px;
-                                top: 20px;
-                                left: 90px;
-                            }
+                        & img:last-child {
+                            width: 120px;
+                            top: 20px;
+                            left: 90px;
                         }
+                    }
 
-                        & p {
-                            font-size: 18px;
-                            font-weight: 500;
-                        }
+                    & p {
+                        font-size: 18px;
+                        font-weight: 500;
                     }
                 }
             }
+        }
 
-            & button {
-                display: none;
-            }
+        & button {
+            display: none;
         }
     }
 }

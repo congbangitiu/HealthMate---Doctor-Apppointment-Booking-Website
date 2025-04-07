@@ -6,6 +6,7 @@ import Logo from '../../../assets/images/logo.png';
 import { useTheme } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import { Box } from '@mui/material';
 import SyncLoader from 'react-spinners/SyncLoader';
 import { BASE_URL, token } from '../../../../config';
 import { PropTypes } from 'prop-types';
@@ -14,6 +15,7 @@ import formatDate from './../../../utils/formatDate';
 import { PlusOutlined } from '@ant-design/icons';
 import { Image, Upload } from 'antd';
 import { uploadImageToCloudinary } from '../../../utils/uploadCloudinary';
+import { useMediaQuery } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
@@ -43,6 +45,7 @@ const ExaminationFormEdit = ({
     createdTime,
 }) => {
     const theme = useTheme();
+    const isMobile = useMediaQuery('(max-width:768px)');
     const [loadingBtnSave, setLoadingBtnSave] = useState(false);
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
@@ -61,7 +64,7 @@ const ExaminationFormEdit = ({
         PaperProps: {
             style: {
                 maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-                width: '250px',
+                width: isMobile ? '100%' : '250px',
             },
         },
     };
@@ -261,15 +264,49 @@ const ExaminationFormEdit = ({
                             value={ultrasoundRequest}
                             onChange={handleSelectChange}
                             MenuProps={MenuProps}
+                            renderValue={(selected) => (
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: 'row !important',
+                                        flexWrap: 'wrap',
+                                        gap: '5px',
+                                    }}
+                                >
+                                    {selected.map((value) => (
+                                        <Box
+                                            key={value}
+                                            sx={{
+                                                backgroundColor: 'var(--lightGreenColor)',
+                                                borderRadius: '4px',
+                                                padding: '2px 6px',
+                                                fontSize: '18px',
+                                                whiteSpace: 'nowrap',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                maxWidth: '100%',
+                                            }}
+                                        >
+                                            {value}
+                                        </Box>
+                                    ))}
+                                </Box>
+                            )}
                             sx={{
                                 flex: 1,
                                 '& .MuiSelect-select': {
                                     padding: '8px 15px',
                                     fontSize: '20px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    minHeight: '56px',
+                                    overflow: 'hidden',
+                                    boxSizing: 'border-box',
                                 },
                                 '& .MuiOutlinedInput-notchedOutline': {
                                     border: '2px solid var(--primaryColor)',
                                     borderRadius: '5px',
+                                    ...(isMobile && { width: 'calc(100vw - 40px)' }),
                                 },
                                 '&:hover .MuiOutlinedInput-notchedOutline': {
                                     borderColor: 'var(--primaryColor)',

@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './DoctorList.module.scss';
-
 import Search from '../../../components/Search/Search';
 import DoctorCard from '../../../components/DoctorCard/DoctorCard';
-
 import { BASE_URL } from '../../../../config';
 import useFetchData from '../../../hooks/useFetchData';
 import Loader from '../../../components/Loader/Loader';

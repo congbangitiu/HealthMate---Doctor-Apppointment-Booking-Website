@@ -253,7 +253,6 @@
     }
 }
 
-// Responsive design
 @media only screen and (max-width: 768px) {
     .container {
         width: 100%;
@@ -267,22 +266,24 @@
             }
         }
 
-        & .prescription {
-            & .brand {
-                gap: 10px;
+        & .examination {
+            & div:first-child {
+                & .brand {
+                    gap: 10px;
 
-                & img {
-                    width: 70px;
-                    height: 70px;
-                }
-
-                & div {
-                    & h4 {
-                        font-size: 18px;
+                    & img {
+                        width: 70px;
+                        height: 70px;
                     }
 
-                    & p {
-                        font-size: 16px;
+                    & div {
+                        & h4 {
+                            font-size: 18px;
+                        }
+
+                        & p {
+                            font-size: 16px;
+                        }
                     }
                 }
             }
@@ -307,14 +308,19 @@
                 }
             }
 
-            & .medications {
-                & table {
-                    font-size: 16px;
-                }
+            & .check-up {
+                gap: 5px;
+                margin-top: 15px;
 
-                & h4 {
+                & span {
+                    flex-direction: column;
+                    gap: 0;
                     font-size: 18px;
                 }
+            }
+
+            & h2 {
+                margin: 30px 0 20px 0;
             }
 
             & .confirmation {

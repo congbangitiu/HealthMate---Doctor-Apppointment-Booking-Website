@@ -13,10 +13,12 @@ import SyncLoader from 'react-spinners/SyncLoader';
 import { FaCircleExclamation } from 'react-icons/fa6';
 import { QRCodeSVG } from 'qrcode.react';
 import { generateAndDownloadPDF } from '../../../utils/handlePDF';
+import { useMediaQuery } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
 const Prescription = () => {
+    const isMobile = useMediaQuery('(max-width:768px)');
     const { id: appointmentId } = useParams();
     const { data: appointment, loading } = useFetchData(
         `${BASE_URL}/users/appointments/my-appointments/${appointmentId}`,
@@ -69,7 +71,7 @@ const Prescription = () => {
                             </div>
                             {prescription?.pdfInfo?.url && (
                                 <div className={cx('qr-code')}>
-                                    <QRCodeSVG value={prescription?.pdfInfo?.url} size={60} />
+                                    <QRCodeSVG value={prescription?.pdfInfo?.url} size={isMobile ? 45 : 60} />
                                 </div>
                             )}
                         </div>
@@ -128,10 +130,10 @@ const Prescription = () => {
                                                 ))}
                                             </tbody>
                                         </table>
-                                        <h4>
-                                            <b>Total types of medications:</b> {prescription?.medications?.length}
-                                        </h4>
                                     </div>
+                                    <h4>
+                                        <b>Total types of medications:</b> {prescription?.medications?.length}
+                                    </h4>
                                     <p>
                                         <b>Doctor Advice: </b>
                                         {prescription?.doctorAdvice}

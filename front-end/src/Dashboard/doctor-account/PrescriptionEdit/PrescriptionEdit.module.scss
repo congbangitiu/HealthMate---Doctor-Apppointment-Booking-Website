@@ -146,16 +146,12 @@
                 }
 
                 & .delete {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
                     padding: 12px;
                     border-radius: 100px;
                     overflow: hidden;
                     white-space: nowrap;
                     cursor: pointer;
                     background-color: red;
-                    width: max-content;
 
                     &:hover {
                         opacity: 0.8;
@@ -376,23 +372,34 @@
 
                 & .medication {
                     flex-direction: column;
-                    align-items: flex-end;
+                    gap: 10px;
 
-                    & div {
-                        & div {
-                            & input {
-                                font-size: 18px !important;
-                                width: 260px;
+                    & div:first-child {
+                        width: 100%;
+                        margin-right: auto;
+
+                        & .upper-part {
+                            & b {
+                                font-size: 18px;
                             }
+
+                            & input {
+                                font-size: 18px;
+                            }
+                        }
+
+                        & .lower-part {
+                            grid-template-columns: 1fr;
                         }
                     }
 
                     & .delete {
-                        margin: 0 !important;
+                        margin: 0;
+                        margin-left: auto;
                     }
                 }
 
-                & button {
+                & .add-button {
                     margin-top: 0;
                     font-size: 16px;
                     width: 150px;
@@ -404,13 +411,25 @@
                 }
             }
 
-            & .note {
+            & .advice {
                 & b {
                     font-size: 18px;
                 }
 
                 & textarea {
                     font-size: 18px;
+                }
+            }
+
+            & .notes {
+                & b {
+                    font-size: 18px;
+                }
+
+                & ul {
+                    & li {
+                        font-size: 18px;
+                    }
                 }
             }
 

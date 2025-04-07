@@ -131,7 +131,7 @@ const ReExaminationAppointmentEdit = ({ appointment, prescription, schedule, set
 
     return (
         <div className={cx('container')}>
-            <form className={cx('examination-form')} onSubmit={handleSubmit}>
+            <form className={cx('re-examination')} onSubmit={handleSubmit}>
                 <div className={cx('brand')}>
                     <img src={Logo} alt="" />
                     <div>

@@ -95,6 +95,7 @@ const MedicalRecords = () => {
                     <Tabs
                         value={activeTab}
                         onChange={handleChangeTab}
+                        variant="scrollable"
                         textColor="inherit"
                         indicatorColor="inherit"
                         sx={{

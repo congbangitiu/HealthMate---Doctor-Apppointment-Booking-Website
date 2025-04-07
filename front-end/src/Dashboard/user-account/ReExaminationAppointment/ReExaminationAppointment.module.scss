@@ -238,22 +238,24 @@
             }
         }
 
-        & .prescription {
-            & .brand {
-                gap: 10px;
+        & .re-examination {
+            & div:first-child {
+                & .brand {
+                    gap: 10px;
 
-                & img {
-                    width: 70px;
-                    height: 70px;
-                }
-
-                & div {
-                    & h4 {
-                        font-size: 18px;
+                    & img {
+                        width: 70px;
+                        height: 70px;
                     }
 
-                    & p {
-                        font-size: 16px;
+                    & div {
+                        & h4 {
+                            font-size: 18px;
+                        }
+
+                        & p {
+                            font-size: 16px;
+                        }
                     }
                 }
             }
@@ -278,12 +280,12 @@
                 }
             }
 
-            & .medications {
-                & table {
-                    font-size: 16px;
+            & .notice {
+                & div:first-child {
+                    font-size: 18px;
                 }
 
-                & h4 {
+                & div:last-child {
                     font-size: 18px;
                 }
             }

@@ -12,10 +12,12 @@ import Loader from '../../../components/Loader/Loader';
 import { QRCodeSVG } from 'qrcode.react';
 import { FaCircleExclamation } from 'react-icons/fa6';
 import { generateAndDownloadPDF, generatePDFBlob } from '../../../utils/handlePDF';
+import { useMediaQuery } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
 const PrescriptionView = ({ appointment, prescription, onPDFUploadSuccess }) => {
+    const isMobile = useMediaQuery('(max-width:768px)');
     const [loadingBtn, setLoadingBtn] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -122,7 +124,7 @@ const PrescriptionView = ({ appointment, prescription, onPDFUploadSuccess }) => 
                             </div>
                             {prescription?.pdfInfo?.url && (
                                 <div className={cx('qr-code')}>
-                                    <QRCodeSVG value={prescription?.pdfInfo?.url} size={60} />
+                                    <QRCodeSVG value={prescription?.pdfInfo?.url} size={isMobile ? 45 : 60} />
                                 </div>
                             )}
                         </div>
@@ -181,10 +183,10 @@ const PrescriptionView = ({ appointment, prescription, onPDFUploadSuccess }) => 
                                                 ))}
                                             </tbody>
                                         </table>
-                                        <h4>
-                                            <b>Total types of medications:</b> {prescription?.medications?.length}
-                                        </h4>
                                     </div>
+                                    <h4>
+                                        <b>Total types of medications:</b> {prescription?.medications?.length}
+                                    </h4>
                                     <p>
                                         <b>Doctor Advice: </b>
                                         {prescription?.doctorAdvice}

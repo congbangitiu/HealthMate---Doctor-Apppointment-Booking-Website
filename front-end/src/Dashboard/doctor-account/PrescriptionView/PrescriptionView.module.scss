@@ -89,7 +89,7 @@
             width: 100%;
             overflow-x: auto;
             border-radius: 10px;
-            margin-top: 20px;
+            margin: 20px 0;
 
             & table {
                 width: 100%;
@@ -98,7 +98,6 @@
                 border: 1px solid var(--primaryColor);
                 border-radius: 10px;
                 font-size: 18px;
-                margin-bottom: 30px;
 
                 & thead {
                     background-color: var(--primaryColor);
@@ -139,13 +138,12 @@
                     }
                 }
             }
+        }
 
-            & h4 {
-                font-size: 20px;
-                font-weight: 500;
-                margin-top: 10px;
-                text-align: justify;
-            }
+        & h4 {
+            font-size: 20px;
+            font-weight: 500;
+            text-align: justify;
         }
 
         & .notes {
@@ -257,21 +255,23 @@
         }
 
         & .prescription {
-            & .brand {
-                gap: 10px;
+            & div:first-child {
+                & .brand {
+                    gap: 10px;
 
-                & img {
-                    width: 70px;
-                    height: 70px;
-                }
-
-                & div {
-                    & h4 {
-                        font-size: 18px;
+                    & img {
+                        width: 70px;
+                        height: 70px;
                     }
 
-                    & p {
-                        font-size: 16px;
+                    & div {
+                        & h4 {
+                            font-size: 18px;
+                        }
+
+                        & p {
+                            font-size: 16px;
+                        }
                     }
                 }
             }
@@ -300,9 +300,21 @@
                 & table {
                     font-size: 16px;
                 }
+            }
 
-                & h4 {
+            & h4 {
+                font-size: 18px;
+            }
+
+            & .notes {
+                & b {
                     font-size: 18px;
+                }
+
+                & ul {
+                    & li {
+                        font-size: 18px;
+                    }
                 }
             }
 

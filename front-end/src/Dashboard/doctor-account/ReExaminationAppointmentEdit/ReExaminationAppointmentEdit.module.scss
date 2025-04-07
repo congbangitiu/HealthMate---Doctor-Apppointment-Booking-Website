@@ -1,5 +1,5 @@
 .container {
-    margin-top: 10px;
+    margin-top: 15px;
 
     & .brand {
         display: flex;
@@ -196,6 +196,117 @@
 
         &:hover {
             opacity: 0.7;
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .container {
+        & .re-examination {
+            width: 100%;
+
+            & .brand {
+                gap: 10px;
+
+                & img {
+                    width: 70px;
+                    height: 70px;
+                }
+
+                & div {
+                    & h4 {
+                        font-size: 18px;
+                    }
+
+                    & p {
+                        font-size: 16px;
+                    }
+                }
+            }
+
+            & h1 {
+                font-size: 25px;
+            }
+
+            & .patient-info {
+                gap: 0;
+
+                & p {
+                    font-size: 18px;
+                }
+
+                & span {
+                    flex-direction: column;
+
+                    & p {
+                        font-size: 18px;
+                    }
+                }
+
+                & .disease {
+                    & b {
+                        font-size: 18px;
+                    }
+
+                    & input {
+                        font-size: 18px;
+                        height: 35px;
+                    }
+                }
+            }
+
+            & .notice {
+                & div:first-child {
+                    font-size: 18px;
+                }
+
+                & div:nth-child(2) {
+                    & b {
+                        font-size: 18px;
+                    }
+
+                    & .schedule {
+                        grid-template-columns: 1fr;
+                        gap: 10px;
+                    }
+                }
+
+                & div:last-child {
+                    font-size: 18px;
+                }
+            }
+
+            & .confirmation {
+                margin-top: 25px;
+
+                & > div {
+                    transform: translateX(12.5%);
+
+                    & h4 {
+                        font-size: 18px;
+                    }
+
+                    & span {
+                        align-items: center;
+
+                        & img:first-child {
+                            width: 90px;
+                            height: 90px;
+                        }
+
+                        & img:last-child {
+                            width: 120px;
+                            top: 20px;
+                            left: 90px;
+                        }
+                    }
+
+                    & p {
+                        font-size: 18px;
+                        font-weight: 500;
+                    }
+                }
+            }
         }
     }
 }

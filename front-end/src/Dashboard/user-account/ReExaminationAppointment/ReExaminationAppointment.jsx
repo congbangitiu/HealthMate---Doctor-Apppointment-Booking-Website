@@ -14,10 +14,12 @@ import Loader from '../../../components/Loader/Loader';
 import ErrorSign from '../../../components/Error/Error';
 import { QRCodeSVG } from 'qrcode.react';
 import { generateAndDownloadPDF } from '../../../utils/handlePDF';
+import { useMediaQuery } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
 const ReExaminationAppointment = ({ appointment }) => {
+    const isMobile = useMediaQuery('(max-width:768px)');
     const [loadingBtn, setLoadingBtn] = useState(false);
     const { data: prescription, loading, error } = useFetchData(`${BASE_URL}/prescriptions/${appointment._id}`);
 
@@ -52,7 +54,10 @@ const ReExaminationAppointment = ({ appointment }) => {
                             </div>
                             {appointment.nextAppointment?.pdfInfo?.url && (
                                 <div className={cx('qr-code')}>
-                                    <QRCodeSVG value={appointment.nextAppointment?.pdfInfo?.url} size={60} />
+                                    <QRCodeSVG
+                                        value={appointment.nextAppointment?.pdfInfo?.url}
+                                        size={isMobile ? 45 : 60}
+                                    />
                                 </div>
                             )}
                         </div>
