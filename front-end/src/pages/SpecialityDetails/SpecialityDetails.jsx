@@ -9,12 +9,12 @@ const cx = classNames.bind(styles);
 const SpecialityDetails = () => {
     const { id } = useParams();
     const specialty = specialties.find((item) => item.id === id);
-    useEffect(() => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth',
-        });
-    }, [id]);
+    // useEffect(() => {
+    //     window.scrollTo({
+    //         top: 0,
+    //         behavior: 'smooth',
+    //     });
+    // }, [id]);
 
     return (
         <div className={cx('container')}>
