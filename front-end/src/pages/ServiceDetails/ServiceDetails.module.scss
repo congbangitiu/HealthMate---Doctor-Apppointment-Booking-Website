@@ -3,7 +3,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 100px 120px 100px 120px;
+    padding: 80px 120px 100px 120px;
     background-image: url(../../assets/images/Blur.png);
     background-repeat: no-repeat;
     background-position: center;
@@ -13,83 +13,231 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: 50px;
+        margin-top: 60px;
         gap: 50px;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+
+        &:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
 
         & img {
-            width: 25%;
-            border-radius: 10px;
+            width: 30%;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+
+            &:hover {
+                transform: scale(1.05);
+            }
         }
 
         & div {
-            width: 80%;
+            width: 70%;
 
             & h4 {
-                font-size: 30px;
-                font-weight: 550;
+                font-size: 35px;
+                font-weight: 700;
                 color: var(--primaryColor);
+                background: linear-gradient(90deg, var(--primaryColor), var(--irisBlueColor));
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+                margin-bottom: 15px;
+                position: relative;
+
+                &:after {
+                    content: '';
+                    position: absolute;
+                    width: 0;
+                    height: 3px;
+                    bottom: -5px;
+                    left: 0;
+                    background: var(--primaryColor);
+                    transition: width 0.4s ease;
+                }
+
+                &:hover:after {
+                    width: 50%;
+                }
             }
 
             & p {
-                font-size: 16px;
+                font-size: 18px;
                 margin-top: 10px;
                 text-align: justify;
+                line-height: 1.6;
             }
         }
     }
 
     & .info {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 1fr);
         width: 100%;
-        margin-top: 100px;
-        gap: 50px;
+        margin-top: 60px;
+        gap: 60px;
 
         & div {
-            border: 2px solid var(--primaryColor);
             display: flex;
             flex-direction: column;
-            border-radius: 10px;
+            border-radius: 15px;
+            background-color: linear-gradient(145deg, #ffffff, #f8faff);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
 
             &:hover {
-                box-shadow: 0px 0px 8px var(--whiteColor);
+                box-shadow: 0 12px 30px rgba(var(--primaryColor), 0.25);
+                background: linear-gradient(145deg, #f9fbff, #ffffff);
+
+                &:before {
+                    left: 100%;
+                }
+
+                & span:after {
+                    width: 100%;
+                }
+            }
+
+            &:before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(120deg, transparent, rgba(var(--primaryColor), 0.15), transparent);
+                transition: left 0.6s ease;
             }
 
             & span {
-                border-bottom: 2px solid var(--primaryColor);
-                background-color: var(--primaryColor);
+                background: linear-gradient(90deg, var(--primaryColor), var(--irisBlueColor));
                 color: var(--whiteColor);
                 width: 100%;
                 text-align: center;
                 font-size: 20px;
-                font-weight: 500;
-                padding: 5px 0;
-                border-top-left-radius: 8px;
-                border-top-right-radius: 8px;
+                font-weight: 600;
+                padding: 10px 0;
+                border-top-left-radius: 15px;
+                border-top-right-radius: 15px;
+                position: relative;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+
+                &:after {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 0;
+                    height: 100%;
+                    background: rgba(255, 255, 255, 0.2);
+                    transition: width 0.4s ease;
+                }
             }
 
             & ul {
                 list-style: none;
-                padding: 15px 30px;
+                padding: 20px;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                background-color: var(--whiteColor);
 
                 & li {
-                    font-size: 16px;
-                    margin-top: 5px;
+                    font-size: 18px;
+                    position: relative;
+                    padding-left: 25px;
+                    transition: all 0.3s ease;
+
+                    &:before {
+                        content: '✦';
+                        position: absolute;
+                        left: 0;
+                        color: var(--primaryColor);
+                        font-size: 14px;
+                        transition: transform 0.3s ease;
+                    }
+
+                    &:hover {
+                        color: var(--irisBlueColor);
+                        transform: translateX(5px);
+
+                        &:before {
+                            transform: scale(1.2) rotate(45deg);
+                        }
+                    }
+
+                    &:matches([class*='info'] div:nth-child(2) li) {
+                        padding-left: 35px;
+
+                        &:before {
+                            content: counter(step-counter);
+                            counter-increment: step-counter;
+                            width: 22px;
+                            height: 22px;
+                            background: var(--primaryColor);
+                            color: #fff;
+                            border-radius: 50%;
+                            text-align: center;
+                            line-height: 22px;
+                            font-size: 12px;
+                            left: 0;
+                            transform: none;
+                        }
+
+                        &:hover:before {
+                            transform: scale(1.1);
+                        }
+                    }
+                }
+
+                &:matches([class*='info'] div:nth-child(2) ul) {
+                    counter-reset: step-counter;
                 }
             }
         }
     }
 
     & .relevant-doctors {
-        margin-top: 80px;
+        margin-top: 70px;
         display: flex;
         flex-direction: column;
         align-items: center;
+        width: 100%;
 
         & h4:first-child {
             font-size: 30px;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--primaryColor);
+            background: linear-gradient(90deg, var(--primaryColor), var(--irisBlueColor));
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+
+            &:after {
+                content: '';
+                position: absolute;
+                width: 0;
+                height: 3px;
+                bottom: -10px;
+                left: 50%;
+                background: var(--primaryColor);
+                transition: width 0.4s ease;
+                transform: translateX(-50%);
+            }
+
+            &:hover:after {
+                width: 60%;
+            }
         }
 
         & .doctors {
@@ -104,6 +252,7 @@
         & .no-doctor {
             font-size: 18px;
             text-align: justify;
+            margin-top: 40px;
         }
     }
 }
@@ -117,9 +266,19 @@
             flex-direction: column;
             margin-top: 5px;
             gap: 25px;
+            padding: 0;
+            box-shadow: none;
+
+            &:hover {
+                box-shadow: none;
+            }
 
             & img {
                 width: 100%;
+
+                &:hover {
+                    transform: none;
+                }
             }
 
             & div {
@@ -128,6 +287,11 @@
                 & h4 {
                     font-size: 26px;
                     text-align: center;
+                    margin-bottom: 0;
+
+                    &::after {
+                        display: none;
+                    }
                 }
             }
         }
@@ -151,6 +315,10 @@
 
         & .relevant-doctors {
             margin-top: 40px;
+
+            & h4:first-child {
+                font-size: 26px;
+            }
 
             & .doctors {
                 margin-top: 30px;

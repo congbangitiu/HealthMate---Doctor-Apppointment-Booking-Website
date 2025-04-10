@@ -41,7 +41,7 @@ const ServiceDetails = () => {
                     <span>Benefits</span>
                     <ul>
                         {Treatments[id - 1].benefits.map((benefit, index) => (
-                            <li key={index}> - {benefit}</li>
+                            <li key={index}>{benefit}</li>
                         ))}
                     </ul>
                 </div>
@@ -59,7 +59,7 @@ const ServiceDetails = () => {
                     <span>Requirements</span>
                     <ul>
                         {Treatments[id - 1].requirements.map((requirement, index) => (
-                            <li key={index}> - {requirement}</li>
+                            <li key={index}>{requirement}</li>
                         ))}
                     </ul>
                 </div>
@@ -67,7 +67,7 @@ const ServiceDetails = () => {
                     <span>Expected Results</span>
                     <ul>
                         {Treatments[id - 1].expectedResults.map((result, index) => (
-                            <li key={index}> - {result}</li>
+                            <li key={index}>{result}</li>
                         ))}
                     </ul>
                 </div>
@@ -80,16 +80,20 @@ const ServiceDetails = () => {
                 ) : error ? (
                     <Error errorMessage={error} />
                 ) : (
-                    <div className={cx('doctors')}>
+                    <>
                         {doctors.length > 0 ? (
-                            doctors.map((doctor) => <DoctorCard key={doctor._id} doctor={doctor} />)
+                            <div className={cx('doctors')}>
+                                {doctors.map((doctor) => (
+                                    <DoctorCard key={doctor._id} doctor={doctor} />
+                                ))}
+                            </div>
                         ) : (
                             <p className={cx('no-doctor')}>
                                 Currently there is no doctor in charge of this service. Thank you for your interest in
-                                the service !
+                                the service!
                             </p>
                         )}
-                    </div>
+                    </>
                 )}
             </div>
         </div>

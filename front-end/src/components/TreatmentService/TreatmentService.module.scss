@@ -31,7 +31,7 @@
 
     & .services {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: repeat(3, 1fr);
         gap: 50px;
         margin-top: 50px;
 
@@ -91,17 +91,26 @@
         display: flex;
         justify-content: center;
         align-items: flex-end;
-        background-color: var(--primaryColor);
-        margin-top: 50px;
-        padding: 10px 20px;
-        border-radius: 5px;
-        gap: 5px;
+        background: linear-gradient(90deg, var(--primaryColor), var(--irisBlueColor));
+        margin-top: 40px;
+        padding: 10px 30px; 
+        border-radius: 50px; 
+        gap: 8px;
         font-size: 16px;
-        font-weight: 500;
+        font-weight: 600;
         color: var(--whiteColor);
+        border: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
 
         &:hover {
-            opacity: 0.7;
+            opacity: 1; 
+            transform: scale(1.05); 
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        & svg {
+            font-size: 20px; 
         }
     }
 }
@@ -130,6 +139,7 @@
 
         & .services {
             grid-template-columns: 1fr;
+            gap: 30px;
         }
 
         & button {

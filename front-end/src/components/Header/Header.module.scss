@@ -39,17 +39,39 @@
             & .link {
                 font-size: var(--subheading);
                 font-weight: var(--textWeight);
+                position: relative;
+                text-decoration: none;
+                transition: color 0.3s ease;
+
+                &:after {
+                    content: '';
+                    position: absolute;
+                    width: 0;
+                    height: 3px;
+                    bottom: -10px;
+                    left: 0;
+                    background-color: var(--primaryColor);
+                    transition: width 0.3s ease;
+                }
 
                 &:hover {
                     cursor: pointer;
                     color: var(--primaryColor);
-                    font-weight: 550;
+
+                    &:after {
+                        width: 100%;
+                    }
                 }
             }
 
             & .active {
                 color: var(--primaryColor);
                 font-weight: 550;
+
+                /* Gạch chân luôn hiển thị khi active */
+                &:after {
+                    width: 100%; /* Gạch chân đầy đủ khi active */
+                }
             }
 
             & .link-icon {
