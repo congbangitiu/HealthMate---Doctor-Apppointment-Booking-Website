@@ -10,6 +10,7 @@ import { GoDotFill } from 'react-icons/go';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { FaUserDoctor } from 'react-icons/fa6';
 import { MdMedicalServices, MdContactSupport } from 'react-icons/md';
+import { FaStethoscope } from 'react-icons/fa';
 import { Popover, Dialog, Drawer, Slide, useMediaQuery } from '@mui/material';
 import { authContext } from '../../context/AuthContext';
 import ConfirmLogout from '../ConfirmLogout/ConfirmLogout';
@@ -50,6 +51,11 @@ const Header = () => {
             path: '/home',
             icon: IoMdHome,
             content: 'Home',
+        },
+        {
+            path: '/specialties',
+            icon: FaStethoscope,
+            content: 'Specialties',
         },
         {
             path: '/doctors',
@@ -221,7 +227,7 @@ const Header = () => {
                         createdAt: createdAtTimestamp,
                         type: 'booking',
                         status: latestStatusObj ? latestStatusObj.status : item.status,
-                        isReExamination: false, 
+                        isReExamination: false,
                     };
                 });
         } else if (role === 'patient' && prescriptionData) {

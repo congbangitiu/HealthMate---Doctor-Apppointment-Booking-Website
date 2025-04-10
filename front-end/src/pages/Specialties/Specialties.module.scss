@@ -1,0 +1,65 @@
+.container {
+    padding: 100px 120px 80px 120px;
+    background-image: url(../../assets/images/Blur.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+
+    & .carousel {
+        & img {
+            height: 500px;
+        }
+    }
+
+    & .specialties {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+        margin-top: 80px;
+
+        & .specialty {
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px 0 var(--grayColor);
+            background-color: var(--whiteColor);
+            transition: all 0.3s ease;
+
+            &:hover {
+                cursor: pointer;
+                box-shadow: 0px 0px 8px var(--primaryColor);
+
+                & div:first-child img {
+                    transform: scale(1.1);
+                }
+            }
+
+            & div:first-child {
+                overflow: hidden;
+                border-radius: 10px;
+
+                & img {
+                    height: 200px;
+                    width: 100%;
+                    object-fit: cover;
+                    transition: transform 0.5s ease;
+                }
+            }
+
+            & div:last-child {
+                margin-top: 15px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                flex: 1;
+                gap: 5px;
+
+                & h4 {
+                    font-size: 18px;
+                    font-weight: 600;
+                    text-align: center;
+                }
+            }
+        }
+    }
+}

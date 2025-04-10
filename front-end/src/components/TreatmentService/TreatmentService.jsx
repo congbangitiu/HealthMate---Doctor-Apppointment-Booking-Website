@@ -24,7 +24,9 @@ const TreatmentService = () => {
                 {Treatments.slice(0, visibleServices).map((treatment) => (
                     <Link to={`/services/${treatment.id}`} key={treatment.id}>
                         <div className={cx('service')}>
-                            <img src={treatment.image} alt="" />
+                            <div>
+                                <img src={treatment.image} alt="" />
+                            </div>
                             <h4>{treatment.name}</h4>
                             <p>{treatment.shortDesc}</p>
                         </div>

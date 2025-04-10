@@ -37,15 +37,17 @@ const Tabs = ({ tab, setTab, doctorData, setShowProfileMobile }) => {
                 >
                     Overview
                 </button>
-                <button
-                    className={cx('mode', tab === 'appointments' && 'active')}
-                    onClick={() => {
-                        setTab('appointments');
-                        setShowProfileMobile(false);
-                    }}
-                >
-                    Appointments
-                </button>
+                {doctorData.isApproved === 'approved' && (
+                    <button
+                        className={cx('mode', tab === 'appointments' && 'active')}
+                        onClick={() => {
+                            setTab('appointments');
+                            setShowProfileMobile(false);
+                        }}
+                    >
+                        Appointments
+                    </button>
+                )}
                 <button
                     className={cx('mode', tab === 'setting' && 'active')}
                     onClick={() => {

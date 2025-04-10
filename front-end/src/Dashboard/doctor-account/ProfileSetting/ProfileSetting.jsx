@@ -41,6 +41,17 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
         signature: null,
     });
 
+    const specializationOptions = [
+        'Neurologist',
+        'Dermatologist',
+        'Cardiologist',
+        'Psychiatrist',
+        'Pulmonologist',
+        'Rheumatologist',
+        'Oncologist',
+        'Ophthalmologist',
+    ];
+
     useEffect(() => {
         setFormData({
             fullname: doctorData.fullname || '',
@@ -347,14 +358,11 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                         required
                     >
                         <option value="">Select</option>
-                        <option value="Neurologist">Neurologist</option>
-                        <option value="Dermatologist">Dermatologist</option>
-                        <option value="Cardiologist">Cardiologist</option>
-                        <option value="Psychiatrist">Psychiatrist</option>
-                        <option value="Pulmonologist">Pulmonologist</option>
-                        <option value="Rheumatologist">Rheumatologist</option>
-                        <option value="Oncologist">Oncologist</option>
-                        <option value="Ophthalmologist">Ophthalmologist</option>
+                        {specializationOptions.map((specialization) => (
+                            <option key={specialization} value={specialization}>
+                                {specialization}
+                            </option>
+                        ))}
                     </select>
                 </div>
                 <div className={cx('field')}>
