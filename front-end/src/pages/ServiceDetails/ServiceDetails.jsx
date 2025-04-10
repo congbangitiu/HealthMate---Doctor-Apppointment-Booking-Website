@@ -27,8 +27,6 @@ const ServiceDetails = () => {
         error,
     } = useFetchData(`${BASE_URL}/doctors?query=${Treatments[id - 1].doctor.toLowerCase()}`);
 
-    console.log(doctors);
-
     return (
         <div className={cx('container')}>
             <div className={cx('intro')}>
