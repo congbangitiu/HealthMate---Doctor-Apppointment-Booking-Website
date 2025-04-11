@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
-import styles from './SpecialityDetails.module.scss';
+import styles from './SpecialtyDetails.module.scss';
 import specialties from '../../assets/data/mock-data/specialties';
 
 const cx = classNames.bind(styles);
 
-const SpecialityDetails = () => {
+const SpecialtyDetails = () => {
     const { id } = useParams();
     const specialty = specialties.find((item) => item.id === id);
     useEffect(() => {
@@ -110,4 +110,4 @@ const SpecialityDetails = () => {
     );
 };
 
-export default SpecialityDetails;
+export default SpecialtyDetails;

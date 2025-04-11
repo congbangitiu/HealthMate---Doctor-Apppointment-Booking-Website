@@ -6,7 +6,7 @@ import Login from './../pages/Login/Login';
 import Register from './../pages/Register/Register';
 import Contact from './../pages/Contact/Contact';
 import Specialties from './../pages/Specialties/Specialties';
-import SpecialityDetails from '../pages/SpecialityDetails/SpecialityDetails';
+import SpecialtyDetails from '../pages/SpecialtyDetails/SpecialtyDetails';
 import DoctorList from './../pages/Doctors/DoctorList/DoctorList';
 import DoctorDetails from './../pages/Doctors/DoctorDetails/DoctorDetails';
 import ServiceDetails from '../pages/ServiceDetails/ServiceDetails';
@@ -33,7 +33,7 @@ const Routers = () => {
             <Route path="/contact" element={<Contact />} />
             <Route path="/services" element={<Services />} />
             <Route path="/specialties" element={<Specialties />} />
-            <Route path="/specialties/:id" element={<SpecialityDetails />} />
+            <Route path="/specialties/:id" element={<SpecialtyDetails />} />
             <Route path="/services/:id" element={<ServiceDetails />} />
             <Route path="/checkout-success" element={<CheckoutSucess />} />
             <Route path="/chats" element={<Chat />} />
