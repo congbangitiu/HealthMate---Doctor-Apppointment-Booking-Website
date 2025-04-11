@@ -120,7 +120,7 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
             <AdminSearch
                 title="Doctors"
                 total={officialDoctors.length}
-                placeholder="Type doctor's name or specialization ..."
+                placeholder="Type doctor's name or subspecialty ..."
                 query={query}
                 setQuery={setQuery}
             />
@@ -143,7 +143,7 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
                                                 <div>
                                                     <div>
                                                         <h4>Dr. {doctor.fullname}</h4>
-                                                        <span>{doctor.specialization}</span>
+                                                        <span>{doctor.subspecialty}</span>
                                                     </div>
                                                     <h4>PENDING</h4>
                                                 </div>
@@ -190,7 +190,7 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
                                                 <div>
                                                     <div>
                                                         <h4>Dr. {doctor.fullname}</h4>
-                                                        <span>{doctor.specialization}</span>
+                                                        <span>{doctor.subspecialty}</span>
                                                     </div>
                                                     <h4>REJECTED</h4>
                                                 </div>
@@ -236,7 +236,7 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
                                     </div>
                                     <div className={cx('info')}>
                                         <h4>Dr. {doctor.fullname}</h4>
-                                        <p>{doctor.specialization}</p>
+                                        <p>{doctor.subspecialty}</p>
                                     </div>
                                     <div className={cx('buttons')}>
                                         <Link to={`/doctors/${doctor._id}`}>

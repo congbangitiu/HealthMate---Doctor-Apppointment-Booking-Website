@@ -2,9 +2,13 @@
     width: 100%;
 
     & .upper-part {
-        & h4 {
+        & h4:first-child {
             font-size: 30px;
             font-weight: 600;
+            background: linear-gradient(90deg, var(--primaryColor), var(--yellowColor));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         & .selections {

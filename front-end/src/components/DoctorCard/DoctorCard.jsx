@@ -13,7 +13,7 @@ const DoctorCard = ({ doctor }) => {
             <img src={doctor.photo} alt="" />
             <h4>Dr. {doctor.fullname}</h4>
             <div className={cx('expertise-rating')}>
-                <div className={cx('expertise')}>{doctor.specialization}</div>
+                <div className={cx('expertise')}>{doctor.subspecialty}</div>
                 <div className={cx('rating')}>
                     <FaStar className={cx('stars')} />
                     <p>{doctor.avgRating}</p>

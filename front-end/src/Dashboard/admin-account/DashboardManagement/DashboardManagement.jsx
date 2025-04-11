@@ -200,7 +200,7 @@ const DashboardManagement = ({ users, doctors, appointments }) => {
                                                 {roundNumber(topDoctor.averageRating, 2)})
                                             </span>
                                         </span>
-                                        <p>{topDoctor.specialization}</p>
+                                        <p>{topDoctor.subspecialty}</p>
                                     </div>
                                 </Link>
                             ))}

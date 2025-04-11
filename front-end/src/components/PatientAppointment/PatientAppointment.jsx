@@ -42,7 +42,7 @@ const PatientAppointment = ({ appointment, handleDelete }) => {
                 <div className={cx('upperPart')}>
                     <div>
                         <h4>Dr. {appointment.doctor.fullname}</h4>
-                        <span>{appointment.doctor.specialization}</span>
+                        <span>{appointment.doctor.subspecialty}</span>
                     </div>
                     <div style={{ color: statusStyle.color }}>
                         {StatusIcon && <StatusIcon className={cx('icon')} style={{ color: statusStyle.color }} />}

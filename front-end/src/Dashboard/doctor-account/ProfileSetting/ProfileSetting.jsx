@@ -31,7 +31,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
         phone: '',
         bio: '',
         gender: '',
-        specialization: '',
+        subspecialty: '',
         ticketPrice: 0,
         qualifications: [{ startingDate: '', endingDate: '', degree: '', university: '' }],
         experiences: [{ startingDate: '', endingDate: '', position: '', hospital: '' }],
@@ -41,7 +41,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
         signature: null,
     });
 
-    const specializationOptions = [
+    const subspecialtyOptions = [
         'Neurologist',
         'Dermatologist',
         'Cardiologist',
@@ -59,7 +59,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
             phone: doctorData.phone || '',
             bio: doctorData.bio || '',
             gender: doctorData.gender || '',
-            specialization: doctorData.specialization || '',
+            subspecialty: doctorData.subspecialty || '',
             ticketPrice: doctorData.ticketPrice || 0,
             qualifications: doctorData.qualifications.map((qualification) => ({
                 startingDate: qualification.startingDate,
@@ -349,18 +349,18 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                     </select>
                 </div>
                 <div className={cx('field')}>
-                    <label htmlFor="specialization">Specialization</label>
+                    <label htmlFor="subspecialty">Subspecialty</label>
                     <select
-                        name="specialization"
-                        id="specialization"
-                        value={formData.specialization}
+                        name="subspecialty"
+                        id="subspecialty"
+                        value={formData.subspecialty}
                         onChange={handleInputChange}
                         required
                     >
                         <option value="">Select</option>
-                        {specializationOptions.map((specialization) => (
-                            <option key={specialization} value={specialization}>
-                                {specialization}
+                        {subspecialtyOptions.map((subspecialty) => (
+                            <option key={subspecialty} value={subspecialty}>
+                                {subspecialty}
                             </option>
                         ))}
                     </select>

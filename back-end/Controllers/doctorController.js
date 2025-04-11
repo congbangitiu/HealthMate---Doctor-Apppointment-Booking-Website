@@ -66,7 +66,7 @@ export const getAllDoctors = async (req, res) => {
                 // isApproved: 'approved',
                 $or: [
                     { fullname: { $regex: req.query.query, $options: 'i' } },
-                    { specialization: { $regex: req.query.query, $options: 'i' } },
+                    { subspecialty: { $regex: req.query.query, $options: 'i' } },
                 ],
             }).select('-password');
         } else {

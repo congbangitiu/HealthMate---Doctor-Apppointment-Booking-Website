@@ -60,7 +60,7 @@ const Dashboard = () => {
                                     smallMode={true}
                                     fullname={doctorData.fullname}
                                     photo={doctorData.photo}
-                                    specialization={doctorData.specialization}
+                                    subspecialty={doctorData.subspecialty}
                                     averageRating={doctorData.averageRating}
                                     totalRating={doctorData.totalRating}
                                     bio={doctorData.bio}

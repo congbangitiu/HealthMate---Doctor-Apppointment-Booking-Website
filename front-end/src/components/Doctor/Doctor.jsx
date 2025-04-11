@@ -7,7 +7,7 @@ import roundNumber from '../../utils/roundNumber';
 
 const cx = classNames.bind(styles);
 
-const Doctor = ({ smallMode, fullname, bio, averageRating, totalRating, specialization, photo }) => {
+const Doctor = ({ smallMode, fullname, bio, averageRating, totalRating, subspecialty, photo }) => {
     useEffect(() => {
         window.scrollTo({
             top: 0,
@@ -21,7 +21,7 @@ const Doctor = ({ smallMode, fullname, bio, averageRating, totalRating, speciali
             <div className={cx('info', smallMode && 'small')}>
                 <div className={cx('name-expertise')}>
                     <h4>Dr. {fullname}</h4>
-                    <div className={cx('expertise')}>{specialization}</div>
+                    <div className={cx('expertise')}>{subspecialty}</div>
                 </div>
                 <div className={cx('rating')}>
                     <FaStar className={cx('stars')} />
@@ -45,7 +45,7 @@ Doctor.propTypes = {
     about: PropTypes.string.isRequired,
     averageRating: PropTypes.number.isRequired,
     totalRating: PropTypes.number.isRequired,
-    specialization: PropTypes.string.isRequired,
+    subspecialty: PropTypes.string.isRequired,
     ticketPrice: PropTypes.number.isRequired,
     photo: PropTypes.string.isRequired,
 };

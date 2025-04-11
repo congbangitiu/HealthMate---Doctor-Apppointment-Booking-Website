@@ -24,7 +24,7 @@ const Search = ({ query, setQuery, handleSearch }) => {
                     type="text"
                     name="search"
                     id="searchInput"
-                    placeholder="Type doctor's name or specialization ..."
+                    placeholder="Type doctor's name or subspecialty ..."
                     value={query}
                     onChange={handleInputChange}
                 />
