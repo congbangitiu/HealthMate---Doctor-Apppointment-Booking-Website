@@ -45,19 +45,17 @@ const SpecialtyDetails = () => {
                 </div>
 
                 {/* Subspecialties - if any */}
-                {specialty.subspecialties && (
-                    <div className={cx('subspecialties')}>
-                        <h2>Subspecialties</h2>
-                        <div className={cx('subspecialties-grid')}>
-                            {specialty.subspecialties.map((sub, index) => (
-                                <div key={index} className={cx('subspecialty-card')}>
-                                    <h3>{sub.name}</h3>
-                                    <p>{sub.description}</p>
-                                </div>
-                            ))}
-                        </div>
+                <div className={cx('subspecialties')}>
+                    <h2>Subspecialties</h2>
+                    <div className={cx('subspecialties-grid')}>
+                        {specialty.subspecialties.map((sub, index) => (
+                            <div key={index} className={cx('subspecialty-card')}>
+                                <h3>{sub.name}</h3>
+                                <p>{sub.description}</p>
+                            </div>
+                        ))}
                     </div>
-                )}
+                </div>
 
                 {/* Key Functions */}
                 <div className={cx('key-functions')}>

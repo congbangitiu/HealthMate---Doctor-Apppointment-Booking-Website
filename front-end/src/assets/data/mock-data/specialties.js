@@ -20,6 +20,19 @@ const specialties = [
         description:
             'The Outpatient Department (OPD) is the first point of contact between patients and the hospital’s healthcare system. It provides comprehensive diagnostic, treatment, and health management services for individuals with non-emergency and non-hospitalized medical conditions. The department is designed to facilitate streamlined patient care, timely follow-ups, and preventive health interventions in a patient-centered environment. Staffed by multidisciplinary professionals, the OPD enables coordinated care across specialties with access to diagnostic support and referral pathways when needed.',
 
+        subspecialties: [
+            {
+                name: 'Generalism',
+                description:
+                    'Broad-spectrum care for undifferentiated symptoms and primary diagnosis before specialist referral.',
+            },
+            {
+                name: 'Preventivism',
+                description:
+                    'Focus on early detection, risk assessment, and preventive screening to maintain population health.',
+            },
+        ],
+
         keyFunctions: [
             {
                 title: 'Clinical Consultation and Diagnosis',
@@ -106,6 +119,39 @@ const specialties = [
         description:
             'The Paraclinical Department serves as the diagnostic backbone of our healthcare institution, integrating cutting-edge technology with expert analysis to deliver precise diagnostic insights. Our department operates 24/7 to provide comprehensive laboratory services including hematology, clinical chemistry, microbiology, and advanced histopathology, alongside state-of-the-art medical imaging modalities such as high-resolution CT, 3T MRI, and interventional radiology procedures. We maintain ISO 15189 accreditation and CAP certification, ensuring international standards of quality and reliability for all diagnostic outputs that form the foundation of patient care decisions across all clinical specialties.',
 
+        subspecialties: [
+            {
+                name: 'Radiology',
+                description:
+                    'Imaging diagnostics such as X-ray, CT, and MRI for internal visualization of anatomical structures.',
+            },
+            {
+                name: 'Hematology',
+                description:
+                    'Laboratory study of blood and blood-related disorders, including anemia, leukemia, and coagulation issues.',
+            },
+            {
+                name: 'Pathology',
+                description:
+                    'Study of tissue and cellular samples for disease diagnosis, particularly cancers and infections.',
+            },
+            {
+                name: 'Electrodiagnosis',
+                description:
+                    'Diagnostic tests like EEG, ECG, and EMG used to assess electrical activity in the brain, heart, and muscles.',
+            },
+            {
+                name: 'Endoscopy',
+                description:
+                    'Visual examination of internal organs such as the stomach and colon using minimally invasive scopes.',
+            },
+            {
+                name: 'Nuclear',
+                description:
+                    'Use of radioactive tracers in imaging and therapy, aiding diagnosis of cancers, thyroid, and cardiac conditions.',
+            },
+        ],
+
         keyFunctions: [
             {
                 title: 'Diagnostic Testing Services',
@@ -164,12 +210,8 @@ const specialties = [
         image: InternalMedicineDepartment,
         description:
             'The Internal Medicine Department serves as the cornerstone of adult medical care, providing comprehensive, evidence-based management of complex multi-system diseases. Our department brings together world-class internists and subspecialists to deliver personalized care for conditions ranging from acute illnesses to chronic disorders. With a patient-centered approach, we integrate advanced diagnostic technologies, cutting-edge treatment protocols, and preventive health strategies to optimize outcomes.',
+
         subspecialties: [
-            {
-                name: 'Pulmonology',
-                description:
-                    'Diagnosis and treatment of respiratory diseases including asthma, pneumonia, bronchitis, and chronic obstructive pulmonary disease (COPD).',
-            },
             {
                 name: 'Cardiology',
                 description:
@@ -267,6 +309,29 @@ const specialties = [
         image: SurgeryDepartment,
         description: `The Surgery Department serves as the cornerstone of our hospital's interventional care, delivering comprehensive surgical solutions ranging from minimally invasive procedures to complex operations. Our department combines advanced robotic systems (including da Vinci Xi platforms), cutting-edge imaging guidance, and a multidisciplinary team approach to ensure optimal patient outcomes.`,
 
+        subspecialties: [
+            {
+                name: 'Neurosurgery',
+                description: 'Surgical treatment of disorders affecting the brain, spine, and nervous system.',
+            },
+            {
+                name: 'Cardiothoracic',
+                description: 'Surgery involving the heart, lungs, and chest cavity.',
+            },
+            {
+                name: 'Orthopedics',
+                description: 'Surgical care for bones, joints, ligaments, tendons, and muscles.',
+            },
+            {
+                name: 'Urology',
+                description: 'Surgical management of urinary tract and male reproductive system disorders.',
+            },
+            {
+                name: 'Otolaryngology',
+                description: 'Head and neck surgery including ears, nose, and throat (ENT).',
+            },
+        ],
+
         keyFunctions: [
             {
                 title: 'Surgical Intervention Services',
@@ -326,6 +391,35 @@ const specialties = [
         description:
             'The Pediatrics Department is a vital specialty dedicated to the health and well-being of infants, children, and adolescents. Our department provides comprehensive outpatient and inpatient care for a wide range of pediatric illnesses, from common infections to complex chronic conditions. Our pediatricians are trained to diagnose, treat, and prevent diseases while closely monitoring the physical, emotional, and developmental growth of young patients. In addition to treating acute and chronic conditions, we actively engage in preventive care, routine vaccinations, developmental screenings, and nutrition counseling to ensure children receive holistic and age-appropriate healthcare. Our child-friendly environment is designed to ease anxiety and promote comfort during visits, fostering a positive medical experience for both children and their families.',
 
+        subspecialties: [
+            {
+                name: 'Neonatology',
+                description: 'Care for newborn infants, particularly the ill or premature.',
+            },
+            {
+                name: 'Hematology',
+                description: 'Diagnosis and treatment of blood disorders in children.',
+            },
+            {
+                name: 'Allergy',
+                description:
+                    'Management of allergic conditions such as asthma, eczema, and food allergies in children.',
+            },
+            {
+                name: 'Endocrinology',
+                description: 'Treatment of hormonal imbalances and growth disorders in children.',
+            },
+            {
+                name: 'Neonatology',
+                description:
+                    'Specialized care for newborn infants, especially those who are premature, underweight, or have congenital disorders.',
+            },
+            {
+                name: 'Adolescentology',
+                description: 'Focuses on the unique physical, psychological, and emotional development of teenagers.',
+            },
+        ],
+
         keyFunctions: [
             {
                 title: 'Pediatric Medical Services',
@@ -376,7 +470,6 @@ const specialties = [
             ],
         },
     },
-
     {
         id: 'dermatology',
         name: 'Dermatology Department',
@@ -384,6 +477,34 @@ const specialties = [
         image: DermatologyDepartment,
         description:
             'The Dermatology Department specializes in diagnosing and treating a wide range of skin, hair, and nail disorders. Our team of experienced dermatologists uses both medical and cosmetic dermatological approaches to provide holistic care tailored to each patient’s needs. From managing chronic conditions like eczema, acne, and psoriasis to detecting and treating skin cancers, we focus on early diagnosis and minimally invasive treatment options. The department also offers advanced cosmetic procedures such as laser therapy, chemical peels, and skin rejuvenation treatments, ensuring patients not only feel better but also look their best.',
+
+        subspecialties: [
+            {
+                name: 'Cosmetology',
+                description: 'Focus on aesthetic treatments such as skin rejuvenation and scar correction.',
+            },
+            {
+                name: 'Trichology',
+                description: 'Diagnosis and treatment of hair and scalp disorders.',
+            },
+            {
+                name: 'Allergology',
+                description:
+                    'Study and treatment of allergic skin reactions including urticaria and contact dermatitis.',
+            },
+            {
+                name: 'Mycology',
+                description: 'Diagnosis and treatment of fungal skin infections.',
+            },
+            {
+                name: 'Oncology',
+                description: 'Management of skin cancers including melanoma and basal cell carcinoma.',
+            },
+            {
+                name: 'Immunodermatology',
+                description: 'Study of immune-related skin conditions like lupus and pemphigus.',
+            },
+        ],
 
         keyFunctions: [
             {
@@ -452,6 +573,20 @@ const specialties = [
         description:
             'The Respiratory Department provides comprehensive care for patients with acute and chronic respiratory diseases. With a multidisciplinary team of pulmonologists, respiratory therapists, and critical care specialists, we focus on early diagnosis, effective treatment, and long-term management of respiratory conditions. The department is equipped with advanced diagnostics such as pulmonary function testing, bronchoscopy, and high-resolution CT scanning. From asthma and chronic obstructive pulmonary disease (COPD) to pneumonia and tuberculosis, we offer evidence-based care aimed at improving lung health and overall patient outcomes.',
 
+        subspecialties: [
+            {
+                name: 'Pulmonology',
+                description:
+                    'Diagnosis and treatment of diseases affecting the lungs and airways such as asthma, bronchitis, and COPD.',
+            },
+
+            {
+                name: 'Bronchology',
+                description:
+                    'Specialized in bronchoscopy and endoscopic examination of the airways for diagnostic and therapeutic purposes.',
+            },
+        ],
+
         keyFunctions: [
             {
                 title: 'Diagnosis and Management of Respiratory Disorders',
@@ -518,6 +653,33 @@ const specialties = [
         image: RehabilitationDepartment,
         description:
             'The Rehabilitation Department is dedicated to helping patients regain functional independence after injury, surgery, or illness. Our multidisciplinary team includes physiotherapists, occupational therapists, speech therapists, and rehabilitation doctors. The department treats patients with neurological disorders, musculoskeletal conditions, post-stroke impairments, sports injuries, and post-operative recovery needs. We provide individualized care plans using evidence-based techniques such as therapeutic exercises, electrotherapy, hydrotherapy, and assistive device training.',
+
+        subspecialties: [
+            {
+                name: 'Physiatry',
+                description:
+                    'Physical medicine and rehabilitation focused on restoring functional ability in people with physical impairments or disabilities.',
+            },
+            {
+                name: 'Physiotherapy',
+                description:
+                    'Use of exercises, manual therapy, and modalities to restore mobility and function in musculoskeletal conditions.',
+            },
+            {
+                name: 'OccupationalTherapy',
+                description:
+                    'Helps patients regain the ability to perform daily activities through adaptive techniques and therapeutic exercises.',
+            },
+            {
+                name: 'SpeechTherapy',
+                description: 'Assessment and treatment of speech, language, communication, and swallowing disorders.',
+            },
+            {
+                name: 'Neurorehabilitation',
+                description:
+                    'Recovery-focused therapy for patients with neurological impairments such as stroke, spinal cord injury, or traumatic brain injury.',
+            },
+        ],
 
         keyFunctions: [
             {
@@ -586,6 +748,38 @@ const specialties = [
         description:
             'The Ophthalmology Department provides comprehensive eye care services for patients of all ages, from routine vision screening to advanced surgical procedures. Our team of ophthalmologists specializes in the diagnosis and treatment of eye diseases including cataracts, glaucoma, diabetic retinopathy, macular degeneration, and refractive errors. With access to modern equipment such as OCT, slit-lamp microscopy, and laser systems, we ensure precise diagnostics and high-quality interventions. Preventive screenings and pediatric eye care are also integral parts of our mission.',
 
+        subspecialties: [
+            {
+                name: 'Retinology',
+                description:
+                    'Diagnosis and treatment of retinal disorders including diabetic retinopathy and macular degeneration.',
+            },
+            {
+                name: 'Glaucoma',
+                description:
+                    'Specialized in managing intraocular pressure and preserving optic nerve health to prevent vision loss.',
+            },
+            {
+                name: 'Corneology',
+                description:
+                    'Focused on corneal diseases and transplantation, including keratitis, ulcers, and dystrophies.',
+            },
+            {
+                name: 'Oculoplastic',
+                description: 'Surgical and cosmetic treatment of eyelid, orbit, and tear drainage system disorders.',
+            },
+            {
+                name: 'PediatricOphthalmology',
+                description:
+                    'Management of visual development and eye disorders in children such as amblyopia and strabismus.',
+            },
+            {
+                name: 'Neuro-ophthalmology',
+                description:
+                    'Deals with visual problems related to the nervous system including optic neuritis, visual field loss, and double vision.',
+            },
+        ],
+
         keyFunctions: [
             {
                 title: 'Comprehensive Eye Examinations',
@@ -653,6 +847,30 @@ const specialties = [
         description:
             'The Dentomaxillofacial Department specializes in the prevention, diagnosis, and treatment of dental, oral, and facial conditions. Services range from general dentistry (cleanings, fillings, extractions) to advanced maxillofacial surgery for trauma, tumors, or congenital defects. The department also provides orthodontic treatments, cosmetic dentistry, and dental implantology. Our team of dentists, oral surgeons, and orthodontists work collaboratively using digital radiography, 3D imaging, and minimally invasive techniques to ensure optimal oral health and facial harmony.',
 
+        subspecialties: [
+            {
+                name: 'Orthodontics',
+                description: 'Correction of misaligned teeth and jaws using braces or other dental devices.',
+            },
+            {
+                name: 'Endodontics',
+                description: 'Treatment of dental pulp and root canal therapy to save teeth.',
+            },
+            {
+                name: 'Periodontics',
+                description: 'Specialized care for gums and supporting structures of the teeth.',
+            },
+            {
+                name: 'Prosthodontics',
+                description: 'Design and fitting of dental prostheses like crowns, bridges, and dentures.',
+            },
+            {
+                name: 'Maxillofacial',
+                description:
+                    'Surgical management of diseases, injuries, and defects in the face, jaw, and oral cavity.',
+            },
+        ],
+
         keyFunctions: [
             {
                 title: 'General and Preventive Dentistry',
@@ -719,6 +937,29 @@ const specialties = [
         image: EmergencyDepartment,
         description:
             'The Emergency – Intensive Care – Toxicology Department is a multidisciplinary unit that plays a critical role in the hospital by providing immediate and specialized care for patients experiencing life-threatening medical conditions. This department combines emergency medicine, intensive care, and toxicology to manage a wide range of critical health issues such as trauma, acute organ failure, poisoning, and cardiopulmonary emergencies. The team of physicians, nurses, and specialists are available 24/7 to ensure rapid response, stabilization, and continuous monitoring using advanced equipment and life-saving interventions. Whether through mechanical ventilation, critical drug infusions, or detoxification protocols, the department ensures that every second counts in saving lives and guiding recovery.',
+
+        subspecialties: [
+            {
+                name: 'Toxicology',
+                description: 'Diagnosis and treatment of poisoning and drug overdose cases.',
+            },
+            {
+                name: 'Traumatology',
+                description: 'Management of acute physical injuries caused by accidents or violence.',
+            },
+            {
+                name: 'Resuscitation',
+                description: 'Advanced life support techniques including CPR and emergency airway management.',
+            },
+            {
+                name: 'Intensivism',
+                description: 'Specialized care for critically ill patients in intensive care units.',
+            },
+            {
+                name: 'Disasterology',
+                description: 'Medical response to mass casualty incidents and disaster scenarios.',
+            },
+        ],
 
         keyFunctions: [
             {
@@ -798,6 +1039,29 @@ const specialties = [
         image: OrthopedicsDepartment,
         description:
             'The Orthopedics and Musculoskeletal Department at HealthMate is dedicated to the diagnosis, treatment, and rehabilitation of disorders related to the bones, joints, muscles, ligaments, and tendons. Our mission is to restore mobility and improve the quality of life for patients suffering from injuries, degenerative diseases, and musculoskeletal conditions. The department integrates advanced surgical techniques, modern imaging diagnostics, and multidisciplinary rehabilitation programs to provide comprehensive care. From treating fractures and sports injuries to managing chronic conditions like osteoarthritis and osteoporosis, our team delivers personalized treatment plans with a strong emphasis on early intervention and long-term recovery.',
+
+        subspecialties: [
+            {
+                name: 'Arthrology',
+                description: 'Study and treatment of joint disorders such as arthritis and joint injuries.',
+            },
+            {
+                name: 'Osteology',
+                description: 'Diagnosis and care for bone diseases and metabolic bone disorders.',
+            },
+            {
+                name: 'Spine',
+                description: 'Management of spinal deformities, injuries, and degenerative disorders.',
+            },
+            {
+                name: 'Prosthetics',
+                description: 'Design and application of artificial limbs and orthopedic support devices.',
+            },
+            {
+                name: 'Orthotics',
+                description: 'Customization of orthopedic devices to support musculoskeletal structure.',
+            },
+        ],
 
         keyFunctions: [
             {
