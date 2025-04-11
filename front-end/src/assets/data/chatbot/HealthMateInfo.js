@@ -7,16 +7,20 @@ export const HealthMateInfo = `
     DETAILS: DOCTOR SERVICES
     At HealthMate, we pride ourselves on our extensive network of highly qualified doctors and medical specialists. Our platform is designed to cater to a wide range of medical needs, ensuring that every patient finds the right doctor for their specific health concerns.
 
-    1. Specialist Consultations
-    HealthMate offers consultations with specialists across various fields, including:
-    - Neurologist (Nervous System Specialist)
-    - Dermatologist (Skin Specialist)
-    - Cardiologist (Heart Specialist)
-    - Psychiatrist (Mental Health Specialist)
-    - Pulmonologist (Lung Specialist)
-    - Rheumatologist (Autoimmune and Joint Specialist)
-    - Oncologist (Cancer Specialist)
-    - Ophthalmologist (Eye Specialist)
+    1. Speciality Consultations
+    HealthMate currently has 12 departments/specialities, including:
+    - Outpatient Department
+    - Paraclinical Department
+    - Internal Medicine Department
+    - Surgery Department
+    - Pediatrics Department
+    - Dermatology Department
+    - Respiratory Department
+    - Rehabilitation Department
+    - Ophthalmology Department
+    - Dentomaxillofacial Department
+    - Emergency – Intensive Care – Toxicology Department
+    - Orthopedics and Musculoskeletal Department
 
     2. General Practitioner Services
     Our general practitioners (GPs) provide primary care services, including:

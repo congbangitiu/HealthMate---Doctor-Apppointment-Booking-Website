@@ -258,12 +258,6 @@ const specialties = [
                     qualityControl: ['30-day readmission risk assessment', 'Patient satisfaction surveys'],
                 },
             ],
-            performanceTargets: {
-                initialAssessment: '≤30 minutes for urgent cases',
-                diagnosticResolution: '≤48 hours for routine cases',
-                treatmentInitiation: '≤4 hours for acute conditions',
-                followUpTimeliness: '≤7 days post-discharge',
-            },
         },
     },
     {
@@ -322,12 +316,6 @@ const specialties = [
                     qualityControl: ['24-hour postoperative follow-up', 'VTE prophylaxis compliance tracking'],
                 },
             ],
-            performanceTargets: {
-                emergencySurgery: '≤90 minute decision-to-incision time',
-                electiveSurgery: '≤30 day wait time from consultation',
-                postOpComplications: '<5% 30-day readmission rate',
-                orTurnover: '≤30 minutes between cases',
-            },
         },
     },
     {
