@@ -1,66 +1,95 @@
 .container {
+    position: relative;
     display: flex;
-    flex-direction: column;
     align-items: center;
     width: 100%;
+    padding: 10px;
+    border-radius: 50px;
+    background-color: var(--whiteColor);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 2px solid var(--lightGrayColor);
 
-    & h2 {
-        font-size: 50px;
-        font-weight: 700;
-        line-height: 60px;
+    &:hover {
+        box-shadow: 0 6px 25px var(--lightGreenColor);
     }
 
-    & .search-wrapper {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 30px;
-        width: 70%;
-        padding: 10px;
-        border-radius: 10px;
-        background-color: var(--whiteColor);
-        box-shadow: 0 0 20px var(--primaryColor);
+    &:focus-within {
+        border-color: var(--primaryColor);
+        box-shadow: 0 6px 25px var(--lightGreenColor);
+    }
 
-        & input {
-            width: 90%;
-            border: none;
-            outline: none;
-            margin-left: 10px;
-            color: var(--headingColor);
-            font-weight: 520;
+    & input {
+        flex: 1;
+        border: none;
+        outline: none;
+        margin-left: 12px;
+        color: var(--headingColor);
+        font-weight: 520;
+        font-size: 16px;
+        background: transparent;
+        transition: all 0.3s ease;
+        padding: 8px 0;
 
+        &::placeholder {
+            font-weight: 500;
+            color: var(--darkGrayColor);
+            opacity: 0.8;
+        }
+
+        &:focus {
             &::placeholder {
-                font-weight: 500;
+                opacity: 0.5;
             }
         }
+    }
 
-        & .search-icon-wrapper,
-        & .close-icon-wrapper {
-            padding: 10px;
-            border-radius: 5px;
+    & .search-icon-wrapper,
+    & .close-icon-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transform-origin: center;
 
-            &:hover {
-                cursor: pointer;
-                opacity: 0.8;
-            }
+        &:hover {
+            cursor: pointer;
+            transform: scale(1.1);
         }
 
-        & .search-icon-wrapper {
-            background-color: var(--primaryColor);
+        &:active {
+            transform: scale(0.95);
+        }
+    }
 
-            & .search-icon {
-                font-size: 20px;
-                color: var(--whiteColor);
-            }
+    & .search-icon-wrapper {
+        background: linear-gradient(135deg, var(--primaryColor), var(--irisBlueColor));
+
+        & .search-icon {
+            font-size: 18px;
+            color: var(--whiteColor);
+            transition: transform 0.3s ease;
         }
 
-        & .close-icon-wrapper {
-            background-color: transparent;
+        &:hover .search-icon {
+            transform: scale(1.1);
+        }
+    }
 
-            & .close-icon {
-                font-size: 20px;
-                color: var(--darkGrayColor);
-            }
+    & .close-icon-wrapper {
+        background-color: transparent;
+
+        & .close-icon {
+            font-size: 22px;
+            color: var(--darkGrayColor);
+            transition: color 0.3s ease;
+        }
+
+        &:hover .close-icon {
+            color: var(--primaryColor);
         }
     }
 }
@@ -68,28 +97,26 @@
 // Responsive
 @media only screen and (max-width: 768px) {
     .container {
-        & h2 {
-            font-size: 32px;
-            line-height: normal;
+        padding: 10px 16px;
+        border-radius: 40px;
+
+        & input {
+            font-size: 15px;
+            margin-left: 8px;
         }
 
-        & .search-wrapper {
-            width: 100%;
-            margin-top: 20px;
-            box-shadow: 0 0 10px var(--primaryColor);
+        & .search-icon-wrapper,
+        & .close-icon-wrapper {
+            width: 36px;
+            height: 36px;
+        }
 
-            & input {
-                font-size: 16px;
-                width: 80%;
-            }
+        & .search-icon-wrapper .search-icon {
+            font-size: 16px;
+        }
 
-            & .search-icon-wrapper,
-            & .close-icon-wrapper {
-                & .search-icon,
-                & .close-icon {
-                    font-size: 16px;
-                }
-            }
+        & .close-icon-wrapper .close-icon {
+            font-size: 20px;
         }
     }
 }

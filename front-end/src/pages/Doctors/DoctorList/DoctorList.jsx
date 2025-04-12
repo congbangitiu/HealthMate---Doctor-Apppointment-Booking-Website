@@ -7,6 +7,8 @@ import { BASE_URL } from '../../../../config';
 import useFetchData from '../../../hooks/useFetchData';
 import Loader from '../../../components/Loader/Loader';
 import Error from '../../../components/Error/Error';
+import { Select, MenuItem } from '@mui/material';
+import specialties from '../../../assets/data/mock-data/specialties';
 
 const cx = classNames.bind(styles);
 
@@ -14,6 +16,7 @@ const DoctorList = () => {
     const [query, setQuery] = useState('');
     const [debouncedQuery, setDebouncedQuery] = useState('');
     const { data: doctors, loading, error } = useFetchData(`${BASE_URL}/doctors?query=${debouncedQuery}`);
+    const [selectedSpecialty, setSelectedSpecialty] = useState('');
 
     const handleSearch = () => {
         setQuery(query.trim());
@@ -35,22 +38,125 @@ const DoctorList = () => {
         });
     }, []);
 
-    const officialDoctors = doctors.filter((doctor) => doctor.isApproved === 'approved');
+    const specialtyOptions = specialties.map((specialty) => specialty.name);
+
+    const ITEM_HEIGHT = 48;
+    const ITEM_PADDING_TOP = 8;
+    const MenuProps = {
+        PaperProps: {
+            sx: {
+                width: '330px',
+                borderRadius: '10px',
+                border: '1px solid rgba(0,0,0,0.1)',
+                boxSizing: 'border-box',
+                overflow: 'hidden',
+            },
+        },
+        MenuListProps: {
+            sx: {
+                maxHeight: ITEM_HEIGHT * ITEM_PADDING_TOP,
+                overflowY: 'auto',
+                padding: '8px 0',
+                boxSizing: 'border-box',
+                '&::-webkit-scrollbar-button': {
+                    display: 'none',
+                },
+            },
+        },
+    };
+
+    const customStyles = {
+        '& .MuiSelect-select': {
+            fontFamily: '"Manrope", sans-serif',
+            fontWeight: '520',
+            padding: '0 25px',
+            display: 'flex',
+            alignItems: 'center',
+            lineHeight: '56px',
+        },
+        
+        '& .MuiOutlinedInput-notchedOutline': {
+            border: '2px solid var(--lightGrayColor)',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+            borderRadius: '50px',
+        },
+
+        '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'var(--lightGrayColor)',
+            boxShadow: '0 4px 20px var(--lightGreenColor)',
+        },
+
+        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'var(--primaryColor)',
+            boxShadow: '0 4px 20px var(--lightGreenColor)',
+        },
+    };
+
+    const officialDoctors = doctors.filter(
+        (doctor) =>
+            doctor.isApproved === 'approved' && (selectedSpecialty === '' || doctor.specialty === selectedSpecialty),
+    );
 
     return (
-        <div className={cx('container')}>
-            <Search query={query} setQuery={setQuery} handleSearch={handleSearch} />
-
+        <div className={cx('container-parent')}>
             {loading ? (
                 <Loader />
             ) : error ? (
                 <Error errorMessage={error} />
             ) : (
-                <div className={cx('doctors-wrapper')}>
+                <div className={cx('container')}>
                     <h2>Our great doctors</h2>
                     <p className={cx('description')}>
                         World-class care for everyone. Our health System offers unmatched, expert health care.
                     </p>
+                    <div className={cx('query')}>
+                        <Select
+                            value={selectedSpecialty}
+                            onChange={(e) => setSelectedSpecialty(e.target.value)}
+                            MenuProps={MenuProps}
+                            inputProps={{ sx: { height: '50px' } }}
+                            sx={customStyles}
+                            displayEmpty
+                            renderValue={(selected) => selected || 'All Specialties'}
+                        >
+                            <MenuItem
+                                value=""
+                                sx={{
+                                    '&:hover': {
+                                        backgroundColor: 'var(--lightGreenColor)',
+                                    },
+                                    backgroundColor:
+                                        selectedSpecialty === '' ? 'var(--primaryColor) !important' : 'transparent',
+
+                                    fontWeight: selectedSpecialty === '' ? '500' : 'normal',
+                                }}
+                            >
+                                All Specialties
+                            </MenuItem>
+                            {specialtyOptions.map((option) => (
+                                <MenuItem
+                                    key={option}
+                                    value={option}
+                                    sx={{
+                                        '&:hover': {
+                                            backgroundColor: 'var(--lightGreenColor)',
+                                        },
+                                        backgroundColor:
+                                            selectedSpecialty === option
+                                                ? 'var(--primaryColor) !important'
+                                                : 'transparent',
+
+                                        fontWeight: selectedSpecialty === option ? '500' : 'normal',
+                                    }}
+                                >
+                                    {option}
+                                </MenuItem>
+                            ))}
+                        </Select>
+
+                        <Search query={query} setQuery={setQuery} handleSearch={handleSearch} />
+                    </div>
+
                     <div className={cx('doctors')}>
                         {officialDoctors.map((doctor) => (
                             <DoctorCard key={doctor._id} doctor={doctor} />

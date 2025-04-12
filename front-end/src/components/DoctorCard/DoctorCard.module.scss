@@ -1,31 +1,61 @@
 .container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    border-radius: 20px;
+    border-radius: 25px;
     padding: 20px;
-    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     background-color: #fff;
-    transition: transform 0.3s, background-color 0.3s;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
 
     &:hover {
-        transform: scale(1.02);
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px var(--lightGreenColor);
+
+        &::before {
+            opacity: 1;
+        }
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(74, 108, 247, 0.05) 0%, rgba(255, 255, 255, 0) 60%);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: 0;
     }
 
     & img {
         object-fit: cover;
-        border-radius: 15px;
+        border-radius: 16px;
         aspect-ratio: 1/1;
+        width: 100%;
+        height: auto;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.4s ease;
+        position: relative;
+        z-index: 1;
     }
 
     & h4 {
-        font-size: 20px;
+        font-size: 22px;
         font-weight: 700;
-        color: var(--irisBlueColor);
+        background: linear-gradient(90deg, var(--primaryColor), var(--irisBlueColor));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
         text-align: center;
         margin-top: 15px;
-        margin-bottom: 10px;
+        position: relative;
+        z-index: 1;
     }
 
     & .expertise-rating {
@@ -33,30 +63,51 @@
         justify-content: space-between;
         align-items: center;
         width: 100%;
-        margin-top: 10px;
+        margin-top: 15px;
+        position: relative;
+        z-index: 1;
 
         & .expertise {
-            padding: 5px 15px;
-            border-radius: 8px;
+            padding: 8px 16px;
+            border-radius: 12px;
             font-weight: 600;
             color: var(--irisBlueColor);
-            background-color: #ccf0f3;
+            background-color: rgba(204, 240, 243, 0.6);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(74, 108, 247, 0.1);
+            transition: all 0.3s ease;
+
+            &:hover {
+                background-color: rgba(204, 240, 243, 0.9);
+            }
         }
 
         & .rating {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 12px;
+            background-color: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.2);
 
             & .stars {
                 color: var(--yellowColor);
+                filter: drop-shadow(0 2px 4px rgba(255, 215, 0, 0.3));
             }
 
             & p {
                 margin: 0;
+                font-weight: 500;
 
                 &:nth-child(2) {
-                    font-weight: 600;
+                    font-weight: 700;
+                    color: var(--headingColor);
+                }
+
+                &:last-child {
+                    color: var(--darkGrayColor);
+                    font-size: 14px;
                 }
             }
         }
@@ -64,15 +115,35 @@
 
     & .details {
         width: 100%;
+        position: relative;
         margin-top: 15px;
+        z-index: 1;
 
         & .patients {
             font-size: 16px;
             font-weight: 600;
+            color: var(--headingColor);
+            display: flex;
+            align-items: center;
+
+            &::before {
+                content: '👨‍⚕️';
+                margin-right: 8px;
+                filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+            }
         }
 
         & .office {
             font-size: 14px;
+            color: var(--darkGrayColor);
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+
+            &::before {
+                content: '🏥';
+                margin-right: 8px;
+            }
         }
     }
 }

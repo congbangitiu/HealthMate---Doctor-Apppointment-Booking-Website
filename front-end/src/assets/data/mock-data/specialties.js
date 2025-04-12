@@ -769,11 +769,6 @@ const specialties = [
                 description: 'Surgical and cosmetic treatment of eyelid, orbit, and tear drainage system disorders.',
             },
             {
-                name: 'PediatricOphthalmology',
-                description:
-                    'Management of visual development and eye disorders in children such as amblyopia and strabismus.',
-            },
-            {
                 name: 'Neuro-ophthalmology',
                 description:
                     'Deals with visual problems related to the nervous system including optic neuritis, visual field loss, and double vision.',
@@ -932,7 +927,7 @@ const specialties = [
     },
     {
         id: 'emergency',
-        name: 'Emergency – Intensive Care – Toxicology Department',
+        name: 'Emergency – Intensive Care Department',
         abbreviation: 'EIC',
         image: EmergencyDepartment,
         description:
@@ -1034,7 +1029,7 @@ const specialties = [
     },
     {
         id: 'orthopedics',
-        name: 'Orthopedics and Musculoskeletal Department',
+        name: 'Musculoskeletal Department',
         abbreviation: 'ORT',
         image: OrthopedicsDepartment,
         description:

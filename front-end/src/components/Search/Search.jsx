@@ -18,26 +18,23 @@ const Search = ({ query, setQuery, handleSearch }) => {
 
     return (
         <div className={cx('container')}>
-            <h2>Find a doctor</h2>
-            <div className={cx('search-wrapper')}>
-                <input
-                    type="text"
-                    name="search"
-                    id="searchInput"
-                    placeholder="Type doctor's name or subspecialty ..."
-                    value={query}
-                    onChange={handleInputChange}
-                />
-                {query ? (
-                    <div className={cx('close-icon-wrapper')}>
-                        <IoMdCloseCircle className={cx('close-icon')} onClick={handleClearSearch} />
-                    </div>
-                ) : (
-                    <div className={cx('search-icon-wrapper')} onClick={handleSearch}>
-                        <FaSearch className={cx('search-icon')} />
-                    </div>
-                )}
-            </div>
+            <input
+                type="text"
+                name="search"
+                id="searchInput"
+                placeholder="Type doctor's name or subspecialty ..."
+                value={query}
+                onChange={handleInputChange}
+            />
+            {query ? (
+                <div className={cx('close-icon-wrapper')}>
+                    <IoMdCloseCircle className={cx('close-icon')} onClick={handleClearSearch} />
+                </div>
+            ) : (
+                <div className={cx('search-icon-wrapper')} onClick={handleSearch}>
+                    <FaSearch className={cx('search-icon')} />
+                </div>
+            )}
         </div>
     );
 };

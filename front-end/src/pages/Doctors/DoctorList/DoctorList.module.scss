@@ -1,20 +1,16 @@
-.container {
-    padding: 140px 120px 60px 120px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-image: url(../../assets/images/Blur.png);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+.container-parent {
+    padding: 120px 120px 60px 120px;
+    min-height: calc(100vh - 278px);
 
-    & .doctors-wrapper {
+    & .container {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin-top: 100px;
+        background-image: url(../../assets/images/Blur.png);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
 
         & h2 {
             line-height: 60px;
@@ -27,24 +23,30 @@
             font-size: 18px;
         }
 
+        & .query {
+            display: grid;
+            grid-template-columns: 1.25fr 2.75fr;
+            width: 100%;
+            margin-top: 30px;
+            gap: 20px;
+        }
+
         & .doctors {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             justify-content: center;
-            gap: 35px;
-            margin-top: 40px;
+            gap: 30px;
+            margin-top: 50px;
         }
     }
 }
 
 // Responsive
 @media only screen and (max-width: 768px) {
-    .container {
+    .container-parent {
         padding: 80px 20px 50px 20px;
 
-        & .doctors-wrapper {
-            margin-top: 50px;
-
+        & .container {
             & h2 {
                 font-size: 32px;
                 line-height: normal;
@@ -55,6 +57,10 @@
                 margin-top: 5px !important;
                 width: 100%;
                 text-align: center;
+            }
+
+            & .query {
+                grid-template-columns: 1fr;
             }
 
             & .doctors {

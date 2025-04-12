@@ -178,8 +178,6 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
             subspecialty: newValue,
             specialty: matchedSpecialty ? matchedSpecialty.name : '',
         });
-
-        // setSelectedSpecialty(matchedSpecialty ? matchedSpecialty.name : '');
     };
 
     // Qualification functions
@@ -363,6 +361,17 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                     </select>
                 </div>
                 <div className={cx('field')}>
+                    <label htmlFor="ticketPrice">Ticket price</label>
+                    <input
+                        type="number"
+                        name="ticketPrice"
+                        id="ticketPrice"
+                        value={formData.ticketPrice}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <div className={cx('field')}>
                     <label htmlFor="specialty">Specialty</label>
                     <input
                         name="specialty"
@@ -428,17 +437,6 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                                 },
                             },
                         }}
-                    />
-                </div>
-                <div className={cx('field')}>
-                    <label htmlFor="ticketPrice">Ticket price</label>
-                    <input
-                        type="number"
-                        name="ticketPrice"
-                        id="ticketPrice"
-                        value={formData.ticketPrice}
-                        onChange={handleInputChange}
-                        required
                     />
                 </div>
             </div>

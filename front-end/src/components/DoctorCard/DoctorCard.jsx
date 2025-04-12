@@ -23,7 +23,7 @@ const DoctorCard = ({ doctor }) => {
             <div className={cx('details')}>
                 <p className={cx('patients')}>+{doctor.totalPatients} patients</p>
                 <p className={cx('office')}>
-                    <InfoToolTip text={doctor.experiences[0]?.hospital} maxLength={34} />
+                    <InfoToolTip text={doctor.experiences[0]?.hospital} maxLength={30} />
                 </p>
             </div>
         </Link>
