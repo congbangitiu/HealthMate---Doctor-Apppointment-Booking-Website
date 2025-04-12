@@ -148,9 +148,8 @@
     }
 
     & .selection {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        display: grid;
+        grid-template-columns: 0.75fr 1.25fr 1.25fr 0.75fr; 
         gap: 20px;
         margin-top: 30px;
 
@@ -159,18 +158,21 @@
             display: flex;
             flex-direction: column;
 
-            & select,
-            & input {
-                padding: 10px;
-                border-radius: 5px;
-                border: 2px solid var(--darkGrayColor);
-                margin-top: 2px;
-            }
-
             & label {
                 font-size: 18px;
                 font-weight: 500;
                 color: var(--primaryColor);
+                margin-bottom: 2px;
+            }
+
+            &:not(:nth-child(3)) {
+                & select,
+                & input {
+                    width: 100%;
+                    padding: 10px;
+                    border-radius: 5px;
+                    border: 2px solid var(--darkGrayColor);
+                }
             }
         }
     }

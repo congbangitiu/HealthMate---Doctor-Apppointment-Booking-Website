@@ -9,12 +9,7 @@ import formatDate from './../../../utils/formatDate';
 import { toast } from 'react-toastify';
 import { BASE_URL, token } from '../../../../config';
 import { PropTypes } from 'prop-types';
-import { useMediaQuery } from '@mui/material';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import { useTheme } from '@mui/material/styles';
+import { useMediaQuery, useTheme, Select, MenuItem, TextField, Autocomplete } from '@mui/material';
 import Papa from 'papaparse';
 
 const cx = classNames.bind(styles);
@@ -397,9 +392,7 @@ const PrescriptionEdit = ({
                                                 <li
                                                     {...props}
                                                     style={{
-                                                        fontWeight: selected
-                                                            ? theme.typography.fontWeightBold
-                                                            : theme.typography.fontWeightRegular,
+                                                        fontWeight: selected ? '500' : 'normal',
                                                         backgroundColor: selected
                                                             ? 'var(--lightGreenColor)'
                                                             : 'inherit',

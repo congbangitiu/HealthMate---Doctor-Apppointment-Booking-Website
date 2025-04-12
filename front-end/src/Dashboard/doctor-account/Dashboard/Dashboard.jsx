@@ -55,7 +55,7 @@ const Dashboard = () => {
                             </div>
                         )}
                         {tab === 'overview' && (
-                            <div>
+                            <div className={cx('overview')}>
                                 <Doctor
                                     smallMode={true}
                                     fullname={doctorData.fullname}

@@ -9,6 +9,8 @@ import { uploadImageToCloudinary } from '../../../utils/uploadCloudinary';
 import { BASE_URL, token } from '../../../../config';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
+import specialties from '../../../assets/data/mock-data/specialties';
+import { TextField, Autocomplete } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
@@ -31,6 +33,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
         phone: '',
         bio: '',
         gender: '',
+        specialty: '',
         subspecialty: '',
         ticketPrice: 0,
         qualifications: [{ startingDate: '', endingDate: '', degree: '', university: '' }],
@@ -41,16 +44,12 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
         signature: null,
     });
 
-    const subspecialtyOptions = [
-        'Neurologist',
-        'Dermatologist',
-        'Cardiologist',
-        'Psychiatrist',
-        'Pulmonologist',
-        'Rheumatologist',
-        'Oncologist',
-        'Ophthalmologist',
-    ];
+    const subspecialtyOptions = specialties.reduce((acc, specialty) => {
+        if (specialty.subspecialties) {
+            return [...acc, ...specialty.subspecialties.map((subspecialty) => subspecialty.name)];
+        }
+        return acc;
+    }, []);
 
     useEffect(() => {
         setFormData({
@@ -59,6 +58,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
             phone: doctorData.phone || '',
             bio: doctorData.bio || '',
             gender: doctorData.gender || '',
+            specialty: doctorData.specialty || '',
             subspecialty: doctorData.subspecialty || '',
             ticketPrice: doctorData.ticketPrice || 0,
             qualifications: doctorData.qualifications.map((qualification) => ({
@@ -166,6 +166,20 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
             updateItems[index][name] = value;
             return { ...preFormData, [key]: updateItems };
         });
+    };
+
+    const handleSubspecialtyChange = (event, newValue) => {
+        const matchedSpecialty = specialties.find((specialty) =>
+            specialty.subspecialties?.some((sub) => sub.name === newValue),
+        );
+
+        setFormData({
+            ...formData,
+            subspecialty: newValue,
+            specialty: matchedSpecialty ? matchedSpecialty.name : '',
+        });
+
+        // setSelectedSpecialty(matchedSpecialty ? matchedSpecialty.name : '');
     };
 
     // Qualification functions
@@ -349,21 +363,72 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                     </select>
                 </div>
                 <div className={cx('field')}>
-                    <label htmlFor="subspecialty">Subspecialty</label>
-                    <select
-                        name="subspecialty"
-                        id="subspecialty"
-                        value={formData.subspecialty}
+                    <label htmlFor="specialty">Specialty</label>
+                    <input
+                        name="specialty"
+                        id="specialty"
+                        value={formData.specialty}
                         onChange={handleInputChange}
                         required
-                    >
-                        <option value="">Select</option>
-                        {subspecialtyOptions.map((subspecialty) => (
-                            <option key={subspecialty} value={subspecialty}>
-                                {subspecialty}
-                            </option>
-                        ))}
-                    </select>
+                        readOnly
+                    />
+                </div>
+                <div className={cx('field')}>
+                    <label htmlFor="subspecialty">Subspecialty</label>
+                    <Autocomplete
+                        disablePortal
+                        options={subspecialtyOptions}
+                        value={formData.subspecialty}
+                        onChange={handleSubspecialtyChange}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                sx={{
+                                    '& .MuiOutlinedInput-root': {
+                                        padding: '5px 10px',
+                                        fontSize: '16px',
+                                        borderRadius: '5px',
+                                        '& fieldset': {
+                                            border: '2px solid var(--darkGrayColor)',
+                                        },
+                                        '&:hover fieldset': {
+                                            border: '2px solid var(--darkGrayColor)',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            border: '2px solid var(--darkGrayColor)',
+                                        },
+                                    },
+                                    '& .MuiInputBase-input': {
+                                        padding: '10px',
+                                        fontSize: '16px',
+                                    },
+                                }}
+                            />
+                        )}
+                        renderOption={(props, option, { selected }) => (
+                            <li
+                                {...props}
+                                style={{
+                                    fontWeight: selected ? '500' : 'normal',
+                                    backgroundColor: selected ? 'var(--lightGreenColor)' : 'inherit',
+                                }}
+                            >
+                                {option}
+                            </li>
+                        )}
+                        slotProps={{
+                            paper: {
+                                sx: {
+                                    '& .MuiAutocomplete-option': {
+                                        fontSize: '16px',
+                                        '&:hover': {
+                                            backgroundColor: 'var(--lightGrayColor) !important',
+                                        },
+                                    },
+                                },
+                            },
+                        }}
+                    />
                 </div>
                 <div className={cx('field')}>
                     <label htmlFor="ticketPrice">Ticket price</label>
