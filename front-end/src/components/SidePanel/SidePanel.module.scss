@@ -1,34 +1,57 @@
 .container {
-    padding: 20px 30px;
-    border-radius: 10px;
-    width: 400px;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 12px;
+    width: 450px;
+    box-shadow: 0 10px 30px var(--black-08);
+    border: 1px solid var(--black-05);
+    transition: all 0.3s ease;
+
+    &:hover {
+        box-shadow: 0 15px 35px var(--black-12);
+    }
 
     & .price {
         display: flex;
         justify-content: space-between;
+        align-items: center;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--black-05);
 
         & h4 {
             font-size: 18px;
+            color: var(--darkGrayColor);
+            font-weight: 500;
         }
 
         & h3 {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 600;
+            color: var(--primaryColor);
+            position: relative;
+
+            &::after {
+                content: '/session';
+                font-size: 12px;
+                color: var(--darkGrayColor);
+                font-weight: 400;
+                margin-left: 4px;
+            }
         }
     }
 
     & > h4 {
-        font-size: 18px;
-        margin-bottom: 10px;
-        margin-top: 10px;
+        font-size: 16px;
+        margin: 10px 0;
+        color: var(--darkColor);
+        font-weight: 500;
     }
 
     & .slots {
-        max-height: 140px;
         overflow: auto;
-        border-top: 2px dashed var(--lightGrayColor);
-        border-bottom: 2px dashed var(--lightGrayColor);
+        max-height: 120px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
 
         // Customize scroll bar
         &::-webkit-scrollbar {
@@ -51,90 +74,117 @@
         }
 
         & .slot {
-            display: grid;
-            grid-template-areas: 'radio date time ';
-            grid-template-columns: auto 1.5fr 2fr;
+            width: 98%;
+            padding: 10px 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid var(--lightGrayColor);
+            display: flex; 
             align-items: center;
-            padding: 5px 0;
-            border-radius: 5px;
+            gap: 12px;
 
             & input[type='radio'] {
-                grid-area: radio;
-                margin-right: 20px;
+                flex: 0 0 15px; 
+                appearance: none;
+                width: 15px;
+                height: 15px;
+                border: 2px solid var(--lightGrayColor);
+                border-radius: 50%;
+                margin: 0;
+                transition: all 0.3s ease;
+                cursor: pointer;
+
+                &:checked {
+                    border-color: var(--primaryColor);
+                    background: radial-gradient(circle, var(--primaryColor) 40%, transparent 45%);
+                }
             }
 
             & p {
-                font-size: 16px;
                 color: var(--darkGrayColor);
-            }
+                line-height: 1.4;
+                margin: 0;
 
-            & p:first-of-type {
-                grid-area: date;
-            }
+                &:nth-of-type(1) {
+                    flex: 1.5;
+                    font-weight: 500;
+                    color: var(--darkColor);
+                }
 
-            & p:last-of-type {
-                grid-area: time;
+                &:nth-of-type(2) {
+                    flex: 2;
+                }
             }
 
             &.selected {
-                background-color: var(--primaryLightColor);
+                background-color: var(--primary-08);
+                border-color: var(--primaryColor);
 
                 & p {
                     color: var(--primaryColor);
-                    font-weight: 600;
-                }
 
-                & input[type='radio']:checked {
-                    accent-color: var(--primaryColor);
+                    &:nth-of-type(1) {
+                        font-weight: 600;
+                    }
                 }
             }
 
-            &:hover {
+            &:hover:not(.selected) {
                 cursor: pointer;
-                background-color: var(--primaryLightColor);
-
-                & p {
-                    color: var(--primaryColor);
-                }
+                border-color: var(--lightGrayColor);
             }
         }
 
         & .no-slot {
-            margin: 10px 0;
+            margin: 16px 0;
             color: var(--darkGrayColor);
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 0 8px;
+            text-align: center;
         }
     }
 
     & .booking-btn-wrapper {
         display: flex;
         justify-content: center;
-        margin-top: 15px;
+        margin-top: 20px;
 
         & .booking-btn {
-            background-color: var(--primaryColor);
-            color: var(--whiteColor);
+            background: var(--buttonBgColor);
+            color: white;
             font-size: 15px;
             font-weight: 500;
-            padding: 8px 12px;
-            border-radius: 5px;
-            width: 50%;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            padding: 12px 24px;
+            border-radius: 10px;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px (--primary-10);
+            position: relative;
+            overflow: hidden;
 
             &:hover {
-                cursor: pointer;
-                opacity: 0.8;
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px var(--primary-20);
             }
-        }
 
-        & .notSelectedSlot {
-            background-color: var(--lightGrayColor);
+            &:active {
+                transform: translateY(0);
+            }
 
-            &:hover {
+            &.notSelectedSlot {
+                background: var(--lightGrayColor);
+                color: var(--darkGrayColor);
                 cursor: not-allowed;
-                opacity: 1;
+                box-shadow: none;
+
+                &:hover {
+                    transform: none;
+                    box-shadow: none;
+                }
             }
         }
     }
@@ -143,13 +193,32 @@
 // Responsive
 @media only screen and (max-width: 768px) {
     .container {
-        margin: 30px 0;
         width: 100%;
+        margin: 20px 0;
         padding: 20px;
+
+        & .slots {
+            max-height: 280px;
+        }
 
         & .booking-btn-wrapper {
             & .booking-btn {
-                width: 100%;
+                padding: 12px;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .container {
+        padding: 16px;
+
+        & .slot {
+            grid-template-columns: auto 1fr;
+            padding: 12px;
+
+            & p {
+                font-size: 13px;
             }
         }
     }

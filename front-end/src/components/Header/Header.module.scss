@@ -68,9 +68,8 @@
                 color: var(--primaryColor);
                 font-weight: 550;
 
-                /* Gạch chân luôn hiển thị khi active */
                 &:after {
-                    width: 100%; /* Gạch chân đầy đủ khi active */
+                    width: 100%;
                 }
             }
 
@@ -93,85 +92,83 @@
             display: flex;
             align-items: center;
             gap: 10px;
-        }
-
-        & .inner {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: transform 0.3s ease;
-            position: absolute;
-            right: 160px;
-            padding: 10px 15px;
-            border-radius: 10px;
-            z-index: 1;
-
-            & .info {
-                display: flex;
-                align-items: center;
-                gap: 15px;
-
-                & .avatar {
-                    width: 50px;
-                    height: 50px;
-                    object-fit: cover;
-                    aspect-ratio: 1/1;
-                    border-radius: 100px;
-                }
-
-                & .name {
-                    & h4 {
-                        font-size: 16px;
-                        font-weight: 600;
-                        color: var(--primaryColor);
-                    }
-
-                    & p {
-                        font-size: 14px;
-                        color: var(--darkGrayColor);
-                    }
-                }
-            }
-        }
-
-        & .isLogin {
-            padding: 10px 15px;
-            border-radius: 10px;
 
             &:hover {
-                cursor: pointer;
-                background-color: var(--lightGreenColor);
-                box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+                & .inner {
+                    transform: translateX(-55px);
+                }
+
+                & .logout-btn {
+                    opacity: 1;
+                }
             }
-        }
 
-        & .profileActive {
-            background-color: var(--lightGreenColor);
-        }
-
-        & > div:first-child:hover {
             & .inner {
-                transform: translateX(-55px);
+                display: flex;
+                align-items: center;
+                transition: transform 0.3s ease;
+                position: absolute;
+                right: 160px;
+                padding: 10px 15px;
+                z-index: 1;
+
+                & .info {
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+
+                    & .avatar {
+                        width: 50px;
+                        height: 50px;
+                        object-fit: cover;
+                        aspect-ratio: 1/1;
+                        border-radius: 100px;
+                    }
+
+                    & .name {
+                        & h4 {
+                            font-size: 16px;
+                            font-weight: 600;
+                            color: var(--primaryColor);
+                        }
+
+                        & p {
+                            font-size: 14px;
+                            color: var(--darkGrayColor);
+                        }
+                    }
+                }
+            }
+
+            & .isLogin {
+                padding: 10px 15px;
+                border-radius: 10px;
+
+                &:hover {
+                    cursor: pointer;
+                    background-color: var(--lightGreenColor);
+                    box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+                }
+            }
+
+            & .profileActive {
+                background-color: var(--lightGreenColor);
             }
 
             & .logout-btn {
-                opacity: 1;
-            }
-        }
+                color: var(--whiteColor);
+                background-color: #000;
+                font-size: 20px;
+                padding: 10px;
+                border-radius: 100px;
+                margin-left: 10px;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                z-index: 0;
 
-        & .logout-btn {
-            color: var(--whiteColor);
-            background-color: #000;
-            font-size: 20px;
-            padding: 10px;
-            border-radius: 100px;
-            margin-left: 10px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 0;
-
-            &:hover {
-                opacity: 0.7 !important;
+                &:hover {
+                    opacity: 0.7 !important;
+                }
             }
         }
 
@@ -252,7 +249,7 @@
 
         & .login,
         & .register {
-            background-color: var(--buttonBgColor);
+            background: var(--buttonBgColor);
             color: var(--whiteColor);
             font-size: 16px;
             font-weight: 500;

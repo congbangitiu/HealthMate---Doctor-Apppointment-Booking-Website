@@ -104,6 +104,7 @@
 
                     &:hover {
                         cursor: pointer;
+                        color: var(--irisBlueColor);
                     }
                 }
             }
@@ -122,9 +123,9 @@
         margin-top: 30px;
 
         & .feedback-btn {
-            padding: 10px 20px;
-            background-color: var(--primaryColor);
-            border-radius: 5px;
+            padding: 12px 24px;
+            border-radius: 10px;
+            background: var(--buttonBgColor);
             color: var(--whiteColor);
             font-size: 16px;
             font-weight: 500;

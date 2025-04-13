@@ -96,9 +96,9 @@
         height: 40px;
         border-radius: 5px;
         color: var(--whiteColor);
-        font-size: 18px;
-        font-weight: 500;
-        background-color: var(--primaryColor);
+        font-size: 16px;
+        font-weight: 600;
+        background: var(--buttonBgColor);
 
         &:hover {
             opacity: 0.8;

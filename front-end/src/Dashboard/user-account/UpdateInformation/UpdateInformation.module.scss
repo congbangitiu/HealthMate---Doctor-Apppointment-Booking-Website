@@ -131,7 +131,7 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    background-color: var(--primaryColor);
+                    background: var(--buttonBgColor);
                     color: var(--whiteColor);
                     width: 150px;
                     height: 45px;
@@ -148,7 +148,7 @@
         & .submit-btn {
             width: 40%;
             height: 50px;
-            background-color: var(--primaryColor);
+            background: var(--buttonBgColor);
             font-size: 18px;
             font-weight: 500;
             color: var(--whiteColor);

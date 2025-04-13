@@ -27,8 +27,10 @@ const TreatmentService = () => {
                             <div>
                                 <img src={treatment.image} alt="" />
                             </div>
-                            <h4>{treatment.name}</h4>
-                            <p>{treatment.shortDesc}</p>
+                            <div>
+                                <h4>{treatment.name}</h4>
+                                <p>{treatment.shortDesc}</p>
+                            </div>
                         </div>
                     </Link>
                 ))}

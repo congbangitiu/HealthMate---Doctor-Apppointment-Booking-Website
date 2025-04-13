@@ -50,7 +50,7 @@
 
     & .active {
         color: var(--whiteColor);
-        background-color: var(--primaryColor);
+        background: var(--buttonBgColor);
         font-weight: 500;
     }
 }

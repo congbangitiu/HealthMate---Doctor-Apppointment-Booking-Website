@@ -6,7 +6,7 @@
     flex-direction: column;
 
     & header {
-        background-color: var(--primaryColor);
+        background: var(--buttonBgColor);
         color: var(--whiteColor);
         display: flex;
         justify-content: space-between;

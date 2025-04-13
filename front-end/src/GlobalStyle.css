@@ -1,6 +1,6 @@
 :root {
     --primaryColor: #30d5c8;
-    --buttonBgColor: #0067ff;
+    --buttonBgColor: linear-gradient(to right, var(--primaryColor), var(--irisBlueColor));
     --yellowColor: #feb60d;
     --purpleColor: #9771ff;
     --irisBlueColor: #01b5c5;
@@ -22,4 +22,17 @@
     --subheading: 18px;
     --textSize: 14px;
     --textWeight: 450;
+
+    --black-01: rgba(var(--black-rgb), 0.01);
+    --black-08: rgba(var(--black-rgb), 0.08);
+    --black-12: rgba(var(--black-rgb), 0.12);
+    --black-05: rgba(var(--black-rgb), 0.05);
+
+    --black-rgb: 0, 0, 0;
+    --primary-rgb: 48, 213, 200;
+
+    --primaryColor: #30d5c8;
+    --primary-08: rgba(var(--primary-rgb), 0.08);
+    --primary-10: rgba(var(--primary-rgb), 0.1);
+    --primary-20: rgba(var(--primary-rgb), 0.2);
 }

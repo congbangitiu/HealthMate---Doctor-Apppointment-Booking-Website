@@ -4,7 +4,7 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    min-height: 450px;
+    min-height: calc(100vh - 278px);
 
     & h4 {
         font-size: 16px;

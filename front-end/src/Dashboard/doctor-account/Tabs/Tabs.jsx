@@ -25,8 +25,11 @@ const Tabs = ({ tab, setTab, doctorData, setShowProfileMobile }) => {
 
     return (
         <div className={cx('container')}>
-            <img src={doctorData.photo || Doctor} alt="" />
-            <h4>Dr. {doctorData.fullname}</h4>
+            <div className={cx('profile')}>
+                <img src={doctorData.photo || Doctor} alt="" />
+                <h4>Dr. {doctorData.fullname}</h4>
+                <span>{doctorData.specialty}</span>
+            </div>
             <div className={cx('modes')}>
                 <button
                     className={cx('mode', tab === 'overview' && 'active')}
@@ -91,7 +94,7 @@ const Tabs = ({ tab, setTab, doctorData, setShowProfileMobile }) => {
                 onClose={() => setShowConfirmLogout(false)}
                 sx={{
                     '& .MuiPaper-root': {
-                        width: '100%',
+                        width: '20%',
                         borderRadius: '10px',
                     },
                 }}

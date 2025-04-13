@@ -24,10 +24,6 @@
             border: 1px solid var(--primaryColor);
             border-radius: 10px;
 
-            & thead {
-                background-color: var(--primaryColor);
-            }
-
             & th,
             & td {
                 text-align: center;
@@ -115,9 +111,8 @@
         & .selection {
             margin-top: 20px;
         }
-        
-        & .container {
 
+        & .container {
         }
     }
 }

@@ -17,6 +17,13 @@
             align-items: center;
             gap: 15px;
             padding: 5px 15px;
+            transition: all 0.3s ease;
+
+            &:hover:not(.cancelledStatus) {
+                background: var(--extremeLightGrayColor);
+                cursor: pointer;
+                transform: translateX(2px);
+            }
 
             &.cancelledStatus {
                 cursor: not-allowed !important;

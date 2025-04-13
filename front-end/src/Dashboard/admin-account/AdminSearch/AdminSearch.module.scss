@@ -18,54 +18,93 @@
         justify-content: space-between;
         align-items: center;
         width: 50%;
-        border-radius: 10px;
-        box-shadow: 0 0 10px var(--primaryColor);
+        border-radius: 50px;
+        box-shadow: 0 0 10px var(--lightGrayColor);
         padding: 10px;
         background-color: var(--whiteColor);
+        transition: all 0.3s ease;
+
+        &:hover {
+            box-shadow: 0 6px 25px var(--lightGreenColor);
+        }
+
+        &:focus-within {
+            border-color: var(--primaryColor);
+            box-shadow: 0 6px 25px var(--lightGreenColor);
+        }
 
         & input {
+            flex: 1;
             border: none;
             outline: none;
-            width: 100%;
+            margin-left: 12px;
             color: var(--headingColor);
-            font-weight: 500;
+            font-weight: 520;
+            font-size: 16px;
+            background: transparent;
+            transition: all 0.3s ease;
+            padding: 8px 0;
 
             &::placeholder {
                 font-weight: 500;
+                color: var(--darkGrayColor);
+                opacity: 0.8;
+            }
+
+            &:focus {
+                &::placeholder {
+                    opacity: 0.5;
+                }
             }
         }
 
         & .search-icon-wrapper,
         & .close-icon-wrapper {
-            width: 30px;
-            height: 30px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            border-radius: 5px;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-origin: center;
 
             &:hover {
                 cursor: pointer;
-                opacity: 0.8;
+                transform: scale(1.1);
+            }
+
+            &:active {
+                transform: scale(0.95);
             }
         }
 
         & .search-icon-wrapper {
-            background-color: var(--primaryColor);
-        }
+            background: linear-gradient(135deg, var(--primaryColor), var(--irisBlueColor));
 
-        & .search-icon {
-            font-size: 16px;
-            color: var(--whiteColor);
+            & .search-icon {
+                font-size: 18px;
+                color: var(--whiteColor);
+                transition: transform 0.3s ease;
+            }
+
+            &:hover .search-icon {
+                transform: scale(1.1);
+            }
         }
 
         & .close-icon-wrapper {
             background-color: transparent;
-        }
 
-        & .close-icon {
-            font-size: 20px;
-            color: var(--darkGrayColor);
+            & .close-icon {
+                font-size: 22px;
+                color: var(--darkGrayColor);
+                transition: color 0.3s ease;
+            }
+
+            &:hover .close-icon {
+                color: var(--primaryColor);
+            }
         }
     }
 }

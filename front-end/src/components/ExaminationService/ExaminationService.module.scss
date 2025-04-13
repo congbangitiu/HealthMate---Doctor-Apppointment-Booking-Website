@@ -39,6 +39,29 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            padding: 20px;
+            border-radius: 15px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            background-color: var(--whiteColor);
+
+            &:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 15px 40px var(--lightGreenColor);
+
+                &::before {
+                    opacity: 1;
+                }
+
+                & div:first-child img {
+                    transform: scale(1.1);
+                    filter: brightness(1.05);
+                }
+
+                & h4 {
+                    background-position: 100% 50%;
+                }
+            }
 
             & h4 {
                 font-size: 22px;
@@ -51,22 +74,6 @@
                 font-weight: 500;
                 margin-top: 10px;
                 text-align: center;
-            }
-
-            & .arrow-icon-wrapper {
-                padding: 8px;
-                border-radius: 50px;
-                border: 2px solid #000;
-                margin-top: 20px;
-
-                &:hover {
-                    cursor: pointer;
-                    background-color: #d3d3d3;
-                }
-
-                & .arrow-icon {
-                    font-size: 20px;
-                }
             }
         }
     }
@@ -95,10 +102,7 @@
 
         & .services {
             flex-direction: column;
-
-            & .arrow-icon-wrapper {
-                padding: 12px !important;
-            }
+            gap: 40px;
         }
     }
 }

@@ -78,12 +78,12 @@
 
     & .submit-btn {
         padding: 10px 0;
-        width: 150px;
+        width: 200px;
         border-radius: 5px;
         color: var(--whiteColor);
         font-size: 16px;
         font-weight: 500;
-        background-color: var(--primaryColor) !important;
+        background: var(--buttonBgColor);
         margin-top: 20px;
 
         &:hover {

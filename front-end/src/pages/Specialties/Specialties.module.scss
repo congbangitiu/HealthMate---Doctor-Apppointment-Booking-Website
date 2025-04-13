@@ -13,51 +13,109 @@
 
     & .specialties {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 30px;
         margin-top: 80px;
 
         & .specialty {
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px 0 var(--grayColor);
+            position: relative;
+            padding: 0;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
             background-color: var(--whiteColor);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
 
             &:hover {
-                cursor: pointer;
-                box-shadow: 0px 0px 8px var(--primaryColor);
+                transform: translateY(-8px);
+                box-shadow: 0 15px 40px var(--lightGreenColor);
+
+                &::before {
+                    opacity: 1;
+                }
 
                 & div:first-child img {
                     transform: scale(1.1);
+                    filter: brightness(1.05);
                 }
+
+                & div:last-child {
+                    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 1));
+                }
+            }
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(135deg, rgba(74, 108, 247, 0.05) 0%, rgba(255, 255, 255, 0) 60%);
+                opacity: 0;
+                transition: opacity 0.4s ease;
+                z-index: 1;
+                pointer-events: none;
             }
 
             & div:first-child {
                 overflow: hidden;
-                border-radius: 10px;
+                border-radius: 16px 16px 0 0;
+                height: 220px;
+                position: relative;
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 40%;
+                    background: linear-gradient(to top, rgba(0, 0, 0, 0.1), transparent);
+                }
 
                 & img {
-                    height: 200px;
+                    height: 100%;
                     width: 100%;
                     object-fit: cover;
-                    transition: transform 0.5s ease;
+                    transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+                    will-change: transform;
                 }
             }
 
             & div:last-child {
-                margin-top: 15px;
+                margin-top: 0;
+                padding: 15px 10px;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                flex: 1;
-                gap: 5px;
+                gap: 8px;
+                background: white;
+                transition: all 0.4s ease;
+                position: relative;
+                z-index: 2;
 
                 & h4 {
-                    font-size: 18px;
-                    font-weight: 600;
+                    font-size: 20px;
+                    font-weight: 700;
                     text-align: center;
+                    margin: 0;
+
+                    &:first-child {
+                        color: var(--headingColor);
+                        background: linear-gradient(90deg, var(--primaryColor), var(--irisBlueColor));
+                        -webkit-background-clip: text;
+                        background-clip: text;
+                        color: transparent;
+                    }
+
+                    &:last-child {
+                        color: var(--darkGrayColor);
+                        font-weight: 600;
+                        font-size: 16px;
+                    }
                 }
             }
         }

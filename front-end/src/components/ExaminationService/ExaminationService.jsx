@@ -23,17 +23,11 @@ const ExaminationService = () => {
                         Comprehensive care, from doctor to diagnosis. Our health system is with you every step of the
                         way.
                     </p>
-                    <Link to="/doctors" className={cx('arrow-icon-wrapper')}>
-                        <FaLongArrowAltRight className={cx('arrow-icon')} />
-                    </Link>
                 </div>
                 <div className={cx('service')}>
                     <img src={ExaminationService2} alt="" />
                     <h4>Find a Location</h4>
                     <p>From consultation to care, our health system delivers unmatched expertise, wherever you are.</p>
-                    <div className={cx('arrow-icon-wrapper')}>
-                        <FaLongArrowAltRight className={cx('arrow-icon')} />
-                    </div>
                 </div>
                 <div className={cx('service')}>
                     <img src={ExaminationService3} alt="" />
@@ -41,9 +35,6 @@ const ExaminationService = () => {
                     <p>
                         Your journey to health starts here. Our system provides expert care from the clinic to the lab.
                     </p>
-                    <Link to="/doctors" className={cx('arrow-icon-wrapper')}>
-                        <FaLongArrowAltRight className={cx('arrow-icon')} />
-                    </Link>
                 </div>
             </div>
         </div>
