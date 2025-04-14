@@ -31,12 +31,15 @@
             gap: 20px;
         }
 
-        & .doctors {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            justify-content: center;
-            gap: 30px;
+        & .doctors-wrapper {
             margin-top: 50px;
+
+            & .doctors {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                justify-content: center;
+                gap: 30px;
+            }
         }
     }
 }
@@ -63,8 +66,10 @@
                 grid-template-columns: 1fr;
             }
 
-            & .doctors {
-                grid-template-columns: 1fr;
+            & .doctors-wrapper {
+                & .doctors {
+                    grid-template-columns: 1fr;
+                }
             }
         }
     }

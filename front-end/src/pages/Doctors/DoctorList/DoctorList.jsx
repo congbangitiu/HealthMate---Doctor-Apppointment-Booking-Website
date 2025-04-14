@@ -3,6 +3,7 @@ import classNames from 'classnames/bind';
 import styles from './DoctorList.module.scss';
 import Search from '../../../components/Search/Search';
 import DoctorCard from '../../../components/DoctorCard/DoctorCard';
+import Panigation from '../../../components/Pagination/Pagination';
 import { BASE_URL } from '../../../../config';
 import useFetchData from '../../../hooks/useFetchData';
 import Loader from '../../../components/Loader/Loader';
@@ -17,6 +18,10 @@ const DoctorList = () => {
     const [debouncedQuery, setDebouncedQuery] = useState('');
     const { data: doctors, loading, error } = useFetchData(`${BASE_URL}/doctors?query=${debouncedQuery}`);
     const [selectedSpecialty, setSelectedSpecialty] = useState('');
+
+    const [currentPage, setCurrentPage] = useState(0);
+    const [currentItems, setCurrentItems] = useState([]);
+    const itemsPerPage = 12;
 
     const handleSearch = () => {
         setQuery(query.trim());
@@ -74,7 +79,7 @@ const DoctorList = () => {
             alignItems: 'center',
             lineHeight: '56px',
         },
-        
+
         '& .MuiOutlinedInput-notchedOutline': {
             border: '2px solid var(--lightGrayColor)',
             boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
@@ -96,6 +101,12 @@ const DoctorList = () => {
         (doctor) =>
             doctor.isApproved === 'approved' && (selectedSpecialty === '' || doctor.specialty === selectedSpecialty),
     );
+
+    useEffect(() => {
+        const offset = currentPage * itemsPerPage;
+        const items = officialDoctors.slice(offset, offset + itemsPerPage);
+        setCurrentItems(items);
+    }, [currentPage, officialDoctors, itemsPerPage]);
 
     return (
         <div className={cx('container-parent')}>
@@ -157,10 +168,19 @@ const DoctorList = () => {
                         <Search query={query} setQuery={setQuery} handleSearch={handleSearch} />
                     </div>
 
-                    <div className={cx('doctors')}>
-                        {officialDoctors.map((doctor) => (
-                            <DoctorCard key={doctor._id} doctor={doctor} />
-                        ))}
+                    <div className={cx('doctors-wrapper')}>
+                        <div className={cx('doctors')}>
+                            {officialDoctors.length > 0 &&
+                                currentItems.map((doctor) => <DoctorCard key={doctor._id} doctor={doctor} />)}
+                        </div>
+                        {!loading && officialDoctors.length > itemsPerPage && (
+                            <Panigation
+                                data={officialDoctors}
+                                itemsPerPage={itemsPerPage}
+                                currentPage={currentPage}
+                                setCurrentPage={setCurrentPage}
+                            />
+                        )}
                     </div>
                 </div>
             )}

@@ -2,7 +2,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 100px;
 
     & .img-wrapper {
         position: relative;
@@ -50,7 +49,6 @@
 @media only screen and (max-width: 768px) {
     .container {
         flex-direction: column;
-        margin-top: 50px;
 
         & .img-wrapper {
             & img:last-child {
@@ -74,7 +72,7 @@
 
         & .more-details {
             width: 100%;
-            margin-top: 30px;
+            margin-top: 20px;
         }
     }
 }

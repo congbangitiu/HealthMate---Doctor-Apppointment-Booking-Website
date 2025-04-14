@@ -21,15 +21,14 @@
                 font-weight: 500;
 
                 &:hover {
-                    background-color: var(--primaryColor);
-                    color: var(--whiteColor);
+                    background-color: var(--lightGreenColor);
                 }
             }
 
             &.active a {
-                background-color: var(--primaryColor);
+                background: var(--buttonBgColor);
                 color: var(--whiteColor);
-                border: 1px solid var(--primaryColor);
+                border: 1px solid var(--buttonBgColor);
             }
 
             &.disabled a {
@@ -46,7 +45,7 @@
     }
 }
 
-/* 📌 Responsive */
+/* Responsive */
 @media only screen and (max-width: 768px) {
     .container {
         margin-top: 40px;
@@ -64,7 +63,6 @@
             }
         }
 
-        /* 📌 Ẩn chữ "Previous" & "Next" trên mobile */
         & .previous a,
         & .next a {
             display: none;

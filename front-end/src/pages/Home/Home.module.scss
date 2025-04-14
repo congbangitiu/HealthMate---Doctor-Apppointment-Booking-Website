@@ -4,13 +4,17 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
 }
 
 // Responsive
 @media only screen and (max-width: 768px) {
     .container {
         padding: 60px 20px 0 20px;
-        flex-direction: column;
         margin-top: 20px;
+        gap: 50px;
     }
 }
