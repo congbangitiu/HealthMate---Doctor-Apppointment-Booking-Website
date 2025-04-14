@@ -4,20 +4,24 @@ import styles from './Doctor.module.scss';
 import { FaStar } from 'react-icons/fa';
 import { PropTypes } from 'prop-types';
 import roundNumber from '../../utils/roundNumber';
+import DefaultMaleDoctorAvatar from '../../assets/images/default-male-doctor.png';
+import DefaultFemaleDoctorAvatar from '../../assets/images/default-female-doctor.png';
 
 const cx = classNames.bind(styles);
 
-const Doctor = ({ smallMode, fullname, bio, averageRating, totalRating, subspecialty, photo }) => {
+const Doctor = ({ smallMode, fullname, gender, bio, averageRating, totalRating, subspecialty, photo }) => {
+    const defaultDoctorAvatar = gender === 'male' ? DefaultMaleDoctorAvatar : DefaultFemaleDoctorAvatar;
+
     useEffect(() => {
         window.scrollTo({
             top: 0,
-            behavior: 'smooth'
+            behavior: 'smooth',
         });
     }, []);
 
     return (
         <div className={cx('container')}>
-            <img src={photo} alt="" className={cx(smallMode && 'smallImg')} />
+            <img src={photo || defaultDoctorAvatar} className={cx(smallMode && 'smallImg')} />
             <div className={cx('info', smallMode && 'small')}>
                 <div className={cx('name-expertise')}>
                     <h4>Dr. {fullname}</h4>
@@ -37,6 +41,7 @@ const Doctor = ({ smallMode, fullname, bio, averageRating, totalRating, subspeci
 Doctor.propTypes = {
     smallMode: PropTypes.bool.isRequired,
     fullname: PropTypes.string.isRequired,
+    gender: PropTypes.string.isRequired,
     qualifications: PropTypes.array.isRequired,
     experiences: PropTypes.array.isRequired,
     timeSlots: PropTypes.array.isRequired,

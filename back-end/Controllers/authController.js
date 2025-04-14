@@ -216,7 +216,7 @@ export const sendEmailOTP = async (req, res) => {
             }
         });
 
-        // Return HTML content for testing API instead of sending real email 
+        // Return HTML content for testing API instead of sending real email
         // res.send(`
         //     <div style="font-family: Arial, sans-serif;">
         //         <p style="color: #4e545f;">Dear ${fullname},</p>
@@ -287,5 +287,44 @@ export const sendSMSOTP = async (req, res) => {
     } catch (error) {
         console.error('Error in sendSMSOTP:', error);
         res.status(500).json({ error: 'Server error' });
+    }
+};
+
+const addDoctorByAdmin = async (req, res) => {
+    const { fullname, username, email, password, role, isApprove } = req.body;
+
+    try {
+        // Check if user already exists
+        const doctor = await Doctor.findOne({ email });
+        if (doctor) {
+            return res.status(400).json({ message: 'Doctor already exists' });
+        }
+
+        // Hash password
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(password, salt);
+
+        // Create new account
+        doctor = new Doctor({
+            fullname,
+            username,
+            email,
+            password: hashPassword,
+            role,
+            isApprove,
+        });
+
+        await doctor.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Add new doctor successfully!',
+        });
+    } catch (error) {
+        console.error('Error in adding new doctor:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error. Try again!',
+        });
     }
 };

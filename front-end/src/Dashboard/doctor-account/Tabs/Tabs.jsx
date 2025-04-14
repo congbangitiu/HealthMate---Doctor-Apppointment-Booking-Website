@@ -1,18 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-
 import classNames from 'classnames/bind';
 import styles from './Tabs.module.scss';
-
 import Doctor from '../../../assets/images/about.png';
 import { MdLogout } from 'react-icons/md';
 import { TbStatusChange } from 'react-icons/tb';
-
 import ChangePassword from '../ChangePassword/ChangePassword';
 import ConfirmLogout from '../../../components/ConfirmLogout/ConfirmLogout';
-
-import Dialog from '@mui/material/Dialog';
-import Slide from '@mui/material/Slide';
+import { useMediaQuery, Dialog, Slide } from '@mui/material';
 
 const cx = classNames.bind(styles);
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -20,6 +15,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const Tabs = ({ tab, setTab, doctorData, setShowProfileMobile }) => {
+    const isMobile = useMediaQuery('(max-width:768px)');
     const [showFormChangePassword, setShowFormChangePassword] = useState(false);
     const [showConfirmLogout, setShowConfirmLogout] = useState(false);
 
@@ -94,7 +90,7 @@ const Tabs = ({ tab, setTab, doctorData, setShowProfileMobile }) => {
                 onClose={() => setShowConfirmLogout(false)}
                 sx={{
                     '& .MuiPaper-root': {
-                        width: '20%',
+                        width: isMobile ? '100%' : '20% ',
                         borderRadius: '10px',
                     },
                 }}

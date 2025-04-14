@@ -1,6 +1,64 @@
 .container {
     width: 100%;
 
+    & .upper-part {
+        display: flex;
+        gap: 30px;
+
+        button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, var(--primaryColor), var(--irisBlueColor));
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(48, 213, 200, 0.3);
+            position: relative;
+            overflow: hidden;
+            width: 250px;
+
+            &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(48, 213, 200, 0.4);
+
+                &::before {
+                    transform: scale(1.2);
+                }
+            }
+
+            &:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 10px rgba(48, 213, 200, 0.3);
+            }
+
+            &:focus:not(:active)::after {
+                animation: ripple 0.6s ease-out;
+            }
+
+            & .icon {
+                font-size: 35px;
+            }
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        }
+    }
+
     & .lower-part {
         margin-top: 50px;
 
@@ -337,7 +395,10 @@
                         & img {
                             width: 120px;
                             height: 120px;
-                            border-radius: 100px;
+                            border-radius: 50%;
+                            object-fit: cover;
+                            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                            border: 4px solid var(--whiteColor);
                         }
 
                         & .rating {
@@ -380,6 +441,10 @@
                             font-size: 16px;
                             font-weight: 600;
                             color: var(--darkGrayColor);
+                            background-color: rgba(255, 255, 255, 0.7);
+                            padding: 4px 12px;
+                            border-radius: 20px;
+                            display: inline-block;
                         }
                     }
 
@@ -415,8 +480,22 @@
     }
 }
 
+.doctor-creation-form {
+    width: 600px;
+    padding: 30px;
+}
+
 @media only screen and (max-width: 768px) {
     .container {
+        & .upper-part {
+            flex-direction: column;
+            gap: 20px;
+
+            & button {
+                width: 100%;
+            }
+        }
+
         & .lower-part {
             margin-top: 40px;
 
@@ -606,5 +685,10 @@
         & p {
             font-size: 18px;
         }
+    }
+
+    .doctor-creation-form {
+        width: 100%;
+        padding: 20px;
     }
 }
