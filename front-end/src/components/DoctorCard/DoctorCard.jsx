@@ -11,7 +11,7 @@ const cx = classNames.bind(styles);
 
 const DoctorCard = ({ doctor }) => {
     const defaultDoctorAvatar = doctor.gender === 'male' ? DefaultMaleDoctorAvatar : DefaultFemaleDoctorAvatar;
-    
+
     return (
         <Link to={`/doctors/${doctor._id}`} className={cx('container')}>
             <img src={doctor.photo || defaultDoctorAvatar} alt="" />
@@ -24,14 +24,14 @@ const DoctorCard = ({ doctor }) => {
                     <p>({doctor.totalRating})</p>
                 </div>
             </div>
-            {doctor.totalPatients > 0 && doctor.experiences.length > 0 && (
-                <div className={cx('details')}>
-                    <p className={cx('patients')}>+{doctor.totalPatients} patients</p>
+            <div className={cx('details')}>
+                {doctor.totalPatients > 0 && <p className={cx('patients')}>+{doctor.totalPatients} patients</p>}
+                {doctor.experiences.length > 0 && (
                     <p className={cx('office')}>
                         <InfoToolTip text={doctor.experiences[0]?.hospital} maxLength={30} />
                     </p>
-                </div>
-            )}
+                )}
+            </div>
         </Link>
     );
 };

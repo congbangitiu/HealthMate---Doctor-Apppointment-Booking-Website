@@ -42,3 +42,82 @@ export const addNewDoctor = async (req, res) => {
         });
     }
 };
+
+export const addDoctorTest = async (req, res) => {
+    try {
+        const {
+            fullname,
+            username,
+            email,
+            password,
+            gender,
+            phone,
+            role,
+            ticketPrice,
+            specialty,
+            subspecialty,
+            qualifications,
+            experiences,
+            bio,
+            about,
+            timeSlots,
+            totalPatients,
+            photo,
+            signature,
+            isApproved,
+            status,
+        } = req.body;
+
+        // Check if doctor already exists
+        const existingDoctor = await Doctor.findOne({ email });
+        if (existingDoctor) {
+            return res.status(400).json({ success: false, message: 'Doctor already exists' });
+        }
+
+        // Hash the password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Prepare doctor data
+        const doctorData = {
+            fullname,
+            username,
+            email,
+            password: hashedPassword,
+            gender,
+            phone,
+            role: role || 'doctor',
+            ticketPrice,
+            specialty,
+            subspecialty,
+            qualifications,
+            experiences,
+            bio,
+            about,
+            totalPatients,
+            timeSlots,
+            isApproved: isApproved || 'approved',
+            status: status || 'online',
+        };
+
+        // Optional fields: only add if provided
+        if (photo) doctorData.photo = photo;
+        if (signature) doctorData.signature = signature;
+
+        // Create and save the doctor
+        const newDoctor = new Doctor(doctorData);
+        await newDoctor.save();
+
+        res.status(201).json({
+            success: true,
+            message: 'Doctor added successfully!',
+            doctorId: newDoctor._id,
+        });
+    } catch (error) {
+        console.error('Error in adding new doctor:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error. Try again!',
+        });
+    }
+};

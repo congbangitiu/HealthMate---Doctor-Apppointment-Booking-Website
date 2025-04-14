@@ -18,6 +18,8 @@ import Notifications from '../Notifications/Notifications';
 import { BASE_URL } from '../../../config';
 import useFetchData from '../../hooks/useFetchData';
 import notificationSound from '../../assets/sounds/notificationSound.wav';
+import DefaultMaleDoctorAvatar from '../../assets/images/default-male-doctor.png';
+import DefaultFemaleDoctorAvatar from '../../assets/images/default-female-doctor.png';
 
 import { io } from 'socket.io-client';
 
@@ -94,6 +96,9 @@ const Header = () => {
         else if (role === 'patient') window.location.href = '/users/profile/me';
         else if (role === 'doctor') window.location.href = '/doctors/profile/me';
     };
+
+    const defaultDoctorAvatar =
+        role === 'doctor' && user.gender === 'male' ? DefaultMaleDoctorAvatar : DefaultFemaleDoctorAvatar;
 
     useEffect(() => {
         const fetchUnreadCounts = async () => {
@@ -437,7 +442,7 @@ const Header = () => {
                                 onClick={handlePath}
                             >
                                 <div className={cx('info')}>
-                                    <img className={cx('avatar')} src={user?.photo} alt="" />
+                                    <img className={cx('avatar')} src={user?.photo || defaultDoctorAvatar} alt="" />
                                     <div className={cx('name')}>
                                         <h4>{user?.fullname}</h4>
                                         <p>{user?.username}</p>

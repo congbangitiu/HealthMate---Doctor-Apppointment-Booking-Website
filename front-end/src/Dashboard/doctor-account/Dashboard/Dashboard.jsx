@@ -59,6 +59,7 @@ const Dashboard = () => {
                                 <Doctor
                                     smallMode={true}
                                     fullname={doctorData.fullname}
+                                    gender={doctorData.gender}
                                     photo={doctorData.photo}
                                     subspecialty={doctorData.subspecialty}
                                     averageRating={doctorData.averageRating}
