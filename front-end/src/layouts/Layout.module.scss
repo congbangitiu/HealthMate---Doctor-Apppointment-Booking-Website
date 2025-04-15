@@ -6,119 +6,154 @@
         bottom: 20px;
         right: 20px;
         z-index: 250;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background-color: transparent;
-        transition: width 0.3s, height 0.3s, background-color 0.3s, box-shadow 0.3s;
-        transform: rotate(180deg);
+        display: flex;
+        flex-direction: column;
 
-        &.hovered {
-            width: 125px;
-            height: 125px;
-            background-color: rgba(0, 0, 0, 0.2);
-            box-shadow: 0 0 100px var(--darkGrayColor);
-
-            & .fab-options {
-                opacity: 1;
-                pointer-events: auto;
-            }
-        }
-
-        & .fab-button {
-            position: absolute;
+        & .up-btn {
+            position: fixed;
+            bottom: 85px;
+            right: 20px;
             width: 50px;
             height: 50px;
-            background-color: var(--primaryColor);
+            background-color: var(--lightGreenColor);
             border-radius: 50%;
             box-shadow: 0 0 10px var(--darkGrayColor);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: transform 0.3s, background-color 0.3s;
+            transition: transform 0.3s, background-color 0.3s, opacity 0.3s, visibility 0.3s;
 
-            &.rotate {
-                transform: rotate(-45deg);
-                background-color: red;
+            &.hidden {
+                opacity: 0;
+                visibility: hidden;
+            }
+
+            &:active {
+                transform: scale(0.8);
             }
 
             .icon {
-                color: var(--whiteColor);
+                color: var(--primaryColor);
                 font-size: 22px;
             }
         }
 
-        & .fab-options {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
+        & .modes-wrapper {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: transparent;
+            transition: width 0.3s, height 0.3s, background-color 0.3s, box-shadow 0.3s;
+            transform: rotate(180deg);
 
-            & .icon-wrapper {
+            &.hovered {
+                width: 125px;
+                height: 125px;
+                background-color: rgba(0, 0, 0, 0.2);
+                box-shadow: 0 0 100px var(--darkGrayColor);
+
+                & .fab-options {
+                    opacity: 1;
+                    pointer-events: auto;
+                }
+            }
+
+            & .fab-button {
                 position: absolute;
                 width: 50px;
                 height: 50px;
-                background: var(--buttonBgColor);
+                background-color: var(--primaryColor);
                 border-radius: 50%;
                 box-shadow: 0 0 10px var(--darkGrayColor);
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                transition: all 0.3s;
                 cursor: pointer;
+                transition: transform 0.3s, background-color 0.3s;
 
-                &:active {
-                    transform: scale(0.8);
+                &.rotate {
+                    transform: rotate(-45deg);
+                    background-color: red;
                 }
 
-                &:first-child img {
-                    width: 65%;
-                    transform: rotate(-180deg);
-                }
-
-                &:last-child img {
-                    width: 75%;
-                    transform: rotate(-180deg);
+                .icon {
+                    color: var(--whiteColor);
+                    font-size: 22px;
                 }
             }
 
-            & .icon-wrapper:nth-child(1) {
-                bottom: -15px;
-                left: 20px;
-            }
+            & .fab-options {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.3s;
 
-            & .icon-wrapper:nth-child(2) {
-                top: 30px;
-                right: -20px;
+                & .icon-wrapper {
+                    position: absolute;
+                    width: 50px;
+                    height: 50px;
+                    background: var(--buttonBgColor);
+                    border-radius: 50%;
+                    box-shadow: 0 0 10px var(--darkGrayColor);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.3s;
+                    cursor: pointer;
+
+                    &:active {
+                        transform: scale(0.8);
+                    }
+
+                    &:first-child img {
+                        width: 65%;
+                        transform: rotate(-180deg);
+                    }
+
+                    &:last-child img {
+                        width: 75%;
+                        transform: rotate(-180deg);
+                    }
+                }
+
+                & .icon-wrapper:nth-child(1) {
+                    bottom: -15px;
+                    left: 20px;
+                }
+
+                & .icon-wrapper:nth-child(2) {
+                    top: 30px;
+                    right: -20px;
+                }
             }
         }
-    }
 
-    & .chatbot-icon-wrapper {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 250;
-        width: 50px;
-        height: 50px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 50%;
-        transition: all 0.3s;
-        background-color: var(--primaryColor);
-        box-shadow: 0 0 10px var(--darkGrayColor);
-        cursor: pointer;
+        & .chatbot-icon-wrapper {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 250;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+            background-color: var(--primaryColor);
+            box-shadow: 0 0 10px var(--darkGrayColor);
+            cursor: pointer;
 
-        &:active {
-            transform: scale(0.8);
-        }
+            &:active {
+                transform: scale(0.8);
+            }
 
-        & img {
-            width: 75%;
+            & img {
+                width: 75%;
+            }
         }
     }
 
