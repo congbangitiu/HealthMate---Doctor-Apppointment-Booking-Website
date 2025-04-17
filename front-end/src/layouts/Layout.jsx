@@ -38,12 +38,14 @@ const Layout = () => {
                 <Routers />
 
                 <div className={cx('fab-container')}>
-                    <div
-                        className={cx('up-btn', { hidden: isHovered })}
-                        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                    >
-                        <FaChevronUp className={cx('icon')} />
-                    </div>
+                    {!isShowChatbot && (
+                        <div
+                            className={cx('up-btn', { hidden: isHovered })}
+                            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                        >
+                            <FaChevronUp className={cx('icon')} />
+                        </div>
+                    )}
                     {user ? (
                         <div className={cx('modes-wrapper', { hovered: isHovered })} onMouseLeave={handleMouseLeave}>
                             <div className={cx('fab-button', { rotate: isHovered })} onMouseEnter={handleMouseEnter}>

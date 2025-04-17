@@ -1,0 +1,129 @@
+.container {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px 0;
+
+    & .upper-part {
+        & h3 {
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--primaryColor);
+            margin-bottom: 10px;
+        }
+    }
+
+    & .middle-part {
+        & span {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            & h3 {
+                font-size: 20px;
+                font-weight: 500;
+                color: var(--primaryColor);
+            }
+
+            & p {
+                font-size: 18px;
+                font-weight: 400;
+                color: var(--darkGrayColor);
+            }
+        }
+
+        & .day-section {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            align-items: center;
+            gap: 20px 0;
+            margin-top: 10px;
+
+            & h4 {
+                font-size: 18px;
+                font-weight: 500;
+                color: var(--darkGrayColor);
+            }
+        }
+    }
+
+    & .lower-part {
+        & h3 {
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--primaryColor);
+            margin-bottom: 10px;
+        }
+
+        & table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 1px solid var(--primaryColor);
+            border-radius: 10px;
+            overflow: hidden;
+
+            & th,
+            & td {
+                text-align: center;
+                border: 1px solid var(--primaryColor);
+                padding: 12px;
+            }
+
+            & th {
+                background-color: var(--primaryColor);
+                color: var(--whiteColor);
+            }
+
+            & tr:nth-child(odd) {
+                background-color: white;
+            }
+
+            & tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            & td.odd-date {
+                background-color: white !important;
+            }
+
+            & td.even-date {
+                background-color: #f2f2f2 !important;
+            }
+
+            & .link {
+                width: 100%;
+                padding: 12px;
+            }
+
+            & a {
+                text-decoration: none;
+                color: inherit;
+                display: block;
+            }
+
+            & .pending {
+                color: var(--yellowColor);
+                font-weight: 500;
+            }
+
+            & .done {
+                color: var(--primaryColor);
+                font-weight: 500;
+            }
+
+            & .cancelled {
+                color: red;
+                font-weight: 500;
+            }
+
+            & .captitalized {
+                text-transform: capitalize;
+            }
+
+            & .cancelledStatus {
+                cursor: not-allowed !important;
+            }
+        }
+    }
+}

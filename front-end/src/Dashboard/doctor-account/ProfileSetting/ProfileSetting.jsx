@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './ProfileSetting.module.scss';
@@ -11,16 +11,17 @@ import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
 import specialties from '../../../assets/data/mock-data/specialties';
 import { TextField, Autocomplete } from '@mui/material';
+import TimeSlots from '../TimeSlots/TimeSlots';
 
 const cx = classNames.bind(styles);
 
 const ProfileSetting = ({ doctorData, isMobile }) => {
-    useEffect(() => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth',
-        });
-    }, []);
+    // useEffect(() => {
+    //     window.scrollTo({
+    //         top: 0,
+    //         behavior: 'smooth',
+    //     });
+    // }, []);
 
     const [loading, setLoading] = useState(false);
     const [errorWordLimit, setErrorWordLimit] = useState('');
@@ -220,24 +221,61 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
         deleteItem('experiences', index);
     };
 
-    // Time slots functions
-    const addTimeSlots = (e) => {
-        e.preventDefault();
-        addItem('timeSlots', {
-            day: '',
-            startingTime: '',
-            endingTime: '',
-        });
+    // Format date to YYYY-MM-DD to match the date picker format
+    const formatDateToYYYYMMDD = (date) => {
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     };
 
-    const handleTimeSlotsChange = (event, index) => {
-        handleReusableInputChange('timeSlots', event, index);
+    // Generate days of week with actual dates
+    const getDaysOfWeekWithDates = () => {
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const today = new Date();
+        const currentDay = today.getDay(); // 0 (Sunday) to 6 (Saturday)
+
+        return days
+            .map((day, index) => {
+                const date = new Date(today);
+                // If the day is in the past this week, show next week's date
+                if (index < currentDay) {
+                    date.setDate(date.getDate() + 7 - (currentDay - index));
+                } else {
+                    date.setDate(date.getDate() + (index - currentDay));
+                }
+
+                return {
+                    name: day,
+                    date: formatDateToYYYYMMDD(date),
+                    dateObj: date,
+                };
+            })
+            .filter((day) => day.name !== 'Sunday'); // Remove Sunday if not needed
     };
 
-    const deleteTimeSlots = (e, index) => {
-        e.preventDefault();
-        deleteItem('timeSlots', index);
-    };
+    const daysOfWeekWithDates = getDaysOfWeekWithDates();
+
+    const handleTimeSlotsChange = useCallback(
+        (slots) => {
+            const dayToDateMap = {};
+            daysOfWeekWithDates.forEach((dayInfo) => {
+                dayToDateMap[dayInfo.name] = dayInfo.date;
+            });
+
+            const formattedSlots = slots.map((slot) => ({
+                ...slot,
+                day: dayToDateMap[slot.day] || slot.day,
+            }));
+
+            setFormData((prev) => ({
+                ...prev,
+                timeSlots: formattedSlots,
+            }));
+        },
+        [daysOfWeekWithDates],
+    );
 
     // Edit
     const toggleEditable = (key, index) => {
@@ -603,72 +641,11 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
 
             {/* TIME SLOTS */}
             <h3 className={cx('title', 'other')}>Time slots</h3>
-            <div className={cx('details')}>
-                {formData.timeSlots?.map((timeSlot, index) => (
-                    <div key={index} className={cx('timeSlots')}>
-                        <div className={cx('schedule')}>
-                            <div className={cx('credential')}>
-                                <label htmlFor="startingDate">Date</label>
-                                <input
-                                    className={cx(!timeSlot.isEditable && 'disabled')}
-                                    type="date"
-                                    id="startingDate"
-                                    value={timeSlot.day}
-                                    name="day"
-                                    onChange={(e) => handleTimeSlotsChange(e, index)}
-                                    disabled={!timeSlot.isEditable}
-                                />
-                            </div>
-                            <div className={cx('credential')}>
-                                <label htmlFor="startingTime">Starting time</label>
-                                <input
-                                    className={cx(!timeSlot.isEditable && 'disabled')}
-                                    type="time"
-                                    id="startingTime"
-                                    value={timeSlot.startingTime}
-                                    name="startingTime"
-                                    onChange={(e) => handleTimeSlotsChange(e, index)}
-                                    disabled={!timeSlot.isEditable}
-                                />
-                            </div>
-                            <div className={cx('credential')}>
-                                <label htmlFor="endingTime">Ending time</label>
-                                <input
-                                    className={cx(!timeSlot.isEditable && 'disabled')}
-                                    type="time"
-                                    id="endingTime"
-                                    value={timeSlot.endingTime}
-                                    name="endingTime"
-                                    onChange={(e) => handleTimeSlotsChange(e, index)}
-                                    disabled={!timeSlot.isEditable}
-                                />
-                            </div>
-                        </div>
-                        <div className={cx('modeWrapper')}>
-                            <div className={cx('mode')} onClick={() => toggleEditable('timeSlots', index)}>
-                                {timeSlot.isEditable ? (
-                                    <>
-                                        <LiaSaveSolid className={cx('icon')} />
-                                        <p className={cx('text')}>Save</p>
-                                    </>
-                                ) : (
-                                    <>
-                                        <MdOutlineModeEditOutline className={cx('icon')} />
-                                        <p className={cx('text')}>Edit</p>
-                                    </>
-                                )}
-                            </div>
-                            <div className={cx('mode')} onClick={(e) => deleteTimeSlots(e, index)}>
-                                <FaRegTrashAlt className={cx('icon')} />
-                                <p className={cx('text')}>Delete</p>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-                <button className={cx('add')} onClick={addTimeSlots}>
-                    Add time slots
-                </button>
-            </div>
+            <TimeSlots
+                handleTimeSlotsChange={handleTimeSlotsChange}
+                daysOfWeekWithDates={daysOfWeekWithDates}
+                initialTimeSlots={formData.timeSlots}
+            />
 
             {/* ABOUT */}
             <h3 className={cx('title', 'other')}>About</h3>
