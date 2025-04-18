@@ -8,7 +8,7 @@ import convertTime from '../../../utils/convertTime';
 
 const cx = classNames.bind(styles);
 
-const TimeSlots = ({ handleTimeSlotsChange, daysOfWeekWithDates, initialTimeSlots }) => {
+const TimeSlots = ({ handleTimeSlotsChange, daysOfWeekWithDates, initialTimeSlots, currentTimeSlots }) => {
     const isMobile = useMediaQuery('(max-width:768px)');
     const theme = useTheme();
 
@@ -210,6 +210,20 @@ const TimeSlots = ({ handleTimeSlotsChange, daysOfWeekWithDates, initialTimeSlot
         return Object.entries(grouped);
     };
 
+    console.log(initialTimeSlots, 'initialTimeSlots');
+    console.log(currentTimeSlots, 'currentTimeSlots');
+
+    // Check if the given slot exists in the currentTimeSlots from database
+    const isSlotBooked = (slot) => {
+        return !currentTimeSlots.some((currentSlot) => {
+            return (
+                currentSlot.day === slot.date &&
+                currentSlot.startingTime === slot.start &&
+                currentSlot.endingTime === slot.end
+            );
+        });
+    };
+
     return (
         <div className={cx('container')}>
             <div className={cx('upper-part')}>
@@ -390,6 +404,7 @@ const TimeSlots = ({ handleTimeSlotsChange, daysOfWeekWithDates, initialTimeSlot
                                 <th>Date</th>
                                 <th>Time Slots</th>
                                 <th>Period</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -405,8 +420,13 @@ const TimeSlots = ({ handleTimeSlotsChange, daysOfWeekWithDates, initialTimeSlot
                                                     {formatDate(date)}
                                                 </td>
                                             ) : null}
-                                            <td>{`${convertTime(slot.start)} - ${convertTime(slot.end)}`}</td>
-                                            <td>{slot.period}</td>
+                                            <td className={cx({ booked: isSlotBooked(slot) })}>{`${convertTime(
+                                                slot.start,
+                                            )} - ${convertTime(slot.end)}`}</td>
+                                            <td className={cx({ booked: isSlotBooked(slot) })}>{slot.period}</td>
+                                            <td className={cx({ booked: isSlotBooked(slot) })}>
+                                                {isSlotBooked(slot) ? 'Booked' : 'Available'}
+                                            </td>
                                         </tr>
                                     ))}
                                 </React.Fragment>
@@ -423,6 +443,7 @@ TimeSlots.propTypes = {
     handleTimeSlotsChange: PropTypes.func.isRequired,
     daysOfWeekWithDates: PropTypes.array.isRequired,
     initialTimeSlots: PropTypes.array.isRequired,
+    currentTimeSlots: PropTypes.array.isRequired,
 };
 
 export default TimeSlots;

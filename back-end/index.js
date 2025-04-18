@@ -17,6 +17,7 @@ import prescriptionRoute from './Routes/prescription.js';
 import examinationRoute from './Routes/examination.js';
 import chatRoute from './Routes/chat.js';
 import { stripeWebhook } from './Controllers/bookingController.js';
+import { initSlotGenerationCron } from './utils/slotGenerator.js';
 
 dotenv.config();
 
@@ -80,6 +81,9 @@ app.use('/api/v1/chats', chatRoute);
 // Attach Socket.IO logic
 chatSocketHandler(io);
 notificationSocketHandler(io);
+
+// Initialize slot generation cron job
+initSlotGenerationCron();
 
 // Start the server and connect to the database
 server.listen(port, () => {

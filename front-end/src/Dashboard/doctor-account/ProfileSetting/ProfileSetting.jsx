@@ -287,6 +287,8 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
         }));
     };
 
+    // console.log(doctorData.timeSlots);
+
     return (
         <div className={cx('container')}>
             {/* PERSONAL INFORMATION  */}
@@ -645,6 +647,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                 handleTimeSlotsChange={handleTimeSlotsChange}
                 daysOfWeekWithDates={daysOfWeekWithDates}
                 initialTimeSlots={formData.timeSlots}
+                currentTimeSlots={doctorData.timeSlots} // Pass formTimeSlots for comparison
             />
 
             {/* ABOUT */}

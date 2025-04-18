@@ -4,7 +4,7 @@ import User from '../Models/UserSchema.js';
 import bcrypt from 'bcryptjs';
 import cloudinary from '../utils/cloudinaryConfig.js';
 
-export const updateDoctor = async (req, res) => {
+export const updateProfile = async (req, res) => {
     const id = req.params.id;
     try {
         const updatedDoctor = await Doctor.findByIdAndUpdate(id, { $set: req.body }, { new: true });

@@ -107,7 +107,7 @@ const FeedbackDoctor = ({ reviews, role }) => {
                     ))
                 ) : (
                     <p className={cx('no-feedback')}>
-                        There is no review for this doctor yet. Be the first to share your experience!
+                        There is no review for this doctor yet. {role === 'patient' && 'Be the first to give feedback!'}
                     </p>
                 )}
             </div>
