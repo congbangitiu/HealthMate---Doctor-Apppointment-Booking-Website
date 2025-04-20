@@ -210,9 +210,6 @@ const TimeSlots = ({ handleTimeSlotsChange, daysOfWeekWithDates, initialTimeSlot
         return Object.entries(grouped);
     };
 
-    console.log(initialTimeSlots, 'initialTimeSlots');
-    console.log(currentTimeSlots, 'currentTimeSlots');
-
     // Check if the given slot exists in the currentTimeSlots from database
     const isSlotBooked = (slot) => {
         return !currentTimeSlots.some((currentSlot) => {

@@ -16,12 +16,12 @@ import TimeSlots from '../TimeSlots/TimeSlots';
 const cx = classNames.bind(styles);
 
 const ProfileSetting = ({ doctorData, isMobile }) => {
-    // useEffect(() => {
-    //     window.scrollTo({
-    //         top: 0,
-    //         behavior: 'smooth',
-    //     });
-    // }, []);
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }, []);
 
     const [loading, setLoading] = useState(false);
     const [errorWordLimit, setErrorWordLimit] = useState('');

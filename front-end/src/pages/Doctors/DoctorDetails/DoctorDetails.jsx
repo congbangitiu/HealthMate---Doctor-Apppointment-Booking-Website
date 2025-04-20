@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './DoctorDetails.module.scss';
 import axios from 'axios';
@@ -14,16 +14,19 @@ import { useParams } from 'react-router-dom';
 import { authContext } from '../../../context/AuthContext';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
+import { Dialog, useMediaQuery } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
 const DoctorDetails = () => {
     const [activeTab, setActiveTab] = useState('about');
     const { id } = useParams();
+    const isMobile = useMediaQuery('(max-width:768px)');
     const { data: doctor, loading, error } = useFetchData(`${BASE_URL}/doctors/${id}`);
     const { role } = useContext(authContext);
     const [loadingApprove, setLoadingApprove] = useState(false);
     const [loadingReject, setLoadingReject] = useState(false);
+    const [expandeSidePanel, setExpandeSidePanel] = useState(false);
 
     useEffect(() => {
         window.scrollTo({
@@ -124,14 +127,62 @@ const DoctorDetails = () => {
                         <span>
                             <Doctor {...doctor} />
                         </span>
-                        <SidePanel
-                            doctorId={doctor._id}
-                            ticketPrice={doctor.ticketPrice}
-                            timeSlots={doctor.timeSlots}
-                            doctorPhoto={doctor.photo}
-                            doctorName={doctor.fullname}
-                            role={role}
-                        />
+
+                        {expandeSidePanel ? (
+                            <Dialog
+                                open={expandeSidePanel}
+                                keepMounted
+                                onClose={() => setExpandeSidePanel(false)}
+                                fullWidth
+                                maxWidth={false}
+                                sx={{
+                                    '& .MuiPaper-root': {
+                                        borderRadius: '16px',
+                                        height: 'max-content',
+                                        width: isMobile ? '100%' : '800px',
+                                        padding: isMobile ? '20px' : '30px',
+                                        boxShadow: isMobile ? 'none' : '0 10px 30px var(--black-08)',
+                                        border: isMobile ? 'none' : '1px solid var(--black-05)',
+                                        margin: '0',
+                                    },
+                                }}
+                            >
+                                <SidePanel
+                                    doctorId={doctor._id}
+                                    ticketPrice={doctor.ticketPrice}
+                                    timeSlots={doctor.timeSlots}
+                                    doctorPhoto={doctor.photo}
+                                    doctorName={doctor.fullname}
+                                    role={role}
+                                    expandeSidePanel={expandeSidePanel}
+                                    setExpandeSidePanel={setExpandeSidePanel}
+                                />
+                            </Dialog>
+                        ) : (
+                            <div
+                                style={{
+                                    width: isMobile ? '100%' : '450px',
+                                    padding: isMobile ? '10px 0' : '20px',
+                                    boxShadow: isMobile ? 'none' : '0 10px 30px var(--black-08)',
+                                    border: isMobile ? 'none' : '1px solid var(--black-05)',
+                                    borderTop: isMobile ? '1px solid var(--darkGrayColor)' : 'none',
+                                    borderBottom: isMobile ? '1px solid var(--darkGrayColor)' : 'none',
+                                    borderRadius: isMobile ? '0' : '16px',
+                                    margin: isMobile ? '20px 0' : '0',
+                                }}
+                            >
+                                <SidePanel
+                                    doctorId={doctor._id}
+                                    ticketPrice={doctor.ticketPrice}
+                                    timeSlots={doctor.timeSlots}
+                                    doctorPhoto={doctor.photo}
+                                    doctorName={doctor.fullname}
+                                    role={role}
+                                    expandeSidePanel={expandeSidePanel}
+                                    setExpandeSidePanel={setExpandeSidePanel}
+                                />
+                            </div>
+                        )}
                     </div>
                     <div className={cx('bar')}>
                         <div className={cx({ active: activeTab === 'about' })} onClick={() => setActiveTab('about')}>

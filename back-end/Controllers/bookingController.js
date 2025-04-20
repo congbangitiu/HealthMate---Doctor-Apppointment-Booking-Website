@@ -350,7 +350,7 @@ export const stripeWebhook = async (req, res) => {
             }
 
             // Send confirmation email
-            await sendConfirmationEmail(user.email, {
+            await sendBookingConfirmationEmail(user.email, {
                 userName: user.fullname,
                 doctorName: doctor.fullname,
                 timeSlot: parsedTimeSlot,

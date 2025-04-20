@@ -203,105 +203,7 @@ const specialties = [
             ],
         },
     },
-    {
-        id: 'internal-medicine',
-        name: 'Internal Medicine Department',
-        abbreviation: 'IM',
-        image: InternalMedicineDepartment,
-        description:
-            'The Internal Medicine Department serves as the cornerstone of adult medical care, providing comprehensive, evidence-based management of complex multi-system diseases. Our department brings together world-class internists and subspecialists to deliver personalized care for conditions ranging from acute illnesses to chronic disorders. With a patient-centered approach, we integrate advanced diagnostic technologies, cutting-edge treatment protocols, and preventive health strategies to optimize outcomes.',
 
-        subspecialties: [
-            {
-                name: 'Cardiology',
-                description:
-                    'Management of cardiovascular conditions such as hypertension, myocardial infarction, heart failure, and coronary artery disease.',
-            },
-            {
-                name: 'Gastroenterology',
-                description:
-                    'Care for digestive system disorders including gastric ulcers, hepatitis, and inflammatory bowel disease.',
-            },
-            {
-                name: 'Endocrinology',
-                description:
-                    'Treatment of endocrine disorders like diabetes mellitus, thyroid diseases, and metabolic syndrome.',
-            },
-            {
-                name: 'Nephrology',
-                description:
-                    'Management of kidney and urinary tract conditions including renal failure, cystitis, and kidney stones.',
-            },
-            {
-                name: 'Neurology',
-                description:
-                    "Care for neurological disorders such as chronic headaches, insomnia, stroke, and Parkinson's disease.",
-            },
-            {
-                name: 'Rheumatology',
-                description:
-                    'Treatment of musculoskeletal disorders including rheumatoid arthritis, osteoarthritis, and osteoporosis.',
-            },
-        ],
-        keyFunctions: [
-            {
-                title: 'Comprehensive Disease Management',
-                details: [
-                    'Diagnosis and treatment of acute and chronic conditions',
-                    'Coordination with surgical specialties when intervention is required',
-                    'Long-term management of chronic diseases',
-                ],
-            },
-            {
-                title: 'Preventive Healthcare',
-                details: [
-                    'Health risk assessments',
-                    'Chronic disease screening programs',
-                    'Vaccination for adult patients',
-                ],
-            },
-        ],
-        clinicalWorkflow: {
-            phases: [
-                {
-                    stage: 'Clinical Assessment',
-                    steps: [
-                        'Electronic patient history capture with AI-assisted symptom analysis',
-                        'Comprehensive physical examination using digital documentation tools',
-                        'Automated vital sign integration with EMR',
-                    ],
-                    qualityControl: ['Dual verification of patient history', 'Standardized examination protocols'],
-                },
-                {
-                    stage: 'Diagnostic Evaluation',
-                    steps: [
-                        'Evidence-based test ordering with clinical decision support',
-                        'Point-of-care testing (POCT) for rapid results',
-                        'Specialist consultation triage system',
-                    ],
-                    qualityControl: ['Test appropriateness algorithms', 'Real-time insurance authorization checks'],
-                },
-                {
-                    stage: 'Therapeutic Intervention',
-                    steps: [
-                        'Personalized treatment plans with pharmacogenomic considerations',
-                        'Automated medication reconciliation',
-                        'Multidisciplinary case conferences for complex patients',
-                    ],
-                    qualityControl: ['Drug interaction screening', 'Treatment protocol adherence monitoring'],
-                },
-                {
-                    stage: 'Follow-up Management',
-                    steps: [
-                        'Automated discharge summary generation',
-                        'Structured telehealth follow-up scheduling',
-                        'Chronic disease management program enrollment',
-                    ],
-                    qualityControl: ['30-day readmission risk assessment', 'Patient satisfaction surveys'],
-                },
-            ],
-        },
-    },
     {
         id: 'surgery',
         name: 'Surgery Department',
@@ -830,6 +732,105 @@ const specialties = [
                         'Post-op care and visual rehabilitation',
                     ],
                     qualityControl: ['Surgical outcome tracking', 'Follow-up compliance monitoring'],
+                },
+            ],
+        },
+    },
+    {
+        id: 'internal-medicine',
+        name: 'Internal Medicine Department',
+        abbreviation: 'IM',
+        image: InternalMedicineDepartment,
+        description:
+            'The Internal Medicine Department serves as the cornerstone of adult medical care, providing comprehensive, evidence-based management of complex multi-system diseases. Our department brings together world-class internists and subspecialists to deliver personalized care for conditions ranging from acute illnesses to chronic disorders. With a patient-centered approach, we integrate advanced diagnostic technologies, cutting-edge treatment protocols, and preventive health strategies to optimize outcomes.',
+
+        subspecialties: [
+            {
+                name: 'Cardiology',
+                description:
+                    'Management of cardiovascular conditions such as hypertension, myocardial infarction, heart failure, and coronary artery disease.',
+            },
+            {
+                name: 'Gastroenterology',
+                description:
+                    'Care for digestive system disorders including gastric ulcers, hepatitis, and inflammatory bowel disease.',
+            },
+            {
+                name: 'Endocrinology',
+                description:
+                    'Treatment of endocrine disorders like diabetes mellitus, thyroid diseases, and metabolic syndrome.',
+            },
+            {
+                name: 'Nephrology',
+                description:
+                    'Management of kidney and urinary tract conditions including renal failure, cystitis, and kidney stones.',
+            },
+            {
+                name: 'Neurology',
+                description:
+                    "Care for neurological disorders such as chronic headaches, insomnia, stroke, and Parkinson's disease.",
+            },
+            {
+                name: 'Rheumatology',
+                description:
+                    'Treatment of musculoskeletal disorders including rheumatoid arthritis, osteoarthritis, and osteoporosis.',
+            },
+        ],
+        keyFunctions: [
+            {
+                title: 'Comprehensive Disease Management',
+                details: [
+                    'Diagnosis and treatment of acute and chronic conditions',
+                    'Coordination with surgical specialties when intervention is required',
+                    'Long-term management of chronic diseases',
+                ],
+            },
+            {
+                title: 'Preventive Healthcare',
+                details: [
+                    'Health risk assessments',
+                    'Chronic disease screening programs',
+                    'Vaccination for adult patients',
+                ],
+            },
+        ],
+        clinicalWorkflow: {
+            phases: [
+                {
+                    stage: 'Clinical Assessment',
+                    steps: [
+                        'Electronic patient history capture with AI-assisted symptom analysis',
+                        'Comprehensive physical examination using digital documentation tools',
+                        'Automated vital sign integration with EMR',
+                    ],
+                    qualityControl: ['Dual verification of patient history', 'Standardized examination protocols'],
+                },
+                {
+                    stage: 'Diagnostic Evaluation',
+                    steps: [
+                        'Evidence-based test ordering with clinical decision support',
+                        'Point-of-care testing (POCT) for rapid results',
+                        'Specialist consultation triage system',
+                    ],
+                    qualityControl: ['Test appropriateness algorithms', 'Real-time insurance authorization checks'],
+                },
+                {
+                    stage: 'Therapeutic Intervention',
+                    steps: [
+                        'Personalized treatment plans with pharmacogenomic considerations',
+                        'Automated medication reconciliation',
+                        'Multidisciplinary case conferences for complex patients',
+                    ],
+                    qualityControl: ['Drug interaction screening', 'Treatment protocol adherence monitoring'],
+                },
+                {
+                    stage: 'Follow-up Management',
+                    steps: [
+                        'Automated discharge summary generation',
+                        'Structured telehealth follow-up scheduling',
+                        'Chronic disease management program enrollment',
+                    ],
+                    qualityControl: ['30-day readmission risk assessment', 'Patient satisfaction surveys'],
                 },
             ],
         },

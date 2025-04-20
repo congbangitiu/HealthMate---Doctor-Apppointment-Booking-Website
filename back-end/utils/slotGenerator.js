@@ -50,7 +50,7 @@ export const generateWeeklySlotsForAllDoctors = async () => {
                     { new: true },
                 );
 
-                console.log(`Added ${uniqueNewSlots.length} slots for doctor ${doctor._id}`);
+                // console.log(`Added ${uniqueNewSlots.length} slots for doctor ${doctor._id}`);
             }
         }
 
@@ -80,7 +80,7 @@ export const removeExpiredSlotsForAllDoctors = async () => {
 
             if (removedCount > 0) {
                 await doctor.save();
-                console.log(`Removed ${removedCount} expired slots for doctor ${doctor._id}`);
+                // console.log(`Removed ${removedCount} expired slots for doctor ${doctor._id}`);
             }
         }
 
@@ -114,26 +114,16 @@ const analyzeTimeSlotPatterns = (timeSlots) => {
     return patterns;
 };
 
-// Initialize the weekly slot generation cron job
+// Initialize the daily slot maintenance cron job
 export const initSlotGenerationCron = () => {
-    console.log('Initializing cron jobs for slot generation and removal');
-    // Cron job 1: Remove expired slots every day at 00:00
+    console.log('Initializing daily cron job for slot maintenance');
+
+    // Cron job: Every day at 00:00
     cron.schedule(
         '0 0 * * *',
         async () => {
-            console.log('Remove expired slots ...');
+            console.log('Daily task: Remove expired slots and generate new slots...');
             await removeExpiredSlotsForAllDoctors();
-        },
-        {
-            timezone: 'Asia/Ho_Chi_Minh',
-        },
-    );
-
-    // Cron job 2: task every Sunday at 00:00
-    cron.schedule(
-        '0 0 * * 0',
-        async () => {
-            console.log('Generate new weekly slots ...');
             await generateWeeklySlotsForAllDoctors();
         },
         {
@@ -141,3 +131,20 @@ export const initSlotGenerationCron = () => {
         },
     );
 };
+
+// Test mode: Run the slot generation per minute
+// export const initSlotGenerationCron = () => {
+//     console.log('Initializing daily cron job for slot maintenance');
+
+//     cron.schedule(
+//         '* * * * *',
+//         async () => {
+//             console.log('Test mode: running cron task every minute...');
+//             await removeExpiredSlotsForAllDoctors();
+//             await generateWeeklySlotsForAllDoctors();
+//         },
+//         {
+//             timezone: 'Asia/Ho_Chi_Minh',
+//         },
+//     );
+// };

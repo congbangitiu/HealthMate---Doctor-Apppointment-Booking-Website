@@ -60,7 +60,6 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
 
                 // Redirect to success page immediately
                 window.location.href = '/checkout-success';
-                
             } else if (selectedPaymentMethod === 'E-Wallet') {
                 // 💡 If payment method is E-Wallet, go to Stripe Checkout
                 const appointmentRes = await fetch(`${BASE_URL}/bookings/checkout-session/${doctorId}`, {

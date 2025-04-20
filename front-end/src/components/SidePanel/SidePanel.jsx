@@ -6,13 +6,23 @@ import convertTime from '../../utils/convertTime';
 import ConfirmBooking from '../../Dashboard/user-account/ConfirmBooking/ConfirmBooking';
 import { Dialog, Slide, useMediaQuery } from '@mui/material';
 import formatDate from '../../utils/formatDate';
+import { BiExpandAlt, BiCollapseAlt } from 'react-icons/bi';
 
 const cx = classNames.bind(styles);
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const SidePanel = ({ doctorId, ticketPrice, timeSlots: initialTimeSlots = [], doctorPhoto, doctorName, role }) => {
+const SidePanel = ({
+    doctorId,
+    ticketPrice,
+    timeSlots: initialTimeSlots = [],
+    doctorPhoto,
+    doctorName,
+    role,
+    expandeSidePanel,
+    setExpandeSidePanel,
+}) => {
     const isMobile = useMediaQuery('(max-width:768px)');
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [timeSlots, setTimeSlots] = useState(initialTimeSlots);
@@ -32,16 +42,30 @@ const SidePanel = ({ doctorId, ticketPrice, timeSlots: initialTimeSlots = [], do
         }
     };
 
+    // Filter slots to hide past starting times
+    const filteredTimeSlots = timeSlots.filter((slot) => {
+        const slotDateTime = new Date(`${slot.day}T${slot.startingTime}`);
+        const now = new Date();
+        return slotDateTime >= now;
+    });
+
     return (
         <div className={cx('container')}>
             <div className={cx('price')}>
                 <h4>Ticket price</h4>
                 <h3>${ticketPrice}</h3>
             </div>
-            <h4>Available Time Slots:</h4>
-            <div className={cx('slots')}>
-                {timeSlots.length > 0 ? (
-                    timeSlots?.map((timeSlot, index) => (
+            <div>
+                <h4>Available Time Slots:</h4>
+                {expandeSidePanel ? (
+                    <BiCollapseAlt className={cx('icon')} onClick={() => setExpandeSidePanel(false)} />
+                ) : (
+                    <BiExpandAlt className={cx('icon')} onClick={() => setExpandeSidePanel(true)} />
+                )}
+            </div>
+            <div className={cx(expandeSidePanel ? 'slots-expanded' : 'slots-collapsed')}>
+                {filteredTimeSlots.length > 0 ? (
+                    filteredTimeSlots?.map((timeSlot, index) => (
                         <div
                             key={index}
                             className={cx('slot', { selected: selectedSlot === timeSlot })}
@@ -57,10 +81,12 @@ const SidePanel = ({ doctorId, ticketPrice, timeSlots: initialTimeSlots = [], do
                                 />
                             )}
 
-                            <p>{formatDate(timeSlot.day)}</p>
-                            <p>
-                                {convertTime(timeSlot.startingTime)} - {convertTime(timeSlot.endingTime)}
-                            </p>
+                            <div>
+                                <p>{formatDate(timeSlot.day)}</p>
+                                <p>
+                                    {convertTime(timeSlot.startingTime)} - {convertTime(timeSlot.endingTime)}
+                                </p>
+                            </div>
                         </div>
                     ))
                 ) : (
@@ -115,6 +141,8 @@ SidePanel.propTypes = {
     doctorPhoto: PropTypes.string.isRequired,
     doctorName: PropTypes.string.isRequired,
     role: PropTypes.string.isRequired,
+    expandeSidePanel: PropTypes.bool.isRequired,
+    setExpandeSidePanel: PropTypes.func.isRequired,
 };
 
 export default SidePanel;

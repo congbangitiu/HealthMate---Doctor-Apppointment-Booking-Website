@@ -1,14 +1,7 @@
 .container {
-    padding: 20px;
-    border-radius: 12px;
-    width: 450px;
-    box-shadow: 0 10px 30px var(--black-08);
-    border: 1px solid var(--black-05);
+    width: 100%;
     transition: all 0.3s ease;
-
-    &:hover {
-        box-shadow: 0 15px 35px var(--black-12);
-    }
+    overflow: hidden;
 
     & .price {
         display: flex;
@@ -39,14 +32,31 @@
         }
     }
 
-    & > h4 {
-        font-size: 16px;
-        margin: 10px 0;
-        color: var(--darkColor);
-        font-weight: 500;
+    & div:nth-child(2) {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        & h4 {
+            font-size: 16px;
+            margin: 10px 0;
+            color: var(--darkColor);
+            font-weight: 500;
+        }
+
+        & .icon {
+            font-size: 16px;
+            transition: all 0.2s ease;
+
+            &:hover {
+                font-size: 18px;
+                color: var(--primaryColor);
+                cursor: pointer;
+            }
+        }
     }
 
-    & .slots {
+    & .slots-collapsed {
         overflow: auto;
         max-height: 120px;
         display: flex;
@@ -80,12 +90,12 @@
             transition: all 0.3s ease;
             position: relative;
             border: 1px solid var(--lightGrayColor);
-            display: flex; 
+            display: flex;
             align-items: center;
             gap: 12px;
 
             & input[type='radio'] {
-                flex: 0 0 15px; 
+                flex: 0 0 15px;
                 appearance: none;
                 width: 15px;
                 height: 15px;
@@ -101,19 +111,129 @@
                 }
             }
 
-            & p {
-                color: var(--darkGrayColor);
-                line-height: 1.4;
-                margin: 0;
+            & div {
+                flex: 1;
+                display: flex;
 
-                &:nth-of-type(1) {
-                    flex: 1.5;
-                    font-weight: 500;
-                    color: var(--darkColor);
+                & p {
+                    color: var(--darkGrayColor);
+                    line-height: 1.4;
+                    margin: 0;
+
+                    &:nth-of-type(1) {
+                        flex: 1.5;
+                        font-weight: 500;
+                        color: var(--darkColor);
+                    }
+
+                    &:nth-of-type(2) {
+                        flex: 2;
+                    }
                 }
+            }
 
-                &:nth-of-type(2) {
-                    flex: 2;
+            &.selected {
+                background-color: var(--primary-08);
+                border-color: var(--primaryColor);
+
+                & p {
+                    color: var(--primaryColor);
+
+                    &:nth-of-type(1) {
+                        font-weight: 600;
+                    }
+                }
+            }
+
+            &:hover:not(.selected) {
+                cursor: pointer;
+                border-color: var(--lightGrayColor);
+            }
+        }
+
+        & .no-slot {
+            margin: 16px 0;
+            color: var(--darkGrayColor);
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 0 8px;
+            text-align: center;
+        }
+    }
+
+    & .slots-expanded {
+        overflow: auto;
+        max-height: 300px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+
+        // Customize scroll bar
+        &::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        &::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 5px var(--grayColor);
+            border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: var(--lightGreenColor);
+            border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+            background-color: var(--primaryColor);
+            cursor: pointer;
+        }
+
+        & .slot {
+            width: 98%;
+            padding: 10px 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid var(--lightGrayColor);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            & input[type='radio'] {
+                flex: 0 0 15px;
+                appearance: none;
+                width: 15px;
+                height: 15px;
+                border: 2px solid var(--lightGrayColor);
+                border-radius: 50%;
+                margin: 0;
+                transition: all 0.3s ease;
+                cursor: pointer;
+
+                &:checked {
+                    border-color: var(--primaryColor);
+                    background: radial-gradient(circle, var(--primaryColor) 40%, transparent 45%);
+                }
+            }
+
+            & div {
+                flex: 1;
+                display: flex;
+
+                & p {
+                    color: var(--darkGrayColor);
+                    line-height: 1.4;
+                    margin: 0;
+
+                    &:nth-of-type(1) {
+                        flex: 1.5;
+                        font-weight: 500;
+                        color: var(--darkColor);
+                    }
+
+                    &:nth-of-type(2) {
+                        flex: 2;
+                    }
                 }
             }
 
@@ -194,31 +314,34 @@
 @media only screen and (max-width: 768px) {
     .container {
         width: 100%;
-        margin: 20px 0;
-        padding: 20px;
 
-        & .slots {
-            max-height: 280px;
+        & .slots-collapsed {
+            height: max-content;
+
+            & .slot {
+                width: 100%;
+            }
+        }
+
+        & .slots-expanded {
+            grid-template-columns: 1fr;
+            max-height: 400px;
+
+            & .slot {
+                width: 100%;
+                gap: 15px;
+
+                & div {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 5px;
+                }
+            }
         }
 
         & .booking-btn-wrapper {
             & .booking-btn {
                 padding: 12px;
-            }
-        }
-    }
-}
-
-@media only screen and (max-width: 480px) {
-    .container {
-        padding: 16px;
-
-        & .slot {
-            grid-template-columns: auto 1fr;
-            padding: 12px;
-
-            & p {
-                font-size: 13px;
             }
         }
     }

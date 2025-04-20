@@ -83,50 +83,18 @@
                 background-color: #f2f2f2;
             }
 
-            & td.booked {
-                color: var(--darkGrayColor);
-            }
+            & td {
+                &.booked {
+                    color: var(--darkGrayColor);
+                }
 
-            & td.odd-date {
-                background-color: var(--whiteColor) !important;
-            }
+                &.odd-date {
+                    background-color: var(--whiteColor) !important;
+                }
 
-            & td.even-date {
-                background-color: #f2f2f2 !important;
-            }
-
-            & .link {
-                width: 100%;
-                padding: 12px;
-            }
-
-            & a {
-                text-decoration: none;
-                color: inherit;
-                display: block;
-            }
-
-            & .pending {
-                color: var(--yellowColor);
-                font-weight: 500;
-            }
-
-            & .done {
-                color: var(--primaryColor);
-                font-weight: 500;
-            }
-
-            & .cancelled {
-                color: red;
-                font-weight: 500;
-            }
-
-            & .captitalized {
-                text-transform: capitalize;
-            }
-
-            & .cancelledStatus {
-                cursor: not-allowed !important;
+                &.even-date {
+                    background-color: #f2f2f2 !important;
+                }
             }
         }
     }

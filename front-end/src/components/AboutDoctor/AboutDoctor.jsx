@@ -45,7 +45,7 @@ const AboutDoctor = ({ fullname, about, qualifications, experiences, hidden }) =
                             <div key={index} className={cx('experience-detail')}>
                                 <p>
                                     {formatDate(experience.startingDate)} -{' '}
-                                    {experience.endingDate ? formatDate(experience.endingDate) : 'Current'}
+                                    {experience.endingDate ? formatDate(experience.endingDate) : 'Present'}
                                 </p>
                                 <p>{experience.position}</p>
                                 <p>{experience.hospital}</p>
