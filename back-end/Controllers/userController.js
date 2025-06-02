@@ -1,6 +1,5 @@
 import User from '../Models/UserSchema.js';
 import Booking from '../Models/BookingSchema.js';
-import Doctor from '../Models/DoctorSchema.js';
 import Prescription from '../Models/PrescriptionSchema.js';
 import bcrypt from 'bcryptjs';
 

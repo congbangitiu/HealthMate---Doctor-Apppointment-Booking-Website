@@ -17,7 +17,7 @@ import prescriptionRoute from './Routes/prescription.js';
 import examinationRoute from './Routes/examination.js';
 import chatRoute from './Routes/chat.js';
 import { stripeWebhook } from './Controllers/bookingController.js';
-import { initSlotGenerationCron } from './utils/slotGenerator.js';
+import { initSlotGenerationCron } from './utils/slotManager.js';
 
 dotenv.config();
 

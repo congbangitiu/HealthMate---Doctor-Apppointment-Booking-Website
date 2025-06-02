@@ -401,7 +401,7 @@ const TimeSlots = ({ handleTimeSlotsChange, daysOfWeekWithDates, initialTimeSlot
                                 <th>Date</th>
                                 <th>Time Slots</th>
                                 <th>Period</th>
-                                <th>Status</th>
+                                {/* <th>Status</th> */}
                             </tr>
                         </thead>
                         <tbody>
@@ -417,13 +417,16 @@ const TimeSlots = ({ handleTimeSlotsChange, daysOfWeekWithDates, initialTimeSlot
                                                     {formatDate(date)}
                                                 </td>
                                             ) : null}
-                                            <td className={cx({ booked: isSlotBooked(slot) })}>{`${convertTime(
+                                            <td>{`${convertTime(slot.start)} - ${convertTime(slot.end)}`}</td>
+                                            <td>{slot.period}</td>
+
+                                            {/* <td className={cx({ booked: isSlotBooked(slot) })}>{`${convertTime(
                                                 slot.start,
                                             )} - ${convertTime(slot.end)}`}</td>
                                             <td className={cx({ booked: isSlotBooked(slot) })}>{slot.period}</td>
                                             <td className={cx({ booked: isSlotBooked(slot) })}>
                                                 {isSlotBooked(slot) ? 'Booked' : 'Available'}
-                                            </td>
+                                            </td> */}
                                         </tr>
                                     ))}
                                 </React.Fragment>

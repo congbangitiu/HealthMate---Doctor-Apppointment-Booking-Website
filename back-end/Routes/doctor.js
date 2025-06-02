@@ -1,5 +1,4 @@
 import express from 'express';
-import Doctor from '../Models/DoctorSchema.js';
 import {
     updateProfile,
     deleteDoctor,

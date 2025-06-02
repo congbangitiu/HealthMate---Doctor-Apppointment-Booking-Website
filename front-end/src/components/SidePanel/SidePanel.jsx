@@ -57,11 +57,12 @@ const SidePanel = ({
             </div>
             <div>
                 <h4>Available Time Slots:</h4>
-                {expandeSidePanel ? (
-                    <BiCollapseAlt className={cx('icon')} onClick={() => setExpandeSidePanel(false)} />
-                ) : (
-                    <BiExpandAlt className={cx('icon')} onClick={() => setExpandeSidePanel(true)} />
-                )}
+                {timeSlots.length > 0 &&
+                    (expandeSidePanel ? (
+                        <BiCollapseAlt className={cx('icon')} onClick={() => setExpandeSidePanel(false)} />
+                    ) : (
+                        <BiExpandAlt className={cx('icon')} onClick={() => setExpandeSidePanel(true)} />
+                    ))}
             </div>
             <div className={cx(expandeSidePanel ? 'slots-expanded' : 'slots-collapsed')}>
                 {filteredTimeSlots.length > 0 ? (

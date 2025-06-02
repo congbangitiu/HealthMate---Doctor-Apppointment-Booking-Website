@@ -269,7 +269,7 @@ const PrescriptionEdit = ({
         return {
             fontWeight:
                 selectedOption === option ? theme.typography.fontWeightMedium : theme.typography.fontWeightRegular,
-            backgroundColor: selectedOption.includes(option) ? 'var(--lightGreenColor)' : 'inherit',
+            backgroundColor: selectedOption?.includes(option) ? 'var(--lightGreenColor)' : 'inherit',
         };
     };
 

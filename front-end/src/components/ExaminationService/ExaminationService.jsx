@@ -1,7 +1,5 @@
-import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './ExaminationService.module.scss';
-import { FaLongArrowAltRight } from 'react-icons/fa';
 import ExaminationService1 from '../../assets/images/icon01.png';
 import ExaminationService2 from '../../assets/images/icon02.png';
 import ExaminationService3 from '../../assets/images/icon03.png';

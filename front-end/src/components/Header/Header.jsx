@@ -77,7 +77,17 @@ const Header = () => {
     ];
 
     const isActive = (path) => {
-        return location.pathname === path || (location.pathname === '/' && path === '/home');
+        if (path === '/home') {
+            return location.pathname === '/' || location.pathname === '/home';
+        }
+
+        // Special case for doctors: avoid marking "Doctors" as active when on the profile page
+        if (role === 'doctor' && path === '/doctors' && location.pathname === '/doctors/profile/me') {
+            return false;
+        }
+
+        // Ensure exact match or specific subpaths
+        return location.pathname === path || location.pathname.startsWith(`${path}/`);
     };
 
     const isProfileOrAppointment = () => {

@@ -19,7 +19,7 @@ export const HealthMateInfo = `
     - Rehabilitation Department
     - Ophthalmology Department
     - Dentomaxillofacial Department
-    - Emergency – Intensive Care – Toxicology Department
+    - Emergency – Intensive Care - Department
     - Orthopedics and Musculoskeletal Department
 
     2. General Practitioner Services
