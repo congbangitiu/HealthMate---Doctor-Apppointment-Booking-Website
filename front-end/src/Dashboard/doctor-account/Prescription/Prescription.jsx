@@ -23,7 +23,7 @@ const Prescription = () => {
                 timesPerDay: 0,
                 quantityPerTime: 0,
                 totalUnits: 0,
-                timeOfDay: ["Morning"],
+                timeOfDay: ['Morning'],
                 dosageForm: '',
                 mealRelation: 'After meal',
             },
@@ -31,6 +31,7 @@ const Prescription = () => {
     ]);
     const [diseaseName, setDiseaseName] = useState('');
     const [doctorAdvice, setDoctorAdvice] = useState('');
+    const [isSigned, setIsSigned] = useState(false);
     const [createdTime, setCreatedTime] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -69,6 +70,7 @@ const Prescription = () => {
                     setDiseaseName(prescriptionData.data.diseaseName);
                     setDoctorAdvice(prescriptionData.data.doctorAdvice);
                     setCreatedTime(prescriptionData.data.updatedAt);
+                    setIsSigned(prescriptionData.data.isSigned);
                 } else {
                     console.log('Prescription not found, creating a new one.');
                 }
@@ -104,6 +106,8 @@ const Prescription = () => {
                     setMedications={setMedications}
                     id={id}
                     createdTime={createdTime}
+                    isSigned={isSigned}
+                    setIsSigned={setIsSigned}
                 />
             ) : (
                 <PrescriptionView

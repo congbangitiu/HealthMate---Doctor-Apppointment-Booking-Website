@@ -17,7 +17,6 @@ const Services = () => {
     return (
         <div className={cx('container')}>
             <ExaminationService />
-
             <TreatmentService />
         </div>
     );

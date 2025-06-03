@@ -120,7 +120,7 @@ const MedicalRecords = () => {
                     </Tabs>
                 </div>
                 {activeTab === 'examination-form' ? (
-                    <ExaminationForm appointment={appointment} />
+                    <ExaminationForm />
                 ) : activeTab === 'prescription' ? (
                     <Prescription />
                 ) : (

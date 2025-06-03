@@ -6,21 +6,21 @@ const medicationSchema = new mongoose.Schema({
         timesPerDay: { type: Number, required: true },
         quantityPerTime: { type: Number, required: true },
         totalUnits: { type: Number, required: true },
-        timeOfDay: { 
-            type: [String], 
+        timeOfDay: {
+            type: [String],
             enum: ['Morning', 'Noon', 'Afternoon'],
-            required: true 
-        },
-        dosageForm: { 
-            type: String, 
             required: true,
-            default: 'Tablet'
         },
-        mealRelation: { 
-            type: String, 
+        dosageForm: {
+            type: String,
+            required: true,
+            default: 'Tablet',
+        },
+        mealRelation: {
+            type: String,
             enum: ['Before meal', 'After meal'],
-            required: true 
-        }
+            required: true,
+        },
     },
 });
 
@@ -47,6 +47,10 @@ const prescriptionSchema = new mongoose.Schema(
             default: true,
         },
         actionHistory: [historySchema],
+        isSigned: {
+            type: Boolean,
+            default: false,
+        },
         pdfInfo: {
             url: String,
             publicId: String,

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './ExaminationFormEdit.module.scss';
-import Watermark from '../../../assets/images/watermark30.png';
 import Logo from '../../../assets/images/logo.png';
 import { useTheme } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
@@ -11,11 +10,11 @@ import SyncLoader from 'react-spinners/SyncLoader';
 import { BASE_URL, token } from '../../../../config';
 import { PropTypes } from 'prop-types';
 import { toast } from 'react-toastify';
-import formatDate from './../../../utils/formatDate';
 import { PlusOutlined } from '@ant-design/icons';
 import { Image, Upload } from 'antd';
 import { uploadImageToCloudinary } from '../../../utils/uploadCloudinary';
 import { useMediaQuery } from '@mui/material';
+import SignatureConfirmation from '../../../components/SignatureConfirmation/SignatureConfirmation';
 
 const cx = classNames.bind(styles);
 
@@ -30,6 +29,7 @@ const getBase64 = (file) =>
 const ExaminationFormEdit = ({
     appointmentId,
     appointment,
+    setAppointment,
     chiefComplaint,
     setChiefComplaint,
     clinicalIndications,
@@ -42,6 +42,8 @@ const ExaminationFormEdit = ({
     setUltrasoundResults,
     conclusion,
     setConclusion,
+    isSigned,
+    setIsSigned,
     createdTime,
 }) => {
     const theme = useTheme();
@@ -152,6 +154,7 @@ const ExaminationFormEdit = ({
             }, {}),
             conclusion,
             action,
+            isSigned,
         };
 
         try {
@@ -381,26 +384,13 @@ const ExaminationFormEdit = ({
                         required
                     />
                 </div>
-                <div className={cx('confirmation')}>
-                    <div>
-                        <h4>HealthMate{createdTime && ', ' + formatDate(createdTime)}</h4>
-                        <span>
-                            <img src={Watermark} alt="" />
-                            <img src={appointment?.doctor?.signature} alt="" />
-                        </span>
-                        <p>John Smith</p>
-                        <div>
-                            <input
-                                type="file"
-                                name="signature"
-                                id="customSignature"
-                                accept=".jpg, .png, .jpeg, .webp"
-                                onChange={(e) => console.log(e.target.files[0])}
-                            />
-                            <label htmlFor="customSignature">Replace signature</label>
-                        </div>
-                    </div>
-                </div>
+                <SignatureConfirmation
+                    createdTime={createdTime}
+                    isSigned={isSigned}
+                    setIsSigned={setIsSigned}
+                    appointment={appointment}
+                    setAppointment={setAppointment}
+                />
                 <button type="submit" className={cx('submit-btn')}>
                     {loadingBtnSave ? <SyncLoader size={10} color="#ffffff" /> : 'Save examination form'}
                 </button>
@@ -412,6 +402,7 @@ const ExaminationFormEdit = ({
 ExaminationFormEdit.propTypes = {
     appointmentId: PropTypes.string.isRequired,
     appointment: PropTypes.object.isRequired,
+    setAppointment: PropTypes.func.isRequired,
     chiefComplaint: PropTypes.string.isRequired,
     setChiefComplaint: PropTypes.func.isRequired,
     clinicalIndications: PropTypes.string.isRequired,
@@ -424,6 +415,8 @@ ExaminationFormEdit.propTypes = {
     setUltrasoundResults: PropTypes.func.isRequired,
     conclusion: PropTypes.string.isRequired,
     setConclusion: PropTypes.func.isRequired,
+    isSigned: PropTypes.bool.isRequired,
+    setIsSigned: PropTypes.func.isRequired,
     createdTime: PropTypes.string,
 };
 

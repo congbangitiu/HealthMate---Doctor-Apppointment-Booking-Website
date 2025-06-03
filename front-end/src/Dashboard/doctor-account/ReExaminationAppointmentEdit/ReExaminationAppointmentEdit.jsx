@@ -216,26 +216,6 @@ const ReExaminationAppointmentEdit = ({ appointment, prescription, schedule, set
                             </div>
                         </div>
 
-                        <div className={cx('confirmation')}>
-                            <div>
-                                <h4>HealthMate{appointment.updatedAt && ', ' + formatDate(appointment.updatedAt)}</h4>
-                                <span>
-                                    <img src={Watermark} alt="" />
-                                    <img src={appointment?.doctor?.signature} alt="" />
-                                </span>
-                                <p>{appointment?.doctor?.fullname}</p>
-                                <div>
-                                    <input
-                                        type="file"
-                                        name="signature"
-                                        id="customSignature"
-                                        accept=".jpg, .png, .jpeg, .webp"
-                                        onChange={handleInputChange}
-                                    />
-                                    <label htmlFor="customSignature">Replace signature</label>
-                                </div>
-                            </div>
-                        </div>
                         <button type="submit" className={cx('submit-btn')} disabled={loadingBtnSave}>
                             {loadingBtnSave ? (
                                 <SyncLoader size={10} color="#ffffff" />

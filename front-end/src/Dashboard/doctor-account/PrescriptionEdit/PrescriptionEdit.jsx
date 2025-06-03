@@ -2,15 +2,14 @@ import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './PrescriptionEdit.module.scss';
 import Logo from '../../../assets/images/logo.png';
-import Watermark from '../../../assets/images/watermark30.png';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import SyncLoader from 'react-spinners/SyncLoader';
-import formatDate from './../../../utils/formatDate';
 import { toast } from 'react-toastify';
 import { BASE_URL, token } from '../../../../config';
 import { PropTypes } from 'prop-types';
 import { useMediaQuery, useTheme, Select, MenuItem, TextField, Autocomplete } from '@mui/material';
 import Papa from 'papaparse';
+import SignatureConfirmation from '../../../components/SignatureConfirmation/SignatureConfirmation';
 
 const cx = classNames.bind(styles);
 
@@ -25,10 +24,11 @@ const PrescriptionEdit = ({
     setMedications,
     id,
     createdTime,
+    isSigned,
+    setIsSigned,
 }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery('(max-width:768px)');
-    const [loadingBtnUploadSign, setLoadingBtnUploadSign] = useState(false);
     const [loadingBtnSavePres, setLoadingBtnSavePres] = useState(false);
     const [medicineOptions, setMedicineOptions] = useState([]);
     const [customMedications, setCustomMedications] = useState([]);
@@ -116,39 +116,6 @@ const PrescriptionEdit = ({
         setCustomMedications(customMedications.filter((_, i) => i !== index));
     };
 
-    const handleUploadSignature = async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        try {
-            setLoadingBtnUploadSign(true);
-
-            const formData = new FormData();
-            formData.append('signature', file);
-
-            const res = await fetch(`${BASE_URL}/doctors/upload-signature/${appointment.doctor._id}`, {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                body: formData,
-            });
-
-            const data = await res.json();
-            if (res.ok) {
-                toast.success('Signature uploaded successfully!');
-                setAppointment((prev) => ({ ...prev, doctor: { ...prev.doctor, signature: data.data.signature } }));
-            } else {
-                throw new Error(data.message);
-            }
-
-            setLoadingBtnUploadSign(false);
-        } catch (error) {
-            toast.error(error.message);
-            setLoadingBtnUploadSign(false);
-        }
-    };
-
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     const submitPrescription = async (e) => {
@@ -176,6 +143,7 @@ const PrescriptionEdit = ({
                     medications,
                     doctorAdvice,
                     action,
+                    isSigned,
                 }),
             });
 
@@ -564,36 +532,13 @@ const PrescriptionEdit = ({
                         </ul>
                     </div>
                 </div>
-                <div className={cx('confirmation')}>
-                    <div>
-                        <h4>HealthMate{createdTime && ', ' + formatDate(createdTime)}</h4>
-                        <span>
-                            <img src={Watermark} alt="" />
-                            <img src={appointment?.doctor?.signature} alt="" />
-                        </span>
-                        <p>{appointment?.doctor?.fullname}</p>
-                        <div>
-                            <input
-                                type="file"
-                                name="signature"
-                                id="customSignature"
-                                accept=".jpg, .png, .jpeg, .webp"
-                                onChange={handleUploadSignature}
-                            />
-                            <label htmlFor="customSignature">
-                                {loadingBtnUploadSign ? (
-                                    <button>
-                                        <SyncLoader size={6} color="#ffffff" />
-                                    </button>
-                                ) : appointment?.doctor?.signature ? (
-                                    'Replace signature'
-                                ) : (
-                                    'Upload signature'
-                                )}
-                            </label>
-                        </div>
-                    </div>
-                </div>
+                <SignatureConfirmation
+                    createdTime={createdTime}
+                    isSigned={isSigned}
+                    setIsSigned={setIsSigned}
+                    appointment={appointment}
+                    setAppointment={setAppointment}
+                />
                 <button type="submit" className={cx('submit-btn')}>
                     {loadingBtnSavePres ? <SyncLoader size={10} color="#ffffff" /> : 'Save prescription'}
                 </button>
@@ -613,6 +558,8 @@ PrescriptionEdit.propTypes = {
     setMedications: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,
     createdTime: PropTypes.string,
+    isSigned: PropTypes.bool.isRequired,
+    setIsSigned: PropTypes.func.isRequired,
 };
 
 export default PrescriptionEdit;

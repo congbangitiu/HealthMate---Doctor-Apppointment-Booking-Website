@@ -13,9 +13,10 @@ import ToggleButton from '../../../components/ToggleButton/ToggleButton';
 
 const cx = classNames.bind(styles);
 
-const ExaminationForm = ({ appointment }) => {
+const ExaminationForm = () => {
     const { id } = useParams();
     const [toggle, setToggle] = useState(false);
+    const [appointment, setAppointment] = useState(null);
     const [examination, setExamination] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -34,12 +35,26 @@ const ExaminationForm = ({ appointment }) => {
         'Abdominal Cavity': '',
     });
     const [conclusion, setConclusion] = useState('');
+    const [isSigned, setIsSigned] = useState(false);
     const [createdTime, setCreatedTime] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
+                const resAppointment = await fetch(`${BASE_URL}/doctors/appointments/my-appointments/${id}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                const appointmentData = await resAppointment.json();
+
+                if (appointmentData.success) {
+                    setAppointment(appointmentData.data);
+                } else {
+                    toast.error(appointmentData.message || 'Error fetching appointment data');
+                    setLoading(false);
+                    return;
+                }
+
                 const resExamination = await fetch(`${BASE_URL}/examinations/${id}`, {
                     method: 'GET',
                     headers: {
@@ -62,6 +77,7 @@ const ExaminationForm = ({ appointment }) => {
                         ...exam.ultrasoundResults,
                     }));
                     setConclusion(exam.conclusion || '');
+                    setIsSigned(exam.isSigned);
                     setCreatedTime(exam.updatedAt || '');
                 } else {
                     console.log('Examination not found, creating a new one.');
@@ -90,6 +106,7 @@ const ExaminationForm = ({ appointment }) => {
                 <ExaminationFormEdit
                     appointmentId={id}
                     appointment={appointment}
+                    setAppointment={setAppointment}
                     chiefComplaint={chiefComplaint}
                     setChiefComplaint={setChiefComplaint}
                     clinicalIndications={clinicalIndications}
@@ -102,6 +119,8 @@ const ExaminationForm = ({ appointment }) => {
                     setUltrasoundResults={setUltrasoundResults}
                     conclusion={conclusion}
                     setConclusion={setConclusion}
+                    isSigned={isSigned}
+                    setIsSigned={setIsSigned}
                     createdTime={createdTime}
                 />
             ) : (

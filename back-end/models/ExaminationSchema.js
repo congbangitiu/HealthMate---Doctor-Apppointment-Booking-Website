@@ -51,6 +51,12 @@ const ExaminationSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+
+        isSigned: {
+            type: Boolean,
+            default: false,
+        },
+
         pdfInfo: {
             url: String,
             publicId: String,
