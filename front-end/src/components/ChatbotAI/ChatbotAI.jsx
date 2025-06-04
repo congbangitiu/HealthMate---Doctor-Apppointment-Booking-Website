@@ -7,12 +7,17 @@ import { FaChevronDown, FaStopCircle } from 'react-icons/fa';
 import ChatbotLogo from '../../assets/images/Chatbot-Logo.png';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { HealthMateInfo } from '../../assets/data/chatbot/HealthMateInfo';
-import { diseaseInfo } from '../../assets/data/chatbot/diseaseInfo';
-import { webInstructions } from '../../assets/data/chatbot/webInstructions';
-import { responseInstructions } from '../../assets/data/chatbot/responseInstructions';
 import Typewriter from 'typewriter-effect';
 import { authContext } from '../../context/AuthContext';
 import extractName from '../../utils/extractName';
+import sampleAnswers from '../../assets/data/chatbot/sampleAnswer';
+import generatePrompt from '../../utils/chatbot/generatePrompt';
+import handleDoctorScheduleQuery from '../../utils/chatbot/handleDoctorScheduleQuery';
+import handleSymptomQuery from '../../utils/chatbot/handleSymptomQuery';
+import {
+    handleDoctorAvailabilityResponse,
+    handleSymptomBasedResponse,
+} from '../../utils/chatbot/handlePatientQuestion';
 
 const cx = classNames.bind(styles);
 
@@ -33,6 +38,9 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
     const [isTyping, setIsTyping] = useState(false);
     const [isStopped, setIsStopped] = useState(false);
     const [typewriterInstance, setTypewriterInstance] = useState(null);
+    // Refs for input and chat body
+    const inputRef = useRef(null);
+    const chatBodyRef = useRef(null);
 
     const [patientSuggestions, setPatientSuggestions] = useState([
         'I am experiencing indigestion and heartburn, which specialist should I consult?',
@@ -50,98 +58,32 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
         'Which appointments were canceled this week?',
     ]);
 
-    // Refs for input and chat body
-    const inputRef = useRef(null);
-    const chatBodyRef = useRef(null);
-
-    // Sample answers for predefined questions
-    const sampleAnswers = {
-        patient: {
-            'I am experiencing indigestion and heartburn, which specialist should I consult?':
-                'If you’re experiencing symptoms like indigestion and heartburn, it’s recommended to consult a gastroenterologist. Gastroenterologists are medical specialists who diagnose and treat conditions related to the digestive system, including acid reflux, ulcers, bloating, and other gastrointestinal issues. Scheduling an appointment with one can help you get a proper evaluation and treatment plan tailored to your condition.',
-
-            'Can I get an online consultation with a dermatologist?':
-                'Yes, you can easily schedule an online consultation with a certified dermatologist through the HealthMate platform. Our dermatologists are qualified to assess and treat a wide range of skin conditions, from acne and rashes to more complex skin issues. Online consultations are a convenient way to receive expert advice without needing to visit a clinic.',
-
-            'How can I find the most suitable doctor for my specific health concerns?':
-                'To find the most suitable doctor for your health needs, visit the “Doctors” page on HealthMate. You can apply filters such as medical specialty, doctor ratings, languages spoken, consultation types (in-person or online), and availability. This allows you to compare profiles and choose the doctor who best aligns with your preferences and medical concerns.',
-        },
-        doctor: {
-            'How can I manage my appointment schedule more efficiently?':
-                'To manage your appointment schedule more efficiently, log in to your Doctor Dashboard and navigate to the “Appointments” tab. There, you’ll find tools to view, confirm, reschedule, or cancel appointments. You can also enable notifications and reminders to help you stay updated and reduce no-shows.',
-
-            'What are the most common concerns or questions from patients in my specialty?':
-                'You can gain insights into common patient concerns by reviewing previous consultation transcripts, patient feedback, and ratings on your profile. Additionally, HealthMate provides aggregated data on trending symptoms and frequently asked questions within your specialty, helping you prepare better for recurring patient needs.',
-
-            'Can I get feedback or reviews from patients after consultations to improve my service?':
-                'Yes, after each consultation, patients have the option to leave feedback and rate their experience. These reviews appear on your public profile and are also accessible in your Doctor Dashboard under the “Feedback” section. Reviewing this feedback regularly can help you identify areas for improvement and maintain high patient satisfaction.',
-        },
-        admin: {
-            'List all pending doctor registrations.':
-                'To view all pending doctor registrations, go to the Admin Dashboard and select the “Doctor Management” module. From there, you can see a list of doctors awaiting verification or approval, along with their registration details and submitted credentials.',
-
-            'Any system alerts today?':
-                'To check for any system alerts or notifications for today, navigate to the Admin notification panel on the dashboard. This panel displays real-time alerts regarding system status, upcoming maintenance, security issues, and other administrative updates that may require your attention.',
-
-            'Which appointments were canceled this week?':
-                'To view all appointments canceled during the current week, go to the “Appointments Management” section in the Admin Dashboard. Use the filter options to select the “canceled” status and set the date range to this week. The system will display a list of all relevant canceled appointments along with patient and doctor details.',
-        },
-    };
-
-    // Generate prompt for API request
-    const generatePrompt = (text) => {
-        const isNotLoggedIn = !token || token === 'null' || token === 'undefined';
-        const isAskingAuthentication = (question) => {
-            const lowerQ = question.toLowerCase();
-            return (
-                lowerQ.includes('sign in') ||
-                lowerQ.includes('sign up') ||
-                lowerQ.includes('log in') ||
-                lowerQ.includes('register') ||
-                lowerQ.includes('how to sign in') ||
-                lowerQ.includes('how to sign up')
-            );
-        };
-
-        let prompt = `
-        You are an intelligent chatbot named HealthAid representing HealthMate, a healthcare platform that connects patients with experienced healthcare professionals. Your task is to provide precise and relevant answers to user inquiries about HealthMate based on the following information.
-    
-        Context: 
-            - HealthMate Information: ${HealthMateInfo}       
-            - Disease and Symptoms Information: ${diseaseInfo}
-            - How to Use the Website: ${webInstructions}
-            - How to respond: ${responseInstructions}
-            - Chat history: ${chatHistory.map((item) => `${item.role}: ${item.text}`).join('\n')}
-        `;
-
-        if (isNotLoggedIn) {
-            if (isAskingAuthentication) {
-                prompt += `
-                    Since the user has not signed in, but they are asking about authentication process (sign in / sign up). 
-                    Please provide an instructions from part A in "webInstructions".
-                    The user's question is: "${text}"
-                `;
-            } else {
-                prompt += `
-                    Since the user is not logged in, you only need to provide a *short answer* to their question. Additionally, please encourage the user to log in (or create an account) for a more detailed and personalized experience (just write a sentence encouraging the user to log in, no need to write detailed steps). The user's question is: "${text}"
-                `;
-            }
-        } else {
-            const userRole = role === 'admin' ? 'admin' : role === 'doctor' ? 'doctor' : 'patient';
-            prompt += ` With role ${userRole}, please provide an answer to this question: "${text}" `;
-        }
-
-        return prompt;
-    };
-
     // Format the response
     const formatListResponse = (text) => {
         return text
-            .replace(/\n\*/g, '\n   *') // Format bullet points (*) by adding indentation
-            .replace(/\n-/g, '\n   -') // Format dash lists (-) by adding indentation
-            .replace(/\*\s/g, '\n   * ') // Ensure bullet points (*) start with proper spacing
-            .replace(/-\s/g, '\n   - ') // Ensure dash lists (-) start with proper spacing
-            .replace(/\n\d+\./g, (match) => `\n   ${match.trim()}`); // Format numbered lists (1., 2., 3.) with indentation
+            .replace(/\n\*/g, '   *') // Format bullet points (*) by adding indentation
+            .replace(/\n-/g, '   -') // Format dash lists (-) by adding indentation
+            .replace(/\*\s/g, '   * ') // Ensure bullet points (*) start with proper spacing
+            .replace(/-\s/g, '   - ') // Ensure dash lists (-) start with proper spacing
+            .replace(/\n(\d+)\.\s*(.*)/g, '\n   <strong>$1.</strong> $2');
+    };
+
+    // Retry fetch function to handle rate limits and server overloads
+    const retryFetch = async (url, options, retries = 3, delay = 1500) => {
+        for (let i = 0; i < retries; i++) {
+            const response = await fetch(url, options);
+
+            if (response.ok) return response;
+
+            if (response.status === 429 || response.status === 503) {
+                console.warn(`Retrying (${i + 1}/${retries}) due to overload or rate limit...`);
+                await new Promise((resolve) => setTimeout(resolve, delay));
+            } else {
+                // Other error (e.g., 400, 500) → don't retry
+                return response;
+            }
+        }
+        throw new Error('The model is overloaded. Please try again later.');
     };
 
     // Send API request and update chat history
@@ -161,7 +103,7 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
         };
 
         try {
-            const respone = await fetch(import.meta.env.VITE_API_MODEL, requestOptions);
+            const respone = await retryFetch(import.meta.env.VITE_API_MODEL, requestOptions);
             const data = await respone.json();
             if (!respone.ok) {
                 throw new Error(data.error.message || 'Something went wrong');
@@ -182,24 +124,75 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
         }
     };
 
+    // Check if the user is asking about general website usage
+    const isGeneralWebsiteQuestion = (text) => {
+        const lower = text.toLowerCase();
+        return (
+            lower.includes('how to') ||
+            lower.includes('navigate') ||
+            lower.includes('find a doctor') ||
+            lower.includes('book an appointment') ||
+            lower.includes('filter doctors') ||
+            lower.includes('online consultation') ||
+            lower.includes('profile') ||
+            lower.includes('dashboard') ||
+            lower.includes('reset password')
+        );
+    };
+
     // Send user message and trigger bot response
-    const sendUserMessage = (userMessage) => {
+    const sendUserMessage = async (userMessage) => {
         if (!userMessage.trim()) return;
 
-        // Update chat history with user's message
         setChatHistory((history) => [...history, { role: 'user', text: userMessage }]);
         setIsThinking(true);
 
-        // Delay bot response to simulate processing time
-        setTimeout(() => {
-            generateBotResponse([...chatHistory, { role: 'user', text: generatePrompt(userMessage) }])
-                .then(() => {
-                    setIsThinking(false);
-                })
-                .catch(() => {
-                    setIsThinking(false);
-                });
-        }, 500);
+        if (isGeneralWebsiteQuestion(userMessage)) {
+            const prompt = generatePrompt({
+                text: userMessage,
+                token,
+                role,
+                chatHistory,
+            });
+
+            return generateBotResponse([...chatHistory, { role: 'user', text: prompt }]).finally(() =>
+                setIsThinking(false),
+            );
+        }
+
+        // STEP 1: Check if user is asking about a specific doctor
+        const handledDoctor = await handleDoctorAvailabilityResponse({
+            userMessage,
+            chatHistory,
+            setIsThinking,
+            generateBotResponse,
+            handleDoctorScheduleQuery,
+        });
+        if (handledDoctor) return;
+        
+        // STEP 2: Check if it's a symptom-based question
+        const handledSymptom = await handleSymptomBasedResponse({
+            userMessage,
+            chatHistory,
+            setIsThinking,
+            generateBotResponse,
+            handleSymptomQuery,
+        });
+        if (handledSymptom) return;
+
+        // STEP 3: Fallback – generic prompt
+        generateBotResponse([
+            ...chatHistory,
+            {
+                role: 'user',
+                text: generatePrompt({
+                    text: userMessage,
+                    token,
+                    role,
+                    chatHistory,
+                }),
+            },
+        ]).finally(() => setIsThinking(false));
     };
 
     // Handle "Enter" key event
@@ -349,8 +342,9 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
                                                         .changeDelay(15)
                                                         .typeString(
                                                             chat.text
-                                                                .replace(/\n\s*\*/g, '<br />*') // Replace newlines before bullet points (*) with a single line break to ensure proper formatting
-                                                                .replace(/\n\s*\d+\./g, '<br />'), // Replace newlines before numbered lists (e.g., "1.") with a single line break to maintain proper spacing
+                                                                .replace(/\n/g, '<br />')
+                                                                .replace(/\*\*/g, '')
+                                                                .replace(/\s{2,}/g, ' '),
                                                         )
                                                         .callFunction(() => {
                                                             // Scroll to the bottom when text is being typed

@@ -59,30 +59,42 @@ export const getSingleDoctor = async (req, res) => {
 
 export const getAllDoctors = async (req, res) => {
     try {
-        const { query } = req.query;
+        const { query, specialty } = req.query;
         let doctors;
+
         if (query) {
+            // Search by name or subspecialty using case-insensitive regex
             doctors = await Doctor.find({
-                // isApproved: 'approved',
                 $or: [
-                    { fullname: { $regex: req.query.query, $options: 'i' } },
-                    { subspecialty: { $regex: req.query.query, $options: 'i' } },
+                    { fullname: { $regex: query, $options: 'i' } },
+                    { subspecialty: { $regex: query, $options: 'i' } },
                 ],
-            }).select('-password');
+            }).select('-password'); // Exclude password field
+        } else if (specialty) {
+            // Search by specialty (used in chatbot or direct filtering)
+            doctors = await Doctor.find({
+                specialty: { $regex: specialty, $options: 'i' },
+                isApproved: 'approved', // Optional: only include approved doctors
+            })
+                .select('-password')
+                .sort({ fullname: 1 }); // Optional: sort alphabetically by name
         } else {
-            // doctors = await Doctor.find({ isApproved: 'approved' }).select('-password');
+            // Return all doctors if no filters are provided
             doctors = await Doctor.find().select('-password');
         }
 
+        // Success response
         res.status(200).json({
             success: true,
             message: 'Doctors are found successfully',
             data: doctors,
         });
     } catch (error) {
+        // Error response
         res.status(404).json({
             success: false,
             message: 'Doctors are not found !!!',
+            error: error.message,
         });
     }
 };
