@@ -130,7 +130,15 @@ export const getDoctorProfile = async (req, res) => {
 
 export const getAllDoctorAppointments = async (req, res) => {
     try {
-        const appointments = await Booking.find({ doctor: req.userId }).populate('user', '-password').lean();
+        const { day } = req.query;
+
+        const filter = { doctor: req.userId };
+
+        if (day) {
+            filter['timeSlot.day'] = day;
+        }
+
+        const appointments = await Booking.find(filter).populate('user', '-password').lean();
 
         const formattedAppointments = appointments.map((appointment) => ({
             ...appointment,

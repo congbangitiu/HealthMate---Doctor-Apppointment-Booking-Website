@@ -18,6 +18,7 @@ import {
     handleDoctorAvailabilityResponse,
     handleSymptomBasedResponse,
 } from '../../utils/chatbot/handlePatientQuestion';
+import { handleDoctorTodayAppointments } from '../../utils/chatbot/handleDoctorQuestion';
 
 const cx = classNames.bind(styles);
 
@@ -160,6 +161,16 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
             );
         }
 
+        const handledTodayAppointments = await handleDoctorTodayAppointments({
+            userMessage,
+            role,
+            chatHistory,
+            setIsThinking,
+            generateBotResponse,
+            token,
+        });
+        if (handledTodayAppointments) return;
+
         // STEP 1: Check if user is asking about a specific doctor
         const handledDoctor = await handleDoctorAvailabilityResponse({
             userMessage,
@@ -169,7 +180,7 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
             handleDoctorScheduleQuery,
         });
         if (handledDoctor) return;
-        
+
         // STEP 2: Check if it's a symptom-based question
         const handledSymptom = await handleSymptomBasedResponse({
             userMessage,

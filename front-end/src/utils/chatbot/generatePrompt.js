@@ -1,5 +1,4 @@
 import { HealthMateInfo } from '../../assets/data/chatbot/HealthMateInfo';
-import { diseaseInfo } from '../../assets/data/chatbot/diseaseInfo';
 import { webInstructions } from '../../assets/data/chatbot/webInstructions';
 import { responseInstructions } from '../../assets/data/chatbot/responseInstructions';
 
@@ -27,8 +26,6 @@ const generatePrompt = ({ text, token, role, chatHistory }) => {
             - How to respond: ${responseInstructions}
             - Chat history: ${chatHistory.map((item) => `${item.role}: ${item.text}`).join('\n')}
     `;
-
-    // - Disease and Symptoms Information: ${diseaseInfo}
 
     if (isNotLoggedIn) {
         if (isAskingAuthentication(text)) {
