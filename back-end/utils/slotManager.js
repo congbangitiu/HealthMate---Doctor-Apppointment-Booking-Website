@@ -1,56 +1,86 @@
 import cron from 'node-cron';
 import Doctor from '../Models/DoctorSchema.js';
-import { addDays, parseISO, formatISO, isBefore, startOfToday } from 'date-fns';
+import { addDays, parseISO, isBefore, startOfToday } from 'date-fns';
 
 // Generate weekly time slots for all approved doctors
+const SHIFT_RANGES = {
+    morning: { start: '08:00', end: '11:30' },
+    afternoon: { start: '13:00', end: '16:00' },
+    evening: { start: '18:00', end: '21:00' },
+};
+
+const getTimeRangesForShift = (shift) => {
+    const range = SHIFT_RANGES[shift];
+    if (!range) return [];
+
+    const { start, end } = range;
+    const ranges = [];
+
+    let [h, m] = start.split(':').map(Number);
+    const [endH, endM] = end.split(':').map(Number);
+
+    while (h < endH || (h === endH && m < endM)) {
+        const startTime = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        m += 30;
+        if (m >= 60) {
+            h += 1;
+            m -= 60;
+        }
+        const endTime = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        ranges.push({ start: startTime, end: endTime });
+    }
+
+    return ranges;
+};
+
 export const generateWeeklySlotsForAllDoctors = async () => {
     console.log('Starting automatic slot generation for new week...');
 
     try {
-        // Only process approved doctors
         const doctors = await Doctor.find({ isApproved: 'approved' });
         const now = new Date();
         const nextWeek = addDays(now, 7);
 
         for (const doctor of doctors) {
-            // Skip if doctor has no time slots defined
-            if (!doctor.timeSlots || doctor.timeSlots.length === 0) continue;
+            if (!doctor.availableSchedules || doctor.availableSchedules.length === 0) continue;
 
-            // Analyze existing slots to find working patterns
-            const patterns = analyzeTimeSlotPatterns(doctor.timeSlots);
-
-            // Generate new slots for next 7 days
             const newSlots = [];
 
-            // Create slots for each day in next week
-            for (let day = 1; day <= 7; day++) {
-                const targetDate = addDays(now, day);
-                const dayOfWeek = targetDate.getDay(); // 0 (Sunday) - 6 (Saturday)
+            for (const schedule of doctor.availableSchedules) {
+                const slotDate = new Date(schedule.day);
 
-                // Add slots matching this day of week
-                patterns.forEach((pattern) => {
-                    if (pattern.dayOfWeek === dayOfWeek) {
-                        newSlots.push({
-                            day: formatISO(targetDate, { representation: 'date' }), // Format as 'YYYY-MM-DD'
-                            startingTime: pattern.startingTime,
-                            endingTime: pattern.endingTime,
+                if (slotDate >= now && slotDate <= nextWeek) {
+                    for (const shift of schedule.shifts) {
+                        const normalizedShift = shift.toLowerCase().trim();
+                        const timeRanges = getTimeRangesForShift(normalizedShift);
+
+                        timeRanges.forEach((range) => {
+                            newSlots.push({
+                                day: schedule.day,
+                                startingTime: range.start,
+                                endingTime: range.end,
+                            });
                         });
                     }
-                });
+                }
             }
 
-            // Update doctor's timeSlots avoiding duplicates
-            if (newSlots.length > 0) {
-                const existingDates = doctor.timeSlots.map((slot) => slot.day);
-                const uniqueNewSlots = newSlots.filter((slot) => !existingDates.includes(slot.day));
+            const existingSlots = doctor.timeSlots || [];
+            const newUniqueSlots = newSlots.filter((slot) => {
+                return !existingSlots.some(
+                    (existing) =>
+                        existing.day === slot.day &&
+                        existing.startingTime === slot.startingTime &&
+                        existing.endingTime === slot.endingTime,
+                );
+            });
 
+            if (newUniqueSlots.length > 0) {
                 await Doctor.findByIdAndUpdate(
                     doctor._id,
-                    { $push: { timeSlots: { $each: uniqueNewSlots } } },
+                    { $push: { timeSlots: { $each: newUniqueSlots } } },
                     { new: true },
                 );
-
-                // console.log(`Added ${uniqueNewSlots.length} slots for doctor ${doctor._id}`);
             }
         }
 
@@ -88,30 +118,6 @@ export const removeExpiredSlotsForAllDoctors = async () => {
     } catch (error) {
         console.error('Error removing expired slots:', error);
     }
-};
-
-// Analyze existing time slots to find working patterns
-const analyzeTimeSlotPatterns = (timeSlots) => {
-    const patterns = [];
-    const seenPatterns = new Set(); // To avoid duplicates
-
-    timeSlots.forEach((slot) => {
-        const date = parseISO(slot.day);
-        const dayOfWeek = date.getDay(); // Get day of week (0-6)
-        const patternKey = `${dayOfWeek}-${slot.startingTime}-${slot.endingTime}`;
-
-        // Add unique patterns only
-        if (!seenPatterns.has(patternKey)) {
-            seenPatterns.add(patternKey);
-            patterns.push({
-                dayOfWeek, // 0 (Sunday) to 6 (Saturday)
-                startingTime: slot.startingTime, // e.g. "08:00"
-                endingTime: slot.endingTime, // e.g. "11:30"
-            });
-        }
-    });
-
-    return patterns;
 };
 
 // Initialize the daily slot maintenance cron job

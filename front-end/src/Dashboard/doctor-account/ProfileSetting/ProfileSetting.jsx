@@ -40,6 +40,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
         qualifications: [{ startingDate: '', endingDate: '', degree: '', university: '' }],
         experiences: [{ startingDate: '', endingDate: '', position: '', hospital: '' }],
         timeSlots: [{ day: '', startingTime: '', endingTime: '' }],
+        availableSchedules: doctorData.availableSchedules || [],
         about: '',
         photo: null,
         signature: null,
@@ -79,6 +80,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                 startingTime: timeSlot.startingTime,
                 endingTime: timeSlot.endingTime,
             })),
+            availableSchedules: doctorData.availableSchedules || [],
             about: doctorData.about || '',
             photo: doctorData.photo || '',
             signature: doctorData.signature || '',
@@ -647,7 +649,14 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                 handleTimeSlotsChange={handleTimeSlotsChange}
                 daysOfWeekWithDates={daysOfWeekWithDates}
                 initialTimeSlots={formData.timeSlots}
-                currentTimeSlots={doctorData.timeSlots} // Pass formTimeSlots for comparison
+                currentTimeSlots={doctorData.timeSlots}
+                availableSchedules={formData.availableSchedules}
+                onAvailableScheduleChange={(updated) =>
+                    setFormData((prev) => ({
+                        ...prev,
+                        availableSchedules: updated,
+                    }))
+                }
             />
 
             {/* ABOUT */}

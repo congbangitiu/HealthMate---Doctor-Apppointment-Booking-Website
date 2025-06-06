@@ -8,7 +8,13 @@ import convertTime from '../../../utils/convertTime';
 
 const cx = classNames.bind(styles);
 
-const TimeSlots = ({ handleTimeSlotsChange, daysOfWeekWithDates, initialTimeSlots, currentTimeSlots }) => {
+const TimeSlots = ({
+    handleTimeSlotsChange,
+    daysOfWeekWithDates,
+    currentTimeSlots,
+    availableSchedules,
+    onAvailableScheduleChange,
+}) => {
     const isMobile = useMediaQuery('(max-width:768px)');
     const theme = useTheme();
 
@@ -28,40 +34,31 @@ const TimeSlots = ({ handleTimeSlotsChange, daysOfWeekWithDates, initialTimeSlot
     const [selectedTimes, setSelectedTimes] = useState({});
 
     useEffect(() => {
-        if (initialTimeSlots && initialTimeSlots.length > 0 && selectedDays.length === 0) {
-            const dateToDayMap = {};
-            daysOfWeekWithDates.forEach((dayInfo) => {
-                dateToDayMap[dayInfo.date] = dayInfo.name;
-            });
-
-            const groupedByDay = {};
-            initialTimeSlots.forEach((slot) => {
-                const dayName = dateToDayMap[slot.day];
-                if (!dayName) return;
-
-                if (!groupedByDay[dayName]) {
-                    groupedByDay[dayName] = new Set();
-                }
-
-                const hour = parseInt(slot.startingTime.split(':')[0]);
-                let period = '';
-                if (hour >= 8 && hour < 12) period = 'Morning';
-                else if (hour >= 13 && hour < 17) period = 'Afternoon';
-                else if (hour >= 18 && hour < 22) period = 'Evening';
-
-                if (period) groupedByDay[dayName].add(period);
-            });
-
-            const days = Object.keys(groupedByDay);
+        if (availableSchedules?.length > 0 && selectedDays.length === 0) {
+            const days = [];
             const times = {};
-            days.forEach((day) => {
-                times[day] = Array.from(groupedByDay[day]);
+            availableSchedules.forEach(({ day, shifts }) => {
+                const match = daysOfWeekWithDates.find((d) => d.date === day);
+                if (match) {
+                    days.push(match.name);
+                    times[match.name] = shifts;
+                }
             });
-
             setSelectedDays(days);
             setSelectedTimes(times);
         }
-    }, [initialTimeSlots]);
+    }, [availableSchedules]);
+
+    useEffect(() => {
+        const updatedSchedules = selectedDays.map((dayName) => {
+            const date = daysOfWeekWithDates.find((d) => d.name === dayName)?.date;
+            return {
+                day: date,
+                shifts: selectedTimes[dayName] || [],
+            };
+        });
+        onAvailableScheduleChange(updatedSchedules);
+    }, [selectedDays, selectedTimes]);
 
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
@@ -224,7 +221,7 @@ const TimeSlots = ({ handleTimeSlotsChange, daysOfWeekWithDates, initialTimeSlot
     return (
         <div className={cx('container')}>
             <div className={cx('upper-part')}>
-                <h3>Available days</h3>
+                <h3>Available Days</h3>
                 <Select
                     multiple
                     value={selectedDays}
@@ -304,7 +301,7 @@ const TimeSlots = ({ handleTimeSlotsChange, daysOfWeekWithDates, initialTimeSlot
             {selectedDays.length > 0 && (
                 <div className={cx('middle-part')}>
                     <span>
-                        <h3>Available Time Slots</h3>
+                        <h3>Available Shifts</h3>
                         <p>(Morning: 8:00-11:30 | Afternoon: 13:00-16:00 | Evening: 18:00-21:00)</p>
                     </span>
                     {selectedDays.map((day) => {
@@ -390,7 +387,7 @@ const TimeSlots = ({ handleTimeSlotsChange, daysOfWeekWithDates, initialTimeSlot
                 </div>
             )}
 
-            {allTimeSlots.length > 0 && (
+            {currentTimeSlots.length > 0 && (
                 <div className={cx('lower-part')}>
                     <h3>
                         Generated Time Slots from <b>{formatDate(today)}</b> to <b>{formatDate(endDate)}</b>
@@ -442,8 +439,9 @@ const TimeSlots = ({ handleTimeSlotsChange, daysOfWeekWithDates, initialTimeSlot
 TimeSlots.propTypes = {
     handleTimeSlotsChange: PropTypes.func.isRequired,
     daysOfWeekWithDates: PropTypes.array.isRequired,
-    initialTimeSlots: PropTypes.array.isRequired,
     currentTimeSlots: PropTypes.array.isRequired,
+    availableSchedules: PropTypes.array.isRequired,
+    onAvailableScheduleChange: PropTypes.func.isRequired,
 };
 
 export default TimeSlots;

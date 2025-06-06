@@ -17,7 +17,26 @@ const doctorSchema = new mongoose.Schema({
     experiences: { type: Array },
     bio: { type: String },
     about: { type: String },
-    timeSlots: { type: Array },
+    availableSchedules: [
+        {
+            day: { type: String, required: true },
+            shifts: [
+                {
+                    type: String,
+                    enum: ['morning', 'afternoon', 'evening'],
+                    required: true,
+                },
+            ],
+        },
+        { _id: false },
+    ],
+    timeSlots: [
+        {
+            day: { type: String, required: true },
+            startingTime: { type: String, required: true },
+            endingTime: { type: String, required: true },
+        },
+    ],
     reviews: [{ type: mongoose.Types.ObjectId, ref: 'Review' }],
     averageRating: { type: Number, default: 0 },
     totalRating: { type: Number, default: 0 },
