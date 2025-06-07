@@ -3,6 +3,27 @@ import Doctor from '../Models/DoctorSchema.js';
 import { addDays, parseISO, isBefore, startOfToday } from 'date-fns';
 
 // Generate weekly time slots for all approved doctors
+const getNextDateForDayName = (dayName) => {
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const today = new Date();
+    const utcOffsetInHours = 7; // GMT+7
+    today.setHours(today.getHours() + utcOffsetInHours);
+
+    const todayIndex = today.getDay();
+    const targetIndex = daysOfWeek.indexOf(dayName);
+
+    if (targetIndex === -1) return null;
+
+    let diff = targetIndex - todayIndex;
+    if (diff < 0 || diff === 0) diff += 7;
+
+    const result = new Date();
+    result.setDate(today.getDate() + diff);
+    result.setHours(0, 0, 0, 0);
+
+    return result;
+};
+
 const SHIFT_RANGES = {
     morning: { start: '08:00', end: '11:30' },
     afternoon: { start: '13:00', end: '16:00' },
@@ -47,7 +68,8 @@ export const generateWeeklySlotsForAllDoctors = async () => {
             const newSlots = [];
 
             for (const schedule of doctor.availableSchedules) {
-                const slotDate = new Date(schedule.day);
+                const slotDate = getNextDateForDayName(schedule.day);
+                if (!slotDate) continue;
 
                 if (slotDate >= now && slotDate <= nextWeek) {
                     for (const shift of schedule.shifts) {
@@ -56,7 +78,7 @@ export const generateWeeklySlotsForAllDoctors = async () => {
 
                         timeRanges.forEach((range) => {
                             newSlots.push({
-                                day: schedule.day,
+                                day: slotDate.toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }),
                                 startingTime: range.start,
                                 endingTime: range.end,
                             });

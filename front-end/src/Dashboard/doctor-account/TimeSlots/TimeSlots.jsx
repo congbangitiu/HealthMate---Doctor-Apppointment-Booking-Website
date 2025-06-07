@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { MenuItem, Select, Box, useMediaQuery, useTheme } from '@mui/material';
 import formatDate from '../../../utils/formatDate';
 import convertTime from '../../../utils/convertTime';
+import getNextDateForDay from '../../../utils/getNextDateForDay';
 
 const cx = classNames.bind(styles);
 
@@ -38,7 +39,7 @@ const TimeSlots = ({
             const days = [];
             const times = {};
             availableSchedules.forEach(({ day, shifts }) => {
-                const match = daysOfWeekWithDates.find((d) => d.date === day);
+                const match = daysOfWeekWithDates.find((d) => d.name === day);
                 if (match) {
                     days.push(match.name);
                     times[match.name] = shifts;
@@ -50,13 +51,10 @@ const TimeSlots = ({
     }, [availableSchedules]);
 
     useEffect(() => {
-        const updatedSchedules = selectedDays.map((dayName) => {
-            const date = daysOfWeekWithDates.find((d) => d.name === dayName)?.date;
-            return {
-                day: date,
-                shifts: selectedTimes[dayName] || [],
-            };
-        });
+        const updatedSchedules = selectedDays.map((dayName) => ({
+            day: dayName,
+            shifts: selectedTimes[dayName] || [],
+        }));
         onAvailableScheduleChange(updatedSchedules);
     }, [selectedDays, selectedTimes]);
 
@@ -168,11 +166,10 @@ const TimeSlots = ({
         const allSlots = [];
 
         selectedDays.forEach((day) => {
-            const dayInfo = daysOfWeekWithDates.find((d) => d.name === day);
-            if (!dayInfo) return;
+            const date = getNextDateForDay(day);
 
             selectedTimes[day]?.forEach((period) => {
-                const slots = generateTimeSlots(period, dayInfo.date);
+                const slots = generateTimeSlots(period, date);
                 allSlots.push(...slots);
             });
         });
@@ -185,7 +182,7 @@ const TimeSlots = ({
     useEffect(() => {
         if (allTimeSlots.length > 0) {
             const formattedSlots = allTimeSlots.map((slot) => ({
-                day: daysOfWeekWithDates.find((d) => d.date === slot.date)?.name || '',
+                day: slot.date,
                 startingTime: slot.start,
                 endingTime: slot.end,
             }));
@@ -387,7 +384,7 @@ const TimeSlots = ({
                 </div>
             )}
 
-            {currentTimeSlots.length > 0 && (
+            {allTimeSlots.length > 0 && (
                 <div className={cx('lower-part')}>
                     <h3>
                         Generated Time Slots from <b>{formatDate(today)}</b> to <b>{formatDate(endDate)}</b>

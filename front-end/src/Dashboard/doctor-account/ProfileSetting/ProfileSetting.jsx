@@ -261,19 +261,9 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
 
     const handleTimeSlotsChange = useCallback(
         (slots) => {
-            const dayToDateMap = {};
-            daysOfWeekWithDates.forEach((dayInfo) => {
-                dayToDateMap[dayInfo.name] = dayInfo.date;
-            });
-
-            const formattedSlots = slots.map((slot) => ({
-                ...slot,
-                day: dayToDateMap[slot.day] || slot.day,
-            }));
-
             setFormData((prev) => ({
                 ...prev,
-                timeSlots: formattedSlots,
+                timeSlots: slots,
             }));
         },
         [daysOfWeekWithDates],
@@ -288,8 +278,6 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
             ),
         }));
     };
-
-    // console.log(doctorData.timeSlots);
 
     return (
         <div className={cx('container')}>
@@ -648,7 +636,6 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
             <TimeSlots
                 handleTimeSlotsChange={handleTimeSlotsChange}
                 daysOfWeekWithDates={daysOfWeekWithDates}
-                initialTimeSlots={formData.timeSlots}
                 currentTimeSlots={doctorData.timeSlots}
                 availableSchedules={formData.availableSchedules}
                 onAvailableScheduleChange={(updated) =>

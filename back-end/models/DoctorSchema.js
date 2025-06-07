@@ -27,14 +27,15 @@ const doctorSchema = new mongoose.Schema({
                     required: true,
                 },
             ],
+            _id: false,
         },
-        { _id: false },
     ],
     timeSlots: [
         {
             day: { type: String, required: true },
             startingTime: { type: String, required: true },
             endingTime: { type: String, required: true },
+            _id: false,
         },
     ],
     reviews: [{ type: mongoose.Types.ObjectId, ref: 'Review' }],
