@@ -2,7 +2,7 @@ import formatDate from '../formatDate';
 import convertTime from '../convertTime';
 import { BASE_URL } from '../../../config';
 
-export const handleDoctorTodayAppointments = async ({
+export const handleDoctorAppointments = async ({
     userMessage,
     role,
     chatHistory,
@@ -55,8 +55,8 @@ export const handleDoctorTodayAppointments = async ({
                       dateStr,
                   )}), but there are no appointments recorded.
 
-                    Please reply politely:
-                    - Inform the doctor that they have no appointments for ${label}
+                    No need to say greatings or salutations, please reply politely:
+                    - You have no appointments for ${label}
                     - Optionally wish them a productive day
                 `
                 : `

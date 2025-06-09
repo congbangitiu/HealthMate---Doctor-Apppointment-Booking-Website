@@ -1,5 +1,8 @@
-import formatDate from '../formatDate';
-import convertTime from '../convertTime';
+const SHIFT_LABELS = {
+    Morning: 'morning shift (8:00 to 11:30)',
+    Afternoon: 'afternoon shift (13:00 to 16:00)',
+    Evening: 'evening shift (18:00 to 21:00)',
+};
 
 export const handleDoctorAvailabilityResponse = async ({
     userMessage,
@@ -9,44 +12,40 @@ export const handleDoctorAvailabilityResponse = async ({
     handleDoctorScheduleQuery,
 }) => {
     const doctor = await handleDoctorScheduleQuery(userMessage);
-
     if (!doctor) return false;
 
-    const hasSlots = Array.isArray(doctor.timeSlots) && doctor.timeSlots.length > 0;
+    const hasSchedules = Array.isArray(doctor.availableSchedules) && doctor.availableSchedules.length > 0;
 
-    if (!hasSlots) {
+    if (!hasSchedules) {
         const prompt = `
-            A user asked about the availability of Dr. ${doctor.fullname}, but there are currently no time slots on record.
+            A user asked about the availability of Dr. ${doctor.fullname}, but there are currently no working schedules recorded. 
 
-            Please respond politely, explaining that Dr. ${doctor.fullname} currently has no available schedule.
-            Encourage the user to either:
-                1. Check back later
-                2. Consider choosing another doctor from the same specialty on HealthMate.
+            Please respond politely that Dr. ${doctor.fullname} currently has no registered working schedule.
+            Suggest that the user check back later or explore other doctors in the same specialty on HealthMate.
             Keep the response short and professional.
         `;
 
-        return generateBotResponse([...chatHistory, { role: 'user', text: prompt }]).finally(() =>
-            setIsThinking(false),
-        );
+        await generateBotResponse([...chatHistory, { role: 'user', text: prompt }]);
+        setIsThinking(false);
+        return true;
     }
 
-    const scheduleText = doctor.timeSlots
-        .slice(0, 5) // Limit to 5 time slots
-        .map((slot) => `• ${formatDate(slot.day)}: ${convertTime(slot.startingTime)} – ${convertTime(slot.endingTime)}`)
-        .join('\n');
+    // Group by day for better formatting
+    const scheduleSummary = doctor.availableSchedules
+        .map((entry) => {
+            const shiftDescriptions = entry.shifts.map((shift) => `**${SHIFT_LABELS[shift.trim()]}**`).join(', ');
+            return `**${entry.day}** during the ${shiftDescriptions}`;
+        })
+        .join(' and ');
 
     const prompt = `
-        A user wants to know the availability of Dr. ${doctor.fullname}.
-        Please answer in the following format exactly, make sure the format of scheduleText has bullet points and line breaks like when I passed it in.
-        
-        This is the formatted response:
-            Here are some available time slots of Dr. ${doctor.fullname}:
-            ${scheduleText}
-            Please visit Dr. ${doctor.fullname}’s profile on HealthMate to view the full schedule and book an appointment through our easy booking process.
+        A user asked about the working schedule of Dr. ${doctor.fullname}.
 
-        Please answer in no more than 2–3 sentences:
-        1. Politely suggest that the user visit Dr. ${doctor.fullname}’s profile page on HealthMate to view the full schedule and book an appointment.
-        2. Suggest how the user can book an appointment via HealthMate
+        Please respond with:
+        1. A sentence like: "Dr. ${doctor.fullname} works on ${scheduleSummary}."
+        2. A second sentence that politely invites the user to visit Dr. ${doctor.fullname}’s profile on HealthMate to view detailed time slots and book an appointment.
+
+        Keep it friendly and professional, no more than 2 sentences total.
     `;
 
     await generateBotResponse([...chatHistory, { role: 'user', text: prompt }]).finally(() => setIsThinking(false));
@@ -65,28 +64,36 @@ export const handleSymptomBasedResponse = async ({
     if (symptomData && symptomData.specialty) {
         const { specialty, doctors } = symptomData;
 
+        const formatSchedule = (availableSchedules) => {
+            if (!Array.isArray(availableSchedules) || availableSchedules.length === 0)
+                return '**No schedule available**';
+            return availableSchedules
+                .map((entry) => {
+                    const shifts = entry.shifts.map((shift) => `**${SHIFT_LABELS[shift.trim()]}**`).join(', ');
+                    return `**${entry.day}** during the ${shifts}`;
+                })
+                .join(' and ');
+        };
+
         const doctorInfoText = doctors
             .map((doctor, index) => {
-                const slot = doctor.timeSlots?.[0];
-                return `${index + 1}. Dr. ${doctor.fullname} – Available: ${slot?.day} ${slot?.startingTime}–${
-                    slot?.endingTime
-                }`;
+                const scheduleSummary = formatSchedule(doctor.availableSchedules);
+                return `${index + 1}. **Dr. ${doctor.fullname}** – Available: ${scheduleSummary}`;
             })
             .join('\n');
 
         const prompt = `
-            User symptom: ${userMessage}
-            Mapped specialty: ${specialty}
+            User symptom: ${userMessage}  
+            Mapped specialty: **${specialty}**
 
-            Available doctors:
-            ${doctorInfoText || 'No available doctors at the moment.'}
+            Available doctors:  
+            ${doctorInfoText || '**No available doctors at the moment.**'}
 
-            Please recommend a suitable doctor based on the symptoms. Do not respond to specialties not listed in HealthMate
+            Please recommend a suitable doctor based on the symptoms. Do not respond to specialties not listed in HealthMate.  
             Respond in 2–3 sentences max, focusing on:
-                1. The matched specialty
-                2. A doctor’s name and availability
-                3. A short booking instruction
-            Avoid over-explaining the specialty unless it's essential.
+                1. The matched specialty (bold)
+                2. A doctor’s name and availability (bold both name and shifts)
+                3. A short booking instruction (1 line max)
         `;
 
         await generateBotResponse([...chatHistory, { role: 'user', text: prompt }]).finally(() => setIsThinking(false));

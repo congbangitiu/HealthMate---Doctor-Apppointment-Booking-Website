@@ -2,7 +2,7 @@ import { HealthMateInfo } from '../../assets/data/chatbot/HealthMateInfo';
 import { webInstructions } from '../../assets/data/chatbot/webInstructions';
 import { responseInstructions } from '../../assets/data/chatbot/responseInstructions';
 
-const generatePrompt = ({ text, token, role, chatHistory }) => {
+const generatePrompt = ({ text, token, role, chatHistory, fallbackFeature }) => {
     const isNotLoggedIn = !token || token === 'null' || token === 'undefined';
 
     const isAskingAuthentication = (question) => {
@@ -25,7 +25,24 @@ const generatePrompt = ({ text, token, role, chatHistory }) => {
             - How to Use the Website: ${webInstructions}
             - How to respond: ${responseInstructions}
             - Chat history: ${chatHistory.map((item) => `${item.role}: ${item.text}`).join('\n')}
-    `;
+
+        Formatting rules:
+            - If the response contains a list of items (services, steps, features, departments, etc.), please use:
+                • Bullet points (• or -) when order is not important
+                • Numbered list (1., 2., 3., ...) when steps or order matters
+            - Place each item on a separate line.
+            - Do not group all items into a single paragraph.
+        `;
+
+    if (fallbackFeature) {
+        prompt += `
+            The user asked about a feature (${fallbackFeature}) that is not currently supported for their role (${role}). 
+            Please respond politely to inform them that this feature is not available to their current role.
+            Then, guide them on how to access this information manually by referring to the relevant part in "webInstructions".
+            The user's question is: "${text}"
+        `;
+        return prompt;
+    }
 
     if (isNotLoggedIn) {
         if (isAskingAuthentication(text)) {

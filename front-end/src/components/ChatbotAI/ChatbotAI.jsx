@@ -10,6 +10,12 @@ import { HealthMateInfo } from '../../assets/data/chatbot/HealthMateInfo';
 import Typewriter from 'typewriter-effect';
 import { authContext } from '../../context/AuthContext';
 import extractName from '../../utils/extractName';
+import formatListResponse from '../../utils/chatbot/formatListResponse';
+import {
+    isGeneralWebsiteQuestion,
+    isAskingAboutAppointments,
+    isAskingAboutSymptoms,
+} from '../../utils/chatbot/determineQuestionType';
 import sampleAnswers from '../../assets/data/chatbot/sampleAnswer';
 import generatePrompt from '../../utils/chatbot/generatePrompt';
 import handleDoctorScheduleQuery from '../../utils/chatbot/handleDoctorScheduleQuery';
@@ -18,7 +24,7 @@ import {
     handleDoctorAvailabilityResponse,
     handleSymptomBasedResponse,
 } from '../../utils/chatbot/handlePatientQuestion';
-import { handleDoctorTodayAppointments } from '../../utils/chatbot/handleDoctorQuestion';
+import { handleDoctorAppointments } from '../../utils/chatbot/handleDoctorQuestion';
 
 const cx = classNames.bind(styles);
 
@@ -58,16 +64,6 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
         'Any system alerts today?',
         'Which appointments were canceled this week?',
     ]);
-
-    // Format the response
-    const formatListResponse = (text) => {
-        return text
-            .replace(/\n\*/g, '   *') // Format bullet points (*) by adding indentation
-            .replace(/\n-/g, '   -') // Format dash lists (-) by adding indentation
-            .replace(/\*\s/g, '   * ') // Ensure bullet points (*) start with proper spacing
-            .replace(/-\s/g, '   - ') // Ensure dash lists (-) start with proper spacing
-            .replace(/\n(\d+)\.\s*(.*)/g, '\n   <strong>$1.</strong> $2');
-    };
 
     // Retry fetch function to handle rate limits and server overloads
     const retryFetch = async (url, options, retries = 3, delay = 1500) => {
@@ -111,7 +107,7 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
             }
 
             // Extract and format the bot's response
-            let apiResponseText = data.candidates[0].content.parts[0].text.replace(/\*\*(.*?)\*\*/g, '$1').trim();
+            let apiResponseText = data.candidates[0].content.parts[0].text.trim();
             apiResponseText = formatListResponse(apiResponseText);
 
             updateHistory(apiResponseText);
@@ -125,22 +121,6 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
         }
     };
 
-    // Check if the user is asking about general website usage
-    const isGeneralWebsiteQuestion = (text) => {
-        const lower = text.toLowerCase();
-        return (
-            lower.includes('how to') ||
-            lower.includes('navigate') ||
-            lower.includes('find a doctor') ||
-            lower.includes('book an appointment') ||
-            lower.includes('filter doctors') ||
-            lower.includes('online consultation') ||
-            lower.includes('profile') ||
-            lower.includes('dashboard') ||
-            lower.includes('reset password')
-        );
-    };
-
     // Send user message and trigger bot response
     const sendUserMessage = async (userMessage) => {
         if (!userMessage.trim()) return;
@@ -148,6 +128,33 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
         setChatHistory((history) => [...history, { role: 'user', text: userMessage }]);
         setIsThinking(true);
 
+        const fallbackForUnsupportedRole = (featureText) => {
+            const fallbackPrompt = generatePrompt({
+                text: userMessage,
+                token,
+                role,
+                chatHistory,
+                fallbackFeature: featureText,
+            });
+
+            generateBotResponse([...chatHistory, { role: 'user', text: fallbackPrompt }]).finally(() =>
+                setIsThinking(false),
+            );
+        };
+
+        // Check if doctor ask about symptoms or doctor availability
+        if (role !== 'patient' && isAskingAboutSymptoms(userMessage)) {
+            fallbackForUnsupportedRole('symptom-based diagnosis or doctor availability');
+            return;
+        }
+
+        // Check if user is asking about appointments
+        if (role !== 'doctor' && isAskingAboutAppointments(userMessage)) {
+            fallbackForUnsupportedRole('appointment schedules');
+            return;
+        }
+
+        // General website questions
         if (isGeneralWebsiteQuestion(userMessage)) {
             const prompt = generatePrompt({
                 text: userMessage,
@@ -161,37 +168,43 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
             );
         }
 
-        const handledTodayAppointments = await handleDoctorTodayAppointments({
-            userMessage,
-            role,
-            chatHistory,
-            setIsThinking,
-            generateBotResponse,
-            token,
-        });
-        if (handledTodayAppointments) return;
+        // Handle doctor-specific questions
+        if (role === 'doctor') {
+            const handledAppointmentsAppointments = await handleDoctorAppointments({
+                userMessage,
+                role,
+                chatHistory,
+                setIsThinking,
+                generateBotResponse,
+                token,
+            });
+            if (handledAppointmentsAppointments) return;
+        }
 
-        // STEP 1: Check if user is asking about a specific doctor
-        const handledDoctor = await handleDoctorAvailabilityResponse({
-            userMessage,
-            chatHistory,
-            setIsThinking,
-            generateBotResponse,
-            handleDoctorScheduleQuery,
-        });
-        if (handledDoctor) return;
+        // Handle patient-specific questions
+        if (role === 'patient') {
+            // Check if user is asking about a specific doctor
+            const handledDoctorAvailability = await handleDoctorAvailabilityResponse({
+                userMessage,
+                chatHistory,
+                setIsThinking,
+                generateBotResponse,
+                handleDoctorScheduleQuery,
+            });
+            if (handledDoctorAvailability) return;
 
-        // STEP 2: Check if it's a symptom-based question
-        const handledSymptom = await handleSymptomBasedResponse({
-            userMessage,
-            chatHistory,
-            setIsThinking,
-            generateBotResponse,
-            handleSymptomQuery,
-        });
-        if (handledSymptom) return;
+            // Check if it's a symptom-based question
+            const handledSymptom = await handleSymptomBasedResponse({
+                userMessage,
+                chatHistory,
+                setIsThinking,
+                generateBotResponse,
+                handleSymptomQuery,
+            });
+            if (handledSymptom) return;
+        }
 
-        // STEP 3: Fallback – generic prompt
+        // Case when the question is not handled by specific functions
         generateBotResponse([
             ...chatHistory,
             {

@@ -1,26 +1,28 @@
 import { BASE_URL } from '../../../config';
 
 const handleDoctorScheduleQuery = async (text) => {
-    // Match Dr. + full name (max 3 words), stop at next word boundary
-    const match = text.match(/Dr\.?\s+(([A-Z][a-zÀ-ỹ]+)(\s+[A-Z][a-zÀ-ỹ]+){0,2})\b/);
-
-    if (!match) return null;
-
-    const name = match[1].trim();
-
-    const response = await fetch(`${BASE_URL}/doctors?query=${name}`);
-    const data = await response.json();
-
+    // Normalize the input text to make it easier to match with doctor names
     const normalize = (str) =>
         str
             .toLowerCase()
-            .replace(/[^a-z\s]/gi, '')
+            .replace(/[^a-zà-ỹ\s]/gi, '')
+            .replace(/\b(dr|doctor)\b/g, '')
             .trim();
 
-    const matchedDoctor = data?.data?.find((doctor) => {
-        const dbName = normalize(doctor.fullname);
-        const queryName = normalize(name);
-        return dbName.includes(queryName) || queryName.includes(dbName);
+    const cleanedText = normalize(text);
+    const inputWords = cleanedText.split(/\s+/);
+
+    const response = await fetch(`${BASE_URL}/doctors`);
+    const data = await response.json();
+
+    const doctors = data?.data || [];
+
+    const matchedDoctor = doctors.find((doctor) => {
+        const doctorName = normalize(doctor.fullname);
+        const nameWords = doctorName.split(/\s+/);
+
+        // Check if any word in the doctor's name matches any word in the input text
+        return nameWords.some((word) => inputWords.includes(word));
     });
 
     return matchedDoctor || null;

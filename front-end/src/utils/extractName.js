@@ -1,5 +1,3 @@
-// utils/extractName.js
-
 /**
  * Extract the last two words from a full name string
  * @param {string} fullName - The full name to extract from

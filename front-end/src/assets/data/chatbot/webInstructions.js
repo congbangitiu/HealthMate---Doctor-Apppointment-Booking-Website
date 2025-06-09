@@ -62,7 +62,7 @@ export const webInstructions = `
     B. USER HAS SIGNED IN
         1. General Instructions for All Users:
             - Viewing Doctor Information:
-                + To view detailed information about doctors, go to the top navigation bar and click on “Doctors.” This will show you a list of all doctors. You can search for doctors by name or specialty. To see more details about a specific doctor, click on the arrow at the bottom right of their profile card. You will find information about their education, work experience, and specialties.
+                + To view detailed information about doctors, go to the top navigation bar and click on “Doctors”. This will show you a list of all doctors. You can search for doctors by name or specialty. To see more details about a specific doctor, click on the arrow at the bottom right of their profile card. You will find information about their education, work experience, and specialties.
                 + You can also read and leave feedback for the doctor by selecting the “Feedback” tab.
                 + The most important feature is the ability to book an appointment with the doctor. To do this, click on “Available Time Slots” on the doctor’s profile page. After selecting a time and completing the payment, your appointment will be confirmed.
                 + Payment Options: You can pay either in cash or using an e-wallet. Currently, HealthMate only supports online payments through Stripe.
