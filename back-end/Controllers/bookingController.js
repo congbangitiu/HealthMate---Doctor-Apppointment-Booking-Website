@@ -2,9 +2,8 @@ import User from '../Models/UserSchema.js';
 import Doctor from '../Models/DoctorSchema.js';
 import Booking from '../Models/BookingSchema.js';
 import Stripe from 'stripe';
-import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
-
+import mailTransporter from '../utils/mailTransporter.js';
 import formatDate from '../../front-end/src/utils/formatDate.js';
 import convertTime from '../../front-end/src/utils/convertTime.js';
 
@@ -13,16 +12,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const sendBookingConfirmationEmail = async (userEmail, bookingInfo) => {
     try {
-        const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false,
-            auth: {
-                user: process.env.EMAIL_USERNAME,
-                pass: process.env.EMAIL_PASSWORD,
-            },
-        });
-
         const mailOptions = {
             from: `"HealthMate" <${process.env.EMAIL_USERNAME}>`,
             to: userEmail,
@@ -65,7 +54,7 @@ const sendBookingConfirmationEmail = async (userEmail, bookingInfo) => {
             `,
         };
 
-        await transporter.sendMail(mailOptions);
+        await mailTransporter.sendMail(mailOptions);
     } catch (error) {
         console.error('Error sending email:', error);
     }
@@ -156,16 +145,6 @@ export const createBooking = async (req, res) => {
 
 const sendReExaminationConfirmationEmail = async (userEmail, bookingInfo) => {
     try {
-        const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false,
-            auth: {
-                user: process.env.EMAIL_USERNAME,
-                pass: process.env.EMAIL_PASSWORD,
-            },
-        });
-
         const mailOptions = {
             from: `"HealthMate" <${process.env.EMAIL_USERNAME}>`,
             to: userEmail,
@@ -202,7 +181,7 @@ const sendReExaminationConfirmationEmail = async (userEmail, bookingInfo) => {
             `,
         };
 
-        await transporter.sendMail(mailOptions);
+        await mailTransporter.sendMail(mailOptions);
     } catch (error) {
         console.error('Error sending email:', error);
     }

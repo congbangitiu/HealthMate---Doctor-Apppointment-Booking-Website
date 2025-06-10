@@ -130,12 +130,23 @@ export const getDoctorProfile = async (req, res) => {
 
 export const getAllDoctorAppointments = async (req, res) => {
     try {
-        const { day } = req.query;
+        const { day, createdToday } = req.query;
 
         const filter = { doctor: req.userId };
 
         if (day) {
             filter['timeSlot.day'] = day;
+        }
+
+        if (createdToday === 'true') {
+            const now = new Date();
+            const startOfToday = new Date(now.setHours(0, 0, 0, 0));
+            const endOfToday = new Date(now.setHours(23, 59, 59, 999));
+
+            filter.createdAt = {
+                $gte: startOfToday,
+                $lte: endOfToday,
+            };
         }
 
         const appointments = await Booking.find(filter).populate('user', '-password').lean();
