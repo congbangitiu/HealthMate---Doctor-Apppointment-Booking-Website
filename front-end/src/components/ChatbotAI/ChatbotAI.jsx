@@ -364,12 +364,7 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
 
                                                     typewriter
                                                         .changeDelay(15)
-                                                        .typeString(
-                                                            chat.text
-                                                                .replace(/\n/g, '<br />')
-                                                                .replace(/\*\*/g, '')
-                                                                .replace(/\s{2,}/g, ' '),
-                                                        )
+                                                        .typeString(chat.text)
                                                         .callFunction(() => {
                                                             // Scroll to the bottom when text is being typed
                                                             if (chatBodyRef.current) {
