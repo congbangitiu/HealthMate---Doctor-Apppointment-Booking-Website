@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { PropTypes } from 'prop-types';
-import truncateText from '../../utils/truncateText';
+import truncateText from '../../utils/text/truncateText';
 
 const GeneralTooltip = styled(({ className, ...props }) => <Tooltip {...props} classes={{ popper: className }} />)(
     ({ theme }) => ({

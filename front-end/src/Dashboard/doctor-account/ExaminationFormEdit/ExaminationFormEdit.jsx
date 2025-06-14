@@ -12,7 +12,7 @@ import { PropTypes } from 'prop-types';
 import { toast } from 'react-toastify';
 import { PlusOutlined } from '@ant-design/icons';
 import { Image, Upload } from 'antd';
-import { uploadImageToCloudinary } from '../../../utils/uploadCloudinary';
+import { uploadImageToCloudinary } from '../../../utils/services/uploadCloudinary';
 import { useMediaQuery } from '@mui/material';
 import SignatureConfirmation from '../../../components/SignatureConfirmation/SignatureConfirmation';
 

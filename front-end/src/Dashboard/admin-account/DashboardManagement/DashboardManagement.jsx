@@ -9,7 +9,7 @@ import TimeAppointmentBarChart from './../Charts/TimeAppointmentBarChart/TimeApp
 import GenderDonutChart from '../Charts/GenderDonutChart/GenderDonutChart';
 import { FaStar } from 'react-icons/fa';
 import { PropTypes } from 'prop-types';
-import roundNumber from '../../../utils/roundNumber';
+import roundNumber from '../../../utils/number/roundNumber';
 
 const cx = classNames.bind(styles);
 

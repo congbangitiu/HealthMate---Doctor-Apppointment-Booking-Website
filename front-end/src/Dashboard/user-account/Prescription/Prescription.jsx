@@ -7,12 +7,12 @@ import Watermark from '../../../assets/images/watermark30.png';
 import { BASE_URL } from '../../../../config';
 import useFetchData from '../../../hooks/useFetchData';
 import Loader from '../../../components/Loader/Loader';
-import formatDate from '../../../utils/formatDate';
+import formatDate from '../../../utils/date-time/formatDate';
 import { TbDownload } from 'react-icons/tb';
 import SyncLoader from 'react-spinners/SyncLoader';
 import { FaCircleExclamation } from 'react-icons/fa6';
 import { QRCodeSVG } from 'qrcode.react';
-import { generateAndDownloadPDF } from '../../../utils/handlePDF';
+import { generateAndDownloadPDF } from '../../../utils/file/handlePDF';
 import { useMediaQuery } from '@mui/material';
 
 const cx = classNames.bind(styles);

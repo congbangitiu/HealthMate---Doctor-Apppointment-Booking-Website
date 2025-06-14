@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './Notifications.module.scss';
-import formatTimeAgo from '../../utils/formatTimeAgo';
-import formatDate from '../../utils/formatDate';
-import convertTime from '../../utils/convertTime';
+import formatTimeAgo from '../../utils/date-time/formatTimeAgo';
+import formatDate from '../../utils/date-time/formatDate';
+import convertTime from '../../utils/date-time/convertTime';
 import { IoIosNotifications, IoIosArrowBack } from 'react-icons/io';
 import { useMediaQuery } from '@mui/material';
 

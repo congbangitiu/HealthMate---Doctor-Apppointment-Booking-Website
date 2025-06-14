@@ -6,7 +6,7 @@ import { PropTypes } from 'prop-types';
 import { TbDownload } from 'react-icons/tb';
 import Logo from '../../../assets/images/logo.png';
 import Watermark from '../../../assets/images/watermark30.png';
-import formatDate from '../../../utils/formatDate';
+import formatDate from '../../../utils/date-time/formatDate';
 import SyncLoader from 'react-spinners/SyncLoader';
 import Loader from '../../../components/Loader/Loader';
 import { Image } from 'antd';
@@ -14,7 +14,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { BASE_URL } from '../../../../config';
 import useFetchData from '../../../hooks/useFetchData';
 import { FaCircleExclamation } from 'react-icons/fa6';
-import { generateAndDownloadPDF } from '../../../utils/handlePDF';
+import { generateAndDownloadPDF } from '../../../utils/file/handlePDF';
 import { useMediaQuery } from '@mui/material';
 
 const cx = classNames.bind(styles);

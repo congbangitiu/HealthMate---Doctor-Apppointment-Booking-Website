@@ -16,12 +16,12 @@ import {
     uploadImageToCloudinary,
     uploadVideoToCloudinary,
     uploadDocumentToCloudinary,
-} from '../../utils/uploadCloudinary';
+} from '../../utils/services/uploadCloudinary';
 import MoonLoader from 'react-spinners/MoonLoader';
 import { Image } from 'antd';
-import formatTimestamp from '../../utils/formatTimestamp';
-import convertFileSize from '../../utils/convertFileSize';
-import truncateText from '../../utils/truncateText';
+import formatTimestamp from '../../utils/date-time/formatTimestamp';
+import convertFileSize from '../../utils/file/convertFileSize';
+import truncateText from '../../utils/text/truncateText';
 import { IoIosArrowBack } from 'react-icons/io';
 
 import { io } from 'socket.io-client';

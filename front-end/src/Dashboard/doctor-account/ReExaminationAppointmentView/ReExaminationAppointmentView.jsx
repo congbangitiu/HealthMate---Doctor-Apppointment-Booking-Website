@@ -4,14 +4,14 @@ import styles from './ReExaminationAppointmentView.module.scss';
 import Logo from '../../../assets/images/logo.png';
 import Watermark from '../../../assets/images/watermark30.png';
 import { TbDownload } from 'react-icons/tb';
-import formatDate from '../../../utils/formatDate';
-import convertTime from '../../../utils/convertTime';
+import formatDate from '../../../utils/date-time/formatDate';
+import convertTime from '../../../utils/date-time/convertTime';
 import SyncLoader from 'react-spinners/SyncLoader';
 import { PropTypes } from 'prop-types';
 import { BASE_URL, token } from '../../../../config';
 import { QRCodeSVG } from 'qrcode.react';
 import Loader from '../../../components/Loader/Loader';
-import { generateAndDownloadPDF, generatePDFBlob } from '../../../utils/handlePDF';
+import { generateAndDownloadPDF, generatePDFBlob } from '../../../utils/file/handlePDF';
 import { useMediaQuery } from '@mui/material';
 
 const cx = classNames.bind(styles);
@@ -146,7 +146,7 @@ const ReExaminationAppointmentView = ({ appointment, prescription, onPDFUploadSu
                                 </p>
                             </span>
                         </div>
-                        {appointment.status === 'done' && appointment.nextAppointment.timeSlot && (
+                        {appointment.status === 'done' && appointment.nextAppointment?.timeSlot && (
                             <>
                                 <div className={cx('notice')}>
                                     <div>
@@ -163,11 +163,11 @@ const ReExaminationAppointmentView = ({ appointment, prescription, onPDFUploadSu
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>{formatDate(appointment.nextAppointment.timeSlot?.day)}</td>
+                                                <td>{formatDate(appointment.nextAppointment?.timeSlot?.day)}</td>
                                                 <td>
-                                                    {convertTime(appointment.nextAppointment.timeSlot?.startingTime)}
+                                                    {convertTime(appointment.nextAppointment?.timeSlot?.startingTime)}
                                                 </td>
-                                                <td>{convertTime(appointment.nextAppointment.timeSlot?.endingTime)}</td>
+                                                <td>{convertTime(appointment.nextAppointment?.timeSlot?.endingTime)}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -195,7 +195,7 @@ const ReExaminationAppointmentView = ({ appointment, prescription, onPDFUploadSu
                         )}
                     </div>
 
-                    {appointment.status === 'done' && appointment.nextAppointment.timeSlot && (
+                    {appointment.status === 'done' && appointment.nextAppointment?.timeSlot && (
                         <button onClick={handleDownloadPDF}>
                             {loadingBtn ? (
                                 <SyncLoader size={10} color="#ffffff" />

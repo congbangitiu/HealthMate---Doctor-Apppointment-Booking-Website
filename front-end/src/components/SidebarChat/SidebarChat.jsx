@@ -6,9 +6,9 @@ import { IoMdCloseCircle } from 'react-icons/io';
 import PropTypes from 'prop-types';
 import Loader from '../../components/Loader/Loader';
 import Error from '../../components/Error/Error';
-import truncateFullname from './../../utils/truncateFullname';
-import formatTimestamp from './../../utils/formatTimestamp';
-import truncateText from './../../utils/truncateText';
+import truncateFullname from './../../utils/text/truncateFullname';
+import formatTimestamp from './../../utils/date-time/formatTimestamp';
+import truncateText from '../../utils/text/truncateText';
 
 const cx = classNames.bind(styles);
 

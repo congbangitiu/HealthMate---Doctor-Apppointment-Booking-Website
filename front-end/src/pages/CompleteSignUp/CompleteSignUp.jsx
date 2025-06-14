@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { auth } from '../../utils/firebase';
+import { auth } from '../../utils/services/firebase';
 import { toast } from 'react-toastify';
 import { isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
 import { BASE_URL } from '../../../config';

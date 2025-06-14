@@ -5,8 +5,8 @@ import styles from './ConfirmBooking.module.scss';
 import { BASE_URL, token } from '../../../../config';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
-import convertTime from '../../../utils/convertTime';
-import formatDate from '../../../utils/formatDate';
+import convertTime from '../../../utils/date-time/convertTime';
+import formatDate from '../../../utils/date-time/formatDate';
 
 const cx = classNames.bind(styles);
 

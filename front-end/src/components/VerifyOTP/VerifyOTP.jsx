@@ -5,7 +5,7 @@ import styles from './VerifyOTP.module.scss';
 import { LiaSmsSolid } from 'react-icons/lia';
 import { MdOutlineEmail } from 'react-icons/md';
 import SyncLoader from 'react-spinners/SyncLoader';
-import truncateNumber from '../../utils/truncateNumber';
+import truncateNumber from '../../utils/number/truncateNumber';
 import OTPInput from 'otp-input-react';
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../../config';

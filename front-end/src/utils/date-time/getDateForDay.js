@@ -1,4 +1,4 @@
-const getNextDateForDay = (dayName) => {
+const getDateForDay = (dayName) => {
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const today = new Date();
     const todayIndex = today.getDay(); // 0–6
@@ -13,4 +13,4 @@ const getNextDateForDay = (dayName) => {
     return nextDate.toISOString().split('T')[0];
 };
 
-export default getNextDateForDay;
+export default getDateForDay;

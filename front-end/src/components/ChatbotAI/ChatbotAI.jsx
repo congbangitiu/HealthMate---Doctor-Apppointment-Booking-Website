@@ -9,7 +9,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import { HealthMateInfo } from '../../assets/data/chatbot/HealthMateInfo';
 import Typewriter from 'typewriter-effect';
 import { authContext } from '../../context/AuthContext';
-import extractName from '../../utils/extractName';
+import extractName from '../../utils/text/extractName';
 import formatListResponse from '../../utils/chatbot/formatListResponse';
 import {
     isGeneralWebsiteQuestion,

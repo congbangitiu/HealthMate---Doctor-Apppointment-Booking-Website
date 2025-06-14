@@ -4,8 +4,8 @@ import Booking from '../Models/BookingSchema.js';
 import Stripe from 'stripe';
 import dotenv from 'dotenv';
 import mailTransporter from '../utils/mailTransporter.js';
-import formatDate from '../../front-end/src/utils/formatDate.js';
-import convertTime from '../../front-end/src/utils/convertTime.js';
+import formatDate from '../../front-end/src/utils/date-time/formatDate.js';
+import convertTime from '../../front-end/src/utils/date-time/convertTime.js';
 
 dotenv.config();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);

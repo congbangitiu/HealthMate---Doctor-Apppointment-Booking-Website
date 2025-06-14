@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import styles from './Doctor.module.scss';
 import { FaStar } from 'react-icons/fa';
 import { PropTypes } from 'prop-types';
-import roundNumber from '../../utils/roundNumber';
+import roundNumber from '../../utils/number/roundNumber';
 import DefaultMaleDoctorAvatar from '../../assets/images/default-male-doctor.png';
 import DefaultFemaleDoctorAvatar from '../../assets/images/default-female-doctor.png';
 

@@ -4,8 +4,8 @@ import styles from './PatientAppointment.module.scss';
 import { MdEmail, MdOutlineDone, MdOutlinePendingActions } from 'react-icons/md';
 import { FaPhoneAlt } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io';
-import formatDate from './../../utils/formatDate';
-import convertTime from './../../utils/convertTime';
+import formatDate from '../../utils/date-time/formatDate';
+import convertTime from './../../utils/date-time/convertTime';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { useMediaQuery } from '@mui/material';
 

@@ -4,8 +4,8 @@ import classNames from 'classnames/bind';
 import styles from './AppointmentManagement.module.scss';
 import Selections from '../../../components/Selections/Selections';
 import { PropTypes } from 'prop-types';
-import convertTime from './../../../utils/convertTime';
-import formatDate from './../../../utils/formatDate';
+import convertTime from './../../../utils/date-time/convertTime';
+import formatDate from '../../../utils/date-time/formatDate';
 import Pagination from '../../../components/Pagination/Pagination';
 
 const cx = classNames.bind(styles);

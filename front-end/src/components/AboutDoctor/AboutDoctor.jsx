@@ -1,4 +1,4 @@
-import formatDate from '../../utils/formatDate';
+import formatDate from '../../utils/date-time/formatDate';
 import classNames from 'classnames/bind';
 import styles from './AboutDoctor.module.scss';
 import DoctorActivity1 from '../../assets/images/doctor-activity-1.webp';

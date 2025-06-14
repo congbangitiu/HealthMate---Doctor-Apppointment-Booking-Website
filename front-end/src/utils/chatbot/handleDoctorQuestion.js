@@ -1,5 +1,5 @@
-import formatDate from '../formatDate';
-import convertTime from '../convertTime';
+import formatDate from '../date-time/formatDate';
+import convertTime from '../date-time/convertTime';
 import { BASE_URL } from '../../../config';
 
 export const handleDoctorAppointments = async ({

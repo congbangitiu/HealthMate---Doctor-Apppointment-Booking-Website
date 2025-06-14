@@ -1,8 +1,8 @@
 import mailTransporter from '../utils/mailTransporter.js';
 import Booking from '../Models/BookingSchema.js';
 import Doctor from '../Models/DoctorSchema.js';
-import formatDate from '../../front-end/src/utils/formatDate.js';
-import convertTime from '../../front-end/src/utils/convertTime.js';
+import formatDate from '../../front-end/src/utils/date-time/formatDate.js';
+import convertTime from '../../front-end/src/utils/date-time/convertTime.js';
 import cron from 'node-cron';
 
 const generateAppointmentWrapper = (appointments, doctor) => {
@@ -16,8 +16,8 @@ const generateAppointmentWrapper = (appointments, doctor) => {
                     <ul style="margin: 8px 0 0 16px; padding: 0; list-style-type: disc; font-size: 14px;">
                         <li><strong>Date:</strong> ${formatDate(appointment.timeSlot.day)}</li>
                         <li><strong>Time:</strong> ${convertTime(appointment.timeSlot.startingTime)} – ${convertTime(
-                            appointment.timeSlot.endingTime,
-                        )}</li>
+                appointment.timeSlot.endingTime,
+            )}</li>
                     </ul>
                 </div>
             `,
@@ -29,8 +29,8 @@ const generateAppointmentWrapper = (appointments, doctor) => {
             <p style="margin-bottom: 6px;">Dear Dr. ${doctor.fullname},</p>
             <p style="margin-bottom: 16px;">
                 Here ${appointments.length > 1 ? 'are' : 'is'} the appointment${
-                    appointments.length > 1 ? 's' : ''
-                } booked today 
+        appointments.length > 1 ? 's' : ''
+    } booked today 
                 <strong>(${formatDate(new Date())})</strong>:
             </p>
             ${rows}

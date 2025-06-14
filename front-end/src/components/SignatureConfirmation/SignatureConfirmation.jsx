@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Watermark from '../../assets/images/watermark30.png';
 import classNames from 'classnames/bind';
 import styles from './SignatureConfirmation.module.scss';
-import formatDate from '../../utils/formatDate';
+import formatDate from '../../utils/date-time/formatDate';
 import { toast } from 'react-toastify';
 import { BASE_URL, token } from '../../../config';
 import SyncLoader from 'react-spinners/SyncLoader';

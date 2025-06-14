@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './SidePanel.module.scss';
-import convertTime from '../../utils/convertTime';
+import convertTime from '../../utils/date-time/convertTime';
 import ConfirmBooking from '../../Dashboard/user-account/ConfirmBooking/ConfirmBooking';
 import { Dialog, Slide, useMediaQuery } from '@mui/material';
-import formatDate from '../../utils/formatDate';
+import formatDate from '../../utils/date-time/formatDate';
 import { BiExpandAlt, BiCollapseAlt } from 'react-icons/bi';
 
 const cx = classNames.bind(styles);

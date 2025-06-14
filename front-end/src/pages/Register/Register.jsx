@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import {uploadImageToCloudinary} from '../../utils/uploadCloudinary';
+import { uploadImageToCloudinary } from '../../utils/services/uploadCloudinary.js';
 import { BASE_URL } from '../../../config';
 import classNames from 'classnames/bind';
 import styles from './Register.module.scss';
@@ -13,7 +13,7 @@ import { CiMobile3 } from 'react-icons/ci';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
 import VerifyOTP from '../../components/VerifyOTP/VerifyOTP.jsx';
-import { auth, RecaptchaVerifier, signInWithPhoneNumber } from '../../utils/firebase';
+import { auth, RecaptchaVerifier, signInWithPhoneNumber } from '../../utils/services/firebase';
 
 const cx = classNames.bind(styles);
 

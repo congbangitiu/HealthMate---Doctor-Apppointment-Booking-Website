@@ -9,7 +9,7 @@ import { FaStar, FaLongArrowAltRight } from 'react-icons/fa';
 import { PiSmileySad } from 'react-icons/pi';
 import { CiCirclePlus } from 'react-icons/ci';
 import { Dialog, Slide, useMediaQuery } from '@mui/material';
-import roundNumber from '../../../utils/roundNumber';
+import roundNumber from '../../../utils/number/roundNumber';
 import Loader from '../../../components/Loader/Loader';
 import Error from '../../../components/Error/Error';
 import SyncLoader from 'react-spinners/SyncLoader';

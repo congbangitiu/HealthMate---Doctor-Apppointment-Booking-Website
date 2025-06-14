@@ -3,9 +3,9 @@ import classNames from 'classnames/bind';
 import styles from './TimeSlots.module.scss';
 import PropTypes from 'prop-types';
 import { MenuItem, Select, Box, useMediaQuery, useTheme } from '@mui/material';
-import formatDate from '../../../utils/formatDate';
-import convertTime from '../../../utils/convertTime';
-import getNextDateForDay from '../../../utils/getNextDateForDay';
+import formatDate from '../../../utils/date-time/formatDate';
+import convertTime from '../../../utils/date-time/convertTime';
+import getDateForDay from '../../../utils/date-time/getDateForDay';
 
 const cx = classNames.bind(styles);
 
@@ -166,7 +166,7 @@ const TimeSlots = ({
         const allSlots = [];
 
         selectedDays.forEach((day) => {
-            const date = getNextDateForDay(day);
+            const date = getDateForDay(day);
 
             selectedTimes[day]?.forEach((period) => {
                 const slots = generateTimeSlots(period, date);

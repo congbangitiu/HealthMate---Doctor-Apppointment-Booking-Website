@@ -3,11 +3,9 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './ReExaminationAppointmentEdit.module.scss';
 import Logo from '../../../assets/images/logo.png';
-import Watermark from '../../../assets/images/watermark30.png';
 import SyncLoader from 'react-spinners/SyncLoader';
 import { BASE_URL, token } from '../../../../config';
 import { toast } from 'react-toastify';
-import formatDate from '../../../utils/formatDate';
 
 const cx = classNames.bind(styles);
 

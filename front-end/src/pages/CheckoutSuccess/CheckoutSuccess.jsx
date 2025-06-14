@@ -6,8 +6,8 @@ import { MdDone } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import { BASE_URL, token } from '../../../config';
-import convertTime from '../../utils/convertTime';
-import formatDate from '../../utils/formatDate';
+import convertTime from '../../utils/date-time/convertTime';
+import formatDate from '../../utils/date-time/formatDate';
 import { useMediaQuery } from '@mui/material';
 
 const cx = classNames.bind(styles);

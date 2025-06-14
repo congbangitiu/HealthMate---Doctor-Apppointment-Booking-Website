@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import formatDate from '../../utils/formatDate';
+import formatDate from '../../utils/date-time/formatDate';
 import { BASE_URL, token } from '../../../config';
 import classNames from 'classnames/bind';
 import styles from './FeedbackDoctor.module.scss';
