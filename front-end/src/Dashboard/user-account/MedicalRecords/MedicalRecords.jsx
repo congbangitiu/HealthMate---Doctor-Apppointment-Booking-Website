@@ -110,17 +110,16 @@ const MedicalRecords = () => {
                                 height: '3px',
                             },
                         }}
-                        style={{}}
                     >
                         <Tab value="examination-form" label="Examination Form" />
                         <Tab value="prescription" label="Prescription" />
-                        {appointment.status === 'done' && appointment.nextAppointment.timeSlot && (
+                        {appointment.status === 'done' && appointment.nextAppointment?.timeSlot && (
                             <Tab value="re-examination-appointment" label="Re-Examination Appointment" />
                         )}
                     </Tabs>
                 </div>
                 {activeTab === 'examination-form' ? (
-                    <ExaminationForm />
+                    <ExaminationForm appointment={appointment} />
                 ) : activeTab === 'prescription' ? (
                     <Prescription />
                 ) : (

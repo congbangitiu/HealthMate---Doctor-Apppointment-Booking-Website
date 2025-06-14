@@ -23,7 +23,7 @@ const doctorSchema = new mongoose.Schema({
             shifts: [
                 {
                     type: String,
-                    enum: ['morning', 'afternoon', 'evening'],
+                    enum: ['Morning', 'Afternoon', 'Evening'],
                     required: true,
                 },
             ],

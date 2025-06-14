@@ -17,7 +17,7 @@ const TimeAppointmentBarChart = () => {
 
     useEffect(() => {
         const loadCSVData = async () => {
-            const response = await fetch('/mock-data/Healmate_Appointment_Record_2023.csv');
+            const response = await fetch('/mock-data/Healmate_Appointment_Record_2024.csv');
             const rawData = await response.text();
             const parsedData = d3.csvParse(rawData);
             setData(parsedData);
@@ -156,7 +156,7 @@ const TimeAppointmentBarChart = () => {
             .text(
                 `Number of patients scheduled for appointments in ${
                     selectedTime === 'month' ? selectedMonth + ',' : 'the ' + selectedQuarter + ' quarter of'
-                } 2023`,
+                } 2024`,
             );
 
         // Add legend

@@ -13,7 +13,7 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
 
     useEffect(() => {
         const loadCSVData = async () => {
-            const response = await fetch('/mock-data/Healmate_Appointment_Record_2023.csv');
+            const response = await fetch('/mock-data/Healmate_Appointment_Record_2024.csv');
             const rawData = await response.text();
             const parsedData = d3.csvParse(rawData);
             setData(parsedData);
@@ -75,7 +75,7 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
             .attr('text-anchor', 'middle')
             .style('font-size', '26px')
             .style('font-weight', 'bold')
-            .text(`Number of patients registered to see Dr. ${doctorChart} in 2023`);
+            .text(`Number of patients registered to see Dr. ${doctorChart} in 2024`);
 
         // Add legend
         const legend = svg

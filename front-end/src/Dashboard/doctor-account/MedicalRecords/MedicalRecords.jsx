@@ -114,7 +114,6 @@ const MedicalRecords = () => {
                                 height: '3px',
                             },
                         }}
-                        style={{}}
                     >
                         <Tab value="examination-form" label="Examination Form" />
                         <Tab value="prescription" label="Prescription" />
