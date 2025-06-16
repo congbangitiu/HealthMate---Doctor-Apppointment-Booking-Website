@@ -12,10 +12,30 @@ import loginEn from '../../locales/en/login.json';
 import loginVi from '../../locales/vi/login.json';
 import registerEn from '../../locales/en/register.json';
 import registerVi from '../../locales/vi/register.json';
+import specialtiesEN from '../../locales/en/specialties.json';
+import specialtiesVI from '../../locales/vi/specialties.json';
+import specialtyDetailsEN from '../../locales/en/specialtyDetails.json';
+import specialtyDetailsVI from '../../locales/vi/specialtyDetails.json';
 
 const resources = {
-    en: { homepage: homepageEN, navbar: navbarEN, footer: footerEN, login: loginEn, register: registerEn },
-    vi: { homepage: homepageVI, navbar: navbarVI, footer: footerVI, login: loginVi, register: registerVi },
+    en: {
+        homepage: homepageEN,
+        navbar: navbarEN,
+        footer: footerEN,
+        login: loginEn,
+        register: registerEn,
+        specialties: specialtiesEN,
+        specialtyDetails: specialtyDetailsEN,
+    },
+    vi: {
+        homepage: homepageVI,
+        navbar: navbarVI,
+        footer: footerVI,
+        login: loginVi,
+        register: registerVi,
+        specialties: specialtiesVI,
+        specialtyDetails: specialtyDetailsVI,
+    },
 };
 
 i18n.use(LanguageDetector)
@@ -25,7 +45,7 @@ i18n.use(LanguageDetector)
         fallbackLng: 'en',
         lng: 'en',
         defaultNS: 'homepage',
-        ns: ['homepage', 'navbar', 'footer', 'login', 'register'],
+        ns: ['homepage', 'navbar', 'footer', 'login', 'register', 'specialties', 'specialtyDetails'],
         interpolation: { escapeValue: false },
     });
 

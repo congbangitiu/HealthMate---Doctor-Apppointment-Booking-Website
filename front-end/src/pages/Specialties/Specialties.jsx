@@ -14,10 +14,13 @@ import SwiperImg9 from '../../assets/images/SwiperImg9.jpg';
 import SwiperImg10 from '../../assets/images/SwiperImg10.jpg';
 import { Carousel } from 'antd';
 import specialties from '../../assets/data/mock-data/specialties';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const Specialties = () => {
+    const { t } = useTranslation('specialties');
+
     const imageCarousel = [
         SwiperImg1,
         SwiperImg2,
@@ -49,11 +52,11 @@ const Specialties = () => {
                 {specialties.map((specialty) => (
                     <Link className={cx('specialty')} key={specialty.id} to={`/specialties/${specialty.id}`}>
                         <div>
-                            <img src={specialty.image} alt="" />
+                            <img src={specialty.image} alt={specialty.id} />
                         </div>
                         <div>
-                            <h4>{specialty.name}</h4>
-                            <h4>({specialty.abbreviation})</h4>
+                            <h4>{t(`${specialty.id}.name`)}</h4>
+                            <h4>({t(`${specialty.id}.abbreviation`)})</h4>
                         </div>
                     </Link>
                 ))}

@@ -1,0 +1,1039 @@
+{
+    "outpatient": {
+        "name": "Khoa Khám Bệnh",
+        "abbreviation": "OPD",
+        "description": "Khoa Khám Bệnh là điểm tiếp nhận đầu tiên giữa bệnh nhân và hệ thống y tế của bệnh viện. Khoa cung cấp dịch vụ chẩn đoán, điều trị và quản lý sức khỏe toàn diện cho những trường hợp không khẩn cấp và không cần nhập viện. Được thiết kế để tối ưu hóa quy trình khám chữa bệnh, khoa hỗ trợ theo dõi tái khám kịp thời và can thiệp phòng ngừa trong môi trường lấy bệnh nhân làm trung tâm. Đội ngũ chuyên môn đa ngành giúp đảm bảo điều phối chăm sóc hiệu quả giữa các chuyên khoa với đầy đủ hỗ trợ cận lâm sàng và tuyến chuyển viện khi cần thiết.",
+        "subspecialties": [
+            {
+                "name": "Y học tổng quát",
+                "description": "Chăm sóc toàn diện ban đầu cho các triệu chứng chưa xác định trước khi chuyển chuyên khoa."
+            },
+            {
+                "name": "Y học dự phòng",
+                "description": "Tập trung vào phát hiện sớm, đánh giá nguy cơ và tầm soát để duy trì sức khỏe cộng đồng."
+            }
+        ],
+        "keyFunctions": [
+            {
+                "title": "Tư vấn & Chẩn đoán Lâm sàng",
+                "details": [
+                    "Khám lâm sàng và đánh giá triệu chứng",
+                    "Lấy tiền sử bệnh đầy đủ",
+                    "Chỉ định và đọc kết quả xét nghiệm, chẩn đoán hình ảnh"
+                ]
+            },
+            {
+                "title": "Điều trị và Quản lý Ngoại trú",
+                "details": [
+                    "Kê toa thuốc và điều trị không xâm lấn",
+                    "Lập và cập nhật phác đồ cho bệnh mạn tính",
+                    "Tư vấn lối sống và chế độ dinh dưỡng"
+                ]
+            },
+            {
+                "title": "Theo dõi và Giám sát Sức khỏe",
+                "details": [
+                    "Lên lịch tái khám và theo dõi điều trị",
+                    "Theo dõi đáp ứng điều trị",
+                    "Điều chỉnh phác đồ theo tiến triển"
+                ]
+            },
+            {
+                "title": "Giáo dục và Hỗ trợ Bệnh nhân",
+                "details": [
+                    "Hướng dẫn phòng bệnh và tự chăm sóc",
+                    "Hướng dẫn tuân thủ điều trị và theo dõi tại nhà",
+                    "Tư vấn tâm lý và hỗ trợ sức khỏe tinh thần"
+                ]
+            },
+            {
+                "title": "Dịch vụ Chẩn đoán & Hỗ trợ Cơ bản",
+                "details": [
+                    "Xét nghiệm máu và nước tiểu",
+                    "Chẩn đoán hình ảnh cơ bản: X-quang, siêu âm",
+                    "Đánh giá trước phẫu thuật và chuyển tuyến nếu cần"
+                ]
+            }
+        ],
+        "clinicalWorkflow": {
+            "phases": [
+                {
+                    "stage": "Đánh giá ban đầu",
+                    "steps": [
+                        "Đăng ký bệnh nhân và đo sinh hiệu",
+                        "Phân loại bệnh dựa trên triệu chứng",
+                        "Chuyển đến phòng khám chuyên khoa phù hợp"
+                    ],
+                    "qualityControl": ["Đảm bảo định danh bệnh nhân chính xác", "Tuân thủ quy trình phân loại bệnh"]
+                },
+                {
+                    "stage": "Khám và Chẩn đoán",
+                    "steps": [
+                        "Khám trực tiếp với bác sĩ",
+                        "Chỉ định xét nghiệm (máu, hình ảnh)",
+                        "Lấy mẫu hoặc chẩn đoán hình ảnh tại chỗ"
+                    ],
+                    "qualityControl": [
+                        "Sử dụng bảng kiểm tiêu chuẩn khi khám",
+                        "Ghi chép chính xác vào hồ sơ bệnh án điện tử (EMR)"
+                    ]
+                },
+                {
+                    "stage": "Điều trị và Lên kế hoạch Tái khám",
+                    "steps": [
+                        "Đưa ra chẩn đoán và kế hoạch điều trị",
+                        "Kê toa thuốc và tư vấn sinh hoạt",
+                        "Hẹn tái khám nếu cần"
+                    ],
+                    "qualityControl": [
+                        "Phê duyệt phác đồ bởi bác sĩ cao cấp (nếu cần)",
+                        "Theo dõi tỷ lệ tái khám đúng lịch"
+                    ]
+                }
+            ]
+        }
+    },
+    "paraclinical": {
+        "name": "Khoa Cận Lâm Sàng",
+        "abbreviation": "PCL",
+        "description": "Khoa Cận Lâm Sàng đóng vai trò là nền tảng chẩn đoán của cơ sở y tế, kết hợp công nghệ hiện đại và phân tích chuyên sâu để cung cấp kết quả chẩn đoán chính xác. Khoa hoạt động 24/7, cung cấp các dịch vụ xét nghiệm toàn diện bao gồm huyết học, hoá sinh lâm sàng, vi sinh và mô bệnh học nâng cao, cùng với các phương thức chẩn đoán hình ảnh hiện đại như CT độ phân giải cao, MRI 3T và các thủ thuật X-quang can thiệp. Khoa đạt chứng nhận ISO 15189 và CAP, đảm bảo chất lượng và độ tin cậy theo chuẩn quốc tế cho các kết quả chẩn đoán hỗ trợ ra quyết định điều trị trong mọi chuyên khoa lâm sàng.",
+        "subspecialties": [
+            {
+                "name": "Chẩn đoán hình ảnh",
+                "description": "Chẩn đoán bằng hình ảnh như X-quang, CT, MRI để quan sát cấu trúc bên trong cơ thể."
+            },
+            {
+                "name": "Huyết học",
+                "description": "Xét nghiệm máu và các rối loạn liên quan đến máu như thiếu máu, bạch cầu, rối loạn đông máu."
+            },
+            {
+                "name": "Giải phẫu bệnh",
+                "description": "Nghiên cứu mẫu mô và tế bào để chẩn đoán bệnh lý, đặc biệt là ung thư và nhiễm trùng."
+            },
+            {
+                "name": "Điện chẩn đoán",
+                "description": "Các xét nghiệm như EEG, ECG, EMG nhằm đánh giá hoạt động điện của não, tim và cơ."
+            },
+            {
+                "name": "Nội soi",
+                "description": "Quan sát trực tiếp các cơ quan nội tạng như dạ dày, đại tràng bằng thiết bị nội soi xâm lấn tối thiểu."
+            },
+            {
+                "name": "Y học hạt nhân",
+                "description": "Sử dụng chất đánh dấu phóng xạ trong chẩn đoán và điều trị, hỗ trợ phát hiện ung thư, bệnh tuyến giáp và tim mạch."
+            }
+        ],
+        "keyFunctions": [
+            {
+                "title": "Dịch vụ xét nghiệm chẩn đoán",
+                "details": [
+                    "Xét nghiệm huyết học, hoá sinh, miễn dịch",
+                    "Nuôi cấy vi sinh và chẩn đoán phân tử",
+                    "Giải phẫu bệnh và tế bào học"
+                ]
+            },
+            {
+                "title": "Khoa chẩn đoán hình ảnh",
+                "details": [
+                    "Chụp X-quang, CT, MRI kỹ thuật số",
+                    "Siêu âm và siêu âm Doppler",
+                    "Thủ thuật can thiệp dưới hướng dẫn hình ảnh"
+                ]
+            }
+        ],
+        "clinicalWorkflow": {
+            "phases": [
+                {
+                    "stage": "Tiền phân tích",
+                    "steps": [
+                        "Nhập chỉ định xét nghiệm điện tử với hỗ trợ lâm sàng",
+                        "Hệ thống dán mã vạch mẫu bệnh phẩm",
+                        "Vận chuyển mẫu tự động đến phòng xét nghiệm trung tâm"
+                    ],
+                    "qualityControl": ["Xác minh danh tính bệnh nhân 2 bước", "Kiểm tra điều kiện mẫu hợp lệ"]
+                },
+                {
+                    "stage": "Phân tích",
+                    "steps": [
+                        "Xét nghiệm tự động trên hệ thống Roche Cobas 8000",
+                        "Xét nghiệm thủ công cho các xét nghiệm chuyên biệt",
+                        "Bác sĩ chẩn đoán hình ảnh đọc và kết luận kết quả"
+                    ],
+                    "qualityControl": ["Hiệu chuẩn thiết bị hằng ngày", "Kiểm soát chất lượng nội bộ"]
+                },
+                {
+                    "stage": "Hậu phân tích",
+                    "steps": [
+                        "Bác sĩ giải phẫu bệnh hoặc chẩn đoán hình ảnh xác nhận kết quả",
+                        "Quy trình thông báo kết quả nguy cấp",
+                        "Tích hợp EMR với thông báo đến bác sĩ điều trị"
+                    ],
+                    "qualityControl": ["Theo dõi thời gian trả kết quả", "Hệ thống phản hồi từ bác sĩ lâm sàng"]
+                }
+            ]
+        }
+    },
+    "surgery": {
+        "name": "Khoa Phẫu Thuật",
+        "abbreviation": "SURG",
+        "description": "Khoa Phẫu Thuật là nền tảng của dịch vụ can thiệp tại bệnh viện, cung cấp các giải pháp phẫu thuật toàn diện từ thủ thuật xâm lấn tối thiểu đến các ca phẫu thuật phức tạp. Khoa kết hợp hệ thống robot hiện đại (bao gồm nền tảng da Vinci Xi), công nghệ hình ảnh tiên tiến và cách tiếp cận đa chuyên khoa để đảm bảo kết quả điều trị tối ưu cho bệnh nhân.",
+        "subspecialties": [
+            {
+                "name": "Ngoại thần kinh",
+                "description": "Điều trị phẫu thuật các bệnh lý ảnh hưởng đến não, cột sống và hệ thần kinh."
+            },
+            {
+                "name": "Ngoại lồng ngực",
+                "description": "Phẫu thuật tim, phổi và khoang ngực."
+            },
+            {
+                "name": "Chấn thương chỉnh hình",
+                "description": "Phẫu thuật liên quan đến xương, khớp, dây chằng, gân và cơ."
+            },
+            {
+                "name": "Ngoại tiết niệu",
+                "description": "Phẫu thuật điều trị các bệnh lý hệ tiết niệu và cơ quan sinh dục nam."
+            },
+            {
+                "name": "Tai Mũi Họng",
+                "description": "Phẫu thuật đầu cổ bao gồm tai, mũi, họng (ENT)."
+            }
+        ],
+        "keyFunctions": [
+            {
+                "title": "Dịch vụ can thiệp phẫu thuật",
+                "details": [
+                    "Phẫu thuật mở, nội soi và hỗ trợ bằng robot",
+                    "Chăm sóc phẫu thuật trong cấp cứu và chấn thương",
+                    "Phẫu thuật ung bướu và tái tạo"
+                ]
+            },
+            {
+                "title": "Khoa chăm sóc chu phẫu",
+                "details": [
+                    "Đánh giá tiền mê và tối ưu hóa bệnh nhân",
+                    "Giám sát thần kinh trong phẫu thuật",
+                    "Phác đồ hồi phục tăng cường sau phẫu thuật (ERAS)"
+                ]
+            }
+        ],
+        "clinicalWorkflow": {
+            "phases": [
+                {
+                    "stage": "Trước phẫu thuật",
+                    "steps": [
+                        "Hội chẩn phẫu thuật đa chuyên khoa",
+                        "Đánh giá tiền mê và phân tầng nguy cơ",
+                        "Tối ưu hóa bệnh nhân theo phác đồ ERAS"
+                    ],
+                    "qualityControl": [
+                        "Kiểm tra danh mục kiểm phẫu thuật",
+                        "Theo dõi thời điểm sử dụng kháng sinh dự phòng"
+                    ]
+                },
+                {
+                    "stage": "Trong phẫu thuật",
+                    "steps": [
+                        "Thực hiện thủ tục tạm dừng phẫu thuật tiêu chuẩn",
+                        "Hướng dẫn hình ảnh thời gian thực (huỳnh quang/siêu âm)",
+                        "Tham vấn mô bệnh học trong mổ nếu cần"
+                    ],
+                    "qualityControl": ["Kiểm đếm dụng cụ và bông gạc phẫu thuật", "Theo dõi liên tục dấu hiệu sinh tồn"]
+                },
+                {
+                    "stage": "Sau phẫu thuật",
+                    "steps": [
+                        "Hồi phục tại PACU với quản lý đau đa phương thức",
+                        "Tập vận động sớm và bắt đầu vật lý trị liệu",
+                        "Chăm sóc vết mổ và giám sát biến chứng"
+                    ],
+                    "qualityControl": [
+                        "Theo dõi sau mổ trong vòng 24 giờ",
+                        "Theo dõi tuân thủ dự phòng huyết khối tĩnh mạch (VTE)"
+                    ]
+                }
+            ]
+        }
+    },
+    "pediatrics": {
+        "name": "Khoa Nhi",
+        "abbreviation": "PED",
+        "description": "Khoa Nhi là chuyên khoa quan trọng tập trung vào sức khỏe và sự phát triển toàn diện của trẻ sơ sinh, trẻ nhỏ và thanh thiếu niên. Khoa cung cấp dịch vụ điều trị ngoại trú và nội trú cho nhiều loại bệnh nhi, từ các bệnh nhiễm trùng thông thường đến các bệnh mãn tính phức tạp. Các bác sĩ nhi được đào tạo để chẩn đoán, điều trị và phòng ngừa bệnh tật đồng thời theo dõi sự phát triển thể chất, cảm xúc và tâm lý của trẻ. Ngoài việc điều trị, khoa còn thực hiện chăm sóc dự phòng, tiêm chủng định kỳ, sàng lọc phát triển và tư vấn dinh dưỡng để đảm bảo trẻ nhận được sự chăm sóc toàn diện và phù hợp với độ tuổi. Không gian thân thiện với trẻ giúp giảm lo lắng và mang lại trải nghiệm y tế tích cực cho cả trẻ và gia đình.",
+        "subspecialties": [
+            {
+                "name": "Sơ sinh",
+                "description": "Chăm sóc trẻ sơ sinh, đặc biệt là những bé sinh non hoặc có vấn đề sức khỏe."
+            },
+            {
+                "name": "Huyết học nhi",
+                "description": "Chẩn đoán và điều trị các rối loạn về máu ở trẻ em."
+            },
+            {
+                "name": "Dị ứng nhi",
+                "description": "Quản lý các bệnh dị ứng như hen suyễn, chàm, dị ứng thực phẩm ở trẻ."
+            },
+            {
+                "name": "Nội tiết nhi",
+                "description": "Điều trị rối loạn nội tiết và các vấn đề phát triển ở trẻ em."
+            },
+            {
+                "name": "Vị thành niên",
+                "description": "Chăm sóc và theo dõi sự phát triển về thể chất, tâm lý và cảm xúc của lứa tuổi thanh thiếu niên."
+            }
+        ],
+        "keyFunctions": [
+            {
+                "title": "Dịch vụ y tế nhi khoa",
+                "details": [
+                    "Khám và chẩn đoán các bệnh thường gặp ở trẻ em (sốt, ho, cảm lạnh, tiêu chảy)",
+                    "Điều trị các bệnh cấp và mãn tính như hen suyễn, viêm màng não, bệnh tim bẩm sinh",
+                    "Quản lý cấp cứu nhi và theo dõi nội trú khi cần thiết"
+                ]
+            },
+            {
+                "title": "Chăm sóc dự phòng và theo dõi phát triển",
+                "details": [
+                    "Chương trình tiêm chủng toàn diện (sởi, viêm gan B, ho gà...)",
+                    "Theo dõi chiều cao, cân nặng, các mốc phát triển",
+                    "Tư vấn cho phụ huynh về dinh dưỡng, vệ sinh và nuôi dưỡng trẻ"
+                ]
+            }
+        ],
+        "clinicalWorkflow": {
+            "phases": [
+                {
+                    "stage": "Tiếp nhận bệnh nhi",
+                    "steps": [
+                        "Thu thập tiền sử, triệu chứng, lịch sử tiêm chủng và các mốc phát triển",
+                        "Đo sinh hiệu (nhiệt độ, nhịp thở, mạch...)"
+                    ],
+                    "qualityControl": ["Xác minh lịch tiêm chủng", "Kiểm tra danh tính người giám hộ"]
+                },
+                {
+                    "stage": "Đánh giá lâm sàng",
+                    "steps": [
+                        "Khám tổng quát bởi bác sĩ nhi",
+                        "Đánh giá triệu chứng và chỉ số lâm sàng",
+                        "Chỉ định xét nghiệm chẩn đoán nếu cần (máu, hình ảnh)"
+                    ],
+                    "qualityControl": [
+                        "Áp dụng quy trình phân loại nhi khoa",
+                        "Sử dụng giá trị tham chiếu theo độ tuổi"
+                    ]
+                },
+                {
+                    "stage": "Điều trị và hướng dẫn phụ huynh",
+                    "steps": [
+                        "Chẩn đoán và kê đơn thuốc phù hợp",
+                        "Hướng dẫn xuất viện hoặc nhập viện nếu cần",
+                        "Giáo dục phụ huynh về cách dùng thuốc, chăm sóc tại nhà, dấu hiệu cảnh báo"
+                    ],
+                    "qualityControl": ["Kiểm tra liều thuốc theo cân nặng", "Tuân thủ quy trình lên lịch tái khám"]
+                }
+            ]
+        }
+    },
+    "dermatology": {
+        "name": "Khoa Da Liễu",
+        "abbreviation": "DERM",
+        "description": "Khoa Da Liễu chuyên chẩn đoán và điều trị các bệnh lý về da, tóc và móng. Đội ngũ bác sĩ da liễu giàu kinh nghiệm kết hợp giữa điều trị y học và thẩm mỹ để mang đến dịch vụ chăm sóc toàn diện, cá nhân hóa cho từng bệnh nhân. Khoa tập trung vào việc phát hiện sớm và điều trị ít xâm lấn các bệnh lý như chàm, mụn trứng cá, vảy nến và ung thư da. Ngoài ra, chúng tôi còn cung cấp các liệu trình thẩm mỹ hiện đại như laser, peel da hóa học và trẻ hóa da, giúp bệnh nhân không chỉ khỏe hơn mà còn tự tin hơn về diện mạo của mình.",
+        "subspecialties": [
+            {
+                "name": "Thẩm mỹ da",
+                "description": "Tập trung vào các liệu pháp thẩm mỹ như trẻ hóa da, xóa sẹo."
+            },
+            {
+                "name": "Da đầu - Tóc",
+                "description": "Chẩn đoán và điều trị các bệnh lý về tóc và da đầu."
+            },
+            {
+                "name": "Dị ứng da",
+                "description": "Nghiên cứu và điều trị các phản ứng dị ứng da như mề đay, viêm da tiếp xúc."
+            },
+            {
+                "name": "Nấm da",
+                "description": "Chẩn đoán và điều trị các bệnh nhiễm nấm ngoài da."
+            },
+            {
+                "name": "Ung thư da",
+                "description": "Quản lý các loại ung thư da như u hắc tố, ung thư biểu mô tế bào đáy."
+            },
+            {
+                "name": "Miễn dịch da",
+                "description": "Nghiên cứu các bệnh da do rối loạn miễn dịch như lupus, pemphigus."
+            }
+        ],
+        "keyFunctions": [
+            {
+                "title": "Da liễu điều trị",
+                "details": [
+                    "Chẩn đoán và điều trị chàm, mụn, vảy nến, trứng cá đỏ, nhiễm nấm da",
+                    "Test dị ứng da và điều trị viêm da tiếp xúc",
+                    "Các bệnh da tự miễn như bạch biến, phát ban do lupus"
+                ]
+            },
+            {
+                "title": "Da liễu ung bướu",
+                "details": [
+                    "Tầm soát và sinh thiết ung thư da (u hắc tố, biểu mô tế bào đáy...)",
+                    "Cắt bỏ bằng phẫu thuật hoặc áp lạnh các tổn thương lành và ác tính",
+                    "Theo dõi định kỳ và lập bản đồ nốt ruồi cho bệnh nhân nguy cơ cao"
+                ]
+            },
+            {
+                "title": "Da liễu thẩm mỹ",
+                "details": [
+                    "Điều trị bằng laser: tăng sắc tố, tổn thương mạch máu, triệt lông",
+                    "Peel da hóa học, lăn kim, điều trị sẹo mụn",
+                    "Liệu pháp trẻ hóa da: Botox, filler, nâng cơ"
+                ]
+            }
+        ],
+        "clinicalWorkflow": {
+            "phases": [
+                {
+                    "stage": "Thăm khám ban đầu",
+                    "steps": [
+                        "Đánh giá tổn thương da và tiền sử bệnh",
+                        "Khám bằng đèn Wood hoặc kính soi da",
+                        "Chụp ảnh và ghi nhận tổn thương ban đầu"
+                    ],
+                    "qualityControl": ["Mẫu phiếu đánh giá da tiêu chuẩn", "Khử khuẩn dụng cụ đúng quy trình"]
+                },
+                {
+                    "stage": "Xét nghiệm chẩn đoán",
+                    "steps": [
+                        "Sinh thiết da hoặc cạo tổn thương",
+                        "Test áp da phát hiện dị ứng",
+                        "Phân tích mô bệnh học tại phòng xét nghiệm"
+                    ],
+                    "qualityControl": [
+                        "Ghi nhãn mẫu sinh thiết đúng quy định",
+                        "Xác nhận đồng ý từ bệnh nhân cho thủ thuật"
+                    ]
+                },
+                {
+                    "stage": "Điều trị và theo dõi",
+                    "steps": [
+                        "Kê toa thuốc bôi hoặc thuốc toàn thân",
+                        "Thực hiện các thủ thuật như laser, áp lạnh, tiểu phẫu",
+                        "Hẹn tái khám theo dõi kết quả điều trị và hiệu quả thẩm mỹ"
+                    ],
+                    "qualityControl": ["Theo dõi hiệu quả điều trị", "Ghi nhận tác dụng phụ (nếu có)"]
+                }
+            ]
+        }
+    },
+    "respiratory": {
+        "name": "Khoa Hô Hấp",
+        "abbreviation": "RESP",
+        "description": "Khoa Hô Hấp cung cấp dịch vụ chăm sóc toàn diện cho bệnh nhân mắc các bệnh lý cấp và mãn tính về đường hô hấp. Với đội ngũ bác sĩ chuyên khoa hô hấp, kỹ thuật viên hô hấp và bác sĩ hồi sức chuyên sâu, khoa tập trung vào chẩn đoán sớm, điều trị hiệu quả và quản lý lâu dài các bệnh lý hô hấp. Khoa được trang bị các kỹ thuật hiện đại như đo chức năng hô hấp, nội soi phế quản và chụp CT độ phân giải cao. Từ hen suyễn, bệnh phổi tắc nghẽn mãn tính (COPD) đến viêm phổi và lao, chúng tôi cung cấp các phương pháp điều trị dựa trên bằng chứng nhằm cải thiện sức khỏe phổi và kết quả điều trị tổng thể cho bệnh nhân.",
+        "subspecialties": [
+            {
+                "name": "Hô hấp",
+                "description": "Chẩn đoán và điều trị các bệnh lý phổi và đường thở như hen suyễn, viêm phế quản và COPD."
+            },
+            {
+                "name": "Nội soi phế quản",
+                "description": "Chuyên nội soi chẩn đoán và can thiệp đường thở nhằm phát hiện và điều trị tổn thương."
+            }
+        ],
+        "keyFunctions": [
+            {
+                "title": "Chẩn đoán và điều trị bệnh hô hấp",
+                "details": [
+                    "Điều trị hen, COPD, viêm phế quản, viêm phổi và bệnh mô kẽ phổi",
+                    "Quản lý nhiễm trùng hô hấp bao gồm bệnh lao",
+                    "Chăm sóc ngưng thở khi ngủ và ngáy ngủ qua nghiên cứu giấc ngủ và trị liệu"
+                ]
+            },
+            {
+                "title": "Chẩn đoán chức năng hô hấp",
+                "details": [
+                    "Đo chức năng hô hấp (spirometry, DLCO)",
+                    "Nội soi phế quản chẩn đoán và sinh thiết",
+                    "Xét nghiệm khí máu động mạch và đo độ bão hòa oxy"
+                ]
+            },
+            {
+                "title": "Hỗ trợ và phục hồi chức năng hô hấp",
+                "details": [
+                    "Liệu pháp oxy và xông khí dung",
+                    "Thở máy không xâm lấn (BiPAP/CPAP)",
+                    "Chương trình phục hồi chức năng hô hấp cho bệnh nhân phổi mãn tính"
+                ]
+            }
+        ],
+        "clinicalWorkflow": {
+            "phases": [
+                {
+                    "stage": "Đánh giá bệnh nhân",
+                    "steps": [
+                        "Khai thác tiền sử và phân tích triệu chứng (khó thở, ho, khò khè)",
+                        "Khám lâm sàng bao gồm nghe phổi",
+                        "Chỉ định chẩn đoán hình ảnh (X-quang/CT) và xét nghiệm"
+                    ],
+                    "qualityControl": ["Đánh giá tiền sử hút thuốc", "Chấm điểm mức độ triệu chứng (ví dụ: thang MRC)"]
+                },
+                {
+                    "stage": "Xét nghiệm và chẩn đoán",
+                    "steps": [
+                        "Đo chức năng hô hấp (spirometry)",
+                        "Nội soi phế quản lấy dịch rửa hoặc sinh thiết khi cần",
+                        "Xét nghiệm vi sinh tìm tác nhân gây bệnh (cấy đàm, GeneXpert...)"
+                    ],
+                    "qualityControl": ["Hiệu chuẩn máy đúng quy chuẩn", "Đảm bảo chất lượng mẫu xét nghiệm"]
+                },
+                {
+                    "stage": "Điều trị và theo dõi",
+                    "steps": [
+                        "Kê đơn thuốc (giãn phế quản, corticosteroid, kháng sinh)",
+                        "Theo dõi chức năng hô hấp và cải thiện triệu chứng",
+                        "Tư vấn bỏ thuốc lá và kiểm soát môi trường sống"
+                    ],
+                    "qualityControl": ["Lên lịch hẹn tái khám", "Theo dõi tuân thủ điều trị thuốc"]
+                }
+            ]
+        }
+    },
+    "rehabilitation": {
+        "name": "Khoa Phục Hồi Chức Năng",
+        "abbreviation": "REHAB",
+        "description": "Khoa Phục Hồi Chức Năng chuyên giúp bệnh nhân phục hồi khả năng độc lập sau chấn thương, phẫu thuật hoặc bệnh lý. Đội ngũ đa chuyên môn bao gồm bác sĩ phục hồi, kỹ thuật viên vật lý trị liệu, hoạt động trị liệu và âm ngữ trị liệu. Khoa điều trị các bệnh thần kinh, cơ xương khớp, di chứng sau đột quỵ, chấn thương thể thao và phục hồi sau phẫu thuật. Chúng tôi xây dựng kế hoạch điều trị cá nhân hóa dựa trên bằng chứng như bài tập trị liệu, điện trị liệu, thủy trị liệu và huấn luyện sử dụng thiết bị hỗ trợ.",
+        "subspecialties": [
+            {
+                "name": "Y học phục hồi",
+                "description": "Chuyên ngành phục hồi chức năng cho người bị khiếm khuyết thể chất hoặc khuyết tật vận động."
+            },
+            {
+                "name": "Vật lý trị liệu",
+                "description": "Sử dụng bài tập, thao tác tay và thiết bị hỗ trợ để phục hồi vận động và chức năng cơ xương khớp."
+            },
+            {
+                "name": "Hoạt động trị liệu",
+                "description": "Giúp bệnh nhân phục hồi kỹ năng sinh hoạt hằng ngày thông qua kỹ thuật trị liệu và phương pháp thích nghi."
+            },
+            {
+                "name": "Âm ngữ trị liệu",
+                "description": "Chẩn đoán và điều trị các rối loạn nói, ngôn ngữ, giao tiếp và nuốt."
+            },
+            {
+                "name": "Phục hồi thần kinh",
+                "description": "Trị liệu chuyên sâu cho bệnh nhân bị tổn thương thần kinh như đột quỵ, chấn thương tủy sống, chấn thương sọ não."
+            }
+        ],
+        "keyFunctions": [
+            {
+                "title": "Phục hồi thể chất",
+                "details": [
+                    "Phục hồi sau đột quỵ và tổn thương tủy sống",
+                    "Phục hồi khớp và cơ sau phẫu thuật",
+                    "Điều trị và phục hồi chấn thương thể thao"
+                ]
+            },
+            {
+                "title": "Trị liệu hoạt động & âm ngữ",
+                "details": [
+                    "Phát triển kỹ năng vận động tinh và rèn luyện sinh hoạt",
+                    "Liệu pháp ngôn ngữ cho các bệnh lý thần kinh",
+                    "Trị liệu nuốt và phục hồi nhận thức"
+                ]
+            },
+            {
+                "title": "Thiết bị hỗ trợ & giáo dục",
+                "details": [
+                    "Tập sử dụng chỉnh hình và chân tay giả",
+                    "Đánh giá nhu cầu xe lăn và dụng cụ hỗ trợ vận động",
+                    "Đánh giá an toàn tại nhà và tư vấn chăm sóc"
+                ]
+            }
+        ],
+        "clinicalWorkflow": {
+            "phases": [
+                {
+                    "stage": "Đánh giá ban đầu",
+                    "steps": [
+                        "Xem xét tiền sử và đánh giá chức năng",
+                        "Thiết lập mục tiêu với bệnh nhân và gia đình",
+                        "Đánh giá thể chất và thần kinh ban đầu"
+                    ],
+                    "qualityControl": [
+                        "Sử dụng công cụ đánh giá chuẩn hóa",
+                        "Theo dõi sự phù hợp giữa mục tiêu và tiến độ điều trị"
+                    ]
+                },
+                {
+                    "stage": "Lập kế hoạch và triển khai trị liệu",
+                    "steps": [
+                        "Buổi trị liệu cá nhân hóa (vật lý/hoạt động/âm ngữ)",
+                        "Ứng dụng thiết bị hỗ trợ và công nghệ hỗ trợ",
+                        "Trị liệu nhóm hoặc cá nhân theo nhu cầu"
+                    ],
+                    "qualityControl": ["Rà soát tiến độ hàng tuần", "Họp liên chuyên khoa để đánh giá"]
+                },
+                {
+                    "stage": "Xuất viện và theo dõi",
+                    "steps": [
+                        "Đánh giá kết quả và lập kế hoạch xuất viện",
+                        "Cung cấp bài tập tại nhà và hướng dẫn chăm sóc",
+                        "Lên lịch tái khám định kỳ"
+                    ],
+                    "qualityControl": ["Khảo sát mức độ hài lòng của bệnh nhân", "Lập kế hoạch phòng ngừa tái phát"]
+                }
+            ]
+        }
+    },
+    "ophthalmology": {
+        "name": "Khoa Mắt",
+        "abbreviation": "OPH",
+        "description": "Khoa Mắt cung cấp dịch vụ chăm sóc mắt toàn diện cho mọi lứa tuổi, từ khám thị lực định kỳ đến các phẫu thuật chuyên sâu. Đội ngũ bác sĩ nhãn khoa của chúng tôi chuyên chẩn đoán và điều trị các bệnh lý về mắt như đục thủy tinh thể, tăng nhãn áp, võng mạc tiểu đường, thoái hóa hoàng điểm và tật khúc xạ. Với trang thiết bị hiện đại như máy OCT, kính sinh hiển vi, và hệ thống laser, chúng tôi đảm bảo chẩn đoán chính xác và can thiệp chất lượng cao. Khám sàng lọc phòng bệnh và chăm sóc mắt trẻ em cũng là một phần quan trọng trong sứ mệnh của khoa.",
+        "subspecialties": [
+            {
+                "name": "Bệnh lý võng mạc",
+                "description": "Chẩn đoán và điều trị các bệnh lý võng mạc như võng mạc tiểu đường, thoái hóa hoàng điểm."
+            },
+            {
+                "name": "Tăng nhãn áp",
+                "description": "Chuyên quản lý nhãn áp và bảo vệ dây thần kinh thị giác nhằm ngăn ngừa mất thị lực."
+            },
+            {
+                "name": "Bệnh lý giác mạc",
+                "description": "Tập trung điều trị bệnh giác mạc và ghép giác mạc như viêm loét giác mạc, loạn dưỡng giác mạc."
+            },
+            {
+                "name": "Phẫu thuật mi & hốc mắt",
+                "description": "Phẫu thuật và điều trị thẩm mỹ vùng mi mắt, hốc mắt và hệ thống dẫn lưu lệ."
+            },
+            {
+                "name": "Thần kinh nhãn khoa",
+                "description": "Xử lý các vấn đề thị giác liên quan đến hệ thần kinh như viêm dây thần kinh thị, mất thị trường, song thị."
+            }
+        ],
+        "keyFunctions": [
+            {
+                "title": "Khám mắt toàn diện",
+                "details": [
+                    "Đo thị lực và khúc xạ (kính/can thiệp kính áp tròng)",
+                    "Sàng lọc tăng nhãn áp, đục thủy tinh thể, bệnh võng mạc",
+                    "Kiểm tra nhãn áp và soi đèn khe"
+                ]
+            },
+            {
+                "title": "Điều trị y khoa và phẫu thuật",
+                "details": [
+                    "Phẫu thuật đục thủy tinh thể và đặt thủy tinh thể nhân tạo",
+                    "Điều trị laser cho bệnh võng mạc tiểu đường và tăng nhãn áp",
+                    "Phẫu thuật điều chỉnh lác mắt"
+                ]
+            },
+            {
+                "title": "Chăm sóc mắt nhi và phòng bệnh",
+                "details": [
+                    "Điều trị nhược thị và lác mắt",
+                    "Khám mắt định kỳ tại trường và giáo dục sức khỏe mắt",
+                    "Phòng ngừa hội chứng thị giác màn hình"
+                ]
+            }
+        ],
+        "clinicalWorkflow": {
+            "phases": [
+                {
+                    "stage": "Đánh giá ban đầu",
+                    "steps": [
+                        "Khai thác tiền sử y tế và thị lực",
+                        "Đo thị lực và nhãn áp",
+                        "Khám sinh hiển vi và soi đáy mắt"
+                    ],
+                    "qualityControl": ["Hiệu chuẩn bảng đo thị lực", "Sử dụng thiết bị vô trùng"]
+                },
+                {
+                    "stage": "Chẩn đoán hình ảnh và xét nghiệm",
+                    "steps": [
+                        "Chụp OCT, đo thị trường",
+                        "Siêu âm mắt với môi trường đục",
+                        "Chụp mạch huỳnh quang nếu cần"
+                    ],
+                    "qualityControl": ["Ghi nhật ký bảo trì thiết bị", "Kết quả do bác sĩ chuyên khoa thẩm định"]
+                },
+                {
+                    "stage": "Điều trị & theo dõi",
+                    "steps": [
+                        "Kê đơn kính hoặc thuốc điều trị",
+                        "Lên lịch can thiệp bằng laser hoặc phẫu thuật",
+                        "Chăm sóc hậu phẫu và phục hồi thị giác"
+                    ],
+                    "qualityControl": ["Theo dõi kết quả phẫu thuật", "Giám sát tuân thủ lịch tái khám"]
+                }
+            ]
+        }
+    },
+    "internal-medicine": {
+        "name": "Khoa Nội Tổng Quát",
+        "abbreviation": "IM",
+        "description": "Khoa Nội Tổng Quát là nền tảng của chăm sóc y tế cho người lớn, cung cấp dịch vụ quản lý toàn diện dựa trên bằng chứng cho các bệnh lý đa hệ thống phức tạp. Chúng tôi quy tụ đội ngũ bác sĩ nội khoa và chuyên khoa hàng đầu để điều trị cá nhân hóa cho các bệnh từ cấp tính đến mãn tính. Với cách tiếp cận lấy bệnh nhân làm trung tâm, khoa tích hợp công nghệ chẩn đoán tiên tiến, phác đồ điều trị hiện đại và chiến lược phòng ngừa để tối ưu hóa hiệu quả chăm sóc.",
+        "subspecialties": [
+            {
+                "name": "Tim mạch",
+                "description": "Điều trị các bệnh lý tim mạch như tăng huyết áp, nhồi máu cơ tim, suy tim và bệnh mạch vành."
+            },
+            {
+                "name": "Tiêu hóa",
+                "description": "Chăm sóc các bệnh lý tiêu hóa bao gồm loét dạ dày, viêm gan và viêm ruột."
+            },
+            {
+                "name": "Nội tiết",
+                "description": "Điều trị các rối loạn nội tiết như đái tháo đường, bệnh lý tuyến giáp và hội chứng chuyển hóa."
+            },
+            {
+                "name": "Thận - Tiết niệu",
+                "description": "Điều trị các bệnh về thận và đường tiết niệu như suy thận, viêm bàng quang và sỏi thận."
+            },
+            {
+                "name": "Thần kinh",
+                "description": "Chăm sóc các bệnh thần kinh như đau đầu mãn tính, mất ngủ, đột quỵ và Parkinson."
+            },
+            {
+                "name": "Cơ xương khớp",
+                "description": "Điều trị các bệnh cơ xương khớp như viêm khớp dạng thấp, thoái hóa khớp và loãng xương."
+            }
+        ],
+        "keyFunctions": [
+            {
+                "title": "Quản lý bệnh toàn diện",
+                "details": [
+                    "Chẩn đoán và điều trị các bệnh cấp và mãn tính",
+                    "Phối hợp với các chuyên khoa phẫu thuật khi cần can thiệp",
+                    "Theo dõi và quản lý lâu dài bệnh mãn tính"
+                ]
+            },
+            {
+                "title": "Chăm sóc dự phòng",
+                "details": [
+                    "Đánh giá nguy cơ sức khỏe",
+                    "Chương trình sàng lọc bệnh mãn tính",
+                    "Tiêm chủng cho người lớn"
+                ]
+            }
+        ],
+        "clinicalWorkflow": {
+            "phases": [
+                {
+                    "stage": "Đánh giá lâm sàng",
+                    "steps": [
+                        "Ghi nhận tiền sử bệnh và phân tích triệu chứng hỗ trợ bởi AI",
+                        "Khám toàn diện sử dụng công cụ ghi chép điện tử",
+                        "Tích hợp chỉ số sinh tồn vào hồ sơ điện tử (EMR)"
+                    ],
+                    "qualityControl": ["Xác minh kép tiền sử bệnh", "Chuẩn hóa quy trình khám lâm sàng"]
+                },
+                {
+                    "stage": "Đánh giá chẩn đoán",
+                    "steps": [
+                        "Chỉ định xét nghiệm dựa trên bằng chứng và hỗ trợ quyết định lâm sàng",
+                        "Xét nghiệm tại chỗ (POCT) cho kết quả nhanh",
+                        "Hệ thống phân luồng hội chẩn chuyên khoa"
+                    ],
+                    "qualityControl": [
+                        "Thuật toán đánh giá tính phù hợp của xét nghiệm",
+                        "Kiểm tra bảo hiểm thời gian thực"
+                    ]
+                },
+                {
+                    "stage": "Điều trị",
+                    "steps": [
+                        "Lập kế hoạch điều trị cá nhân hóa có xét đến dược lý di truyền",
+                        "Đối chiếu thuốc tự động",
+                        "Hội chẩn liên chuyên khoa cho ca phức tạp"
+                    ],
+                    "qualityControl": ["Sàng lọc tương tác thuốc", "Giám sát tuân thủ phác đồ điều trị"]
+                },
+                {
+                    "stage": "Quản lý tái khám",
+                    "steps": [
+                        "Tự động tạo tóm tắt xuất viện",
+                        "Lập lịch hẹn tái khám từ xa",
+                        "Tư vấn và theo dõi bệnh mãn tính"
+                    ],
+                    "qualityControl": [
+                        "Đánh giá nguy cơ tái nhập viện trong 30 ngày",
+                        "Khảo sát mức độ hài lòng của bệnh nhân"
+                    ]
+                }
+            ]
+        }
+    },
+    "dentomaxillofacial": {
+        "name": "Khoa Răng Hàm Mặt",
+        "abbreviation": "DMF",
+        "description": "Khoa Răng Hàm Mặt chuyên về phòng ngừa, chẩn đoán và điều trị các bệnh lý về răng, miệng và vùng mặt. Dịch vụ bao gồm từ nha khoa tổng quát (làm sạch, trám răng, nhổ răng) đến phẫu thuật hàm mặt chuyên sâu điều trị chấn thương, khối u hoặc dị tật bẩm sinh. Khoa còn cung cấp chỉnh nha, nha khoa thẩm mỹ và cấy ghép implant. Đội ngũ bác sĩ nha, phẫu thuật viên hàm mặt và bác sĩ chỉnh nha phối hợp chặt chẽ với công nghệ số như chụp X-quang kỹ thuật số, hình ảnh 3D và kỹ thuật ít xâm lấn để đảm bảo sức khỏe răng miệng và sự hài hòa khuôn mặt.",
+        "subspecialties": [
+            {
+                "name": "Chỉnh nha",
+                "description": "Điều chỉnh răng và hàm lệch lạc bằng mắc cài hoặc thiết bị nha khoa chuyên dụng."
+            },
+            {
+                "name": "Nội nha",
+                "description": "Điều trị tủy răng và thực hiện các kỹ thuật chữa tủy để bảo tồn răng."
+            },
+            {
+                "name": "Nha chu",
+                "description": "Chăm sóc chuyên sâu cho nướu và các cấu trúc nâng đỡ răng."
+            },
+            {
+                "name": "Phục hình răng",
+                "description": "Thiết kế và lắp đặt các phục hình răng như mão, cầu răng và hàm giả."
+            },
+            {
+                "name": "Phẫu thuật hàm mặt",
+                "description": "Phẫu thuật điều trị bệnh lý, chấn thương và dị tật vùng mặt, hàm và khoang miệng."
+            }
+        ],
+        "keyFunctions": [
+            {
+                "title": "Nha khoa tổng quát và dự phòng",
+                "details": [
+                    "Khám răng miệng, cạo vôi răng, trám răng",
+                    "Nhổ răng và điều trị bằng fluor",
+                    "Giáo dục vệ sinh răng miệng và chăm sóc dự phòng"
+                ]
+            },
+            {
+                "title": "Phẫu thuật và phục hồi",
+                "details": [
+                    "Phẫu thuật răng khôn và lấy nang",
+                    "Xử lý chấn thương vùng hàm mặt",
+                    "Cấy ghép implant và ghép xương"
+                ]
+            },
+            {
+                "title": "Dịch vụ chỉnh nha và thẩm mỹ",
+                "details": [
+                    "Niềng răng, khay trong suốt và chỉnh hình hàm",
+                    "Tẩy trắng răng và phục hình thẩm mỹ",
+                    "Thiết kế nụ cười và dán sứ veneer"
+                ]
+            }
+        ],
+        "clinicalWorkflow": {
+            "phases": [
+                {
+                    "stage": "Khám và chẩn đoán",
+                    "steps": [
+                        "Khám miệng và chụp phim (X-quang, OPG)",
+                        "Lập sơ đồ răng và phân tích khớp cắn",
+                        "Chẩn đoán sâu răng, nhiễm trùng hoặc sai khớp cắn"
+                    ],
+                    "qualityControl": ["Quy trình vô trùng dụng cụ", "Rà soát độ chính xác chẩn đoán"]
+                },
+                {
+                    "stage": "Lập kế hoạch và điều trị",
+                    "steps": [
+                        "Xây dựng kế hoạch điều trị cá nhân hóa",
+                        "Thực hiện thủ thuật dưới gây tê tại chỗ hoặc toàn thân",
+                        "Ứng dụng công nghệ CAD/CAM trong phục hình chính xác"
+                    ],
+                    "qualityControl": ["Danh mục kiểm an toàn phẫu thuật", "Ghi nhận quy trình điều trị"]
+                },
+                {
+                    "stage": "Chăm sóc sau điều trị và theo dõi",
+                    "steps": [
+                        "Theo dõi hậu phẫu và kiểm soát đau",
+                        "Nhắc lại hướng dẫn vệ sinh răng miệng",
+                        "Đặt lịch tái khám và vệ sinh răng định kỳ"
+                    ],
+                    "qualityControl": ["Ghi chú tiến trình hồi phục", "Theo dõi mức độ hài lòng của người bệnh"]
+                }
+            ]
+        }
+    },
+    "emergency": {
+        "name": "Khoa Cấp cứu – Hồi sức tích cực",
+        "abbreviation": "EIC",
+        "description": "Khoa Cấp cứu – Hồi sức tích cực – Chống độc là một đơn vị đa chuyên khoa đóng vai trò trọng yếu trong bệnh viện, cung cấp chăm sóc khẩn cấp và chuyên sâu cho bệnh nhân gặp tình trạng nguy kịch. Khoa kết hợp giữa y học cấp cứu, hồi sức tích cực và độc học để xử lý đa dạng tình huống y khoa nghiêm trọng như chấn thương, suy tạng cấp, ngộ độc, và các tình trạng khẩn cấp về tim phổi. Đội ngũ bác sĩ, điều dưỡng và chuyên gia trực 24/7 đảm bảo phản ứng nhanh, ổn định tình trạng và theo dõi liên tục với thiết bị hiện đại và các biện pháp can thiệp cứu sinh. Dù là thông qua thở máy, truyền thuốc quan trọng hay giải độc, khoa luôn đảm bảo từng giây đều có giá trị trong việc cứu sống và hỗ trợ phục hồi.",
+        "subspecialties": [
+            {
+                "name": "Độc học",
+                "description": "Chẩn đoán và điều trị các trường hợp ngộ độc thuốc, hóa chất hoặc thực phẩm."
+            },
+            {
+                "name": "Chấn thương học",
+                "description": "Xử lý các chấn thương cấp tính do tai nạn hoặc bạo lực gây ra."
+            },
+            {
+                "name": "Hồi sức cấp cứu",
+                "description": "Kỹ thuật hồi sinh nâng cao như ép tim, sốc điện, kiểm soát đường thở khẩn cấp."
+            },
+            {
+                "name": "Hồi sức tích cực",
+                "description": "Chăm sóc chuyên sâu cho bệnh nhân nguy kịch tại đơn vị hồi sức tích cực (ICU)."
+            },
+            {
+                "name": "Y học thảm họa",
+                "description": "Ứng phó y tế trong các tình huống thảm họa và sự cố gây thương vong hàng loạt."
+            }
+        ],
+        "keyFunctions": [
+            {
+                "title": "Xử lý cấp cứu và chấn thương",
+                "details": [
+                    "Phân loại và đánh giá nhanh bệnh nhân nguy kịch",
+                    "Điều trị chấn thương do tai nạn giao thông, bỏng, té ngã",
+                    "Xử lý tình trạng nội khoa cấp tính như đột quỵ, co giật, đau ngực"
+                ]
+            },
+            {
+                "title": "Hồi sức tích cực và hỗ trợ sự sống",
+                "details": [
+                    "Theo dõi liên tục và hỗ trợ sự sống nâng cao",
+                    "Thở máy, truyền thuốc vận mạch và hỗ trợ tim mạch",
+                    "Điều trị suy hô hấp và suy tim cấp"
+                ]
+            },
+            {
+                "title": "Chống độc và kiểm soát ngộ độc",
+                "details": [
+                    "Xử lý ngộ độc thuốc và hóa chất",
+                    "Thực hiện quy trình giải độc và sử dụng thuốc giải",
+                    "Theo dõi chuyển hóa và phản ứng của cơ quan với chất độc"
+                ]
+            }
+        ],
+        "clinicalWorkflow": {
+            "phases": [
+                {
+                    "stage": "Phân loại và đánh giá ban đầu",
+                    "steps": [
+                        "Phân loại nhanh bởi điều dưỡng chuyên trách",
+                        "Theo dõi sinh hiệu và đánh giá mức độ ưu tiên điều trị",
+                        "Chuyển bệnh nhân đến vùng cấp cứu phù hợp (đỏ, vàng, xanh)"
+                    ],
+                    "qualityControl": [
+                        "Phân loại trong vòng 5 phút kể từ khi đến viện",
+                        "Sử dụng thang phân loại chuẩn (VD: ESI)"
+                    ]
+                },
+                {
+                    "stage": "Hồi sức và chẩn đoán",
+                    "steps": [
+                        "Khám lâm sàng bởi bác sĩ cấp cứu",
+                        "Thực hiện xét nghiệm nhanh tại chỗ (máu, điện tim, hình ảnh)",
+                        "Kiểm soát đường thở, đặt đường truyền và dùng thuốc khẩn cấp"
+                    ],
+                    "qualityControl": ["Theo dõi thời gian can thiệp", "Checklist cho chấn thương nặng và ngừng tim"]
+                },
+                {
+                    "stage": "Ổn định và theo dõi",
+                    "steps": [
+                        "Chuyển lên ICU nếu cần hỗ trợ chuyên sâu",
+                        "Theo dõi 24/7 bằng thiết bị (monitor, máy thở)",
+                        "Điều chỉnh phác đồ theo dữ liệu thời gian thực"
+                    ],
+                    "qualityControl": ["Tuân thủ tỷ lệ điều dưỡng/bệnh nhân", "Kiểm tra ghi nhận sự kiện quan trọng"]
+                },
+                {
+                    "stage": "Chuyển tuyến và kết thúc điều trị",
+                    "steps": [
+                        "Chuyển đến khoa chuyên môn nếu bệnh nhân ổn định",
+                        "Ra viện với hướng dẫn chăm sóc tại nhà và lịch tái khám",
+                        "Chuyển tiếp đến khoa chống độc hoặc đơn vị chăm sóc mạn tính"
+                    ],
+                    "qualityControl": ["Rà soát tóm tắt hồ sơ xuất viện", "Theo dõi tuân thủ tái khám"]
+                }
+            ]
+        }
+    },
+    "orthopedics": {
+        "name": "Khoa Cơ Xương Khớp",
+        "abbreviation": "ORT",
+        "description": "Khoa Cơ Xương Khớp tại HealthMate chuyên chẩn đoán, điều trị và phục hồi chức năng các rối loạn liên quan đến xương, khớp, cơ, dây chằng và gân. Sứ mệnh của chúng tôi là khôi phục khả năng vận động và cải thiện chất lượng cuộc sống cho bệnh nhân gặp chấn thương, bệnh lý thoái hóa hoặc các vấn đề cơ xương khớp. Khoa tích hợp các kỹ thuật phẫu thuật tiên tiến, chẩn đoán hình ảnh hiện đại và chương trình phục hồi đa ngành để cung cấp dịch vụ chăm sóc toàn diện. Từ điều trị gãy xương, chấn thương thể thao đến quản lý các bệnh mãn tính như thoái hóa khớp và loãng xương, chúng tôi luôn xây dựng kế hoạch điều trị cá nhân hóa với trọng tâm là can thiệp sớm và phục hồi lâu dài.",
+        "subspecialties": [
+            {
+                "name": "Khớp học",
+                "description": "Nghiên cứu và điều trị các bệnh lý khớp như viêm khớp và chấn thương khớp."
+            },
+            {
+                "name": "Xương học",
+                "description": "Chẩn đoán và chăm sóc các bệnh lý xương và rối loạn chuyển hóa xương."
+            },
+            { "name": "Cột sống", "description": "Quản lý các biến dạng, chấn thương và bệnh lý thoái hóa cột sống." },
+            {
+                "name": "Chân tay giả",
+                "description": "Thiết kế và ứng dụng các thiết bị giả và dụng cụ hỗ trợ chỉnh hình."
+            },
+            { "name": "Nẹp chỉnh hình", "description": "Tùy chỉnh thiết bị chỉnh hình nhằm hỗ trợ cấu trúc cơ xương." }
+        ],
+        "keyFunctions": [
+            {
+                "title": "Chẩn đoán và điều trị không phẫu thuật",
+                "details": [
+                    "Đánh giá tình trạng đau khớp, cứng khớp, sưng, hạn chế vận động",
+                    "Điều trị các bệnh lý cơ xương như viêm khớp, viêm gân, viêm bao hoạt dịch, đau lưng",
+                    "Kê đơn vật lý trị liệu, kiểm soát đau và dụng cụ chỉnh hình (nẹp, orthotics)"
+                ]
+            },
+            {
+                "title": "Phẫu thuật và can thiệp",
+                "details": [
+                    "Phẫu thuật mở hoặc xâm lấn tối thiểu điều trị gãy xương, đứt dây chằng, trật khớp",
+                    "Thay khớp (háng, gối, vai...)",
+                    "Nội soi khớp để sửa chữa sụn và tái tạo dây chằng"
+                ]
+            },
+            {
+                "title": "Phục hồi và chăm sóc hậu phẫu",
+                "details": [
+                    "Chương trình phục hồi cá nhân sau chấn thương hoặc phẫu thuật",
+                    "Phối hợp với chuyên gia vật lý trị liệu và kiểm soát đau",
+                    "Giáo dục tư thế, ergonomics và chiến lược phòng ngừa chấn thương"
+                ]
+            }
+        ],
+        "clinicalWorkflow": {
+            "phases": [
+                {
+                    "stage": "Tư vấn ban đầu và đánh giá",
+                    "steps": [
+                        "Khám lâm sàng toàn diện vùng khớp hoặc chi bị ảnh hưởng",
+                        "Thu thập bệnh sử và đánh giá mức độ đau",
+                        "Chỉ định xét nghiệm hình ảnh: X-quang, MRI, CT, siêu âm"
+                    ],
+                    "qualityControl": [
+                        "Ghi nhận thang đo đau",
+                        "Chấm điểm chức năng chỉnh hình (ví dụ: Oxford Knee Score)"
+                    ]
+                },
+                {
+                    "stage": "Lập kế hoạch điều trị",
+                    "steps": [
+                        "Hội chẩn đa chuyên khoa (bác sĩ chỉnh hình, chẩn đoán hình ảnh, vật lý trị liệu)",
+                        "Lựa chọn phương án bảo tồn hoặc phẫu thuật",
+                        "Tư vấn bệnh nhân về kết quả kỳ vọng và rủi ro"
+                    ],
+                    "qualityControl": ["Quy trình ra quyết định chia sẻ", "Danh mục kiểm tra đồng thuận điều trị"]
+                },
+                {
+                    "stage": "Phẫu thuật và can thiệp (nếu cần)",
+                    "steps": [
+                        "Chuẩn bị tiền phẫu và đánh giá gây mê",
+                        "Thực hiện phẫu thuật bằng kỹ thuật xâm lấn tối thiểu hoặc mở",
+                        "Chăm sóc vết mổ và phòng ngừa nhiễm trùng sau mổ"
+                    ],
+                    "qualityControl": [
+                        "Kiểm tra tiệt trùng",
+                        "Thực hiện quy trình 'time-out' trước mổ",
+                        "Tuân thủ dự phòng huyết khối tĩnh mạch"
+                    ]
+                },
+                {
+                    "stage": "Phục hồi chức năng và theo dõi",
+                    "steps": [
+                        "Thực hiện vật lý trị liệu định kỳ và tập luyện tăng sức mạnh",
+                        "Hướng dẫn sử dụng dụng cụ hỗ trợ vận động và bài tập tại nhà",
+                        "Tái khám và kiểm tra hình ảnh định kỳ để theo dõi tiến triển"
+                    ],
+                    "qualityControl": ["Theo dõi tuân thủ phục hồi", "Chấm điểm mức độ quay lại hoạt động bình thường"]
+                }
+            ]
+        }
+    }
+}

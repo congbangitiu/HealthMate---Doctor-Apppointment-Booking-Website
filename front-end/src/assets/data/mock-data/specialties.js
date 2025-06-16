@@ -203,7 +203,6 @@ const specialties = [
             ],
         },
     },
-
     {
         id: 'surgery',
         name: 'Surgery Department',
