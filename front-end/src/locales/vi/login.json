@@ -1,0 +1,14 @@
+{
+    "title": "Đăng nhập",
+    "subtitle": "Đăng nhập để duy trì kết nối với chúng tôi",
+    "emailLabel": "Email",
+    "emailPlaceholder": "Nhập email của bạn",
+    "passwordLabel": "Mật khẩu",
+    "passwordPlaceholder": "Nhập mật khẩu của bạn",
+    "remember": "Ghi nhớ đăng nhập?",
+    "forgot": "Quên mật khẩu",
+    "signIn": "Đăng nhập",
+    "or": "hoặc đăng nhập bằng tài khoản khác?",
+    "noAccount": "Bạn chưa có tài khoản?",
+    "signup": "Đăng ký"
+}

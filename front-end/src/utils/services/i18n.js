@@ -8,10 +8,14 @@ import navbarEN from '../../locales/en/navbar.json';
 import navbarVI from '../../locales/vi/navbar.json';
 import footerEN from '../../locales/en/footer.json';
 import footerVI from '../../locales/vi/footer.json';
+import loginEn from '../../locales/en/login.json';
+import loginVi from '../../locales/vi/login.json';
+import registerEn from '../../locales/en/register.json';
+import registerVi from '../../locales/vi/register.json';
 
 const resources = {
-    en: { homepage: homepageEN, navbar: navbarEN, footer: footerEN },
-    vi: { homepage: homepageVI, navbar: navbarVI, footer: footerVI },
+    en: { homepage: homepageEN, navbar: navbarEN, footer: footerEN, login: loginEn, register: registerEn },
+    vi: { homepage: homepageVI, navbar: navbarVI, footer: footerVI, login: loginVi, register: registerVi },
 };
 
 i18n.use(LanguageDetector)
@@ -21,7 +25,7 @@ i18n.use(LanguageDetector)
         fallbackLng: 'en',
         lng: 'en',
         defaultNS: 'homepage',
-        ns: ['homepage', 'navbar', 'footer'],
+        ns: ['homepage', 'navbar', 'footer', 'login', 'register'],
         interpolation: { escapeValue: false },
     });
 

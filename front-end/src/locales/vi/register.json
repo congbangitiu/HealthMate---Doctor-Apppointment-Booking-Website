@@ -1,0 +1,45 @@
+{
+    "title": "Đăng ký",
+    "subtitle": "Tạo tài khoản để trải nghiệm nhiều hơn",
+    "fields": {
+        "fullname": "Họ và tên",
+        "enterFullname": "Nhập họ và tên của bạn",
+        "username": "Tên người dùng",
+        "enterUsername": "Nhập tên người dùng của bạn",
+        "phone": "Số điện thoại",
+        "enterPhone": "Nhập số điện thoại của bạn",
+        "email": "Email",
+        "enterEmail": "Nhập email của bạn",
+        "password": "Mật khẩu",
+        "enterPassword": "Nhập mật khẩu của bạn",
+        "confirmPassword": "Xác nhận mật khẩu",
+        "reenterPassword": "Nhập lại mật khẩu"
+    },
+    "select": {
+        "role": "Bạn là:",
+        "gender": "Giới tính:",
+        "male": "Nam",
+        "female": "Nữ",
+        "other": "Khác",
+        "patient": "Bệnh nhân",
+        "doctor": "Bác sĩ"
+    },
+    "photo": {
+        "upload": "Tải ảnh lên",
+        "notice": "(Lưu ý: Ảnh tỉ lệ 1:1)"
+    },
+    "authenticator": {
+        "choose": "Chọn phương thức xác thực:",
+        "email": "Xác thực qua Email",
+        "sms": "Xác thực qua SMS"
+    },
+    "agreement": "Tôi đồng ý với điều khoản sử dụng",
+    "button": {
+        "register": "Đăng ký"
+    },
+    "other": {
+        "orLogin": "hoặc đăng nhập bằng tài khoản khác?",
+        "haveAccount": "Bạn đã có tài khoản?",
+        "signIn": "Đăng nhập"
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "title": "Sign in",
+    "subtitle": "Sign in to stay connected",
+    "emailLabel": "Email",
+    "emailPlaceholder": "Enter your email",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "remember": "Remember me?",
+    "forgot": "Forgot Password",
+    "signIn": "Sign in",
+    "or": "or sign in with other accounts?",
+    "noAccount": "Don't you have account?",
+    "signup": "Sign up"
+}

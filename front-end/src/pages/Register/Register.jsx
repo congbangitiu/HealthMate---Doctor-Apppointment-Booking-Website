@@ -14,10 +14,12 @@ import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
 import VerifyOTP from '../../components/VerifyOTP/VerifyOTP.jsx';
 import { auth, RecaptchaVerifier, signInWithPhoneNumber } from '../../utils/services/firebase';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const Register = () => {
+    const { t } = useTranslation('register');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
     const [passwordEmpty, setPasswordEmpty] = useState(true);
@@ -201,18 +203,18 @@ const Register = () => {
         <div className={cx('container')}>
             <div className={cx('inner')}>
                 <div className={cx('intro')}>
-                    <h3>Sign up</h3>
-                    <p>Create your account for more experiences</p>
+                    <h3>{t('title')}</h3>
+                    <p>{t('subtitle')}</p>
                 </div>
 
                 <form action="" onSubmit={submitHandler}>
                     <div className={cx('fields')}>
                         <div className={cx('authentication')}>
-                            <p>Fullname</p>
+                            <p>{t('fields.fullname')}</p>
                             <div className={cx('info')}>
                                 <input
                                     type="text"
-                                    placeholder="Enter your fullname"
+                                    placeholder={t('fields.enterFullname')}
                                     name="fullname"
                                     value={formData.fullname}
                                     onChange={handleInputChange}
@@ -222,11 +224,11 @@ const Register = () => {
                             </div>
                         </div>
                         <div className={cx('authentication')}>
-                            <p>Username</p>
+                            <p>{t('fields.username')}</p>
                             <div className={cx('info')}>
                                 <input
                                     type="text"
-                                    placeholder="Enter your username"
+                                    placeholder={t('fields.enterUsername')}
                                     name="username"
                                     value={formData.username}
                                     onChange={handleInputChange}
@@ -236,11 +238,11 @@ const Register = () => {
                             </div>
                         </div>
                         <div className={cx('authentication')}>
-                            <p>Phone No.</p>
+                            <p>{t('fields.phone')}</p>
                             <div className={cx('info')}>
                                 <input
                                     type="text"
-                                    placeholder="Enter your phone number here"
+                                    placeholder={t('fields.enterPhone')}
                                     name="phone"
                                     value={formData.phone}
                                     onChange={handleInputChange}
@@ -250,11 +252,11 @@ const Register = () => {
                             </div>
                         </div>
                         <div className={cx('authentication')}>
-                            <p>Email</p>
+                            <p>{t('fields.email')}</p>
                             <div className={cx('info')}>
                                 <input
                                     type="email"
-                                    placeholder="Enter your email"
+                                    placeholder={t('fields.enterEmail')}
                                     name="email"
                                     value={formData.email}
                                     onChange={handleInputChange}
@@ -265,11 +267,11 @@ const Register = () => {
                         </div>
 
                         <div className={cx('authentication')}>
-                            <p>Password</p>
+                            <p>{t('fields.password')}</p>
                             <div className={cx('info')}>
                                 <input
                                     type={showPassword ? 'text' : 'password'}
-                                    placeholder="Enter your password"
+                                    placeholder={t('fields.enterPassword')}
                                     value={formData.password}
                                     name="password"
                                     onChange={handlePasswordChange}
@@ -285,11 +287,11 @@ const Register = () => {
                             </div>
                         </div>
                         <div className={cx('authentication')}>
-                            <p>Confirm password</p>
+                            <p>{t('fields.confirmPassword')}</p>
                             <div className={cx('info')}>
                                 <input
                                     type={showConfirmedPassword ? 'text' : 'password'}
-                                    placeholder="Re-enter your password"
+                                    placeholder={t('fields.reenterPassword')}
                                     value={formData.confirmedPassword}
                                     name="confirmedPassword"
                                     onChange={handleConfirmedPasswordChange}
@@ -307,10 +309,10 @@ const Register = () => {
                     </div>
                     <div className={cx('selection')}>
                         <div className={cx('choose')}>
-                            <h4>You are a: </h4>
+                            <h4>{t('select.role')}</h4>
                             <select name="role" value={formData.role} onChange={handleInputChange}>
-                                <option value="patient">Patient</option>
-                                <option value="doctor">Doctor</option>
+                                <option value="patient">{t('select.patient')}</option>
+                                <option value="doctor">{t('select.doctor')}</option>
                             </select>
                         </div>
                         <div className={cx('upload-photo')}>
@@ -324,23 +326,23 @@ const Register = () => {
                                     onChange={handleFileInputChange}
                                 />
                                 <label htmlFor="customFile">
-                                    {isUploadingImg ? <SyncLoader size={6} color="#ffffff" /> : 'Upload photo'}
+                                    {isUploadingImg ? <SyncLoader size={6} color="#ffffff" /> : t('photo.upload')}
                                 </label>
                             </div>
-                            <p>(Notice: 1:1 scale photo)</p>
+                            <p>{t('photo.notice')}</p>
                         </div>
                         <div className={cx('choose')}>
-                            <h4>Gender: </h4>
+                            <h4>{t('select.gender')}</h4>
                             <select name="gender" value={formData.gender} onChange={handleInputChange}>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
+                                <option value="male">{t('select.male')}</option>
+                                <option value="female">{t('select.female')}</option>
+                                <option value="other">{t('select.other')}</option>
                             </select>
                         </div>
                     </div>
 
                     <div className={cx('authenticators')}>
-                        <h4>Choose an authenticator: </h4>
+                        <h4>{t('authenticator.choose')}</h4>
                         <div onClick={() => setTab('email')}>
                             <input
                                 type="radio"
@@ -349,7 +351,7 @@ const Register = () => {
                                 checked={tab === 'email'}
                                 onChange={() => setTab('email')}
                             />
-                            <label htmlFor="authenticators">Email Authenticator</label>
+                            <label htmlFor="authenticators">{t('authenticator.email')}</label>
                         </div>
                         <div onClick={() => setTab('SMS')}>
                             <input
@@ -359,30 +361,30 @@ const Register = () => {
                                 checked={tab === 'SMS'}
                                 onChange={() => setTab('SMS')}
                             />
-                            <label htmlFor="authenticators">SMS Authenticator</label>
+                            <label htmlFor="authenticators">{t('authenticator.sms')}</label>
                         </div>
                     </div>
 
                     <div className={cx('remember-container')}>
                         <input type="checkbox" />
-                        <p className={cx('question')}>I agree with the terms of use</p>
+                        <p className={cx('question')}>{t('agreement')}</p>
                     </div>
 
                     <button disabled={loading} className={cx('register-btn')}>
-                        {loading ? <SyncLoader size={8} color="#ffffff" /> : 'Sign up'}
+                        {loading ? <SyncLoader size={8} color="#ffffff" /> : t('button.register')}
                     </button>
 
                     <div className={cx('other-account')}>
-                        <p>or sign in with other accounts?</p>
+                        <p>{t('other.orLogin')}</p>
                         <div className={cx('social-network')}>
                             <FcGoogle className={cx('google')} />
                             <FaFacebook className={cx('facebook')} />
                         </div>
                     </div>
                     <div className={cx('have-account')}>
-                        <p>You have already an account?</p>
+                        <p>{t('other.haveAccount')}</p>
                         <Link to="/login" className={cx('to-sign-in-page')}>
-                            Sign in
+                            {t('other.signIn')}
                         </Link>
                     </div>
                 </form>

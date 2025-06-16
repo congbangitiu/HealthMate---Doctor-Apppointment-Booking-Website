@@ -1,0 +1,45 @@
+{
+    "title": "Sign up",
+    "subtitle": "Create your account for more experiences",
+    "fields": {
+        "fullname": "Fullname",
+        "enterFullname": "Enter your fullname",
+        "username": "Username",
+        "enterUsername": "Enter your username",
+        "phone": "Phone No.",
+        "enterPhone": "Enter your phone number here",
+        "email": "Email",
+        "enterEmail": "Enter your email",
+        "password": "Password",
+        "enterPassword": "Enter your password",
+        "confirmPassword": "Confirm password",
+        "reenterPassword": "Re-enter your password"
+    },
+    "select": {
+        "role": "You are a:",
+        "gender": "Gender:",
+        "male": "Male",
+        "female": "Female",
+        "other": "Other",
+        "patient": "Patient",
+        "doctor": "Doctor"
+    },
+    "photo": {
+        "upload": "Upload photo",
+        "notice": "(Notice: 1:1 scale photo)"
+    },
+    "authenticator": {
+        "choose": "Choose an authenticator:",
+        "email": "Email Authenticator",
+        "sms": "SMS Authenticator"
+    },
+    "agreement": "I agree with the terms of use",
+    "button": {
+        "register": "Sign up"
+    },
+    "other": {
+        "orLogin": "or sign in with other accounts?",
+        "haveAccount": "You have already an account?",
+        "signIn": "Sign in"
+    }
+}

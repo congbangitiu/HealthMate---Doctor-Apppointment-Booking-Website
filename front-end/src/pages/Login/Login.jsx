@@ -10,10 +10,13 @@ import { BASE_URL } from '../../../config';
 import SyncLoader from 'react-spinners/SyncLoader';
 import { toast } from 'react-toastify';
 import { authContext } from '../../context/AuthContext.jsx';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const Login = () => {
+    const { t } = useTranslation('login');
+
     useEffect(() => {
         window.scrollTo({
             top: 0,
@@ -86,17 +89,17 @@ const Login = () => {
         <div className={cx('container')}>
             <div className={cx('inner')}>
                 <div className={cx('intro')}>
-                    <h3>Sign in</h3>
-                    <p>Sign in to stay connected</p>
+                    <h3>{t('title')}</h3>
+                    <p>{t('subtitle')}</p>
                 </div>
 
                 <form action="" onSubmit={submitHandler}>
                     <div className={cx('authentication')}>
-                        <p>Email</p>
+                        <p>{t('emailLabel')}</p>
                         <div className={cx('info')}>
                             <input
                                 type="email"
-                                placeholder="Enter your email"
+                                placeholder={t('emailPlaceholder')}
                                 name="email"
                                 value={formData.email}
                                 onChange={handleEmailChange}
@@ -106,11 +109,11 @@ const Login = () => {
                         </div>
                     </div>
                     <div className={cx('authentication')}>
-                        <p>Password</p>
+                        <p>{t('passwordLabel')}</p>
                         <div className={cx('info')}>
                             <input
                                 type={showPassword ? 'text' : 'password'}
-                                placeholder="Enter your password"
+                                placeholder={t('passwordPlaceholder')}
                                 value={formData.password}
                                 name="password"
                                 onChange={handlePasswordChange}
@@ -128,25 +131,25 @@ const Login = () => {
                     <div className={cx('remember-forgot')}>
                         <div className={cx('remember-container')}>
                             <input type="checkbox" />
-                            <p className={cx('question')}>Remember me ?</p>
+                            <p className={cx('question')}>{t('remember')}</p>
                         </div>
-                        <p className={cx('forgot')}>Forgot Password</p>
+                        <p className={cx('forgot')}>{t('forgot')}</p>
                     </div>
                     <button disabled={loading} className={cx('login-btn')}>
-                        {loading ? <SyncLoader size={8} color="#ffffff" /> : 'Sign in'}
+                        {loading ? <SyncLoader size={8} color="#ffffff" /> : t('signIn')}
                     </button>
 
                     <div className={cx('other-account')}>
-                        <p>or sign in with other accounts?</p>
+                        <p>{t('or')}</p>
                         <div className={cx('social-network')}>
                             <FcGoogle className={cx('google')} />
                             <FaFacebook className={cx('facebook')} />
                         </div>
                     </div>
                     <div className={cx('do-not-have-account')}>
-                        <p>Don&apos;t you have account?</p>
+                        <p>{t('noAccount')}</p>
                         <Link to="/register" className={cx('to-sign-up-page')}>
-                            Sign up
+                            {t('signup')}
                         </Link>
                     </div>
                 </form>
