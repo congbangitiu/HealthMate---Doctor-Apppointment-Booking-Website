@@ -7,6 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthContextProvider } from './context/AuthContext.jsx';
 import { useMediaQuery } from '@mui/material';
+import './utils/services/i18n.js';
 
 const ToastWrapper = () => {
     const isMobile = useMediaQuery('(max-width:768px)');

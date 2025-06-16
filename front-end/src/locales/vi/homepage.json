@@ -1,0 +1,105 @@
+{
+    "introduction": {
+        "hero": {
+            "title": "Đồng hành vì sức khỏe và hạnh phúc của bạn",
+            "description": "HealthMate giúp bạn dễ dàng kết nối với đội ngũ bác sĩ uy tín và dịch vụ chăm sóc sức khỏe toàn diện. Việc đặt lịch hẹn và theo dõi tình trạng sức khỏe của bạn trở nên nhanh chóng và tiện lợi hơn bao giờ hết. Nền tảng thân thiện của chúng tôi mang đến sự chủ động trong chăm sóc sức khỏe cá nhân, giúp bạn an tâm mỗi ngày với những giải pháp y tế phù hợp và đáng tin cậy.",
+            "button": "Đặt lịch khám ngay"
+        },
+        "stats": {
+            "experience": "Năm kinh nghiệm",
+            "location": "Cơ sở phòng khám",
+            "satisfaction": "Mức độ hài lòng"
+        }
+    },
+    "about": {
+        "title": "Tự hào là một trong những nền tảng y tế hàng đầu",
+        "paragraph1": "HealthMate luôn cam kết mang đến dịch vụ chăm sóc sức khỏe xuất sắc nhất. Đội ngũ y bác sĩ giàu kinh nghiệm và tận tâm là nền tảng giúp chúng tôi giữ vững tiêu chuẩn chất lượng cao cho từng bệnh nhân.",
+        "paragraph2": "Chúng tôi không ngừng đổi mới và hoàn thiện để nâng cao trải nghiệm y tế toàn diện. Với công nghệ hiện đại và nền tảng thân thiện, HealthMate đã trở thành cái tên đáng tin cậy trong lĩnh vực chăm sóc sức khỏe.",
+        "button": "Khám phá thêm"
+    },
+    "treatment": {
+        "title": "Điều trị từ xa mọi lúc, mọi nơi",
+        "steps": [
+            "Đặt lịch khám trực tuyến nhanh chóng.",
+            "Tìm kiếm bác sĩ phù hợp và liên hệ phòng khám.",
+            "Xem danh sách bác sĩ đang nhận bệnh nhân mới và chọn khung giờ khám thuận tiện."
+        ],
+        "button": "Bắt đầu tư vấn"
+    },
+    "faqs": {
+        "title": "Những câu hỏi thường gặp từ bệnh nhân ",
+        "list": [
+            {
+                "question": "Dịch vụ chăm sóc y tế của bạn là gì?",
+                "answer": "Chúng tôi chú trọng phòng ngừa, chẩn đoán sớm và xây dựng phác đồ điều trị phù hợp cho từng bệnh nhân. Sự thoải mái, an tâm và hài lòng của bạn là ưu tiên hàng đầu của chúng tôi."
+            },
+            {
+                "question": "Nếu tôi cần điều trị tại bệnh viện thì sao?",
+                "answer": "Khi cần thiết, đội ngũ của chúng tôi sẽ hỗ trợ bạn chuyển viện và đảm bảo quá trình chăm sóc diễn ra liên tục. Chúng tôi hợp tác chặt chẽ với các bệnh viện để mang lại hiệu quả điều trị tối ưu nhất."
+            },
+            {
+                "question": "Tôi có thể đến khám trực tiếp không?",
+                "answer": "Hoàn toàn có thể! Phòng khám của chúng tôi luôn sẵn sàng đón tiếp cả bệnh nhân mới và cũ. Bạn có thể đến trực tiếp hoặc đặt lịch trước – đội ngũ nhân viên luôn sẵn lòng hỗ trợ."
+            },
+            {
+                "question": "Bạn có hỗ trợ khám cấp cứu không?",
+                "answer": "Chúng tôi có cung cấp dịch vụ khám cấp cứu dành cho những trường hợp cần được xử lý nhanh chóng. Đội ngũ y tế chuyên nghiệp của chúng tôi luôn sẵn sàng hỗ trợ kịp thời."
+            },
+            {
+                "question": "Điểm khác biệt trong dịch vụ của bạn là gì?",
+                "answer": "Chúng tôi đặt bệnh nhân làm trung tâm, cá nhân hóa phác đồ điều trị và luôn nỗ lực mang lại trải nghiệm y tế tốt nhất. Sự tận tâm và chuyên nghiệp là điều giúp chúng tôi trở nên khác biệt."
+            }
+        ]
+    },
+    "testimonial": {
+        "title": "Cảm nhận từ bệnh nhân của chúng tôi",
+        "subtitle": "Chăm sóc sức khỏe đẳng cấp cho mọi người. HealthMate cam kết mang đến dịch vụ y tế chuyên nghiệp, tận tâm.",
+        "comments": [
+            {
+                "name": "Muhibur Rahman",
+                "stars": 4,
+                "text": "Tôi đã sử dụng dịch vụ y tế tại đây và rất hài lòng. Họ chăm sóc rất tốt và luôn đảm bảo chất lượng điều trị."
+            },
+            {
+                "name": "Jane Smith",
+                "stars": 5,
+                "text": "Dịch vụ tuyệt vời! Nhân viên rất chuyên nghiệp và chu đáo."
+            },
+            {
+                "name": "David Johnson",
+                "stars": 3,
+                "text": "Trải nghiệm nhìn chung khá tốt. Cơ sở vật chất sạch sẽ và bác sĩ có chuyên môn."
+            },
+            {
+                "name": "Emily Wilson",
+                "stars": 5,
+                "text": "Tôi rất khuyến khích sử dụng dịch vụ tại đây. Họ luôn nỗ lực hết mình vì sự hài lòng của bệnh nhân."
+            },
+            {
+                "name": "Michael Brown",
+                "stars": 4,
+                "text": "Nhân viên thân thiện và làm việc hiệu quả. Không phải chờ đợi quá lâu."
+            },
+            {
+                "name": "Jessica Lee",
+                "stars": 5,
+                "text": "Tôi ấn tượng với sự chăm sóc tận tình và chú ý đến từng chi tiết của họ."
+            },
+            {
+                "name": "Daniel Martinez",
+                "stars": 4,
+                "text": "Trải nghiệm tuyệt vời! Bác sĩ rất tận tâm và có chuyên môn cao."
+            },
+            {
+                "name": "Sarah Taylor",
+                "stars": 3,
+                "text": "Dịch vụ tạm ổn. Tuy nhiên, quy trình đặt lịch cần cải thiện thêm."
+            },
+            {
+                "name": "Christopher Harris",
+                "stars": 5,
+                "text": "Tôi rất yên tâm khi điều trị tại đây. Dịch vụ thật sự xuất sắc!"
+            }
+        ]
+    }
+}

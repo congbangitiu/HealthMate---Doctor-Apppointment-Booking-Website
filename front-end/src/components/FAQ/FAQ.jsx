@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './FAQ.module.scss';
-import FAQs from '../../assets/data/mock-data/faqs';
 import Doctor6 from '../../assets/images/faq-img.png';
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const FAQ = () => {
+    const { t } = useTranslation();
     const [openIndexes, setOpenIndexes] = useState([]);
+
+    const faqs = t('faqs.list', { returnObjects: true });
 
     const toggleAccordion = (index) => {
         const currentIndex = openIndexes.indexOf(index);
@@ -23,25 +26,25 @@ const FAQ = () => {
 
     return (
         <div className={cx('container')}>
-            <img src={Doctor6} alt="" />
+            <img src={Doctor6} alt="FAQ Visual" />
             <div className={cx('content')}>
-                <h2>Most questions by our beloved patients</h2>
+                <h2>{t('faqs.title')}</h2>
                 <div className={cx('faqs')}>
-                    {FAQs.map((FAQ, index) => (
+                    {faqs.map((faq, index) => (
                         <div
-                            key={FAQ.id}
+                            key={index}
                             className={`${cx('faq')} ${openIndexes.includes(index) ? cx('open') : cx('close')}`}
                             onClick={() => toggleAccordion(index)}
                         >
                             <div className={cx('question')}>
-                                <p>{FAQ.question}</p>
+                                <p>{faq.question}</p>
                                 {openIndexes.includes(index) ? (
-                                    <AiOutlineMinus className={cx('icon')} onClick={() => toggleAccordion(index)} />
+                                    <AiOutlineMinus className={cx('icon')} />
                                 ) : (
-                                    <AiOutlinePlus className={cx('icon')} onClick={() => toggleAccordion(index)} />
+                                    <AiOutlinePlus className={cx('icon')} />
                                 )}
                             </div>
-                            {openIndexes.includes(index) && <p className={cx('answer')}>{FAQ.answer}</p>}
+                            {openIndexes.includes(index) && <p className={cx('answer')}>{faq.answer}</p>}
                         </div>
                     ))}
                 </div>

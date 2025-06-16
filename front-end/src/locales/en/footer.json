@@ -1,0 +1,19 @@
+{
+    "quickLinks": "Quick links",
+    "services": "Services",
+    "support": "Support",
+    "copyright": "Copyright ©2025 developed by <1>@CongBang</1> all right reserved",
+    "language": "Language",
+    "links": {
+        "home": "Home",
+        "about": "About us",
+        "services": "Services",
+        "blog": "Blog",
+        "findDoctor": "Find a doctor",
+        "appointment": "Request an Appointment",
+        "location": "Find a Location",
+        "opinion": "Get a Opinion",
+        "donate": "Donate",
+        "contact": "Contact Us"
+    }
+}

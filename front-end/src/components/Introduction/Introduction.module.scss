@@ -6,6 +6,7 @@
         width: 50%;
 
         & h2 {
+            line-height: 70px;
             font-size: 50px;
             font-weight: 700;
         }
@@ -93,6 +94,7 @@
             width: 100%;
 
             & h2 {
+                line-height: normal;
                 font-size: 32px;
             }
 

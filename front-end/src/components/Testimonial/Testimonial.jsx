@@ -7,15 +7,20 @@ import 'swiper/css/scrollbar';
 import 'swiper/css';
 import 'swiper/css/bundle';
 import { HiStar } from 'react-icons/hi';
-import Comments from '../../assets/data/mock-data/comments';
+import { useTranslation } from 'react-i18next';
+import patientAvatar from '../../assets/images/patient-avatar.png';
 
 const cx = classNames.bind(styles);
 
 const Testimonial = () => {
+    const { t } = useTranslation();
+    const comments = t('testimonial.comments', { returnObjects: true });
+
     return (
         <div className={cx('container')}>
-            <h2>What our patient say</h2>
-            <p>World-class care for everyone. Our health System offers unmatched, expert health care.</p>
+            <h2>{t('testimonial.title')}</h2>
+            <p>{t('testimonial.subtitle')}</p>
+
             <div className={cx('content')}>
                 <Swiper
                     modules={[Pagination]}
@@ -37,19 +42,22 @@ const Testimonial = () => {
                         },
                     }}
                 >
-                    {Comments.map((comment) => (
-                        <SwiperSlide key={comment.id}>
+                    {comments.map((comment, index) => (
+                        <SwiperSlide key={index}>
                             <div className={cx('comment')}>
                                 <div className={cx('patient')}>
-                                    <img src={comment.image} alt="" />
+                                    <img src={patientAvatar} alt={comment.name} />
                                     <div className={cx('name-rating')}>
                                         <p className={cx('name')}>{comment.name}</p>
                                         <div className={cx('rating')}>
-                                            {[...Array(comment.stars)].map((index) => (
-                                                <HiStar key={index} className={cx('star-icon', 'star-active')} />
+                                            {[...Array(comment.stars)].map((_, i) => (
+                                                <HiStar key={`full-${i}`} className={cx('star-icon', 'star-active')} />
                                             ))}
-                                            {[...Array(5 - comment.stars)].map((index) => (
-                                                <HiStar key={index} className={cx('star-icon', 'star-disabled')} />
+                                            {[...Array(5 - comment.stars)].map((_, i) => (
+                                                <HiStar
+                                                    key={`empty-${i}`}
+                                                    className={cx('star-icon', 'star-disabled')}
+                                                />
                                             ))}
                                         </div>
                                     </div>

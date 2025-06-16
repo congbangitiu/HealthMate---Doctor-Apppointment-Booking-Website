@@ -20,7 +20,7 @@ import useFetchData from '../../hooks/useFetchData';
 import notificationSound from '../../assets/sounds/notificationSound.wav';
 import DefaultMaleDoctorAvatar from '../../assets/images/default-male-doctor.png';
 import DefaultFemaleDoctorAvatar from '../../assets/images/default-female-doctor.png';
-
+import { useTranslation } from 'react-i18next';
 import { io } from 'socket.io-client';
 
 const cx = classNames.bind(styles);
@@ -31,6 +31,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const socket = io(import.meta.env.VITE_REACT_PUBLIC_SOCKET_URL);
 
 const Header = () => {
+    const { t } = useTranslation('navbar');
     const location = useLocation();
     const isMobile = useMediaQuery('(max-width:768px)');
     const { user, role, token } = useContext(authContext);
@@ -52,27 +53,27 @@ const Header = () => {
         {
             path: '/home',
             icon: IoMdHome,
-            content: 'Home',
+            content: t('home'),
         },
         {
             path: '/specialties',
             icon: FaStethoscope,
-            content: 'Specialties',
+            content: t('specialties'),
         },
         {
             path: '/doctors',
             icon: FaUserDoctor,
-            content: 'Doctors',
+            content: t('doctors'),
         },
         {
             path: '/services',
             icon: MdMedicalServices,
-            content: 'Services',
+            content: t('services'),
         },
         {
             path: '/contact',
             icon: MdContactSupport,
-            content: 'Contact',
+            content: t('contact'),
         },
     ];
 
@@ -482,10 +483,10 @@ const Header = () => {
                 ) : (
                     <>
                         <Link to="/login">
-                            <button className={cx('login')}>Login</button>
+                            <button className={cx('login')}>{t('login')}</button>
                         </Link>
                         <Link to="/register">
-                            <button className={cx('register')}>Register</button>
+                            <button className={cx('register')}>{t('register')}</button>
                         </Link>
                     </>
                 )}
@@ -577,13 +578,13 @@ const Header = () => {
                         </li>
                     ))}
                     <button className={cx('logout-mobile')} onClick={() => setShowConfirmLogout(true)}>
-                        <IoIosLogOut className={cx('icon')} /> Logout
+                        <IoIosLogOut className={cx('icon')} /> {t('logout')}
                     </button>
                 </div>
                 <div className={cx('policy')}>
-                    <p>Privacy Policy</p>
+                    <p>{t('privacy')}</p>
                     <GoDotFill className={cx('icon')} />
-                    <p>Terms of Services</p>
+                    <p>{t('terms')}</p>
                 </div>
             </Drawer>
         </div>

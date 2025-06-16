@@ -11,39 +11,57 @@
         flex-direction: column;
         align-items: center;
 
-        & img {
-            width: 100px;
-            height: 100px;
-        }
-
         & div {
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center;
 
-            & p {
-                font-size: 14px;
+            & img {
+                width: 100px;
+                height: 100px;
             }
 
-            & .social-medias {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                gap: 20px;
-                margin-top: 15px;
+            & div {
+                & p {
+                    font-size: 14px;
+                }
 
-                & .social-icon-wrapper {
-                    padding: 5px;
-                    border-radius: 50px;
-                    border: 2px solid #000;
-                    transition: border 0.3s, color 0.3s;
+                & .social-medias {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 20px;
+                    margin-top: 15px;
 
-                    &:hover {
-                        cursor: pointer;
-                        border: 2px solid var(--whiteColor);
-                        color: var(--whiteColor);
+                    & .social-icon-wrapper {
+                        padding: 5px;
+                        border-radius: 50px;
+                        border: 2px solid #000;
+                        transition: border 0.3s, color 0.3s;
+
+                        &:hover {
+                            cursor: pointer;
+                            border: 2px solid var(--whiteColor);
+                            color: var(--whiteColor);
+                        }
                     }
                 }
+            }
+        }
+
+        & select {
+            margin-top: 20px;
+            width: 200px;
+            padding: 5px;
+            border-radius: 5px;
+            background-color: var(--whiteColor);
+            font-size: 14px;
+            transition: background-color 0.3s;
+            outline: none;
+
+            &:hover {
+                cursor: pointer;
             }
         }
     }
@@ -92,7 +110,6 @@
 
         & .left-part {
             width: 100%;
-            flex-direction: row;
             align-items: center !important;
             gap: 10px;
 
@@ -109,6 +126,11 @@
                     justify-content: left;
                     gap: 10px;
                 }
+            }
+
+            & select {
+                width: 70%;
+                margin-top: 10px;
             }
         }
 

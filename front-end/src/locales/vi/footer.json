@@ -1,0 +1,19 @@
+{
+    "quickLinks": "Liên kết nhanh",
+    "services": "Dịch vụ",
+    "support": "Hỗ trợ",
+    "copyright": "Bản quyền ©2025 được phát triển bởi <1>@CongBang</1>, đã đăng ký bản quyền",
+    "language": "Ngôn ngữ",
+    "links": {
+        "home": "Trang chủ",
+        "about": "Về chúng tôi",
+        "services": "Dịch vụ",
+        "blog": "Blog",
+        "findDoctor": "Tìm bác sĩ",
+        "appointment": "Đặt lịch hẹn",
+        "location": "Tìm cơ sở",
+        "opinion": "Nhận tư vấn",
+        "donate": "Ủng hộ",
+        "contact": "Liên hệ"
+    }
+}
