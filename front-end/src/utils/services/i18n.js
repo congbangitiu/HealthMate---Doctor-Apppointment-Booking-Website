@@ -22,6 +22,10 @@ import treatmentServiceEN from '../../locales/en/treatmentService.json';
 import treatmentServiceVI from '../../locales/vi/treatmentService.json';
 import contactEN from '../../locales/en/contact.json';
 import contactVI from '../../locales/vi/contact.json';
+import doctorList from '../../locales/en/doctorList.json';
+import doctorListVI from '../../locales/vi/doctorList.json';
+import searchEn from '../../locales/en/search.json';
+import searchVi from '../../locales/vi/search.json';
 
 const resources = {
     en: {
@@ -35,6 +39,8 @@ const resources = {
         examinationService: examinationServiceEN,
         treatmentService: treatmentServiceEN,
         contact: contactEN,
+        doctorList: doctorList,
+        search: searchEn,
     },
     vi: {
         homepage: homepageVI,
@@ -47,6 +53,8 @@ const resources = {
         examinationService: examinationServiceVI,
         treatmentService: treatmentServiceVI,
         contact: contactVI,
+        doctorList: doctorListVI,
+        search: searchVi,
     },
 };
 
@@ -67,6 +75,8 @@ i18n.use(LanguageDetector)
             'specialtyDetails',
             'examinationService',
             'contact',
+            'doctorList',
+            'search',
         ],
         interpolation: { escapeValue: false },
     });

@@ -3,10 +3,12 @@ import classNames from 'classnames/bind';
 import styles from './Search.module.scss';
 import { FaSearch } from 'react-icons/fa';
 import { IoMdCloseCircle } from 'react-icons/io';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const Search = ({ query, setQuery, handleSearch }) => {
+    const { t } = useTranslation('search');
     const handleInputChange = (e) => {
         const updatedQuery = e.target.value.replace(/^\s+/, '');
         setQuery(updatedQuery);
@@ -22,7 +24,7 @@ const Search = ({ query, setQuery, handleSearch }) => {
                 type="text"
                 name="search"
                 id="searchInput"
-                placeholder="Type doctor's name or subspecialty ..."
+                placeholder={t('placeholder')}
                 value={query}
                 onChange={handleInputChange}
             />

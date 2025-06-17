@@ -9,11 +9,14 @@ import useFetchData from '../../../hooks/useFetchData';
 import Loader from '../../../components/Loader/Loader';
 import Error from '../../../components/Error/Error';
 import { Select, MenuItem } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import i18n from 'i18next';
 import specialties from '../../../assets/data/mock-data/specialties';
 
 const cx = classNames.bind(styles);
 
 const DoctorList = () => {
+    const { t } = useTranslation(['doctorList', 'specialties']);
     const [query, setQuery] = useState('');
     const [debouncedQuery, setDebouncedQuery] = useState('');
     const { data: doctors, loading, error } = useFetchData(`${BASE_URL}/doctors?query=${debouncedQuery}`);
@@ -31,19 +34,18 @@ const DoctorList = () => {
         const timeout = setTimeout(() => {
             setDebouncedQuery(query);
         }, 700);
-        return () => {
-            clearTimeout(timeout);
-        };
+        return () => clearTimeout(timeout);
     }, [query]);
 
     useEffect(() => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth',
-        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
-    const specialtyOptions = specialties.map((specialty) => specialty.name);
+    const specialtiesData = i18n.getResource(i18n.language, 'specialties');
+    const specialtyOptions = Object.entries(specialtiesData).map(([key, value]) => ({
+        key,
+        value: value.name,
+    }));
 
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
@@ -63,9 +65,7 @@ const DoctorList = () => {
                 overflowY: 'auto',
                 padding: '8px 0',
                 boxSizing: 'border-box',
-                '&::-webkit-scrollbar-button': {
-                    display: 'none',
-                },
+                '&::-webkit-scrollbar-button': { display: 'none' },
             },
         },
     };
@@ -79,28 +79,26 @@ const DoctorList = () => {
             alignItems: 'center',
             lineHeight: '56px',
         },
-
         '& .MuiOutlinedInput-notchedOutline': {
             border: '2px solid var(--lightGrayColor)',
             boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
             borderRadius: '50px',
         },
-
         '&:hover .MuiOutlinedInput-notchedOutline': {
             borderColor: 'var(--lightGrayColor)',
             boxShadow: '0 4px 20px var(--lightGreenColor)',
         },
-
         '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
             borderColor: 'var(--primaryColor)',
             boxShadow: '0 4px 20px var(--lightGreenColor)',
         },
     };
 
-    const officialDoctors = doctors.filter(
-        (doctor) =>
-            doctor.isApproved === 'approved' && (selectedSpecialty === '' || doctor.specialty === selectedSpecialty),
-    );
+    const getSpecialtyIdFromName = (name) => specialties.find((item) => item.name === name)?.id;
+    const officialDoctors = doctors.filter((doctor) => {
+        const doctorId = getSpecialtyIdFromName(doctor.specialty);
+        return doctor.isApproved === 'approved' && (selectedSpecialty === '' || doctorId === selectedSpecialty);
+    });
 
     useEffect(() => {
         const offset = currentPage * itemsPerPage;
@@ -116,10 +114,9 @@ const DoctorList = () => {
                 <Error errorMessage={error} />
             ) : (
                 <div className={cx('container')}>
-                    <h2>Our great doctors</h2>
-                    <p className={cx('description')}>
-                        World-class care for everyone. Our health System offers unmatched, expert health care.
-                    </p>
+                    <h2>{t('heading')}</h2>
+                    <p className={cx('description')}>{t('description')}</p>
+
                     <div className={cx('query')}>
                         <Select
                             value={selectedSpecialty}
@@ -128,39 +125,36 @@ const DoctorList = () => {
                             inputProps={{ sx: { height: '50px' } }}
                             sx={customStyles}
                             displayEmpty
-                            renderValue={(selected) => selected || 'All Specialties'}
+                            renderValue={(selected) => {
+                                const selectedOption = specialtyOptions.find((opt) => opt.key === selected);
+                                return selectedOption ? selectedOption.value : t('allSpecialties');
+                            }}
                         >
                             <MenuItem
                                 value=""
                                 sx={{
-                                    '&:hover': {
-                                        backgroundColor: 'var(--lightGreenColor)',
-                                    },
+                                    '&:hover': { backgroundColor: 'var(--lightGreenColor)' },
                                     backgroundColor:
                                         selectedSpecialty === '' ? 'var(--primaryColor) !important' : 'transparent',
-
                                     fontWeight: selectedSpecialty === '' ? '500' : 'normal',
                                 }}
                             >
-                                All Specialties
+                                {t('allSpecialties')}
                             </MenuItem>
                             {specialtyOptions.map((option) => (
                                 <MenuItem
-                                    key={option}
-                                    value={option}
+                                    key={option.key}
+                                    value={option.key}
                                     sx={{
-                                        '&:hover': {
-                                            backgroundColor: 'var(--lightGreenColor)',
-                                        },
+                                        '&:hover': { backgroundColor: 'var(--lightGreenColor)' },
                                         backgroundColor:
-                                            selectedSpecialty === option
+                                            selectedSpecialty === option.key
                                                 ? 'var(--primaryColor) !important'
                                                 : 'transparent',
-
-                                        fontWeight: selectedSpecialty === option ? '500' : 'normal',
+                                        fontWeight: selectedSpecialty === option.key ? '500' : 'normal',
                                     }}
                                 >
-                                    {option}
+                                    {option.value}
                                 </MenuItem>
                             ))}
                         </Select>
