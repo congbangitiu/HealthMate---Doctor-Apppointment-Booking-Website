@@ -1,0 +1,18 @@
+{
+    "title": "Cung cấp dịch vụ khám chữa bệnh tốt nhất",
+    "subtitle": "Chăm sóc chuyên sâu trong tầm tay bạn. Hệ thống y tế của chúng tôi kết nối bạn với các chuyên gia hàng đầu.",
+    "services": {
+        "findDoctor": {
+            "title": "Tìm bác sĩ",
+            "description": "Chăm sóc toàn diện, từ bác sĩ đến chẩn đoán. Hệ thống y tế đồng hành cùng bạn trên mọi chặng đường."
+        },
+        "findLocation": {
+            "title": "Tìm địa điểm",
+            "description": "Từ tư vấn đến điều trị, hệ thống y tế của chúng tôi mang đến chuyên môn vượt trội, dù bạn ở đâu."
+        },
+        "bookAppointment": {
+            "title": "Đặt lịch hẹn",
+            "description": "Hành trình chăm sóc sức khỏe của bạn bắt đầu từ đây. Hệ thống của chúng tôi cung cấp dịch vụ từ phòng khám đến phòng xét nghiệm."
+        }
+    }
+}

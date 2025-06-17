@@ -19,7 +19,7 @@ import ThyroidDisorderTreatment from '../../images/services/ThyroidDisorderTreat
 
 const services = [
     {
-        id: 1,
+        id: 'neurological-exams',
         image: NeurologicalExams,
         name: 'Neurological Exams',
         doctor: 'Neurologist',
@@ -53,7 +53,7 @@ const services = [
         ],
     },
     {
-        id: 2,
+        id: 'stroke-rehabilitation',
         image: StrokeRehabilitation,
         name: 'Stroke Rehabilitation',
         doctor: 'Neurologist',
@@ -86,7 +86,7 @@ const services = [
         ],
     },
     {
-        id: 3,
+        id: 'skin-cancer-screening',
         image: SkinCancerScreening,
         name: 'Skin Cancer Screening',
         doctor: 'Dermatologist',
@@ -120,7 +120,7 @@ const services = [
         ],
     },
     {
-        id: 4,
+        id: 'acne-treatment',
         image: AcneTreatment,
         name: 'Acne Treatment',
         doctor: 'Dermatologist',
@@ -153,7 +153,7 @@ const services = [
         ],
     },
     {
-        id: 5,
+        id: 'cardiac-stress-testing',
         image: CardiacStressTesting,
         name: 'Cardiac Stress Testing',
         doctor: 'Cardiologist',
@@ -187,7 +187,7 @@ const services = [
         ],
     },
     {
-        id: 6,
+        id: 'echocardiograms',
         image: Echocardiograms,
         name: 'Echocardiograms',
         doctor: 'Cardiologist',
@@ -221,7 +221,7 @@ const services = [
         ],
     },
     {
-        id: 7,
+        id: 'mental-health-counseling',
         image: MentalHealthCounseling,
         name: 'Mental Health Counseling',
         doctor: 'Psychiatrist',
@@ -254,7 +254,7 @@ const services = [
         ],
     },
     {
-        id: 8,
+        id: 'medication-management',
         image: MedicationManagement,
         name: 'Medication Management',
         doctor: 'Psychiatrist',
@@ -287,7 +287,7 @@ const services = [
         ],
     },
     {
-        id: 9,
+        id: 'pulmonary-function-tests',
         image: PulmonaryFunctionTests,
         name: 'Pulmonary Function Tests',
         doctor: 'Pulmonologist',
@@ -321,7 +321,7 @@ const services = [
         ],
     },
     {
-        id: 10,
+        id: 'sleep-apnea-treatment',
         image: SleepApneaTreatment,
         name: 'Sleep Apnea Treatment',
         doctor: 'Pulmonologist',
@@ -354,7 +354,7 @@ const services = [
         ],
     },
     {
-        id: 11,
+        id: 'arthritis-management',
         image: ArthritisManagement,
         name: 'Arthritis Management',
         doctor: 'Rheumatologist',
@@ -388,7 +388,7 @@ const services = [
         ],
     },
     {
-        id: 12,
+        id: 'osteoporosis-screening',
         image: OsteoporosisScreening,
         name: 'Osteoporosis Screening',
         doctor: 'Rheumatologist',
@@ -421,7 +421,7 @@ const services = [
         ],
     },
     {
-        id: 13,
+        id: 'chemotherapy-administration',
         image: ChemotherapyAdministration,
         name: 'Chemotherapy Administration',
         doctor: 'Oncologist',
@@ -455,7 +455,7 @@ const services = [
         ],
     },
     {
-        id: 14,
+        id: 'radiation-therapy',
         image: RadiationTherapy,
         name: 'Radiation Therapy',
         doctor: 'Oncologist',
@@ -488,7 +488,7 @@ const services = [
         ],
     },
     {
-        id: 15,
+        id: 'cataract-surgery',
         image: CataractSurgery,
         name: 'Cataract Surgery',
         doctor: 'Ophthalmologist',
@@ -521,7 +521,7 @@ const services = [
         ],
     },
     {
-        id: 16,
+        id: 'glaucoma-treatment',
         image: GlaucomaTreatment,
         name: 'Glaucoma Treatment',
         doctor: 'Ophthalmologist',
@@ -554,7 +554,7 @@ const services = [
         ],
     },
     {
-        id: 17,
+        id: 'diabetes-management',
         image: DiabetesManagement,
         name: 'Diabetes Management',
         doctor: 'Endocrinologist',
@@ -587,7 +587,7 @@ const services = [
         ],
     },
     {
-        id: 18,
+        id: 'thyroid-disorder-treatment',
         image: ThyroidDisorderTreatment,
         name: 'Thyroid Disorder Treatment',
         doctor: 'Endocrinologist',

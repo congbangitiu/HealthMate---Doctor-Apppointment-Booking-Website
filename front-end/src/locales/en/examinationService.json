@@ -1,0 +1,18 @@
+{
+    "title": "Providing the best medical examination services",
+    "subtitle": "Expert care at your fingertips. Our health system connects you with top medical professionals.",
+    "services": {
+        "findDoctor": {
+            "title": "Find a Doctor",
+            "description": "Comprehensive care, from doctor to diagnosis. Our health system is with you every step of the way."
+        },
+        "findLocation": {
+            "title": "Find a Location",
+            "description": "From consultation to care, our health system delivers unmatched expertise, wherever you are."
+        },
+        "bookAppointment": {
+            "title": "Book an Appointment",
+            "description": "Your journey to health starts here. Our system provides expert care from the clinic to the lab."
+        }
+    }
+}

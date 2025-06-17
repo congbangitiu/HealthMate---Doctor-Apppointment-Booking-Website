@@ -1,0 +1,557 @@
+{
+    "heading": "Offering the best medical treatment services",
+    "description": "World-class care for everyone. Our health System offers unmatched, expert healthcare",
+    "loadMore": "Load more",
+    "label": {
+        "benefits": "Benefits",
+        "procedure": "Procedure",
+        "requirements": "Requirements",
+        "expectedResults": "Expected Results",
+        "relevantDoctors": "Relevant Doctors",
+        "noDoctorMessage": "Currently there is no doctor in charge of this service. Thank you for your interest in the service.",
+        "notFound": "Service not found.",
+        "viewDetails": "View Details"
+    },
+    "services": {
+        "neurological-exams": {
+            "name": "Neurological Exams",
+            "doctor": "Neurologist",
+            "shortDesc": "Thorough assessments to diagnose and manage neurological conditions such as epilepsy, migraines, and Parkinson's disease.",
+            "longDesc": "Neurological exams are essential for diagnosing and managing a wide range of neurological conditions. They involve a series of tests and assessments to evaluate the nervous system. Our neurologists use these exams to detect issues early and plan effective treatments. Regular neurological exams are crucial for patients with ongoing neurological disorders.",
+            "benefits": [
+                "Early detection of neurological conditions.",
+                "Comprehensive assessment of the nervous system.",
+                "Tailored treatment plans.",
+                "Improved quality of life for patients."
+            ],
+            "procedure": [
+                "Patient history review.",
+                "Physical examination.",
+                "Neurological tests (reflexes, coordination, etc.).",
+                "Imaging tests (MRI, CT scans)."
+            ],
+            "requirements": [
+                "Referral from a primary care physician.",
+                "Medical history documents.",
+                "List of current medications.",
+                "Fasting for certain tests."
+            ],
+            "expectedResults": [
+                "Accurate diagnosis of neurological conditions.",
+                "Personalized treatment plans.",
+                "Improved management of symptoms.",
+                "Enhanced patient well-being."
+            ]
+        },
+        "stroke-rehabilitation": {
+            "name": "Stroke Rehabilitation",
+            "doctor": "Neurologist",
+            "shortDesc": "Providing therapy and support to help patients recover and improve functionality after a stroke.",
+            "longDesc": "Stroke rehabilitation focuses on helping patients regain their independence and improve their quality of life after a stroke. It involves a multidisciplinary approach to address the physical, emotional, and cognitive impacts of a stroke. Our team works closely with patients to create personalized rehab plans. The goal is to maximize recovery and prevent future strokes.",
+            "benefits": [
+                "Improved mobility and strength.",
+                "Enhanced cognitive function.",
+                "Better emotional health.",
+                "Reduced risk of future strokes."
+            ],
+            "procedure": [
+                "Initial assessment by a neurologist.",
+                "Physical therapy sessions.",
+                "Occupational therapy.",
+                "Speech and language therapy."
+            ],
+            "requirements": [
+                "Stroke diagnosis documentation.",
+                "Initial consultation with a neurologist.",
+                "Commitment to regular therapy sessions.",
+                "Family or caregiver involvement."
+            ],
+            "expectedResults": [
+                "Improved physical abilities.",
+                "Enhanced cognitive and emotional health.",
+                "Greater independence in daily activities.",
+                "Reduced likelihood of recurrent strokes."
+            ]
+        },
+        "skin-cancer-screening": {
+            "name": "Skin Cancer Screening",
+            "doctor": "Dermatologist",
+            "shortDesc": "Early detection and treatment of skin cancers, including melanoma, through regular skin checks and biopsies.",
+            "longDesc": "Skin cancer screening is vital for the early detection of various skin cancers, including melanoma. Regular screenings can identify cancerous and precancerous conditions early when they are most treatable. Our dermatologists perform thorough skin examinations and biopsies if necessary. This proactive approach significantly increases the chances of successful treatment and recovery.",
+            "benefits": [
+                "Early detection of skin cancer.",
+                "Increased treatment success rates.",
+                "Prevention of cancer progression.",
+                "Peace of mind for patients."
+            ],
+            "procedure": [
+                "Visual examination of the skin.",
+                "Dermatoscopy for closer inspection.",
+                "Biopsy of suspicious lesions.",
+                "Pathology review of biopsy samples."
+            ],
+            "requirements": [
+                "Regular screening appointments.",
+                "Avoiding sun exposure before the appointment.",
+                "Bringing a list of medications.",
+                "Providing a history of skin conditions."
+            ],
+            "expectedResults": [
+                "Early detection and treatment of skin cancer.",
+                "Prevention of cancer spread.",
+                "Better prognosis for patients.",
+                "Improved overall skin health."
+            ]
+        },
+        "acne-treatment": {
+            "name": "Acne Treatment",
+            "doctor": "Dermatologist",
+            "shortDesc": "Customized treatment plans to reduce and manage acne, improving skin health and appearance.",
+            "longDesc": "Acne treatment aims to reduce and manage acne, preventing scarring and improving skin appearance. Our dermatologists tailor treatment plans to each patient's needs, using a combination of topical and oral medications. Regular follow-ups ensure the effectiveness of the treatment. Lifestyle and skincare recommendations are also provided for long-term skin health.",
+            "benefits": [
+                "Clearer skin and reduced acne.",
+                "Prevention of acne scars.",
+                "Improved skin texture and tone.",
+                "Increased self-confidence."
+            ],
+            "procedure": [
+                "Initial skin assessment.",
+                "Prescription of topical treatments.",
+                "Oral medications if necessary.",
+                "Regular follow-up appointments."
+            ],
+            "requirements": [
+                "Adherence to prescribed treatment plans.",
+                "Avoidance of acne triggers.",
+                "Commitment to follow-up visits.",
+                "Use of recommended skincare products."
+            ],
+            "expectedResults": [
+                "Significant reduction in acne.",
+                "Prevention of future breakouts.",
+                "Healthier and clearer skin.",
+                "Enhanced self-esteem."
+            ]
+        },
+        "cardiac-stress-testing": {
+            "name": "Cardiac Stress Testing",
+            "doctor": "Cardiologist",
+            "shortDesc": "Evaluation of heart function and detection of coronary artery disease through controlled physical exercise tests.",
+            "longDesc": "Cardiac stress testing evaluates heart function and helps detect coronary artery disease. The test involves physical exercise or medication to increase heart rate while monitoring heart activity. This helps identify any abnormalities in heart function. Our cardiologists use this information to diagnose heart conditions and plan appropriate treatments.",
+            "benefits": [
+                "Early detection of heart disease.",
+                "Assessment of heart function under stress.",
+                "Guidance for treatment plans.",
+                "Prevention of heart attacks."
+            ],
+            "procedure": [
+                "Pre-test consultation and preparation.",
+                "Exercise or pharmacological stress test.",
+                "Continuous ECG and blood pressure monitoring.",
+                "Post-test analysis and consultation."
+            ],
+            "requirements": [
+                "Fasting for a few hours before the test.",
+                "Wearing comfortable clothing.",
+                "Informing the doctor of any medications.",
+                "Bringing a list of current medications."
+            ],
+            "expectedResults": [
+                "Identification of heart disease.",
+                "Improved heart disease management.",
+                "Tailored treatment plans.",
+                "Reduced risk of heart attacks."
+            ]
+        },
+        "echocardiograms": {
+            "name": "Echocardiograms",
+            "doctor": "Cardiologist",
+            "shortDesc": "Using ultrasound technology to create images of the heart, aiding in the diagnosis of heart conditions.",
+            "longDesc": "Echocardiograms use ultrasound technology to create detailed images of the heart. This non-invasive test helps diagnose various heart conditions, including valve problems and heart muscle damage. Our cardiologists perform echocardiograms to assess heart function and plan treatments. It's a crucial tool for monitoring heart health and guiding patient care.",
+            "benefits": [
+                "Non-invasive heart imaging.",
+                "Accurate diagnosis of heart conditions.",
+                "Guidance for treatment decisions.",
+                "Monitoring of heart health."
+            ],
+            "procedure": [
+                "Preparation and positioning of the patient.",
+                "Application of ultrasound gel.",
+                "Use of a transducer to capture heart images.",
+                "Analysis of the images by a cardiologist."
+            ],
+            "requirements": [
+                "Wearing comfortable clothing.",
+                "Informing the doctor of any medications.",
+                "Bringing a list of current medications.",
+                "Following any specific preparation instructions."
+            ],
+            "expectedResults": [
+                "Detailed images of the heart.",
+                "Accurate diagnosis of heart conditions.",
+                "Effective treatment planning.",
+                "Ongoing monitoring of heart health."
+            ]
+        },
+        "mental-health-counseling": {
+            "name": "Mental Health Counseling",
+            "doctor": "Psychiatrist",
+            "shortDesc": "Providing therapy and support for conditions such as depression, anxiety, and bipolar disorder.",
+            "longDesc": "Mental health counseling offers therapy and support for individuals dealing with mental health conditions such as depression, anxiety, and bipolar disorder. Our psychiatrists work with patients to develop personalized treatment plans. Counseling sessions provide a safe space for patients to discuss their feelings and challenges. The goal is to improve mental well-being and overall quality of life.",
+            "benefits": [
+                "Improved mental health.",
+                "Better coping strategies.",
+                "Enhanced emotional well-being.",
+                "Supportive therapeutic environment."
+            ],
+            "procedure": [
+                "Initial assessment and diagnosis.",
+                "Development of a personalized treatment plan.",
+                "Regular counseling sessions.",
+                "Ongoing monitoring and adjustments to the treatment plan."
+            ],
+            "requirements": [
+                "Commitment to regular counseling sessions.",
+                "Open communication with the therapist.",
+                "Willingness to participate in therapy exercises.",
+                "Adherence to the treatment plan."
+            ],
+            "expectedResults": [
+                "Improved mental health.",
+                "Better management of mental health conditions.",
+                "Enhanced quality of life.",
+                "Increased emotional resilience."
+            ]
+        },
+        "medication-management": {
+            "name": "Medication Management",
+            "doctor": "Psychiatrist",
+            "shortDesc": "Prescribing and monitoring medications to ensure effective treatment of psychiatric disorders.",
+            "longDesc": "Medication management involves prescribing and monitoring medications to treat psychiatric disorders effectively. Our psychiatrists work closely with patients to find the right medication and dosage. Regular follow-ups ensure the medication's effectiveness and manage any side effects. This approach helps patients achieve better mental health outcomes.",
+            "benefits": [
+                "Effective management of psychiatric disorders.",
+                "Reduced symptoms and improved functioning.",
+                "Regular monitoring and adjustments.",
+                "Comprehensive approach to mental health care."
+            ],
+            "procedure": [
+                "Initial psychiatric evaluation.",
+                "Prescription of appropriate medications.",
+                "Regular follow-up appointments.",
+                "Monitoring and adjusting medication as needed."
+            ],
+            "requirements": [
+                "Adherence to prescribed medications.",
+                "Regular follow-up visits.",
+                "Open communication about side effects.",
+                "Commitment to the treatment plan."
+            ],
+            "expectedResults": [
+                "Effective management of symptoms.",
+                "Improved mental health.",
+                "Better quality of life.",
+                "Reduced risk of relapse."
+            ]
+        },
+        "pulmonary-function-tests": {
+            "name": "Pulmonary Function Tests",
+            "doctor": "Pulmonologist",
+            "shortDesc": "Assessing lung function to diagnose and manage respiratory conditions like asthma and chronic obstructive pulmonary disease (COPD).",
+            "longDesc": "Pulmonary function tests (PFTs) assess lung function and help diagnose respiratory conditions such as asthma and COPD. These tests measure how well the lungs work by evaluating airflow and lung volume. Our pulmonologists use PFTs to diagnose conditions, plan treatments, and monitor progress. PFTs are essential for managing chronic respiratory diseases.",
+            "benefits": [
+                "Accurate diagnosis of respiratory conditions.",
+                "Monitoring of lung function.",
+                "Guidance for treatment plans.",
+                "Early detection of respiratory issues."
+            ],
+            "procedure": [
+                "Spirometry to measure airflow.",
+                "Body plethysmography to measure lung volume.",
+                "Diffusion capacity tests.",
+                "Review and interpretation of results by a pulmonologist."
+            ],
+            "requirements": [
+                "Avoiding heavy meals before the test.",
+                "Wearing loose clothing.",
+                "Providing a list of medications.",
+                "Following specific pre-test instructions."
+            ],
+            "expectedResults": [
+                "Detailed assessment of lung function.",
+                "Accurate diagnosis of respiratory conditions.",
+                "Effective treatment planning.",
+                "Improved management of respiratory diseases."
+            ]
+        },
+        "sleep-apnea-treatment": {
+            "name": "Sleep Apnea Treatment",
+            "doctor": "Pulmonologist",
+            "shortDesc": "Diagnosing and managing sleep apnea to improve sleep quality and overall health.",
+            "longDesc": "Sleep apnea treatment focuses on diagnosing and managing sleep apnea to improve sleep quality and overall health. Our pulmonologists use various diagnostic tests, including sleep studies, to identify sleep apnea. Treatment options include CPAP therapy, lifestyle changes, and sometimes surgery. Effective treatment can significantly enhance sleep quality and reduce associated health risks.",
+            "benefits": [
+                "Improved sleep quality.",
+                "Reduced risk of associated health conditions.",
+                "Better daytime alertness and functioning.",
+                "Enhanced overall health."
+            ],
+            "procedure": [
+                "Initial assessment and diagnosis.",
+                "Overnight sleep study.",
+                "Prescription of CPAP or other treatments.",
+                "Regular follow-up and adjustments."
+            ],
+            "requirements": [
+                "Commitment to using prescribed treatments.",
+                "Regular follow-up visits.",
+                "Adherence to lifestyle recommendations.",
+                "Open communication about treatment effectiveness."
+            ],
+            "expectedResults": [
+                "Improved sleep patterns.",
+                "Reduced sleep apnea symptoms.",
+                "Better overall health.",
+                "Enhanced quality of life."
+            ]
+        },
+        "arthritis-management": {
+            "name": "Arthritis Management",
+            "doctor": "Rheumatologist",
+            "shortDesc": "Personalized treatment plans to alleviate pain and improve mobility for patients with various forms of arthritis.",
+            "longDesc": "Arthritis management involves personalized treatment plans to alleviate pain and improve mobility for patients with arthritis. Our rheumatologists assess each patient's condition and develop tailored treatment strategies. These may include medications, physical therapy, and lifestyle changes. The goal is to reduce pain, improve joint function, and enhance the patient's quality of life.",
+            "benefits": [
+                "Reduced pain and inflammation.",
+                "Improved joint mobility.",
+                "Better quality of life.",
+                "Slowed progression of arthritis."
+            ],
+            "procedure": [
+                "Initial assessment and diagnosis.",
+                "Prescription of anti-inflammatory medications.",
+                "Physical therapy sessions.",
+                "Regular follow-up and adjustments."
+            ],
+            "requirements": [
+                "Adherence to treatment plans.",
+                "Regular follow-up visits.",
+                "Commitment to physical therapy.",
+                "Open communication about symptoms."
+            ],
+            "expectedResults": [
+                "Reduced arthritis symptoms.",
+                "Improved joint function.",
+                "Enhanced mobility.",
+                "Better overall quality of life."
+            ]
+        },
+        "osteoporosis-screening": {
+            "name": "Osteoporosis Screening",
+            "doctor": "Rheumatologist",
+            "shortDesc": "Early detection and management of osteoporosis to prevent fractures and maintain bone health.",
+            "longDesc": "Osteoporosis screening is crucial for the early detection and management of osteoporosis. This condition weakens bones, making them more susceptible to fractures. Our rheumatologists use various tests, including bone density scans, to assess bone health. Early intervention can prevent fractures and improve overall bone health.",
+            "benefits": [
+                "Early detection of osteoporosis.",
+                "Prevention of fractures.",
+                "Improved bone health.",
+                "Guidance for lifestyle changes."
+            ],
+            "procedure": [
+                "Initial assessment and medical history review.",
+                "Bone density scans (DEXA).",
+                "Laboratory tests for calcium and vitamin D levels.",
+                "Development of a personalized treatment plan."
+            ],
+            "requirements": [
+                "Regular screening appointments.",
+                "Adherence to prescribed treatments.",
+                "Commitment to lifestyle changes.",
+                "Open communication about symptoms."
+            ],
+            "expectedResults": [
+                "Early detection and management of osteoporosis.",
+                "Prevention of bone fractures.",
+                "Improved bone density.",
+                "Better overall health and mobility."
+            ]
+        },
+        "chemotherapy-administration": {
+            "name": "Chemotherapy Administration",
+            "doctor": "Oncologist",
+            "shortDesc": "Providing cancer treatment through carefully monitored chemotherapy sessions to target and destroy cancer cells.",
+            "longDesc": "Chemotherapy administration is a critical component of cancer treatment, involving the use of drugs to target and destroy cancer cells. Our oncologists carefully monitor each session to manage side effects and ensure the treatment's effectiveness. Chemotherapy can be administered in cycles, allowing healthy cells to recover. This treatment is often combined with other therapies for optimal results.",
+            "benefits": [
+                "Effective targeting of cancer cells.",
+                "Reduced tumor size.",
+                "Improved survival rates.",
+                "Combination with other therapies for better outcomes."
+            ],
+            "procedure": [
+                "Initial consultation and treatment planning.",
+                "Administration of chemotherapy drugs.",
+                "Monitoring of side effects.",
+                "Regular follow-up and adjustments."
+            ],
+            "requirements": [
+                "Adherence to chemotherapy schedule.",
+                "Managing side effects with prescribed medications.",
+                "Regular follow-up visits.",
+                "Open communication about treatment progress."
+            ],
+            "expectedResults": [
+                "Reduction in tumor size.",
+                "Effective management of cancer.",
+                "Improved survival rates.",
+                "Enhanced quality of life."
+            ]
+        },
+        "radiation-therapy": {
+            "name": "Radiation Therapy",
+            "doctor": "Oncologist",
+            "shortDesc": "Using high-energy radiation to shrink tumors and kill cancer cells.",
+            "longDesc": "Radiation therapy uses high-energy radiation to shrink tumors and kill cancer cells. Our oncologists develop precise treatment plans to target cancer while minimizing damage to healthy tissue. Radiation therapy can be used alone or in combination with other treatments. Regular monitoring ensures the treatment's effectiveness and manages any side effects.",
+            "benefits": [
+                "Effective targeting of cancer cells.",
+                "Shrinking of tumors.",
+                "Combination with other treatments.",
+                "Improved survival rates."
+            ],
+            "procedure": [
+                "Initial consultation and planning.",
+                "Simulation and mapping of treatment area.",
+                "Daily radiation therapy sessions.",
+                "Regular monitoring and adjustments."
+            ],
+            "requirements": [
+                "Adherence to treatment schedule.",
+                "Managing side effects with prescribed medications.",
+                "Regular follow-up visits.",
+                "Open communication about treatment progress."
+            ],
+            "expectedResults": [
+                "Reduction in tumor size.",
+                "Effective management of cancer.",
+                "Improved survival rates.",
+                "Enhanced quality of life."
+            ]
+        },
+        "cataract-surgery": {
+            "name": "Cataract Surgery",
+            "doctor": "Ophthalmologist",
+            "shortDesc": "Surgical removal of cloudy lenses to restore clear vision.",
+            "longDesc": "Cataract surgery involves the removal of cloudy lenses to restore clear vision. Our ophthalmologists use advanced techniques to perform this procedure safely and effectively. The cloudy lens is replaced with an artificial one, significantly improving vision. Cataract surgery is a common and successful procedure that can greatly enhance the quality of life for patients.",
+            "benefits": [
+                "Restoration of clear vision.",
+                "Improved quality of life.",
+                "Quick recovery time.",
+                "Reduced risk of complications."
+            ],
+            "procedure": [
+                "Pre-surgery consultation and planning.",
+                "Removal of the cloudy lens.",
+                "Insertion of an artificial lens.",
+                "Post-surgery follow-up and care."
+            ],
+            "requirements": [
+                "Pre-surgery eye examination.",
+                "Adherence to pre-surgery instructions.",
+                "Post-surgery follow-up visits.",
+                "Using prescribed eye drops."
+            ],
+            "expectedResults": [
+                "Clear and improved vision.",
+                "Quick recovery.",
+                "Enhanced quality of life.",
+                "Reduced risk of vision loss."
+            ]
+        },
+        "glaucoma-treatment": {
+            "name": "Glaucoma Treatment",
+            "doctor": "Ophthalmologist",
+            "shortDesc": "Management and treatment of glaucoma to prevent vision loss.",
+            "longDesc": "Glaucoma treatment focuses on managing and preventing vision loss caused by glaucoma. Our ophthalmologists use a combination of medications, laser treatments, and surgery to control intraocular pressure. Early detection and treatment are crucial to prevent further damage to the optic nerve. Regular monitoring ensures the effectiveness of the treatment and adjusts it as necessary.",
+            "benefits": [
+                "Prevention of vision loss.",
+                "Control of intraocular pressure.",
+                "Tailored treatment plans.",
+                "Improved eye health."
+            ],
+            "procedure": [
+                "Initial assessment and diagnosis.",
+                "Prescription of medications.",
+                "Laser treatment or surgery if necessary.",
+                "Regular follow-up and adjustments."
+            ],
+            "requirements": [
+                "Adherence to prescribed medications.",
+                "Regular follow-up visits.",
+                "Monitoring intraocular pressure.",
+                "Open communication about symptoms."
+            ],
+            "expectedResults": [
+                "Controlled intraocular pressure.",
+                "Prevention of vision loss.",
+                "Improved eye health.",
+                "Enhanced quality of life."
+            ]
+        },
+        "diabetes-management": {
+            "name": "Diabetes Management",
+            "doctor": "Endocrinologist",
+            "shortDesc": "Comprehensive care plans to manage blood sugar levels and prevent complications from diabetes.",
+            "longDesc": "Diabetes management involves comprehensive care plans to manage blood sugar levels and prevent complications. Our endocrinologists work with patients to develop personalized treatment strategies. This includes medication management, dietary guidance, and regular monitoring. Effective diabetes management is crucial for preventing serious health issues and maintaining a good quality of life.",
+            "benefits": [
+                "Better blood sugar control.",
+                "Prevention of diabetes complications.",
+                "Improved overall health.",
+                "Enhanced quality of life."
+            ],
+            "procedure": [
+                "Initial assessment and diagnosis.",
+                "Prescription of diabetes medications.",
+                "Dietary and lifestyle guidance.",
+                "Regular follow-up and monitoring."
+            ],
+            "requirements": [
+                "Adherence to prescribed medications.",
+                "Regular monitoring of blood sugar levels.",
+                "Commitment to dietary and lifestyle changes.",
+                "Regular follow-up visits."
+            ],
+            "expectedResults": [
+                "Improved blood sugar levels.",
+                "Prevention of complications.",
+                "Better overall health.",
+                "Enhanced quality of life."
+            ]
+        },
+        "thyroid-disorder-treatment": {
+            "name": "Thyroid Disorder Treatment",
+            "doctor": "Endocrinologist",
+            "shortDesc": "Diagnosis and treatment of thyroid disorders to regulate hormone levels and maintain health.",
+            "longDesc": "Thyroid disorder treatment focuses on diagnosing and managing conditions like hypothyroidism and hyperthyroidism. Our endocrinologists use blood tests to evaluate thyroid function and prescribe appropriate medications. Regular monitoring ensures that hormone levels are kept within the normal range. Effective treatment helps manage symptoms and maintain overall health.",
+            "benefits": [
+                "Regulated hormone levels.",
+                "Management of symptoms.",
+                "Improved overall health.",
+                "Prevention of complications."
+            ],
+            "procedure": [
+                "Initial assessment and blood tests.",
+                "Prescription of thyroid medications.",
+                "Regular monitoring and dosage adjustments.",
+                "Follow-up visits and evaluations."
+            ],
+            "requirements": [
+                "Adherence to prescribed medications.",
+                "Regular follow-up visits.",
+                "Monitoring of symptoms.",
+                "Commitment to treatment plan."
+            ],
+            "expectedResults": [
+                "Regulated hormone levels.",
+                "Improved symptom management.",
+                "Better overall health.",
+                "Enhanced quality of life."
+            ]
+        }
+    }
+}

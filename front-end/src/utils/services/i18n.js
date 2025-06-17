@@ -16,6 +16,10 @@ import specialtiesEN from '../../locales/en/specialties.json';
 import specialtiesVI from '../../locales/vi/specialties.json';
 import specialtyDetailsEN from '../../locales/en/specialtyDetails.json';
 import specialtyDetailsVI from '../../locales/vi/specialtyDetails.json';
+import examinationServiceEN from '../../locales/en/examinationService.json';
+import examinationServiceVI from '../../locales/vi/examinationService.json';
+import treatmentServiceEN from '../../locales/en/treatmentService.json';
+import treatmentServiceVI from '../../locales/vi/treatmentService.json';
 
 const resources = {
     en: {
@@ -26,6 +30,8 @@ const resources = {
         register: registerEn,
         specialties: specialtiesEN,
         specialtyDetails: specialtyDetailsEN,
+        examinationService: examinationServiceEN,
+        treatmentService: treatmentServiceEN,
     },
     vi: {
         homepage: homepageVI,
@@ -35,6 +41,8 @@ const resources = {
         register: registerVi,
         specialties: specialtiesVI,
         specialtyDetails: specialtyDetailsVI,
+        examinationService: examinationServiceVI,
+        treatmentService: treatmentServiceVI,
     },
 };
 
@@ -45,7 +53,16 @@ i18n.use(LanguageDetector)
         fallbackLng: 'en',
         lng: 'en',
         defaultNS: 'homepage',
-        ns: ['homepage', 'navbar', 'footer', 'login', 'register', 'specialties', 'specialtyDetails'],
+        ns: [
+            'homepage',
+            'navbar',
+            'footer',
+            'login',
+            'register',
+            'specialties',
+            'specialtyDetails',
+            'examinationService',
+        ],
         interpolation: { escapeValue: false },
     });
 

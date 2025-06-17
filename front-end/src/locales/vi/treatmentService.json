@@ -1,0 +1,557 @@
+{
+    "heading": "Cung cấp các dịch vụ điều trị y tế tốt nhất",
+    "description": "Chăm sóc đẳng cấp thế giới cho mọi người. Hệ thống y tế của chúng tôi cung cấp dịch vụ chăm sóc sức khỏe chuyên nghiệp.",
+    "loadMore": "Hiện thêm",
+    "label": {
+        "benefits": "Lợi ích",
+        "procedure": "Quy trình",
+        "requirements": "Yêu cầu",
+        "expectedResults": "Kết quả mong đợi",
+        "relevantDoctors": "Bác sĩ phụ trách",
+        "noDoctorMessage": "Hiện chưa có bác sĩ nào phụ trách dịch vụ này. Cảm ơn bạn đã quan tâm!",
+        "notFound": "Không tìm thấy dịch vụ.",
+        "viewDetails": "Xem chi tiết"
+    },
+    "services": {
+        "neurological-exams": {
+            "name": "Khám Thần kinh",
+            "doctor": "Bác sĩ Thần kinh",
+            "shortDesc": "Đánh giá toàn diện để chẩn đoán và quản lý các bệnh lý thần kinh như động kinh, đau nửa đầu và bệnh Parkinson.",
+            "longDesc": "Khám thần kinh là cần thiết để chẩn đoán và quản lý nhiều bệnh lý thần kinh khác nhau. Chúng bao gồm một loạt các xét nghiệm và đánh giá để xem xét hệ thần kinh. Các bác sĩ thần kinh của chúng tôi sử dụng các khám này để phát hiện sớm các vấn đề và lập kế hoạch điều trị hiệu quả. Khám thần kinh định kỳ rất quan trọng đối với bệnh nhân mắc các rối loạn thần kinh kéo dài.",
+            "benefits": [
+                "Phát hiện sớm các bệnh lý thần kinh.",
+                "Đánh giá toàn diện hệ thần kinh.",
+                "Kế hoạch điều trị cá nhân hóa.",
+                "Cải thiện chất lượng cuộc sống cho bệnh nhân."
+            ],
+            "procedure": [
+                "Xem xét tiền sử bệnh nhân.",
+                "Khám lâm sàng.",
+                "Các xét nghiệm thần kinh (phản xạ, phối hợp, v.v.).",
+                "Xét nghiệm hình ảnh (MRI, CT scan)."
+            ],
+            "requirements": [
+                "Giấy giới thiệu từ bác sĩ chăm sóc chính.",
+                "Hồ sơ tiền sử y khoa.",
+                "Danh sách các thuốc đang sử dụng.",
+                "Nhịn ăn trước một số xét nghiệm."
+            ],
+            "expectedResults": [
+                "Chẩn đoán chính xác các bệnh lý thần kinh.",
+                "Kế hoạch điều trị cá nhân hóa.",
+                "Quản lý triệu chứng tốt hơn.",
+                "Cải thiện sức khỏe tổng thể của bệnh nhân."
+            ]
+        },
+        "stroke-rehabilitation": {
+            "name": "Phục hồi chức năng sau đột quỵ",
+            "doctor": "Bác sĩ Thần kinh",
+            "shortDesc": "Cung cấp liệu pháp và hỗ trợ để giúp bệnh nhân phục hồi và cải thiện chức năng sau đột quỵ.",
+            "longDesc": "Phục hồi chức năng sau đột quỵ tập trung vào việc giúp bệnh nhân lấy lại sự độc lập và cải thiện chất lượng cuộc sống sau đột quỵ. Nó bao gồm một cách tiếp cận đa ngành để giải quyết các tác động về thể chất, cảm xúc và nhận thức của đột quỵ. Đội ngũ của chúng tôi làm việc chặt chẽ với bệnh nhân để tạo ra các kế hoạch phục hồi cá nhân hóa. Mục tiêu là tối đa hóa sự phục hồi và ngăn ngừa các cơn đột quỵ trong tương lai.",
+            "benefits": [
+                "Cải thiện khả năng vận động và sức mạnh.",
+                "Tăng cường chức năng nhận thức.",
+                "Sức khỏe cảm xúc tốt hơn.",
+                "Giảm nguy cơ đột quỵ trong tương lai."
+            ],
+            "procedure": [
+                "Đánh giá ban đầu bởi bác sĩ thần kinh.",
+                "Các buổi vật lý trị liệu.",
+                "Liệu pháp nghề nghiệp.",
+                "Liệu pháp ngôn ngữ và giọng nói."
+            ],
+            "requirements": [
+                "Tài liệu chẩn đoán đột quỵ.",
+                "Tư vấn ban đầu với bác sĩ thần kinh.",
+                "Cam kết tham gia các buổi trị liệu định kỳ.",
+                "Sự tham gia của gia đình hoặc người chăm sóc."
+            ],
+            "expectedResults": [
+                "Cải thiện khả năng thể chất.",
+                "Tăng cường sức khỏe nhận thức và cảm xúc.",
+                "Độc lập hơn trong các hoạt động hàng ngày.",
+                "Giảm khả năng tái phát đột quỵ."
+            ]
+        },
+        "skin-cancer-screening": {
+            "name": "Sàng lọc Ung thư Da",
+            "doctor": "Bác sĩ Da liễu",
+            "shortDesc": "Phát hiện và điều trị sớm các loại ung thư da, bao gồm u hắc tố, thông qua kiểm tra da định kỳ và sinh thiết.",
+            "longDesc": "Sàng lọc ung thư da rất quan trọng để phát hiện sớm các loại ung thư da, bao gồm u hắc tố. Các buổi sàng lọc định kỳ có thể xác định các tình trạng ung thư và tiền ung thư sớm khi chúng dễ điều trị nhất. Các bác sĩ da liễu của chúng tôi thực hiện kiểm tra da kỹ lưỡng và sinh thiết nếu cần thiết. Cách tiếp cận chủ động này làm tăng đáng kể cơ hội điều trị và phục hồi thành công.",
+            "benefits": [
+                "Phát hiện sớm ung thư da.",
+                "Tăng tỷ lệ thành công của điều trị.",
+                "Ngăn ngừa sự tiến triển của ung thư.",
+                "Yên tâm cho bệnh nhân."
+            ],
+            "procedure": [
+                "Kiểm tra da bằng mắt thường.",
+                "Soi da để kiểm tra kỹ hơn.",
+                "Sinh thiết các tổn thương đáng ngờ.",
+                "Xem xét bệnh lý của mẫu sinh thiết."
+            ],
+            "requirements": [
+                "Lịch hẹn sàng lọc định kỳ.",
+                "Tránh tiếp xúc với ánh nắng trước buổi hẹn.",
+                "Mang theo danh sách các thuốc đang sử dụng.",
+                "Cung cấp tiền sử bệnh da liễu."
+            ],
+            "expectedResults": [
+                "Phát hiện và điều trị sớm ung thư da.",
+                "Ngăn ngừa sự lây lan của ung thư.",
+                "Tiên lượng tốt hơn cho bệnh nhân.",
+                "Cải thiện sức khỏe da tổng thể."
+            ]
+        },
+        "acne-treatment": {
+            "name": "Điều trị Mụn",
+            "doctor": "Bác sĩ Da liễu",
+            "shortDesc": "Kế hoạch điều trị tùy chỉnh để giảm và quản lý mụn, cải thiện sức khỏe và vẻ ngoài của làn da.",
+            "longDesc": "Điều trị mụn nhằm giảm và quản lý mụn, ngăn ngừa sẹo và cải thiện vẻ ngoài của làn da. Các bác sĩ da liễu của chúng tôi xây dựng kế hoạch điều trị phù hợp với nhu cầu của từng bệnh nhân, sử dụng kết hợp các thuốc bôi và thuốc uống. Các buổi theo dõi định kỳ đảm bảo hiệu quả của điều trị. Các khuyến nghị về lối sống và chăm sóc da cũng được cung cấp để duy trì sức khỏe làn da lâu dài.",
+            "benefits": [
+                "Làn da sạch mụn và giảm mụn đáng kể.",
+                "Ngăn ngừa sẹo mụn.",
+                "Cải thiện kết cấu và tông màu da.",
+                "Tăng sự tự tin."
+            ],
+            "procedure": [
+                "Đánh giá da ban đầu.",
+                "Kê đơn các thuốc bôi ngoài da.",
+                "Thuốc uống nếu cần thiết.",
+                "Các buổi tái khám định kỳ."
+            ],
+            "requirements": [
+                "Tuân thủ kế hoạch điều trị được kê đơn.",
+                "Tránh các tác nhân gây mụn.",
+                "Cam kết tham gia các buổi tái khám.",
+                "Sử dụng các sản phẩm chăm sóc da được khuyến nghị."
+            ],
+            "expectedResults": [
+                "Giảm đáng kể tình trạng mụn.",
+                "Ngăn ngừa mụn tái phát.",
+                "Làn da khỏe mạnh và sạch hơn.",
+                "Tăng cường sự tự tin."
+            ]
+        },
+        "cardiac-stress-testing": {
+            "name": "Kiểm tra Căng thẳng Tim mạch",
+            "doctor": "Bác sĩ Tim mạch",
+            "shortDesc": "Đánh giá chức năng tim và phát hiện bệnh động mạch vành thông qua các bài kiểm tra vận động thể chất có kiểm soát.",
+            "longDesc": "Kiểm tra căng thẳng tim mạch đánh giá chức năng tim và giúp phát hiện bệnh động mạch vành. Bài kiểm tra bao gồm vận động thể chất hoặc sử dụng thuốc để tăng nhịp tim trong khi theo dõi hoạt động tim. Điều này giúp xác định bất kỳ bất thường nào trong chức năng tim. Các bác sĩ tim mạch của chúng tôi sử dụng thông tin này để chẩn đoán các bệnh tim và lập kế hoạch điều trị phù hợp.",
+            "benefits": [
+                "Phát hiện sớm bệnh tim.",
+                "Đánh giá chức năng tim dưới áp lực.",
+                "Hướng dẫn lập kế hoạch điều trị.",
+                "Ngăn ngừa các cơn đau tim."
+            ],
+            "procedure": [
+                "Tư vấn và chuẩn bị trước kiểm tra.",
+                "Bài kiểm tra căng thẳng bằng vận động hoặc thuốc.",
+                "Theo dõi liên tục bằng điện tâm đồ và huyết áp.",
+                "Phân tích và tư vấn sau kiểm tra."
+            ],
+            "requirements": [
+                "Nhịn ăn vài giờ trước kiểm tra.",
+                "Mặc quần áo thoải mái.",
+                "Thông báo cho bác sĩ về các thuốc đang dùng.",
+                "Mang theo danh sách các thuốc hiện tại."
+            ],
+            "expectedResults": [
+                "Xác định bệnh tim.",
+                "Cải thiện quản lý bệnh tim.",
+                "Kế hoạch điều trị tùy chỉnh.",
+                "Giảm nguy cơ đau tim."
+            ]
+        },
+        "echocardiograms": {
+            "name": "Siêu âm Tim",
+            "doctor": "Bác sĩ Tim mạch",
+            "shortDesc": "Sử dụng công nghệ siêu âm để tạo hình ảnh tim, hỗ trợ chẩn đoán các bệnh lý tim mạch.",
+            "longDesc": "Siêu âm tim sử dụng công nghệ siêu âm để tạo ra các hình ảnh chi tiết của tim. Bài kiểm tra không xâm lấn này giúp chẩn đoán các bệnh lý tim mạch khác nhau, bao gồm vấn đề về van tim và tổn thương cơ tim. Các bác sĩ tim mạch của chúng tôi thực hiện siêu âm tim để đánh giá chức năng tim và lập kế hoạch điều trị. Đây là một công cụ quan trọng để theo dõi sức khỏe tim và hướng dẫn chăm sóc bệnh nhân.",
+            "benefits": [
+                "Hình ảnh tim không xâm lấn.",
+                "Chẩn đoán chính xác các bệnh lý tim mạch.",
+                "Hướng dẫn quyết định điều trị.",
+                "Theo dõi sức khỏe tim."
+            ],
+            "procedure": [
+                "Chuẩn bị và định vị bệnh nhân.",
+                "Sử dụng gel siêu âm.",
+                "Sử dụng đầu dò để ghi lại hình ảnh tim.",
+                "Phân tích hình ảnh bởi bác sĩ tim mạch."
+            ],
+            "requirements": [
+                "Mặc quần áo thoải mái.",
+                "Thông báo cho bác sĩ về các thuốc đang dùng.",
+                "Mang theo danh sách các thuốc hiện tại.",
+                "Tuân thủ các hướng dẫn chuẩn bị cụ thể."
+            ],
+            "expectedResults": [
+                "Hình ảnh chi tiết của tim.",
+                "Chẩn đoán chính xác các bệnh lý tim mạch.",
+                "Lập kế hoạch điều trị hiệu quả.",
+                "Theo dõi liên tục sức khỏe tim."
+            ]
+        },
+        "mental-health-counseling": {
+            "name": "Tư vấn Sức khỏe Tâm thần",
+            "doctor": "Bác sĩ Tâm thần",
+            "shortDesc": "Cung cấp liệu pháp và hỗ trợ cho các tình trạng như trầm cảm, lo âu và rối loạn lưỡng cực.",
+            "longDesc": "Tư vấn sức khỏe tâm thần cung cấp liệu pháp và hỗ trợ cho những cá nhân đối mặt với các tình trạng sức khỏe tâm thần như trầm cảm, lo âu và rối loạn lưỡng cực. Các bác sĩ tâm thần của chúng tôi làm việc với bệnh nhân để xây dựng các kế hoạch điều trị cá nhân hóa. Các buổi tư vấn cung cấp một không gian an toàn để bệnh nhân thảo luận về cảm xúc và thách thức của họ. Mục tiêu là cải thiện sức khỏe tâm thần và chất lượng cuộc sống tổng thể.",
+            "benefits": [
+                "Cải thiện sức khỏe tâm thần.",
+                "Chiến lược đối phó tốt hơn.",
+                "Tăng cường sức khỏe cảm xúc.",
+                "Môi trường trị liệu hỗ trợ."
+            ],
+            "procedure": [
+                "Đánh giá và chẩn đoán ban đầu.",
+                "Xây dựng kế hoạch điều trị cá nhân hóa.",
+                "Các buổi tư vấn định kỳ.",
+                "Theo dõi liên tục và điều chỉnh kế hoạch điều trị."
+            ],
+            "requirements": [
+                "Cam kết tham gia các buổi tư vấn định kỳ.",
+                "Giao tiếp cởi mở với nhà trị liệu.",
+                "Sẵn sàng tham gia các bài tập trị liệu.",
+                "Tuân thủ kế hoạch điều trị."
+            ],
+            "expectedResults": [
+                "Cải thiện sức khỏe tâm thần.",
+                "Quản lý tốt hơn các tình trạng sức khỏe tâm thần.",
+                "Chất lượng cuộc sống được nâng cao.",
+                "Tăng cường khả năng phục hồi cảm xúc."
+            ]
+        },
+        "medication-management": {
+            "name": "Quản lý Thuốc",
+            "doctor": "Bác sĩ Tâm thần",
+            "shortDesc": "Kê đơn và theo dõi thuốc để đảm bảo điều trị hiệu quả các rối loạn tâm thần.",
+            "longDesc": "Quản lý thuốc bao gồm việc kê đơn và theo dõi thuốc để điều trị hiệu quả các rối loạn tâm thần. Các bác sĩ tâm thần của chúng tôi làm việc chặt chẽ với bệnh nhân để tìm ra loại thuốc và liều lượng phù hợp. Các buổi theo dõi định kỳ đảm bảo hiệu quả của thuốc và quản lý bất kỳ tác dụng phụ nào. Phương pháp này giúp bệnh nhân đạt được kết quả sức khỏe tâm thần tốt hơn.",
+            "benefits": [
+                "Quản lý hiệu quả các rối loạn tâm thần.",
+                "Giảm triệu chứng và cải thiện chức năng.",
+                "Theo dõi và điều chỉnh định kỳ.",
+                "Cách tiếp cận toàn diện với chăm sóc sức khỏe tâm thần."
+            ],
+            "procedure": [
+                "Đánh giá tâm thần ban đầu.",
+                "Kê đơn thuốc phù hợp.",
+                "Các buổi tái khám định kỳ.",
+                "Theo dõi và điều chỉnh thuốc khi cần thiết."
+            ],
+            "requirements": [
+                "Tuân thủ thuốc được kê đơn.",
+                "Tham gia các buổi tái khám định kỳ.",
+                "Giao tiếp cởi mở về tác dụng phụ.",
+                "Cam kết với kế hoạch điều trị."
+            ],
+            "expectedResults": [
+                "Quản lý hiệu quả các triệu chứng.",
+                "Cải thiện sức khỏe tâm thần.",
+                "Chất lượng cuộc sống tốt hơn.",
+                "Giảm nguy cơ tái phát."
+            ]
+        },
+        "pulmonary-function-tests": {
+            "name": "Kiểm tra Chức năng Phổi",
+            "doctor": "Bác sĩ Phổi",
+            "shortDesc": "Đánh giá chức năng phổi để chẩn đoán và quản lý các bệnh lý hô hấp như hen suyễn và bệnh phổi tắc nghẽn mãn tính (COPD).",
+            "longDesc": "Kiểm tra chức năng phổi (PFTs) đánh giá chức năng phổi và giúp chẩn đoán các bệnh lý hô hấp như hen suyễn và COPD. Các xét nghiệm này đo lường mức độ hoạt động của phổi bằng cách đánh giá luồng khí và thể tích phổi. Các bác sĩ phổi của chúng tôi sử dụng PFTs để chẩn đoán bệnh, lập kế hoạch điều trị và theo dõi tiến triển. PFTs rất cần thiết để quản lý các bệnh hô hấp mãn tính.",
+            "benefits": [
+                "Chẩn đoán chính xác các bệnh lý hô hấp.",
+                "Theo dõi chức năng phổi.",
+                "Hướng dẫn lập kế hoạch điều trị.",
+                "Phát hiện sớm các vấn đề hô hấp."
+            ],
+            "procedure": [
+                "Đo lưu lượng khí bằng phế dung kế.",
+                "Đo thể tích phổi bằng phế thể ký.",
+                "Xét nghiệm khả năng khuếch tán.",
+                "Xem xét và giải thích kết quả bởi bác sĩ phổi."
+            ],
+            "requirements": [
+                "Tránh ăn bữa ăn nặng trước xét nghiệm.",
+                "Mặc quần áo rộng rãi.",
+                "Cung cấp danh sách các thuốc đang sử dụng.",
+                "Tuân thủ các hướng dẫn trước xét nghiệm cụ thể."
+            ],
+            "expectedResults": [
+                "Đánh giá chi tiết chức năng phổi.",
+                "Chẩn đoán chính xác các bệnh lý hô hấp.",
+                "Lập kế hoạch điều trị hiệu quả.",
+                "Cải thiện quản lý các bệnh hô hấp."
+            ]
+        },
+        "sleep-apnea-treatment": {
+            "name": "Điều trị Ngưng thở khi Ngủ",
+            "doctor": "Bác sĩ Phổi",
+            "shortDesc": "Chẩn đoán và quản lý ngưng thở khi ngủ để cải thiện chất lượng giấc ngủ và sức khỏe tổng thể.",
+            "longDesc": "Điều trị ngưng thở khi ngủ tập trung vào chẩn đoán và quản lý ngưng thở khi ngủ để cải thiện chất lượng giấc ngủ và sức khỏe tổng thể. Các bác sĩ phổi của chúng tôi sử dụng các xét nghiệm chẩn đoán, bao gồm nghiên cứu giấc ngủ, để xác định ngưng thở khi ngủ. Các lựa chọn điều trị bao gồm liệu pháp CPAP, thay đổi lối sống và đôi khi là phẫu thuật. Điều trị hiệu quả có thể cải thiện đáng kể chất lượng giấc ngủ và giảm các nguy cơ sức khỏe liên quan.",
+            "benefits": [
+                "Cải thiện chất lượng giấc ngủ.",
+                "Giảm nguy cơ các bệnh lý liên quan.",
+                "Tăng cường sự tỉnh táo và chức năng ban ngày.",
+                "Cải thiện sức khỏe tổng thể."
+            ],
+            "procedure": [
+                "Đánh giá và chẩn đoán ban đầu.",
+                "Nghiên cứu giấc ngủ qua đêm.",
+                "Kê đơn CPAP hoặc các phương pháp điều trị khác.",
+                "Theo dõi và điều chỉnh định kỳ."
+            ],
+            "requirements": [
+                "Cam kết sử dụng các phương pháp điều trị được kê đơn.",
+                "Tham gia các buổi tái khám định kỳ.",
+                "Tuân thủ các khuyến nghị về lối sống.",
+                "Giao tiếp cởi mở về hiệu quả điều trị."
+            ],
+            "expectedResults": [
+                "Cải thiện mô hình giấc ngủ.",
+                "Giảm triệu chứng ngưng thở khi ngủ.",
+                "Sức khỏe tổng thể tốt hơn.",
+                "Chất lượng cuộc sống được nâng cao."
+            ]
+        },
+        "arthritis-management": {
+            "name": "Quản lý Viêm khớp",
+            "doctor": "Bác sĩ Thấp khớp",
+            "shortDesc": "Kế hoạch điều trị cá nhân hóa để giảm đau và cải thiện khả năng vận động cho bệnh nhân mắc các dạng viêm khớp.",
+            "longDesc": "Quản lý viêm khớp bao gồm các kế hoạch điều trị cá nhân hóa để giảm đau và cải thiện khả năng vận động cho bệnh nhân mắc viêm khớp. Các bác sĩ thấp khớp của chúng tôi đánh giá tình trạng của từng bệnh nhân và xây dựng các chiến lược điều trị phù hợp. Các phương pháp này có thể bao gồm thuốc, vật lý trị liệu và thay đổi lối sống. Mục tiêu là giảm đau, cải thiện chức năng khớp và nâng cao chất lượng cuộc sống của bệnh nhân.",
+            "benefits": [
+                "Giảm đau và viêm.",
+                "Cải thiện khả năng vận động khớp.",
+                "Chất lượng cuộc sống tốt hơn.",
+                "Làm chậm tiến triển của viêm khớp."
+            ],
+            "procedure": [
+                "Đánh giá và chẩn đoán ban đầu.",
+                "Kê đơn thuốc chống viêm.",
+                "Các buổi vật lý trị liệu.",
+                "Theo dõi và điều chỉnh định kỳ."
+            ],
+            "requirements": [
+                "Tuân thủ kế hoạch điều trị.",
+                "Tham gia các buổi tái khám định kỳ.",
+                "Cam kết với vật lý trị liệu.",
+                "Giao tiếp cởi mở về các triệu chứng."
+            ],
+            "expectedResults": [
+                "Giảm triệu chứng viêm khớp.",
+                "Cải thiện chức năng khớp.",
+                "Tăng cường khả năng vận động.",
+                "Chất lượng cuộc sống tổng thể tốt hơn."
+            ]
+        },
+        "osteoporosis-screening": {
+            "name": "Sàng lọc Loãng xương",
+            "doctor": "Bác sĩ Thấp khớp",
+            "shortDesc": "Phát hiện và quản lý sớm loãng xương để ngăn ngừa gãy xương và duy trì sức khỏe xương.",
+            "longDesc": "Sàng lọc loãng xương rất quan trọng để phát hiện và quản lý sớm loãng xương. Tình trạng này làm yếu xương, khiến chúng dễ gãy hơn. Các bác sĩ thấp khớp của chúng tôi sử dụng các xét nghiệm khác nhau, bao gồm quét mật độ xương, để đánh giá sức khỏe xương. Can thiệp sớm có thể ngăn ngừa gãy xương và cải thiện sức khỏe xương tổng thể.",
+            "benefits": [
+                "Phát hiện sớm loãng xương.",
+                "Ngăn ngừa gãy xương.",
+                "Cải thiện sức khỏe xương.",
+                "Hướng dẫn thay đổi lối sống."
+            ],
+            "procedure": [
+                "Đánh giá ban đầu và xem xét tiền sử y khoa.",
+                "Quét mật độ xương (DEXA).",
+                "Xét nghiệm phòng thí nghiệm về mức canxi và vitamin D.",
+                "Xây dựng kế hoạch điều trị cá nhân hóa."
+            ],
+            "requirements": [
+                "Lịch hẹn sàng lọc định kỳ.",
+                "Tuân thủ các phương pháp điều trị được kê đơn.",
+                "Cam kết thay đổi lối sống.",
+                "Giao tiếp cởi mở về các triệu chứng."
+            ],
+            "expectedResults": [
+                "Phát hiện và quản lý sớm loãng xương.",
+                "Ngăn ngừa gãy xương.",
+                "Cải thiện mật độ xương.",
+                "Cải thiện sức khỏe tổng thể và khả năng vận động."
+            ]
+        },
+        "chemotherapy-administration": {
+            "name": "Quản lý Hóa trị",
+            "doctor": "Bác sĩ Ung bướu",
+            "shortDesc": "Cung cấp điều trị ung thư thông qua các buổi hóa trị được theo dõi cẩn thận để nhắm mục tiêu và tiêu diệt tế bào ung thư.",
+            "longDesc": "Quản lý hóa trị là một thành phần quan trọng trong điều trị ung thư, liên quan đến việc sử dụng thuốc để nhắm mục tiêu và tiêu diệt tế bào ung thư. Các bác sĩ ung bướu của chúng tôi theo dõi cẩn thận từng buổi để quản lý tác dụng phụ và đảm bảo hiệu quả của điều trị. Hóa trị có thể được thực hiện theo chu kỳ, cho phép các tế bào khỏe mạnh phục hồi. Phương pháp điều trị này thường được kết hợp với các liệu pháp khác để đạt kết quả tối ưu.",
+            "benefits": [
+                "Nhắm mục tiêu hiệu quả vào tế bào ung thư.",
+                "Giảm kích thước khối u.",
+                "Tăng tỷ lệ sống sót.",
+                "Kết hợp với các liệu pháp khác để đạt kết quả tốt hơn."
+            ],
+            "procedure": [
+                "Tư vấn và lập kế hoạch điều trị ban đầu.",
+                "Quản lý thuốc hóa trị.",
+                "Theo dõi tác dụng phụ.",
+                "Theo dõi và điều chỉnh định kỳ."
+            ],
+            "requirements": [
+                "Tuân thủ lịch trình hóa trị.",
+                "Quản lý tác dụng phụ bằng thuốc được kê đơn.",
+                "Tham gia các buổi tái khám định kỳ.",
+                "Giao tiếp cởi mở về tiến trình điều trị."
+            ],
+            "expectedResults": [
+                "Giảm kích thước khối u.",
+                "Quản lý hiệu quả bệnh ung thư.",
+                "Tăng tỷ lệ sống sót.",
+                "Cải thiện chất lượng cuộc sống."
+            ]
+        },
+        "radiation-therapy": {
+            "name": "Xạ trị",
+            "doctor": "Bác sĩ Ung bướu",
+            "shortDesc": "Sử dụng bức xạ năng lượng cao để thu nhỏ khối u và tiêu diệt tế bào ung thư.",
+            "longDesc": "Xạ trị sử dụng bức xạ năng lượng cao để thu nhỏ khối u và tiêu diệt tế bào ung thư. Các bác sĩ ung bướu của chúng tôi xây dựng các kế hoạch điều trị chính xác để nhắm mục tiêu ung thư trong khi giảm thiểu tổn thương đến mô khỏe mạnh. Xạ trị có thể được sử dụng độc lập hoặc kết hợp với các phương pháp điều trị khác. Theo dõi định kỳ đảm bảo hiệu quả của điều trị và quản lý bất kỳ tác dụng phụ nào.",
+            "benefits": [
+                "Nhắm mục tiêu hiệu quả vào tế bào ung thư.",
+                "Thu nhỏ khối u.",
+                "Kết hợp với các phương pháp điều trị khác.",
+                "Tăng tỷ lệ sống sót."
+            ],
+            "procedure": [
+                "Tư vấn và lập kế hoạch ban đầu.",
+                "Mô phỏng và lập bản đồ khu vực điều trị.",
+                "Các buổi xạ trị hàng ngày.",
+                "Theo dõi và điều chỉnh định kỳ."
+            ],
+            "requirements": [
+                "Tuân thủ lịch trình điều trị.",
+                "Quản lý tác dụng phụ bằng thuốc được kê đơn.",
+                "Tham gia các buổi tái khám định kỳ.",
+                "Giao tiếp cởi mở về tiến trình điều trị."
+            ],
+            "expectedResults": [
+                "Giảm kích thước khối u.",
+                "Quản lý hiệu quả bệnh ung thư.",
+                "Tăng tỷ lệ sống sót.",
+                "Cải thiện chất lượng cuộc sống."
+            ]
+        },
+        "cataract-surgery": {
+            "name": "Phẫu thuật Đục thủy tinh thể",
+            "doctor": "Bác sĩ Nhãn khoa",
+            "shortDesc": "Phẫu thuật loại bỏ thủy tinh thể đục để khôi phục tầm nhìn rõ nét.",
+            "longDesc": "Phẫu thuật đục thủy tinh thể liên quan đến việc loại bỏ thủy tinh thể đục để khôi phục tầm nhìn rõ nét. Các bác sĩ nhãn khoa của chúng tôi sử dụng các kỹ thuật tiên tiến để thực hiện quy trình này một cách an toàn và hiệu quả. Thủy tinh thể đục được thay thế bằng một thủy tinh thể nhân tạo, cải thiện đáng kể tầm nhìn. Phẫu thuật đục thủy tinh thể là một thủ thuật phổ biến và thành công, có thể nâng cao đáng kể chất lượng cuộc sống cho bệnh nhân.",
+            "benefits": [
+                "Khôi phục tầm nhìn rõ nét.",
+                "Cải thiện chất lượng cuộc sống.",
+                "Thời gian phục hồi nhanh.",
+                "Giảm nguy cơ biến chứng."
+            ],
+            "procedure": [
+                "Tư vấn và lập kế hoạch trước phẫu thuật.",
+                "Loại bỏ thủy tinh thể đục.",
+                "Chèn thủy tinh thể nhân tạo.",
+                "Theo dõi và chăm sóc sau phẫu thuật."
+            ],
+            "requirements": [
+                "Khám mắt trước phẫu thuật.",
+                "Tuân thủ hướng dẫn trước phẫu thuật.",
+                "Tham gia các buổi tái khám sau phẫu thuật.",
+                "Sử dụng thuốc nhỏ mắt được kê đơn."
+            ],
+            "expectedResults": [
+                "Tầm nhìn rõ nét và cải thiện.",
+                "Phục hồi nhanh chóng.",
+                "Cải thiện chất lượng cuộc sống.",
+                "Giảm nguy cơ mất thị lực."
+            ]
+        },
+        "glaucoma-treatment": {
+            "name": "Điều trị Glaucoma",
+            "doctor": "Bác sĩ Nhãn khoa",
+            "shortDesc": "Quản lý và điều trị glaucoma để ngăn ngừa mất thị lực.",
+            "longDesc": "Điều trị glaucoma tập trung vào quản lý và ngăn ngừa mất thị lực do glaucoma gây ra. Các bác sĩ nhãn khoa của chúng tôi sử dụng kết hợp thuốc, điều trị laser và phẫu thuật để kiểm soát áp lực nội nhãn. Phát hiện và điều trị sớm là rất quan trọng để ngăn ngừa tổn thương thêm cho dây thần kinh thị giác. Theo dõi định kỳ đảm bảo hiệu quả của điều trị và điều chỉnh khi cần thiết.",
+            "benefits": [
+                "Ngăn ngừa mất thị lực.",
+                "Kiểm soát áp lực nội nhãn.",
+                "Kế hoạch điều trị tùy chỉnh.",
+                "Cải thiện sức khỏe mắt."
+            ],
+            "procedure": [
+                "Đánh giá và chẩn đoán ban đầu.",
+                "Kê đơn thuốc.",
+                "Điều trị laser hoặc phẫu thuật nếu cần thiết.",
+                "Theo dõi và điều chỉnh định kỳ."
+            ],
+            "requirements": [
+                "Tuân thủ thuốc được kê đơn.",
+                "Tham gia các buổi tái khám định kỳ.",
+                "Theo dõi áp lực nội nhãn.",
+                "Giao tiếp cởi mở về các triệu chứng."
+            ],
+            "expectedResults": [
+                "Kiểm soát áp lực nội nhãn.",
+                "Ngăn ngừa mất thị lực.",
+                "Cải thiện sức khỏe mắt.",
+                "Cải thiện chất lượng cuộc sống."
+            ]
+        },
+        "diabetes-management": {
+            "name": "Quản lý Tiểu đường",
+            "doctor": "Bác sĩ Nội tiết",
+            "shortDesc": "Kế hoạch chăm sóc toàn diện để quản lý mức đường huyết và ngăn ngừa biến chứng từ tiểu đường.",
+            "longDesc": "Quản lý tiểu đường bao gồm các kế hoạch chăm sóc toàn diện để quản lý mức đường huyết và ngăn ngừa biến chứng. Các bác sĩ nội tiết của chúng tôi làm việc với bệnh nhân để xây dựng các chiến lược điều trị cá nhân hóa. Điều này bao gồm quản lý thuốc, hướng dẫn chế độ ăn uống và theo dõi định kỳ. Quản lý tiểu đường hiệu quả là rất quan trọng để ngăn ngừa các vấn đề sức khỏe nghiêm trọng và duy trì chất lượng cuộc sống tốt.",
+            "benefits": [
+                "Kiểm soát đường huyết tốt hơn.",
+                "Ngăn ngừa biến chứng tiểu đường.",
+                "Cải thiện sức khỏe tổng thể.",
+                "Cải thiện chất lượng cuộc sống."
+            ],
+            "procedure": [
+                "Đánh giá và chẩn đoán ban đầu.",
+                "Kê đơn thuốc điều trị tiểu đường.",
+                "Hướng dẫn chế độ ăn uống và lối sống.",
+                "Theo dõi và giám sát định kỳ."
+            ],
+            "requirements": [
+                "Tuân thủ thuốc được kê đơn.",
+                "Theo dõi định kỳ mức đường huyết.",
+                "Cam kết thay đổi chế độ ăn uống và lối sống.",
+                "Tham gia các buổi tái khám định kỳ."
+            ],
+            "expectedResults": [
+                "Cải thiện mức đường huyết.",
+                "Ngăn ngừa biến chứng.",
+                "Sức khỏe tổng thể tốt hơn.",
+                "Cải thiện chất lượng cuộc sống."
+            ]
+        },
+        "thyroid-disorder-treatment": {
+            "name": "Điều trị Rối loạn Tuyến giáp",
+            "doctor": "Bác sĩ Nội tiết",
+            "shortDesc": "Chẩn đoán và điều trị rối loạn tuyến giáp để điều chỉnh mức hormone và duy trì sức khỏe.",
+            "longDesc": "Điều trị rối loạn tuyến giáp tập trung vào chẩn đoán và quản lý các tình trạng như suy giáp và cường giáp. Các bác sĩ nội tiết của chúng tôi sử dụng xét nghiệm máu để đánh giá chức năng tuyến giáp và kê đơn thuốc phù hợp. Theo dõi định kỳ đảm bảo rằng mức hormone được giữ trong phạm vi bình thường. Điều trị hiệu quả giúp quản lý triệu chứng và duy trì sức khỏe tổng thể.",
+            "benefits": [
+                "Điều chỉnh mức hormone.",
+                "Quản lý triệu chứng.",
+                "Cải thiện sức khỏe tổng thể.",
+                "Ngăn ngừa biến chứng."
+            ],
+            "procedure": [
+                "Đánh giá ban đầu và xét nghiệm máu.",
+                "Kê đơn thuốc điều trị tuyến giáp.",
+                "Theo dõi và điều chỉnh liều lượng định kỳ.",
+                "Các buổi tái khám và đánh giá."
+            ],
+            "requirements": [
+                "Tuân thủ thuốc được kê đơn.",
+                "Tham gia các buổi tái khám định kỳ.",
+                "Theo dõi triệu chứng.",
+                "Cam kết với kế hoạch điều trị."
+            ],
+            "expectedResults": [
+                "Điều chỉnh mức hormone.",
+                "Cải thiện quản lý triệu chứng.",
+                "Sức khỏe tổng thể tốt hơn.",
+                "Cải thiện chất lượng cuộc sống."
+            ]
+        }
+    }
+}

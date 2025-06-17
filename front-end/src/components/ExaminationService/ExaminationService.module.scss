@@ -14,7 +14,7 @@
         & h2 {
             font-size: 50px;
             font-weight: 700;
-            line-height: 60px;
+            line-height: normal;
             text-align: center;
             width: 700px;
         }
@@ -30,7 +30,8 @@
     }
 
     & .services {
-        display: flex;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
         gap: 60px;
         margin-top: 40px;
 
@@ -101,7 +102,7 @@
         }
 
         & .services {
-            flex-direction: column;
+            grid-template-columns: 1fr;
             gap: 40px;
         }
     }

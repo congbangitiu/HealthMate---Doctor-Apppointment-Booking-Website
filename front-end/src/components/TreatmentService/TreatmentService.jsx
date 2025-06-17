@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './TreatmentService.module.scss';
-import { IoIosMore } from 'react-icons/io';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Treatments from '../../assets/data/mock-data/services';
 
 const cx = classNames.bind(styles);
 
 const TreatmentService = () => {
+    const { t } = useTranslation('treatmentService');
     const [visibleServices, setVisibleServices] = useState(6);
 
     const handleLoadMore = () => {
@@ -17,29 +18,26 @@ const TreatmentService = () => {
     return (
         <div className={cx('container')}>
             <div className={cx('content')}>
-                <h2>Offering the best medical treatment services</h2>
-                <p>World-class care for everyone. Our health System offers unmatched, expert healthcare</p>
+                <h2>{t('heading')}</h2>
+                <p>{t('description')}</p>
             </div>
             <div className={cx('services')}>
                 {Treatments.slice(0, visibleServices).map((treatment) => (
                     <Link to={`/services/${treatment.id}`} key={treatment.id}>
                         <div className={cx('service')}>
                             <div>
-                                <img src={treatment.image} alt="" />
+                                <img src={treatment.image} alt={t(`services.${treatment.id}.name`)} />
                             </div>
                             <div>
-                                <h4>{treatment.name}</h4>
-                                <p>{treatment.shortDesc}</p>
+                                <h4>{t(`services.${treatment.id}.name`)}</h4>
+                                <p>{t(`services.${treatment.id}.shortDesc`)}</p>
                             </div>
+                            <span>{t('label.viewDetails')} →</span>
                         </div>
                     </Link>
                 ))}
             </div>
-            {visibleServices < Treatments.length && (
-                <button onClick={handleLoadMore}>
-                    Load more <IoIosMore />
-                </button>
-            )}
+            {visibleServices < Treatments.length && <button onClick={handleLoadMore}>{t('loadMore')} ...</button>}
         </div>
     );
 };
