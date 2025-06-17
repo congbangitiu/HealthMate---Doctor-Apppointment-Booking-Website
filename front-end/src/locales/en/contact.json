@@ -1,0 +1,15 @@
+{
+    "title": "Contact Us",
+    "description": "Got a technical issue? Want to send feedback about a beta feature? Let us know",
+    "fullname": "Fullname",
+    "fullnamePlaceholder": "Enter your fullname",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "phone": "Phone No.",
+    "phonePlaceholder": "Enter your phone number",
+    "subject": "Subject",
+    "subjectPlaceholder": "Let us know how we can help you",
+    "message": "Your issue",
+    "messagePlaceholder": "Write your problem in detail here ...",
+    "submit": "Submit"
+}

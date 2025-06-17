@@ -1,0 +1,15 @@
+{
+    "title": "Liên hệ với chúng tôi",
+    "description": "Gặp sự cố kỹ thuật? Muốn gửi phản hồi về tính năng thử nghiệm? Hãy cho chúng tôi biết",
+    "fullname": "Họ và tên",
+    "fullnamePlaceholder": "Nhập họ và tên của bạn",
+    "email": "Email",
+    "emailPlaceholder": "Nhập địa chỉ email của bạn",
+    "phone": "Số điện thoại",
+    "phonePlaceholder": "Nhập số điện thoại của bạn",
+    "subject": "Chủ đề",
+    "subjectPlaceholder": "Cho chúng tôi biết bạn cần hỗ trợ gì",
+    "message": "Vấn đề của bạn",
+    "messagePlaceholder": "Hãy mô tả chi tiết vấn đề bạn gặp phải ...",
+    "submit": "Gửi yêu cầu"
+}
