@@ -59,7 +59,7 @@ export const getSingleDoctor = async (req, res) => {
 
 export const getAllDoctors = async (req, res) => {
     try {
-        const { query, specialty } = req.query;
+        const { query, specialty, subspecialty } = req.query;
         let doctors;
 
         if (query) {
@@ -69,28 +69,34 @@ export const getAllDoctors = async (req, res) => {
                     { fullname: { $regex: query, $options: 'i' } },
                     { subspecialty: { $regex: query, $options: 'i' } },
                 ],
-            }).select('-password'); // Exclude password field
+            }).select('-password');
         } else if (specialty) {
-            // Search by specialty (used in chatbot or direct filtering)
+            // Filter by specialty
             doctors = await Doctor.find({
                 specialty: { $regex: specialty, $options: 'i' },
-                isApproved: 'approved', // Optional: only include approved doctors
+                isApproved: 'approved',
             })
                 .select('-password')
-                .sort({ fullname: 1 }); // Optional: sort alphabetically by name
+                .sort({ fullname: 1 });
+        } else if (subspecialty) {
+            // Filter by subspecialty
+            doctors = await Doctor.find({
+                subspecialty: { $regex: subspecialty, $options: 'i' },
+                isApproved: 'approved',
+            })
+                .select('-password')
+                .sort({ fullname: 1 });
         } else {
-            // Return all doctors if no filters are provided
+            // No filter – get all doctors
             doctors = await Doctor.find().select('-password');
         }
 
-        // Success response
         res.status(200).json({
             success: true,
             message: 'Doctors are found successfully',
             data: doctors,
         });
     } catch (error) {
-        // Error response
         res.status(404).json({
             success: false,
             message: 'Doctors are not found !!!',

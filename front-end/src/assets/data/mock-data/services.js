@@ -22,7 +22,7 @@ const services = [
         id: 'neurological-exams',
         image: NeurologicalExams,
         name: 'Neurological Exams',
-        doctor: 'Neurologist',
+        subspecialty: 'Neurology',
         shortDesc:
             "Thorough assessments to diagnose and manage neurological conditions such as epilepsy, migraines, and Parkinson's disease.",
         longDesc:
@@ -56,7 +56,7 @@ const services = [
         id: 'stroke-rehabilitation',
         image: StrokeRehabilitation,
         name: 'Stroke Rehabilitation',
-        doctor: 'Neurologist',
+        subspecialty: 'Neurorehabilitation',
         shortDesc: 'Providing therapy and support to help patients recover and improve functionality after a stroke.',
         longDesc:
             'Stroke rehabilitation focuses on helping patients regain their independence and improve their quality of life after a stroke. It involves a multidisciplinary approach to address the physical, emotional, and cognitive impacts of a stroke. Our team works closely with patients to create personalized rehab plans. The goal is to maximize recovery and prevent future strokes.',
@@ -89,7 +89,7 @@ const services = [
         id: 'skin-cancer-screening',
         image: SkinCancerScreening,
         name: 'Skin Cancer Screening',
-        doctor: 'Dermatologist',
+        subspecialty: 'Oncology',
         shortDesc:
             'Early detection and treatment of skin cancers, including melanoma, through regular skin checks and biopsies.',
         longDesc:
@@ -123,7 +123,7 @@ const services = [
         id: 'acne-treatment',
         image: AcneTreatment,
         name: 'Acne Treatment',
-        doctor: 'Dermatologist',
+        subspecialty: 'Cosmetology',
         shortDesc: 'Customized treatment plans to reduce and manage acne, improving skin health and appearance.',
         longDesc:
             "Acne treatment aims to reduce and manage acne, preventing scarring and improving skin appearance. Our dermatologists tailor treatment plans to each patient's needs, using a combination of topical and oral medications. Regular follow-ups ensure the effectiveness of the treatment. Lifestyle and skincare recommendations are also provided for long-term skin health.",
@@ -156,7 +156,7 @@ const services = [
         id: 'cardiac-stress-testing',
         image: CardiacStressTesting,
         name: 'Cardiac Stress Testing',
-        doctor: 'Cardiologist',
+        subspecialty: 'Cardiology',
         shortDesc:
             'Evaluation of heart function and detection of coronary artery disease through controlled physical exercise tests.',
         longDesc:
@@ -190,7 +190,7 @@ const services = [
         id: 'echocardiograms',
         image: Echocardiograms,
         name: 'Echocardiograms',
-        doctor: 'Cardiologist',
+        subspecialty: 'Cardiology',
         shortDesc:
             'Using ultrasound technology to create images of the heart, aiding in the diagnosis of heart conditions.',
         longDesc:
@@ -224,7 +224,7 @@ const services = [
         id: 'mental-health-counseling',
         image: MentalHealthCounseling,
         name: 'Mental Health Counseling',
-        doctor: 'Psychiatrist',
+        subspecialty: 'Neurorehabilitation',
         shortDesc: 'Providing therapy and support for conditions such as depression, anxiety, and bipolar disorder.',
         longDesc:
             'Mental health counseling offers therapy and support for individuals dealing with mental health conditions such as depression, anxiety, and bipolar disorder. Our psychiatrists work with patients to develop personalized treatment plans. Counseling sessions provide a safe space for patients to discuss their feelings and challenges. The goal is to improve mental well-being and overall quality of life.',
@@ -257,7 +257,7 @@ const services = [
         id: 'medication-management',
         image: MedicationManagement,
         name: 'Medication Management',
-        doctor: 'Psychiatrist',
+        subspecialty: 'Neurorehabilitation',
         shortDesc: 'Prescribing and monitoring medications to ensure effective treatment of psychiatric disorders.',
         longDesc:
             "Medication management involves prescribing and monitoring medications to treat psychiatric disorders effectively. Our psychiatrists work closely with patients to find the right medication and dosage. Regular follow-ups ensure the medication's effectiveness and manage any side effects. This approach helps patients achieve better mental health outcomes.",
@@ -290,7 +290,7 @@ const services = [
         id: 'pulmonary-function-tests',
         image: PulmonaryFunctionTests,
         name: 'Pulmonary Function Tests',
-        doctor: 'Pulmonologist',
+        subspecialty: 'Pulmonology',
         shortDesc:
             'Assessing lung function to diagnose and manage respiratory conditions like asthma and chronic obstructive pulmonary disease (COPD).',
         longDesc:
@@ -324,7 +324,7 @@ const services = [
         id: 'sleep-apnea-treatment',
         image: SleepApneaTreatment,
         name: 'Sleep Apnea Treatment',
-        doctor: 'Pulmonologist',
+        subspecialty: 'Bronchology',
         shortDesc: 'Diagnosing and managing sleep apnea to improve sleep quality and overall health.',
         longDesc:
             'Sleep apnea treatment focuses on diagnosing and managing sleep apnea to improve sleep quality and overall health. Our pulmonologists use various diagnostic tests, including sleep studies, to identify sleep apnea. Treatment options include CPAP therapy, lifestyle changes, and sometimes surgery. Effective treatment can significantly enhance sleep quality and reduce associated health risks.',
@@ -357,7 +357,7 @@ const services = [
         id: 'arthritis-management',
         image: ArthritisManagement,
         name: 'Arthritis Management',
-        doctor: 'Rheumatologist',
+        subspecialty: 'Rheumatology',
         shortDesc:
             'Personalized treatment plans to alleviate pain and improve mobility for patients with various forms of arthritis.',
         longDesc:
@@ -391,7 +391,7 @@ const services = [
         id: 'osteoporosis-screening',
         image: OsteoporosisScreening,
         name: 'Osteoporosis Screening',
-        doctor: 'Rheumatologist',
+        subspecialty: 'Osteology',
         shortDesc: 'Early detection and management of osteoporosis to prevent fractures and maintain bone health.',
         longDesc:
             'Osteoporosis screening is crucial for the early detection and management of osteoporosis. This condition weakens bones, making them more susceptible to fractures. Our rheumatologists use various tests, including bone density scans, to assess bone health. Early intervention can prevent fractures and improve overall bone health.',
@@ -424,7 +424,7 @@ const services = [
         id: 'chemotherapy-administration',
         image: ChemotherapyAdministration,
         name: 'Chemotherapy Administration',
-        doctor: 'Oncologist',
+        subspecialty: 'Oncology',
         shortDesc:
             'Providing cancer treatment through carefully monitored chemotherapy sessions to target and destroy cancer cells.',
         longDesc:
@@ -458,7 +458,7 @@ const services = [
         id: 'radiation-therapy',
         image: RadiationTherapy,
         name: 'Radiation Therapy',
-        doctor: 'Oncologist',
+        subspecialty: 'Oncology',
         shortDesc: 'Using high-energy radiation to shrink tumors and kill cancer cells.',
         longDesc:
             "Radiation therapy uses high-energy radiation to shrink tumors and kill cancer cells. Our oncologists develop precise treatment plans to target cancer while minimizing damage to healthy tissue. Radiation therapy can be used alone or in combination with other treatments. Regular monitoring ensures the treatment's effectiveness and manages any side effects.",
@@ -491,7 +491,7 @@ const services = [
         id: 'cataract-surgery',
         image: CataractSurgery,
         name: 'Cataract Surgery',
-        doctor: 'Ophthalmologist',
+        subspecialty: 'Corneology',
         shortDesc: 'Surgical removal of cloudy lenses to restore clear vision.',
         longDesc:
             'Cataract surgery involves the removal of cloudy lenses to restore clear vision. Our ophthalmologists use advanced techniques to perform this procedure safely and effectively. The cloudy lens is replaced with an artificial one, significantly improving vision. Cataract surgery is a common and successful procedure that can greatly enhance the quality of life for patients.',
@@ -524,7 +524,7 @@ const services = [
         id: 'glaucoma-treatment',
         image: GlaucomaTreatment,
         name: 'Glaucoma Treatment',
-        doctor: 'Ophthalmologist',
+        subspecialty: 'Glaucoma',
         shortDesc: 'Management and treatment of glaucoma to prevent vision loss.',
         longDesc:
             'Glaucoma treatment focuses on managing and preventing vision loss caused by glaucoma. Our ophthalmologists use a combination of medications, laser treatments, and surgery to control intraocular pressure. Early detection and treatment are crucial to prevent further damage to the optic nerve. Regular monitoring ensures the effectiveness of the treatment and adjusts it as necessary.',
@@ -557,7 +557,7 @@ const services = [
         id: 'diabetes-management',
         image: DiabetesManagement,
         name: 'Diabetes Management',
-        doctor: 'Endocrinologist',
+        subspecialty: 'Endocrinology',
         shortDesc: 'Comprehensive care plans to manage blood sugar levels and prevent complications from diabetes.',
         longDesc:
             'Diabetes management involves comprehensive care plans to manage blood sugar levels and prevent complications. Our endocrinologists work with patients to develop personalized treatment strategies. This includes medication management, dietary guidance, and regular monitoring. Effective diabetes management is crucial for preventing serious health issues and maintaining a good quality of life.',
@@ -590,7 +590,7 @@ const services = [
         id: 'thyroid-disorder-treatment',
         image: ThyroidDisorderTreatment,
         name: 'Thyroid Disorder Treatment',
-        doctor: 'Endocrinologist',
+        subspecialty: 'Endocrinology',
         shortDesc: 'Diagnosis and treatment of thyroid disorders to regulate hormone levels and maintain health.',
         longDesc:
             'Thyroid disorder treatment focuses on diagnosing and managing conditions like hypothyroidism and hyperthyroidism. Our endocrinologists use blood tests to evaluate thyroid function and prescribe appropriate medications. Regular monitoring ensures that hormone levels are kept within the normal range. Effective treatment helps manage symptoms and maintain overall health.',

@@ -26,7 +26,7 @@ const ServiceDetails = () => {
         data: doctors,
         loading,
         error,
-    } = useFetchData(treatment ? `${BASE_URL}/doctors?query=${treatment.doctor.toLowerCase()}` : null);
+    } = useFetchData(treatment ? `${BASE_URL}/doctors?subspecialty=${treatment.subspecialty.toLowerCase()}` : null);
 
     if (!treatment) {
         return (
