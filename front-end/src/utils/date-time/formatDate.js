@@ -1,8 +1,11 @@
-const formatDate = (date, config) => {
-    const defaultOptions = { day: 'numeric', month: 'short', year: 'numeric' };
-    const options = config ? config : defaultOptions;
+import i18n from 'i18next';
 
-    return new Date(date).toLocaleDateString('en-US', options);
+const formatDate = (date, config) => {
+    const defaultOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+    const options = config || defaultOptions;
+    const locale = i18n.language || 'en';
+
+    return new Date(date).toLocaleDateString(locale === 'vi' ? 'vi-VN' : 'en-US', options);
 };
 
 export default formatDate;

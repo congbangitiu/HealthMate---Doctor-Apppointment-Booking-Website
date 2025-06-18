@@ -1,18 +1,18 @@
+import i18n from 'i18next';
+
 const convertTime = (time) => {
-    const timeParts = time.split(':');
-    let hours = parseInt(timeParts[0]);
-    const minutes = parseInt(timeParts[1]);
+    const [hour, minute] = time.split(':');
+    const date = new Date();
+    date.setHours(parseInt(hour), parseInt(minute));
 
-    let meridiem = 'AM';
+    const locale = i18n.language === 'vi' ? 'vi-VN' : 'en-US';
+    const options = {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: i18n.language !== 'vi',
+    };
 
-    if (hours >= 12) {
-        meridiem = 'PM';
-
-        if (hours > 12) {
-            hours -= 12;
-        }
-    }
-    return hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0') + ' ' + meridiem;
+    return new Intl.DateTimeFormat(locale, options).format(date);
 };
 
 export default convertTime;

@@ -26,6 +26,8 @@ import doctorList from '../../locales/en/doctorList.json';
 import doctorListVI from '../../locales/vi/doctorList.json';
 import searchEn from '../../locales/en/search.json';
 import searchVi from '../../locales/vi/search.json';
+import notificationEN from '../../locales/en/notification.json';
+import notificationVI from '../../locales/vi/notification.json';
 
 const resources = {
     en: {
@@ -41,6 +43,7 @@ const resources = {
         contact: contactEN,
         doctorList: doctorList,
         search: searchEn,
+        notification: notificationEN,
     },
     vi: {
         homepage: homepageVI,
@@ -55,6 +58,7 @@ const resources = {
         contact: contactVI,
         doctorList: doctorListVI,
         search: searchVi,
+        notification: notificationVI,
     },
 };
 

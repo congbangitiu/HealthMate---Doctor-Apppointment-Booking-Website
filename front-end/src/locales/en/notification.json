@@ -1,0 +1,47 @@
+{
+    "title": "Notifications",
+    "emptyTitle": "No new notifications for now.",
+    "emptyDescriptionDoctor": "You'll receive updates here when a patient books or cancels an appointment.",
+    "emptyDescriptionPatient": "You have no new notifications at the moment. Stay updated here for appointment confirmations and prescription updates from your doctor.",
+
+    "doctorBooked": {
+        "prefix": "",
+        "action": "booked",
+        "suffix": "an appointment on"
+    },
+    "doctorCancelled": {
+        "prefix": "",
+        "action": "cancelled",
+        "suffix": "the appointment on"
+    },
+    "prescriptionIssued": {
+        "prefix": "Dr.",
+        "action": "issued",
+        "suffix": "the prescription for your appointment on"
+    },
+    "prescriptionUpdated": {
+        "prefix": "Dr.",
+        "action": "updated",
+        "suffix": "the prescription for your appointment on"
+    },
+    "reExamination": {
+        "prefix": "Dr.",
+        "action": "scheduled",
+        "suffix": "a follow-up appointment for you on"
+    },
+    "at": "at",
+
+    "timeAgo": {
+        "now": "Just now",
+        "minutes": "{{count}} minute ago",
+        "minutes_plural": "{{count}} minutes ago",
+        "hours": "{{count}} hour ago",
+        "hours_plural": "{{count}} hours ago",
+        "days": "{{count}} day ago",
+        "days_plural": "{{count}} days ago",
+        "months": "{{count}} month ago",
+        "months_plural": "{{count}} months ago",
+        "years": "{{count}} year ago",
+        "years_plural": "{{count}} years ago"
+    }
+}

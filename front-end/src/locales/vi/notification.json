@@ -1,0 +1,47 @@
+{
+    "title": "Thông báo",
+    "emptyTitle": "Hiện chưa có thông báo mới.",
+    "emptyDescriptionDoctor": "Bạn sẽ nhận được thông báo tại đây khi bệnh nhân đặt hoặc huỷ cuộc hẹn.",
+    "emptyDescriptionPatient": "Bạn hiện chưa có thông báo mới. Cập nhật thông tin tại đây về xác nhận lịch hẹn và đơn thuốc từ bác sĩ.",
+
+    "doctorBooked": {
+        "prefix": "",
+        "action": "đã đặt",
+        "suffix": "cuộc hẹn vào ngày"
+    },
+    "doctorCancelled": {
+        "prefix": "",
+        "action": "đã huỷ",
+        "suffix": "cuộc hẹn vào ngày"
+    },
+    "prescriptionIssued": {
+        "prefix": "Bác sĩ",
+        "action": "đã kê",
+        "suffix": "đơn thuốc cho cuộc hẹn vào ngày"
+    },
+    "prescriptionUpdated": {
+        "prefix": "Bác sĩ",
+        "action": "đã cập nhật",
+        "suffix": "đơn thuốc cho cuộc hẹn vào ngày"
+    },
+    "reExamination": {
+        "prefix": "Bác sĩ",
+        "action": "đã hẹn lịch tái khám",
+        "suffix": "cho bạn vào ngày"
+    },
+    "at": "lúc",
+
+    "timeAgo": {
+        "now": "Vừa xong",
+        "minutes": "{{count}} phút trước",
+        "minutes_plural": "{{count}} phút trước",
+        "hours": "{{count}} giờ trước",
+        "hours_plural": "{{count}} giờ trước",
+        "days": "{{count}} ngày trước",
+        "days_plural": "{{count}} ngày trước",
+        "months": "{{count}} tháng trước",
+        "months_plural": "{{count}} tháng trước",
+        "years": "{{count}} năm trước",
+        "years_plural": "{{count}} năm trước"
+    }
+}

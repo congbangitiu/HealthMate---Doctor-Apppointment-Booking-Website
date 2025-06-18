@@ -8,10 +8,12 @@ import formatDate from '../../utils/date-time/formatDate';
 import convertTime from '../../utils/date-time/convertTime';
 import { IoIosNotifications, IoIosArrowBack } from 'react-icons/io';
 import { useMediaQuery } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const Notifications = ({ notifications, role, handleCloseNotifications }) => {
+    const { t, i18n } = useTranslation('notification');
     const navigate = useNavigate();
     const isMobile = useMediaQuery('(max-width:768px)');
     const [timeAgoMap, setTimeAgoMap] = useState({});
@@ -20,7 +22,7 @@ const Notifications = ({ notifications, role, handleCloseNotifications }) => {
         const updateTimes = () => {
             const newTimeAgoMap = {};
             notifications.forEach((notification) => {
-                newTimeAgoMap[notification.id] = formatTimeAgo(notification.createdAt);
+                newTimeAgoMap[notification.id] = formatTimeAgo(notification.createdAt, i18n);
             });
             setTimeAgoMap(newTimeAgoMap);
         };
@@ -29,7 +31,7 @@ const Notifications = ({ notifications, role, handleCloseNotifications }) => {
         const interval = setInterval(updateTimes, 60000);
 
         return () => clearInterval(interval);
-    }, [notifications]);
+    }, [notifications, i18n]);
 
     const handleMoveToPrescription = (notification) => {
         if (notification.status === 'cancelled') return;
@@ -43,12 +45,45 @@ const Notifications = ({ notifications, role, handleCloseNotifications }) => {
         handleCloseNotifications();
     };
 
+    const getNotificationMessage = (notification) => {
+        let key = '';
+        let name = '';
+        let date = '';
+        let time = '';
+
+        if (role === 'doctor' && notification.type === 'booking' && !notification.isReExamination) {
+            key = notification.status === 'pending' ? 'doctorBooked' : 'doctorCancelled';
+            name = notification.user.fullname;
+            date = notification.timeSlot?.day;
+            time = notification.timeSlot?.startingTime;
+        } else if (role === 'patient' && notification.type === 'prescription') {
+            key = notification.action === 'create' ? 'prescriptionIssued' : 'prescriptionUpdated';
+            name = notification.doctor.fullname;
+            date = notification.timeSlot?.day;
+            time = notification.timeSlot?.startingTime;
+        } else if (role === 'patient' && notification.isReExamination) {
+            key = 'reExamination';
+            name = notification.doctor.fullname;
+            date = notification.timeSlot?.day;
+            time = notification.timeSlot?.startingTime;
+        }
+
+        return (
+            <p>
+                {t(`${key}.prefix`)} {name} <b>{t(`${key}.action`)}</b>
+                {t(`${key}.suffix`) && <> {t(`${key}.suffix`)}</>} <b>{formatDate(date)}</b> {t('at')}{' '}
+                <b>{convertTime(time)}</b>
+            </p>
+        );
+    };
+
     return (
         <div className={cx('container')}>
             <header>
                 {isMobile && <IoIosArrowBack className={cx('icon')} onClick={handleCloseNotifications} />}
-                Notifications
+                {t('title')}
             </header>
+
             {notifications.length > 0 ? (
                 <div className={cx('notifications')}>
                     {notifications.map((notification) => (
@@ -60,55 +95,14 @@ const Notifications = ({ notifications, role, handleCloseNotifications }) => {
                             })}
                             onClick={() => handleMoveToPrescription(notification)}
                         >
-                            {role === 'doctor' &&
-                                notification.type === 'booking' &&
-                                notification.status !== 'done' &&
-                                !notification.isReExamination && (
-                                    <>
-                                        <img src={notification.user.photo} alt={notification.user.fullname} />
-                                        <div className={cx('details')}>
-                                            <p>
-                                                <b>{notification.user.fullname}</b> has{' '}
-                                                {notification.status === 'pending' ? <b>booked</b> : <b>cancelled</b>}{' '}
-                                                {notification.status === 'pending' ? 'an' : 'the'} appointment on{' '}
-                                                <b>{formatDate(notification.timeSlot?.day)}</b> at{' '}
-                                                <b>{convertTime(notification.timeSlot?.startingTime)}</b>
-                                            </p>
-                                            <p>{timeAgoMap[notification.id]}</p>
-                                        </div>
-                                    </>
-                                )}
-
-                            {role === 'patient' && notification.type === 'prescription' && (
-                                <>
-                                    <img src={notification.doctor.photo} alt={notification.doctor.fullname} />
-                                    <div className={cx('details')}>
-                                        <p>
-                                            <b>Dr. {notification.doctor.fullname}</b> has{' '}
-                                            {notification.action === 'create' ? <b>issued</b> : <b>updated</b>} the
-                                            prescription for your appointment on{' '}
-                                            <b>{formatDate(notification.timeSlot.day)}</b> at{' '}
-                                            <b>{convertTime(notification.timeSlot.startingTime)}</b>
-                                        </p>
-                                        <p>{timeAgoMap[notification.id]}</p>
-                                    </div>
-                                </>
-                            )}
-
-                            {role === 'patient' && notification.isReExamination && (
-                                <>
-                                    <img src={notification.doctor.photo} alt={notification.doctor.fullname} />
-                                    <div className={cx('details')}>
-                                        <p>
-                                            <b>Dr. {notification.doctor.fullname}</b> has scheduled a{' '}
-                                            <b>follow-up appointment</b> for you on{' '}
-                                            <b>{formatDate(notification.timeSlot.day)}</b> at{' '}
-                                            <b>{convertTime(notification.timeSlot.startingTime)}</b>
-                                        </p>
-                                        <p>{timeAgoMap[notification.id]}</p>
-                                    </div>
-                                </>
-                            )}
+                            <img
+                                src={role === 'doctor' ? notification.user.photo : notification.doctor.photo}
+                                alt={role === 'doctor' ? notification.user.fullname : notification.doctor.fullname}
+                            />
+                            <div className={cx('details')}>
+                                {getNotificationMessage(notification)}
+                                <p>{timeAgoMap[notification.id]}</p>
+                            </div>
                         </div>
                     ))}
                 </div>
@@ -117,17 +111,7 @@ const Notifications = ({ notifications, role, handleCloseNotifications }) => {
                     <div>
                         <IoIosNotifications className={cx('icon')} />
                     </div>
-                    {role === 'doctor' ? (
-                        <p>
-                            No new notifications for now. You&apos;ll receive updates here when a patient books or
-                            cancels an appointment.
-                        </p>
-                    ) : (
-                        <p>
-                            You have no new notifications at the moment. Stay updated here for appointment confirmations
-                            and prescription updates from your doctor.
-                        </p>
-                    )}
+                    <p>{role === 'doctor' ? t('emptyDescriptionDoctor') : t('emptyDescriptionPatient')}</p>
                 </div>
             )}
         </div>
