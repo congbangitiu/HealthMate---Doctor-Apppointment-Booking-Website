@@ -67,7 +67,6 @@ i18n.use(LanguageDetector)
     .init({
         resources,
         fallbackLng: 'en',
-        lng: 'en',
         defaultNS: 'homepage',
         ns: [
             'homepage',
@@ -81,8 +80,13 @@ i18n.use(LanguageDetector)
             'contact',
             'doctorList',
             'search',
+            'notification',
         ],
         interpolation: { escapeValue: false },
+        detection: {
+            order: ['localStorage', 'navigator'],
+            caches: ['localStorage'],
+        },
     });
 
 export default i18n;
