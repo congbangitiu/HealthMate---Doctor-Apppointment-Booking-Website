@@ -10,6 +10,7 @@ import { useMediaQuery, Dialog, Slide } from '@mui/material';
 import DefaultMaleDoctorAvatar from '../../../assets/images/default-male-doctor.png';
 import DefaultFemaleDoctorAvatar from '../../../assets/images/default-female-doctor.png';
 import { useTranslation } from 'react-i18next';
+import translateSpecialtyName from '../../../utils/translation/translateSpecialtyName';
 
 const cx = classNames.bind(styles);
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -17,7 +18,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const Tabs = ({ tab, setTab, doctorData, setShowProfileMobile }) => {
-    const { t } = useTranslation('tabsDoctor');
+    const { t, i18n } = useTranslation('tabsDoctor');
     const isMobile = useMediaQuery('(max-width:768px)');
     const [showFormChangePassword, setShowFormChangePassword] = useState(false);
     const [showConfirmLogout, setShowConfirmLogout] = useState(false);
@@ -31,7 +32,7 @@ const Tabs = ({ tab, setTab, doctorData, setShowProfileMobile }) => {
                 <h4>
                     {t('titlePrefix')} {doctorData.fullname}
                 </h4>
-                <span>{doctorData.specialty}</span>
+                <span>{translateSpecialtyName(doctorData.specialty, i18n)}</span>
             </div>
 
             <div className={cx('modes')}>

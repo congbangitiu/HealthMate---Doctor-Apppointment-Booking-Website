@@ -7,11 +7,12 @@ import roundNumber from '../../utils/number/roundNumber';
 import DefaultMaleDoctorAvatar from '../../assets/images/default-male-doctor.png';
 import DefaultFemaleDoctorAvatar from '../../assets/images/default-female-doctor.png';
 import { useTranslation } from 'react-i18next';
+import translateSubspecialtyName from '../../utils/translation/translateSubspecialtyName';
 
 const cx = classNames.bind(styles);
 
 const Doctor = ({ smallMode, fullname, gender, bio, averageRating, totalRating, subspecialty, photo }) => {
-    const { t } = useTranslation('tabsDoctor');
+    const { t, i18n } = useTranslation('tabsDoctor');
     const defaultDoctorAvatar = gender === 'male' ? DefaultMaleDoctorAvatar : DefaultFemaleDoctorAvatar;
 
     useEffect(() => {
@@ -29,7 +30,7 @@ const Doctor = ({ smallMode, fullname, gender, bio, averageRating, totalRating, 
                     <h4>
                         {t('titlePrefix')} {fullname}
                     </h4>
-                    <div className={cx('expertise')}>{subspecialty}</div>
+                    <div className={cx('expertise')}>{translateSubspecialtyName(subspecialty, i18n)}</div>
                 </div>
                 <div className={cx('rating')}>
                     <FaStar className={cx('stars')} />

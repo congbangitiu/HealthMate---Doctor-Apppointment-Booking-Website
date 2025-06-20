@@ -48,6 +48,8 @@ import changePasswordEN from '../../locales/en/common/changePassword.json';
 import changePasswordVI from '../../locales/vi/common/changePassword.json';
 import logoutEN from '../../locales/en/common/logout.json';
 import logoutVI from '../../locales/vi/common/logout.json';
+import doctorCardEN from '../../locales/en/common/doctorCard.json';
+import doctorCardVI from '../../locales/vi/common/doctorCard.json';
 
 const resources = {
     en: {
@@ -74,6 +76,7 @@ const resources = {
         schedule: scheduleEN,
         changePassword: changePasswordEN,
         logout: logoutEN,
+        doctorCard: doctorCardEN,
     },
     vi: {
         homepage: homepageVI,
@@ -99,6 +102,7 @@ const resources = {
         schedule: scheduleVI,
         changePassword: changePasswordVI,
         logout: logoutVI,
+        doctorCard: doctorCardVI,
     },
 };
 
@@ -132,6 +136,7 @@ i18n.use(LanguageDetector)
             'schedule',
             'changePassword',
             'logout',
+            'doctorCard',
         ],
         interpolation: { escapeValue: false },
         detection: {
