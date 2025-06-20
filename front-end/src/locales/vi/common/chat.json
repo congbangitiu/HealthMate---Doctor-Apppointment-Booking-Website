@@ -1,0 +1,27 @@
+{
+    "sidebar": {
+        "title": "Trò chuyện",
+        "searchPlaceholder": "Nhập tên ...",
+        "fetchError": "Lấy dữ liệu thất bại",
+        "noMessage": "Chưa có tin nhắn nào",
+        "you": "Bạn",
+        "sentImage": "đã gửi một hình ảnh",
+        "sentVideo": "đã gửi một video",
+        "sentAttachment": "đã gửi một tệp đính kèm",
+        "sentLink": "đã gửi một liên kết"
+    },
+    "content": {
+        "selectChatPrompt": "Chọn một cuộc trò chuyện để bắt đầu nhắn tin",
+        "online": "Đang hoạt động",
+        "noMessageYet": "Hiện chưa có tin nhắn nào",
+        "editMessage": "Chỉnh sửa tin nhắn",
+        "sentAnImage": "đã gửi một hình ảnh",
+        "sentAVideo": "đã gửi một video",
+        "sentAnAttachment": "đã gửi một tệp đính kèm",
+        "sentALink": "đã gửi một liên kết",
+        "you": "Bạn",
+        "removeForEveryone": "Gỡ cho tất cả",
+        "removeForYou": "Gỡ phía tôi",
+        "writeMessage": "Viết tin nhắn ..."
+    }
+}

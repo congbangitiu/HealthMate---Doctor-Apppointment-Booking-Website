@@ -9,10 +9,12 @@ import Error from '../../components/Error/Error';
 import truncateFullname from './../../utils/text/truncateFullname';
 import formatTimestamp from './../../utils/date-time/formatTimestamp';
 import truncateText from '../../utils/text/truncateText';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const SidebarChat = ({ chats, selectedChat, handleSelectChat, role, userId, isLoading, isError }) => {
+    const { t } = useTranslation('chat');
     const [query, setQuery] = useState('');
 
     const handleSearch = () => {
@@ -36,13 +38,13 @@ const SidebarChat = ({ chats, selectedChat, handleSelectChat, role, userId, isLo
 
     return (
         <div className={cx('container')}>
-            <h1>Chats</h1>
+            <h1>{t('sidebar.title')}</h1>
             <div className={cx('search-wrapper')}>
                 <input
                     type="text"
                     name="search"
                     id="searchInput"
-                    placeholder="Type name ..."
+                    placeholder={t('sidebar.searchPlaceholder')}
                     value={query}
                     onChange={handleInputChange}
                 />
@@ -60,7 +62,7 @@ const SidebarChat = ({ chats, selectedChat, handleSelectChat, role, userId, isLo
             {isLoading ? (
                 <Loader iconSize={12} />
             ) : isError ? (
-                <Error errorMessage="Fetch data failed" />
+                <Error errorMessage={t('sidebar.fetchError')} />
             ) : (
                 <div className={cx('chats')}>
                     {filteredChats.length > 0 &&
@@ -108,7 +110,7 @@ const SidebarChat = ({ chats, selectedChat, handleSelectChat, role, userId, isLo
                                                             {chat.messages[chat.messages.length - 1].type ===
                                                                 'text' && (
                                                                 <>
-                                                                    You:{' '}
+                                                                    {t('sidebar.you')}:{' '}
                                                                     {truncateText(
                                                                         chat.messages[chat.messages.length - 1].content,
                                                                         18,
@@ -116,13 +118,29 @@ const SidebarChat = ({ chats, selectedChat, handleSelectChat, role, userId, isLo
                                                                 </>
                                                             )}
                                                             {chat.messages[chat.messages.length - 1].mediaType ===
-                                                                'image' && <>You sent an image</>}
+                                                                'image' && (
+                                                                <>
+                                                                    {t('sidebar.you')} {t('sidebar.sentImage')}
+                                                                </>
+                                                            )}
                                                             {chat.messages[chat.messages.length - 1].mediaType ===
-                                                                'video' && <>You sent a video</>}
+                                                                'video' && (
+                                                                <>
+                                                                    {t('sidebar.you')} {t('sidebar.sentVideo')}
+                                                                </>
+                                                            )}
                                                             {chat.messages[chat.messages.length - 1].type ===
-                                                                'document' && <>You sent an attachment</>}
+                                                                'document' && (
+                                                                <>
+                                                                    {t('sidebar.you')} {t('sidebar.sentAttachment')}
+                                                                </>
+                                                            )}
                                                             {chat.messages[chat.messages.length - 1].type ===
-                                                                'link' && <>You sent a link</>}
+                                                                'link' && (
+                                                                <>
+                                                                    {t('sidebar.you')} {t('sidebar.sentLink')}
+                                                                </>
+                                                            )}
                                                         </>
                                                     ) : (
                                                         <>
@@ -141,7 +159,7 @@ const SidebarChat = ({ chats, selectedChat, handleSelectChat, role, userId, isLo
                                                                     {role === 'doctor'
                                                                         ? truncateFullname(chat.user.fullname)
                                                                         : truncateFullname(chat.doctor.fullname)}{' '}
-                                                                    sent an image
+                                                                    {t('sidebar.sentImage')}
                                                                 </>
                                                             )}
                                                             {chat.messages[chat.messages.length - 1].mediaType ===
@@ -150,7 +168,7 @@ const SidebarChat = ({ chats, selectedChat, handleSelectChat, role, userId, isLo
                                                                     {role === 'doctor'
                                                                         ? truncateFullname(chat.user.fullname)
                                                                         : truncateFullname(chat.doctor.fullname)}{' '}
-                                                                    sent a video
+                                                                    {t('sidebar.sentVideo')}
                                                                 </>
                                                             )}
                                                             {chat.messages[chat.messages.length - 1].type ===
@@ -159,7 +177,7 @@ const SidebarChat = ({ chats, selectedChat, handleSelectChat, role, userId, isLo
                                                                     {role === 'doctor'
                                                                         ? truncateFullname(chat.user.fullname)
                                                                         : truncateFullname(chat.doctor.fullname)}{' '}
-                                                                    sent an attachment
+                                                                    {t('sidebar.sentAttachment')}
                                                                 </>
                                                             )}
                                                             {chat.messages[chat.messages.length - 1].type ===
@@ -168,7 +186,7 @@ const SidebarChat = ({ chats, selectedChat, handleSelectChat, role, userId, isLo
                                                                     {role === 'doctor'
                                                                         ? truncateFullname(chat.user.fullname)
                                                                         : truncateFullname(chat.doctor.fullname)}{' '}
-                                                                    sent a link
+                                                                    {t('sidebar.sentLink')}
                                                                 </>
                                                             )}
                                                         </>
@@ -182,7 +200,7 @@ const SidebarChat = ({ chats, selectedChat, handleSelectChat, role, userId, isLo
                                                 )}
                                             </>
                                         ) : (
-                                            <p>No message yet</p>
+                                            <p>{t('sidebar.noMessage')}</p>
                                         )}
                                     </div>
                                 </div>

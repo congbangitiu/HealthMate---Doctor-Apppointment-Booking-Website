@@ -23,6 +23,7 @@ import formatTimestamp from '../../utils/date-time/formatTimestamp';
 import convertFileSize from '../../utils/file/convertFileSize';
 import truncateText from '../../utils/text/truncateText';
 import { IoIosArrowBack } from 'react-icons/io';
+import { useTranslation } from 'react-i18next';
 
 import { io } from 'socket.io-client';
 const socket = io(import.meta.env.VITE_REACT_PUBLIC_SOCKET_URL);
@@ -30,6 +31,7 @@ const socket = io(import.meta.env.VITE_REACT_PUBLIC_SOCKET_URL);
 const cx = classNames.bind(styles);
 
 const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile }) => {
+    const { t } = useTranslation('chat');
     const [openPicker, setOpenPicker] = useState(false);
     const [activeMenuIndex, setActiveMenuIndex] = useState(null);
     const [activeBubbleIndex, setActiveBubbleIndex] = useState(null);
@@ -384,7 +386,7 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile }) 
     };
 
     if (!selectedChat) {
-        return <div className={cx('not-selected-chat')}>Select a chat to start messaging</div>;
+        return <div className={cx('not-selected-chat')}>{t('content.selectChatPrompt')}</div>;
     }
 
     return (
@@ -404,8 +406,8 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile }) 
                         </h4>
 
                         {role === 'doctor'
-                            ? selectedChat.user.status === 'online' && <p>Online</p>
-                            : selectedChat.doctor.status === 'online' && <p>Online</p>}
+                            ? selectedChat.user.status === 'online' && <p>{t('content.online')}</p>
+                            : selectedChat.doctor.status === 'online' && <p>{t('content.online')}</p>}
                     </div>
                 </div>
                 <div className={cx('actions')}>
@@ -423,7 +425,7 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile }) 
 
             <div className={cx('content-part')} ref={contentPartRef}>
                 {selectedChat.messages.length <= 0 ? (
-                    <div className={cx('no-message')}>No message yet</div>
+                    <div className={cx('no-message')}>{t('content.noMessageYet')}</div>
                 ) : (
                     selectedChat.messages.map((msg, index) => (
                         <div key={index}>
@@ -517,18 +519,22 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile }) 
                                             {msg.sender?._id === userId && (
                                                 <>
                                                     {msg.type === 'text' && (
-                                                        <div onClick={() => handleShowEditMessage(msg)}>Edit</div>
+                                                        <div onClick={() => handleShowEditMessage(msg)}>
+                                                            {t('content.editMessage')}
+                                                        </div>
                                                     )}
                                                     <div
                                                         onClick={() =>
                                                             handleRemoveMessageForEveryone('removeForEveryone', msg._id)
                                                         }
                                                     >
-                                                        Remove for everyone
+                                                        {t('content.removeForEveryone')}{' '}
                                                     </div>
                                                 </>
                                             )}
-                                            <div onClick={() => handleRemoveMessageForYou(msg._id)}>Remove for you</div>
+                                            <div onClick={() => handleRemoveMessageForYou(msg._id)}>
+                                                {t('content.removeForYou')}
+                                            </div>
                                         </div>
                                     )}
                                 </div>
@@ -543,7 +549,7 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile }) 
                     {messageToEdit && (
                         <div className={cx('edit-part')}>
                             <div>
-                                <h4>Edit message</h4>
+                                <h4>{t('content.editMessage')}</h4>
                                 <p>{messageToEdit.content}</p>
                             </div>
                             <IoIosCloseCircle className={cx('icon')} onClick={handleCancelEdit} />
@@ -593,7 +599,7 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile }) 
                         </div>
                         <input
                             type="text"
-                            placeholder="Write a message ..."
+                            placeholder={t('content.writeMessage')}
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                             onKeyDown={(e) => {

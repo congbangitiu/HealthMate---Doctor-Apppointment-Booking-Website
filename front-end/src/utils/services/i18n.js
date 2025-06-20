@@ -50,6 +50,8 @@ import logoutEN from '../../locales/en/common/logout.json';
 import logoutVI from '../../locales/vi/common/logout.json';
 import doctorCardEN from '../../locales/en/common/doctorCard.json';
 import doctorCardVI from '../../locales/vi/common/doctorCard.json';
+import chatEN from '../../locales/en/common/chat.json';
+import chatVI from '../../locales/vi/common/chat.json';
 
 const resources = {
     en: {
@@ -77,6 +79,7 @@ const resources = {
         changePassword: changePasswordEN,
         logout: logoutEN,
         doctorCard: doctorCardEN,
+        chat: chatEN,
     },
     vi: {
         homepage: homepageVI,
@@ -103,6 +106,7 @@ const resources = {
         changePassword: changePasswordVI,
         logout: logoutVI,
         doctorCard: doctorCardVI,
+        chat: chatVI,
     },
 };
 
