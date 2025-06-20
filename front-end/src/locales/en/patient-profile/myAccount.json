@@ -1,0 +1,12 @@
+{
+    "profile": "Profile",
+    "dateOfBirth": "Date of birth",
+    "email": "Email",
+    "phoneNumber": "Phone number",
+    "address": "Address",
+    "bloodType": "Blood type",
+    "changeInfo": "Change information",
+    "changePassword": "Change password",
+    "logout": "Logout",
+    "appointments": "MY APPOINTMENTS"
+}

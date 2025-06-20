@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useTransition } from 'react';
 import classNames from 'classnames/bind';
 import styles from './MyAccount.module.scss';
 import { TbStatusChange } from 'react-icons/tb';
@@ -10,9 +10,9 @@ import Loader from '../../../components/Loader/Loader';
 import Error from '../../../components/Error/Error';
 import ConfirmLogout from '../../../components/ConfirmLogout/ConfirmLogout';
 import { Dialog, Slide, Drawer, useMediaQuery } from '@mui/material';
-
 import useFetchProfile from '../../../hooks/useFetchData';
 import { BASE_URL } from '../../../../config';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -20,6 +20,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const MyAccount = () => {
+    const { t } = useTranslation('myAccount');
     const isMobile = useMediaQuery('(max-width:768px)');
     const { data: userData, loading, error } = useFetchProfile(`${BASE_URL}/users/profile/me`);
     const [showFormUpdateInfo, setShowFormUpdateInfo] = useState(false);
@@ -37,7 +38,7 @@ const MyAccount = () => {
                 <div className={cx('container')}>
                     {isMobile && (
                         <div className={cx('profile-mobile-btn')} onClick={() => setShowProfileMobile(true)}>
-                            Profile {'>>'}
+                            {t('profile')} {'>>'}
                         </div>
                     )}
                     {!loading && !error && !isMobile && (
@@ -47,42 +48,42 @@ const MyAccount = () => {
                             <h4>{userData.username}</h4>
                             {userData.dateOfBirth && (
                                 <p>
-                                    <b>Date of birth:</b> {userData.dateOfBirth}
+                                    <b>{t('dateOfBirth')}:</b> {userData.dateOfBirth}
                                 </p>
                             )}
                             <p>
-                                <b>Email:</b> {userData.email}
+                                <b>{t('email')}:</b> {userData.email}
                             </p>
                             <p>
-                                <b>Phone number:</b> (+84) {userData.phone}
+                                <b>{t('phoneNumber')}:</b> (+84) {userData.phone}
                             </p>
                             {userData.address && (
                                 <p>
-                                    <b>Address:</b> {userData.address}
+                                    <b>{t('address')}:</b> {userData.address}
                                 </p>
                             )}
                             {userData.bloodType ? (
                                 <p>
-                                    <b>Blood type:</b> {userData.bloodType}
+                                    <b>{t('bloodType')}:</b> {userData.bloodType}
                                 </p>
                             ) : (
                                 <p></p>
                             )}
                             <div>
                                 <button onClick={() => setShowFormUpdateInfo(true)}>
-                                    Change information <TbStatusChange />
+                                    {t('changeInfo')} <TbStatusChange />
                                 </button>
                                 <button onClick={() => setShowFormChangePassword(true)}>
-                                    Change password <TbStatusChange />
+                                    {t('changePassword')} <TbStatusChange />
                                 </button>
                                 <button onClick={() => setShowConfirmLogout(true)}>
-                                    Logout <MdLogout />
+                                    {t('logout')} <MdLogout />
                                 </button>
                             </div>
                         </div>
                     )}
                     <div className={cx('bookings')}>
-                        <h1>MY APPOINTMENTS</h1>
+                        <h1>{t('appointments')}</h1>
                         <MyBookings />
                     </div>
 
@@ -104,34 +105,36 @@ const MyAccount = () => {
                             <h4>{userData.username}</h4>
                             {userData.dateOfBirth && (
                                 <p>
-                                    <b>Date of birth:</b> {userData.dateOfBirth}
+                                    <b>{t('dateOfBirth')}:</b> {userData.dateOfBirth}
                                 </p>
                             )}
                             <p>
-                                <b>Email:</b> {userData.email}
+                                <b>{t('email')}:</b> {userData.email}
                             </p>
                             <p>
-                                <b>Phone number:</b> (+84) {userData.phone}
+                                <b>{t('phoneNumber')}:</b> (+84) {userData.phone}
                             </p>
                             {userData.address && (
                                 <p>
-                                    <b>Address:</b> {userData.address}
+                                    <b>{t('address')}:</b> {userData.address}
                                 </p>
                             )}
-                            {userData.bloodType && (
+                            {userData.bloodType ? (
                                 <p>
-                                    <b>Blood type:</b> {userData.bloodType}
+                                    <b>{t('bloodType')}:</b> {userData.bloodType}
                                 </p>
+                            ) : (
+                                <p></p>
                             )}
                             <div>
                                 <button onClick={() => setShowFormUpdateInfo(true)}>
-                                    Change information <TbStatusChange />
+                                    {t('changeInfo')} <TbStatusChange />
                                 </button>
                                 <button onClick={() => setShowFormChangePassword(true)}>
-                                    Change password <TbStatusChange />
+                                    {t('changePassword')} <TbStatusChange />
                                 </button>
                                 <button onClick={() => setShowConfirmLogout(true)}>
-                                    Logout <MdLogout />
+                                    {t('logout')} <MdLogout />
                                 </button>
                             </div>
                         </div>

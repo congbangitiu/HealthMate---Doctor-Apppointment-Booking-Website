@@ -1,0 +1,26 @@
+{
+    "title": "Update your information",
+    "fields": {
+        "fullname": "Fullname",
+        "fullnamePlaceholder": "Enter your fullname",
+        "username": "Username",
+        "usernamePlaceholder": "Enter your username",
+        "phone": "Phone No.",
+        "phonePlaceholder": "Enter your phone number",
+        "email": "Email",
+        "emailPlaceholder": "Enter your email",
+        "dob": "Date of birth",
+        "dobPlaceholder": "Enter your date of birth with format XX-YY-ZZZZ",
+        "address": "Address",
+        "addressPlaceholder": "Enter your address"
+    },
+    "bloodType": "Blood type",
+    "uploadPhoto": "Upload photo",
+    "gender": "Gender",
+    "genderOptions": {
+        "male": "Male",
+        "female": "Female",
+        "other": "Other"
+    },
+    "updateBtn": "Update"
+}

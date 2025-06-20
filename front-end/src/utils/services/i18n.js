@@ -54,6 +54,10 @@ import chatEN from '../../locales/en/common/chat.json';
 import chatVI from '../../locales/vi/common/chat.json';
 import chatbotEN from '../../locales/en/common/chatbot.json';
 import chatbotVI from '../../locales/vi/common/chatbot.json';
+import myAccountEN from '../../locales/en/patient-profile/myAccount.json';
+import myAccountVI from '../../locales/vi/patient-profile/myAccount.json';
+import updateInfoEN from '../../locales/en/patient-profile/updateInfo.json';
+import updateInfoVI from '../../locales/vi/patient-profile/updateInfo.json';
 
 const resources = {
     en: {
@@ -83,6 +87,8 @@ const resources = {
         doctorCard: doctorCardEN,
         chat: chatEN,
         chatbot: chatbotEN,
+        myAccount: myAccountEN,
+        updateInfo: updateInfoEN,
     },
     vi: {
         homepage: homepageVI,
@@ -111,6 +117,8 @@ const resources = {
         doctorCard: doctorCardVI,
         chat: chatVI,
         chatbot: chatbotVI,
+        myAccount: myAccountVI,
+        updateInfo: updateInfoVI,
     },
 };
 
@@ -147,6 +155,8 @@ i18n.use(LanguageDetector)
             'doctorCard',
             'chat',
             'chatbot',
+            'myAccount',
+            'updateInfo',
         ],
         interpolation: { escapeValue: false },
         detection: {

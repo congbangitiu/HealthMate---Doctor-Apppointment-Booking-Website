@@ -1,0 +1,26 @@
+{
+    "title": "Cập nhật thông tin cá nhân",
+    "fields": {
+        "fullname": "Họ và tên",
+        "fullnamePlaceholder": "Nhập họ và tên",
+        "username": "Tên người dùng",
+        "usernamePlaceholder": "Nhập tên người dùng",
+        "phone": "Số điện thoại",
+        "phonePlaceholder": "Nhập số điện thoại",
+        "email": "Email",
+        "emailPlaceholder": "Nhập email",
+        "dob": "Ngày sinh",
+        "dobPlaceholder": "Nhập ngày sinh theo định dạng XX-YY-ZZZZ",
+        "address": "Địa chỉ",
+        "addressPlaceholder": "Nhập địa chỉ"
+    },
+    "bloodType": "Nhóm máu",
+    "uploadPhoto": "Tải ảnh đại diện",
+    "gender": "Giới tính",
+    "genderOptions": {
+        "male": "Nam",
+        "female": "Nữ",
+        "other": "Khác"
+    },
+    "updateBtn": "Cập nhật"
+}

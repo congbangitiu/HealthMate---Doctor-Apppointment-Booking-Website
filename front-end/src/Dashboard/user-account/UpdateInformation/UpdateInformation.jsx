@@ -10,14 +10,15 @@ import { IoHomeOutline } from 'react-icons/io5';
 import { LiaBirthdayCakeSolid } from 'react-icons/lia';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
-
 import { uploadImageToCloudinary } from '../../../utils/services/uploadCloudinary';
 import { BASE_URL, token } from '../../../../config';
 import { PropTypes } from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
+    const { t } = useTranslation('updateInfo');
     const [loading, setLoading] = useState(false);
     const [loadingAvatar, setLoadingAvatar] = useState(false);
     const [formData, setFormData] = useState({
@@ -98,15 +99,15 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
             <div className={cx('close-icon-wrapper')}>
                 <IoMdClose className={cx('close-icon')} onClick={() => setShowFormUpdateInfo(false)} />
             </div>
-            <h1>Update your information</h1>
+            <h1>{t('title')}</h1>
             <form action="" onSubmit={submitHandler}>
                 <div className={cx('fields')}>
                     <div className={cx('authentication')}>
-                        <p>Fullname</p>
+                        <p>{t('fields.fullname')}</p>
                         <div className={cx('info')}>
                             <input
                                 type="text"
-                                placeholder="Enter your fullname"
+                                placeholder={t('fields.fullnamePlaceholder')}
                                 name="fullname"
                                 value={formData.fullname}
                                 onChange={handleInputChange}
@@ -116,11 +117,11 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
                         </div>
                     </div>
                     <div className={cx('authentication')}>
-                        <p>Username</p>
+                        <p>{t('fields.username')}</p>
                         <div className={cx('info')}>
                             <input
                                 type="text"
-                                placeholder="Enter your username"
+                                placeholder={t('fields.usernamePlaceholder')}
                                 name="username"
                                 value={formData.username}
                                 onChange={handleInputChange}
@@ -129,11 +130,11 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
                         </div>
                     </div>
                     <div className={cx('authentication')}>
-                        <p>Phone No.</p>
+                        <p>{t('fields.phone')}</p>
                         <div className={cx('info')}>
                             <input
                                 type="text"
-                                placeholder="Enter your phone number"
+                                placeholder={t('fields.phonePlaceholder')}
                                 name="phone"
                                 value={formData.phone}
                                 onChange={handleInputChange}
@@ -142,11 +143,11 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
                         </div>
                     </div>
                     <div className={cx('authentication')}>
-                        <p>Email</p>
+                        <p>{t('fields.email')}</p>
                         <div className={cx('info')}>
                             <input
                                 type="email"
-                                placeholder="Enter your email"
+                                placeholder={t('fields.emailPlaceholder')}
                                 name="email"
                                 value={formData.email}
                                 onChange={handleInputChange}
@@ -155,11 +156,11 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
                         </div>
                     </div>
                     <div className={cx('authentication')}>
-                        <p>Date of birth</p>
+                        <p>{t('fields.dob')}</p>
                         <div className={cx('info')}>
                             <input
                                 type="text"
-                                placeholder="Enter your date of birth with format XX-YY-ZZZZ"
+                                placeholder={t('fields.dobPlaceholder')}
                                 name="dateOfBirth"
                                 value={formData.dateOfBirth}
                                 onChange={handleInputChange}
@@ -168,11 +169,11 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
                         </div>
                     </div>
                     <div className={cx('authentication')}>
-                        <p>Address</p>
+                        <p>{t('fields.address')}</p>
                         <div className={cx('info')}>
                             <input
                                 type="text"
-                                placeholder="Enter your address"
+                                placeholder={t('fields.addressPlaceholder')}
                                 name="address"
                                 value={formData.address}
                                 onChange={handleInputChange}
@@ -184,7 +185,7 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
 
                 <div className={cx('selection')}>
                     <div className={cx('choose')}>
-                        <h4>Blood type: </h4>
+                        <h4>{t('bloodType')}:</h4>
                         <select name="bloodType" value={formData.bloodType} onChange={handleInputChange}>
                             <option value="A+">A+</option>
                             <option value="A-">A-</option>
@@ -213,21 +214,21 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
                             onChange={handleFileInputChange}
                         />
                         <label htmlFor="customFile">
-                            {loadingAvatar ? <SyncLoader size={7} color="#ffffff" /> : 'Upload photo'}
+                            {loadingAvatar ? <SyncLoader size={7} color="#ffffff" /> : t('uploadPhoto')}
                         </label>
                     </div>
                     <div className={cx('choose')}>
-                        <h4>Gender: </h4>
+                        <h4>{t('gender')}:</h4>
                         <select name="gender" value={formData.gender} onChange={handleInputChange}>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
+                            <option value="male">{t('genderOptions.male')}</option>
+                            <option value="female">{t('genderOptions.female')}</option>
+                            <option value="other">{t('genderOptions.other')}</option>
                         </select>
                     </div>
                 </div>
 
                 <button disabled={loading && true} className={cx('submit-btn')}>
-                    {loading ? <SyncLoader size={10} color="#ffffff" /> : 'Update'}
+                    {loading ? <SyncLoader size={10} color="#ffffff" /> : t('updateBtn')}
                 </button>
             </form>
         </div>

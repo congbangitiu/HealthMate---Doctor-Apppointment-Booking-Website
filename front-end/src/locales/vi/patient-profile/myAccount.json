@@ -1,0 +1,12 @@
+{
+    "profile": "Hồ sơ cá nhân",
+    "dateOfBirth": "Ngày sinh",
+    "email": "Email",
+    "phoneNumber": "Số điện thoại",
+    "address": "Địa chỉ",
+    "bloodType": "Nhóm máu",
+    "changeInfo": "Cập nhật thông tin",
+    "changePassword": "Đổi mật khẩu",
+    "logout": "Đăng xuất",
+    "appointments": "LỊCH HẸN CỦA TÔI"
+}
