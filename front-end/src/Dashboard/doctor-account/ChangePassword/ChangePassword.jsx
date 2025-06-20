@@ -8,10 +8,12 @@ import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
 import { BASE_URL, token } from '../../../../config';
 import { PropTypes } from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const ChangePassword = ({ setShowFormChangePassword, doctorData }) => {
+    const { t } = useTranslation('changePassword');
     const [showOldPassword, setShowOldPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmedNewPassword, setShowConfirmedNewPassword] = useState(false);
@@ -99,15 +101,15 @@ const ChangePassword = ({ setShowFormChangePassword, doctorData }) => {
             <div className={cx('close-icon-wrapper')}>
                 <IoMdClose className={cx('close-icon')} onClick={() => setShowFormChangePassword(false)} />
             </div>
-            <h1>Change your password</h1>
-            <form action="" onSubmit={submitHandler}>
+            <h1>{t('title')}</h1>
+            <form onSubmit={submitHandler}>
                 <div className={cx('fields')}>
                     <div className={cx('authentication')}>
-                        <p>Old Password</p>
+                        <p>{t('oldPassword')}</p>
                         <div className={cx('info')}>
                             <input
                                 type={showOldPassword ? 'text' : 'password'}
-                                placeholder="Enter your old password"
+                                placeholder={t('oldPasswordPlaceholder')}
                                 value={formData.oldPassword}
                                 name="oldPassword"
                                 onChange={handleOldPasswordChange}
@@ -122,12 +124,13 @@ const ChangePassword = ({ setShowFormChangePassword, doctorData }) => {
                             )}
                         </div>
                     </div>
+
                     <div className={cx('authentication')}>
-                        <p>New Password</p>
+                        <p>{t('newPassword')}</p>
                         <div className={cx('info')}>
                             <input
                                 type={showNewPassword ? 'text' : 'password'}
-                                placeholder="Enter your new password"
+                                placeholder={t('newPasswordPlaceholder')}
                                 value={formData.newPassword}
                                 name="newPassword"
                                 onChange={handleNewPasswordChange}
@@ -142,12 +145,13 @@ const ChangePassword = ({ setShowFormChangePassword, doctorData }) => {
                             )}
                         </div>
                     </div>
+
                     <div className={cx('authentication')}>
-                        <p>Confirm New Password</p>
+                        <p>{t('confirmPassword')}</p>
                         <div className={cx('info')}>
                             <input
                                 type={showConfirmedNewPassword ? 'text' : 'password'}
-                                placeholder="Re-enter your new password"
+                                placeholder={t('confirmPasswordPlaceholder')}
                                 value={formData.confirmedNewPassword}
                                 name="confirmedNewPassword"
                                 onChange={handleConfirmedNewPasswordChange}
@@ -165,7 +169,7 @@ const ChangePassword = ({ setShowFormChangePassword, doctorData }) => {
                 </div>
 
                 <button disabled={loading} className={cx('submit-btn')}>
-                    {loading ? <SyncLoader size={10} color="#ffffff" /> : 'Update'}
+                    {loading ? <SyncLoader size={10} color="#ffffff" /> : t('submit')}
                 </button>
             </form>
         </div>

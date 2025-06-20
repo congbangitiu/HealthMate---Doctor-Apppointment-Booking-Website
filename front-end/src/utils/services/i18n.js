@@ -44,6 +44,10 @@ import profileSettingDoctorEN from '../../locales/en/doctor-profile/profileSetti
 import profileSettingDoctorVI from '../../locales/vi/doctor-profile/profileSetting.json';
 import scheduleEN from '../../locales/en/common/schedule.json';
 import scheduleVI from '../../locales/vi/common/schedule.json';
+import changePasswordEN from '../../locales/en/common/changePassword.json';
+import changePasswordVI from '../../locales/vi/common/changePassword.json';
+import logoutEN from '../../locales/en/common/logout.json';
+import logoutVI from '../../locales/vi/common/logout.json';
 
 const resources = {
     en: {
@@ -68,6 +72,8 @@ const resources = {
         pagination: paginationEN,
         profileSettingDoctor: profileSettingDoctorEN,
         schedule: scheduleEN,
+        changePassword: changePasswordEN,
+        logout: logoutEN,
     },
     vi: {
         homepage: homepageVI,
@@ -91,6 +97,8 @@ const resources = {
         pagination: paginationVI,
         profileSettingDoctor: profileSettingDoctorVI,
         schedule: scheduleVI,
+        changePassword: changePasswordVI,
+        logout: logoutVI,
     },
 };
 
@@ -122,6 +130,8 @@ i18n.use(LanguageDetector)
             'pagination',
             'profileSettingDoctor',
             'schedule',
+            'changePassword',
+            'logout',
         ],
         interpolation: { escapeValue: false },
         detection: {
