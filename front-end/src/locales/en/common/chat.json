@@ -1,6 +1,7 @@
 {
     "sidebar": {
         "title": "Chats",
+        "prefix": "Dr.",
         "searchPlaceholder": "Type name ...",
         "fetchError": "Fetch data failed",
         "noMessage": "No message yet",
@@ -11,14 +12,11 @@
         "sentLink": "sent a link"
     },
     "content": {
+        "prefix": "Dr.",
         "selectChatPrompt": "Select a chat to start messaging",
         "online": "Online",
         "noMessageYet": "No message yet",
         "editMessage": "Edit message",
-        "sentAnImage": "sent an image",
-        "sentAVideo": "sent a video",
-        "sentAnAttachment": "sent an attachment",
-        "sentALink": "sent a link",
         "you": "You",
         "removeForEveryone": "Remove for everyone",
         "removeForYou": "Remove for you",

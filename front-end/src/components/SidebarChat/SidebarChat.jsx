@@ -85,7 +85,7 @@ const SidebarChat = ({ chats, selectedChat, handleSelectChat, role, userId, isLo
                                         <h4>
                                             {role === 'doctor'
                                                 ? truncateFullname(chat.user.fullname)
-                                                : 'Dr. ' + truncateFullname(chat.doctor.fullname)}
+                                                : t('sidebar.prefix') + ' ' + truncateFullname(chat.doctor.fullname)}
                                         </h4>
 
                                         {chat.messages && chat.messages.length > 0 && (

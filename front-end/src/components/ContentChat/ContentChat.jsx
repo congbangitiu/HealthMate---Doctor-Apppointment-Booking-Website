@@ -402,7 +402,9 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile }) 
                     </div>
                     <div>
                         <h4>
-                            {role === 'doctor' ? selectedChat.user.fullname : 'Dr. ' + selectedChat.doctor.fullname}
+                            {role === 'doctor'
+                                ? selectedChat.user.fullname
+                                : t('content.prefix') + ' ' + selectedChat.doctor.fullname}
                         </h4>
 
                         {role === 'doctor'
