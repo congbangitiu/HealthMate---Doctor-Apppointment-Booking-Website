@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './ProfileSetting.module.scss';
@@ -9,13 +9,14 @@ import { uploadImageToCloudinary } from '../../../utils/services/uploadCloudinar
 import { BASE_URL, token } from '../../../../config';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
-import specialties from '../../../assets/data/mock-data/specialties';
 import { TextField, Autocomplete } from '@mui/material';
 import TimeSlots from '../TimeSlots/TimeSlots';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const ProfileSetting = ({ doctorData, isMobile }) => {
+    const { t, i18n } = useTranslation(['profileSettingDoctor', 'specialties']);
     useEffect(() => {
         window.scrollTo({
             top: 0,
@@ -46,12 +47,51 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
         signature: null,
     });
 
-    const subspecialtyOptions = specialties.reduce((acc, specialty) => {
-        if (specialty.subspecialties) {
-            return [...acc, ...specialty.subspecialties.map((subspecialty) => subspecialty.name)];
-        }
-        return acc;
-    }, []);
+    const viSpecialties = i18n.getResource('vi', 'specialties');
+    const enSpecialties = i18n.getResource('en', 'specialties');
+
+    const translateToVietnameseSpecialty = useCallback(
+        (rawEnName) => {
+            for (const [key, specialty] of Object.entries(enSpecialties)) {
+                if (specialty.name === rawEnName) {
+                    return viSpecialties?.[key]?.name || rawEnName;
+                }
+            }
+            return rawEnName;
+        },
+        [enSpecialties, viSpecialties],
+    );
+
+    const translateToEnglishSpecialty = useCallback(
+        (rawViName) => {
+            for (const [key, specialty] of Object.entries(viSpecialties)) {
+                if (specialty.name === rawViName) {
+                    return enSpecialties[key]?.name || rawViName;
+                }
+            }
+            return rawViName;
+        },
+        [viSpecialties, enSpecialties],
+    );
+
+    const subspecialtyOptions = useMemo(() => {
+        const currentLangData = i18n.getResource(i18n.language, 'specialties');
+        const englishData = i18n.getResource('en', 'specialties');
+
+        if (!currentLangData || !englishData) return [];
+
+        return Object.entries(currentLangData).flatMap(([specialtyKey, specialty]) =>
+            (specialty.subspecialties || []).map((sub, index) => ({
+                label: sub.name,
+                value: `${specialtyKey}_${index}`,
+                rawName: englishData?.[specialtyKey]?.subspecialties?.[index]?.name || sub.name,
+                parentSpecialty: specialty.name,
+                parentKey: specialtyKey,
+            })),
+        );
+    }, [i18n.language]);
+
+    const initialSubspecialty = subspecialtyOptions.find((item) => item.rawName === doctorData.subspecialty);
 
     useEffect(() => {
         setFormData({
@@ -60,8 +100,8 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
             phone: doctorData.phone || '',
             bio: doctorData.bio || '',
             gender: doctorData.gender || '',
-            specialty: doctorData.specialty || '',
-            subspecialty: doctorData.subspecialty || '',
+            specialty: initialSubspecialty?.parentSpecialty || doctorData.specialty || '',
+            subspecialty: initialSubspecialty || null,
             ticketPrice: doctorData.ticketPrice || 0,
             qualifications: doctorData.qualifications.map((qualification) => ({
                 startingDate: qualification.startingDate,
@@ -87,11 +127,36 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
         });
     }, [doctorData]);
 
+    useEffect(() => {
+        setFormData((prev) => {
+            if (!prev.subspecialty) return prev;
+            const matched = subspecialtyOptions.find((opt) => opt.rawName === prev.subspecialty.rawName);
+            return matched ? { ...prev, subspecialty: matched } : prev;
+        });
+    }, [i18n.language, subspecialtyOptions]);
+
+    useEffect(() => {
+        setFormData((prev) => {
+            if (i18n.language === 'en' && prev.specialty) {
+                const translatedSpecialty = translateToEnglishSpecialty(prev.specialty);
+                return {
+                    ...prev,
+                    specialty: translatedSpecialty,
+                };
+            }
+            const translatedName = prev.specialty ? translateToVietnameseSpecialty(prev.specialty) : prev.specialty;
+            return {
+                ...prev,
+                specialty: translatedName,
+            };
+        });
+    }, [i18n.language, translateToVietnameseSpecialty, translateToEnglishSpecialty]);
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         if (name === 'bio') {
             if (value.length > 350) {
-                setErrorWordLimit('Maximum 350 characters !!!');
+                setErrorWordLimit(t('messages.bioLimit'));
                 setFormData({ ...formData, [name]: value.slice(0, 350) });
             } else {
                 setErrorWordLimit('');
@@ -133,7 +198,11 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    ...formData,
+                    subspecialty: formData.subspecialty?.rawName,
+                    specialty: formData.specialty,
+                }),
             });
 
             const result = await res.json();
@@ -171,16 +240,14 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
         });
     };
 
-    const handleSubspecialtyChange = (event, newValue) => {
-        const matchedSpecialty = specialties.find((specialty) =>
-            specialty.subspecialties?.some((sub) => sub.name === newValue),
-        );
+    const handleSubspecialtyChange = (selectedOption) => {
+        if (!selectedOption) return;
 
-        setFormData({
-            ...formData,
-            subspecialty: newValue,
-            specialty: matchedSpecialty ? matchedSpecialty.name : '',
-        });
+        setFormData((prev) => ({
+            ...prev,
+            subspecialty: selectedOption,
+            specialty: selectedOption.parentSpecialty,
+        }));
     };
 
     // Qualification functions
@@ -282,15 +349,15 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
     return (
         <div className={cx('container')}>
             {/* PERSONAL INFORMATION  */}
-            <h3 className={cx('title')}>Personal Information</h3>
+            <h3 className={cx('title')}>{t('titles.personalInfo')}</h3>
             <div className={cx('upperPart')}>
                 <div className={cx('leftPart')}>
                     <div className={cx('info')}>
-                        <label htmlFor="fullname">Fullname</label>
+                        <label htmlFor="fullname">{t('fields.fullname')}</label>
                         <input
                             type="text"
                             id="fullname"
-                            placeholder="Enter your fullname"
+                            placeholder={t('fields.fullname')}
                             value={formData.fullname}
                             name="fullname"
                             onChange={handleInputChange}
@@ -298,11 +365,11 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                         />
                     </div>
                     <div className={cx('info')}>
-                        <label htmlFor="email">Email</label>
+                        <label htmlFor="email">{t('fields.email')}</label>
                         <input
                             type="email"
                             id="email"
-                            placeholder="Email"
+                            placeholder={t('fields.email')}
                             value={formData.email}
                             name="email"
                             onChange={handleInputChange}
@@ -310,11 +377,11 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                         />
                     </div>
                     <div className={cx('info')}>
-                        <label htmlFor="phone">Phone No.</label>
+                        <label htmlFor="phone">{t('fields.phone')}</label>
                         <input
                             type="text"
                             id="phone"
-                            placeholder="Enter your phone number"
+                            placeholder={t('fields.phone')}
                             value={formData.phone}
                             name="phone"
                             onChange={handleInputChange}
@@ -325,14 +392,14 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                 <div className={cx('rightPart')}>
                     <div className={cx('info')}>
                         <span>
-                            <label htmlFor="message">Biography</label>
+                            <label htmlFor="message">{t('fields.bio')}</label>
                             {errorWordLimit && <p className={cx('error')}>{errorWordLimit}</p>}
                         </span>
                         <textarea
                             id="message"
                             cols="30"
                             rows="3"
-                            placeholder="Write your bio here with a maximum of 50 words"
+                            placeholder={t('fields.bioPlaceholder')}
                             name="bio"
                             value={formData.bio}
                             onChange={handleInputChange}
@@ -353,10 +420,10 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                             ) : isMobile ? (
                                 <MdFileUpload />
                             ) : (
-                                'Upload photo'
+                                t('fields.uploadPhoto')
                             )}
                         </label>
-                        <p>(Notice: 1:1 scale photo)</p>
+                        <p>{t('fields.photoNote')}</p>
                     </div>
                     <div className={cx('upload', 'signature')}>
                         {formData.signature && <img src={formData.signature} alt="" />}
@@ -373,25 +440,25 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                             ) : isMobile ? (
                                 <MdFileUpload />
                             ) : (
-                                'Upload signature'
+                                t('fields.uploadSignature')
                             )}
                         </label>
-                        <p>(Notice: Remove background )</p>
+                        <p>{t('fields.signatureNote')}</p>
                     </div>
                 </div>
             </div>
             <div className={cx('info', 'selection')}>
                 <div className={cx('field')}>
-                    <label htmlFor="gender">Gender</label>
+                    <label htmlFor="gender">{t('fields.gender')}</label>
                     <select name="gender" id="gender" value={formData.gender} onChange={handleInputChange} required>
-                        <option value="">Select</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
+                        <option value="">{t('fields.genderSelect')}</option>
+                        <option value="Male">{t('fields.male')}</option>
+                        <option value="Female">{t('fields.female')}</option>
+                        <option value="Other">{t('fields.other')}</option>
                     </select>
                 </div>
                 <div className={cx('field')}>
-                    <label htmlFor="ticketPrice">Ticket price</label>
+                    <label htmlFor="ticketPrice">{t('fields.ticketPrice')}</label>
                     <input
                         type="number"
                         name="ticketPrice"
@@ -402,23 +469,27 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                     />
                 </div>
                 <div className={cx('field')}>
-                    <label htmlFor="specialty">Specialty</label>
+                    <label htmlFor="specialty">{t('fields.specialty')}</label>
                     <input
                         name="specialty"
                         id="specialty"
-                        value={formData.specialty}
-                        onChange={handleInputChange}
+                        value={
+                            i18n.language === 'vi'
+                                ? translateToVietnameseSpecialty(formData.specialty)
+                                : formData.specialty
+                        }
                         required
                         readOnly
                     />
                 </div>
                 <div className={cx('field')}>
-                    <label htmlFor="subspecialty">Subspecialty</label>
+                    <label htmlFor="subspecialty">{t('fields.subspecialty')}</label>
                     <Autocomplete
                         disablePortal
                         options={subspecialtyOptions}
                         value={formData.subspecialty}
-                        onChange={handleSubspecialtyChange}
+                        getOptionLabel={(option) => option.label}
+                        onChange={(event, newValue) => handleSubspecialtyChange(newValue)}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
@@ -452,7 +523,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                                     backgroundColor: selected ? 'var(--lightGreenColor)' : 'inherit',
                                 }}
                             >
-                                {option}
+                                {option.label}
                             </li>
                         )}
                         slotProps={{
@@ -472,12 +543,12 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
             </div>
 
             {/* QUALIFICATION */}
-            <h3 className={cx('title', 'other')}>Qualifications</h3>
+            <h3 className={cx('title', 'other')}>{t('titles.qualifications')}</h3>
             <div className={cx('details')}>
                 {formData.qualifications?.map((qualification, index) => (
                     <div key={index} className={cx('credentials')}>
                         <div className={cx('credential')}>
-                            <label htmlFor="startingDate">Starting date</label>
+                            <label htmlFor="startingDate">{t('qualifications.startingDate')}</label>
                             <input
                                 className={cx(!qualification.isEditable && 'disabled')}
                                 type="date"
@@ -489,7 +560,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                             />
                         </div>
                         <div className={cx('credential')}>
-                            <label htmlFor="endingDate">Ending date</label>
+                            <label htmlFor="endingDate">{t('qualifications.endingDate')}</label>
                             <input
                                 className={cx(!qualification.isEditable && 'disabled')}
                                 type="date"
@@ -501,7 +572,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                             />
                         </div>
                         <div className={cx('credential')}>
-                            <label htmlFor="degree">Degree</label>
+                            <label htmlFor="degree">{t('qualifications.degree')}</label>
                             <input
                                 className={cx(!qualification.isEditable && 'disabled')}
                                 type="text"
@@ -513,7 +584,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                             />
                         </div>
                         <div className={cx('credential')}>
-                            <label htmlFor="university">University</label>
+                            <label htmlFor="university">{t('qualifications.university')}</label>
                             <input
                                 className={cx(!qualification.isEditable && 'disabled')}
                                 type="text"
@@ -530,34 +601,34 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                                 {qualification.isEditable ? (
                                     <>
                                         <LiaSaveSolid className={cx('icon')} />
-                                        <p className={cx('text')}>Save</p>
+                                        <p className={cx('text')}>{t('actions.save')}</p>
                                     </>
                                 ) : (
                                     <>
                                         <MdOutlineModeEditOutline className={cx('icon')} />
-                                        <p className={cx('text')}>Edit</p>
+                                        <p className={cx('text')}>{t('actions.edit')}</p>
                                     </>
                                 )}
                             </div>
                             <div className={cx('mode')} onClick={(e) => deleteQualification(e, index)}>
                                 <FaRegTrashAlt className={cx('icon')} />
-                                <p className={cx('text')}>Delete</p>
+                                <p className={cx('text')}>{t('actions.delete')}</p>
                             </div>
                         </div>
                     </div>
                 ))}
                 <button className={cx('add')} onClick={addQualification}>
-                    Add qualification
+                    {t('qualifications.add')}
                 </button>
             </div>
 
             {/* EXPERIENCES */}
-            <h3 className={cx('title', 'other')}>Experiences</h3>
+            <h3 className={cx('title', 'other')}>{t('titles.experiences')}</h3>
             <div className={cx('details')}>
                 {formData.experiences?.map((experience, index) => (
                     <div key={index} className={cx('credentials')}>
                         <div className={cx('credential')}>
-                            <label htmlFor="startingDate">Starting date</label>
+                            <label htmlFor="startingDate">{t('experiences.startingDate')}</label>
                             <input
                                 className={cx(!experience.isEditable && 'disabled')}
                                 type="date"
@@ -569,7 +640,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                             />
                         </div>
                         <div className={cx('credential')}>
-                            <label htmlFor="endingDate">Ending date</label>
+                            <label htmlFor="endingDate">{t('experiences.endingDate')}</label>
                             <input
                                 className={cx(!experience.isEditable && 'disabled')}
                                 type="date"
@@ -581,7 +652,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                             />
                         </div>
                         <div className={cx('credential')}>
-                            <label htmlFor="position">Position</label>
+                            <label htmlFor="position">{t('experiences.position')}</label>
                             <input
                                 className={cx(!experience.isEditable && 'disabled')}
                                 type="text"
@@ -593,7 +664,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                             />
                         </div>
                         <div className={cx('credential')}>
-                            <label htmlFor="hospital">Hospital</label>
+                            <label htmlFor="hospital">{t('experiences.hospital')}</label>
                             <input
                                 className={cx(!experience.isEditable && 'disabled')}
                                 type="text"
@@ -610,29 +681,29 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                                 {experience.isEditable ? (
                                     <>
                                         <LiaSaveSolid className={cx('icon')} />
-                                        <p className={cx('text')}>Save</p>
+                                        <p className={cx('text')}>{t('actions.save')}</p>
                                     </>
                                 ) : (
                                     <>
                                         <MdOutlineModeEditOutline className={cx('icon')} />
-                                        <p className={cx('text')}>Edit</p>
+                                        <p className={cx('text')}>{t('actions.edit')}</p>
                                     </>
                                 )}
                             </div>
                             <div className={cx('mode')} onClick={(e) => deleteExperience(e, index)}>
                                 <FaRegTrashAlt className={cx('icon')} />
-                                <p className={cx('text')}>Delete</p>
+                                <p className={cx('text')}>{t('actions.delete')}</p>{' '}
                             </div>
                         </div>
                     </div>
                 ))}
                 <button className={cx('add')} onClick={addExperience}>
-                    Add experiences
+                    {t('experiences.add')}
                 </button>
             </div>
 
             {/* TIME SLOTS */}
-            <h3 className={cx('title', 'other')}>Time slots</h3>
+            <h3 className={cx('title', 'other')}>{t('titles.timeSlots')}</h3>
             <TimeSlots
                 handleTimeSlotsChange={handleTimeSlotsChange}
                 daysOfWeekWithDates={daysOfWeekWithDates}
@@ -647,19 +718,19 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
             />
 
             {/* ABOUT */}
-            <h3 className={cx('title', 'other')}>About</h3>
+            <h3 className={cx('title', 'other')}>{t('titles.about')}</h3>
             <textarea
                 id="message"
                 cols="30"
                 rows="6"
-                placeholder="Write more your details ..."
+                placeholder={t('fields.aboutPlaceholder')}
                 name="about"
                 value={formData.about}
                 onChange={handleInputChange}
             />
 
             <button onClick={updateProfileHandler} className={cx('submit-btn')}>
-                {loading ? <SyncLoader size={10} color="#ffffff" /> : 'Update profile'}
+                {loading ? <SyncLoader size={10} color="#ffffff" /> : t('actions.update')}
             </button>
         </div>
     );

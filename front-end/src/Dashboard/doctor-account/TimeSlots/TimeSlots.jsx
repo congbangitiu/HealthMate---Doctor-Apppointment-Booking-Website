@@ -6,6 +6,7 @@ import { MenuItem, Select, Box, useMediaQuery, useTheme } from '@mui/material';
 import formatDate from '../../../utils/date-time/formatDate';
 import convertTime from '../../../utils/date-time/convertTime';
 import getDateForDay from '../../../utils/date-time/getDateForDay';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
@@ -16,6 +17,7 @@ const TimeSlots = ({
     availableSchedules,
     onAvailableScheduleChange,
 }) => {
+    const { t } = useTranslation(['profileSettingDoctor', 'schedule']);
     const isMobile = useMediaQuery('(max-width:768px)');
     const theme = useTheme();
 
@@ -48,7 +50,7 @@ const TimeSlots = ({
             setSelectedDays(days);
             setSelectedTimes(times);
         }
-    }, [availableSchedules]);
+    }, [availableSchedules, daysOfWeekWithDates, selectedDays.length]);
 
     useEffect(() => {
         const updatedSchedules = selectedDays.map((dayName) => ({
@@ -56,7 +58,7 @@ const TimeSlots = ({
             shifts: selectedTimes[dayName] || [],
         }));
         onAvailableScheduleChange(updatedSchedules);
-    }, [selectedDays, selectedTimes]);
+    }, [selectedDays, selectedTimes, onAvailableScheduleChange]);
 
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
@@ -218,22 +220,14 @@ const TimeSlots = ({
     return (
         <div className={cx('container')}>
             <div className={cx('upper-part')}>
-                <h3>Available Days</h3>
+                <h3>{t('timeSlots.availableDays', { ns: 'profileSettingDoctor' })}</h3>
                 <Select
                     multiple
                     value={selectedDays}
                     onChange={handleDayChange}
                     MenuProps={MenuProps}
                     renderValue={(selected) => (
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                flexWrap: 'wrap',
-                                gap: '5px',
-                                width: '100%',
-                            }}
-                        >
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '5px', width: '100%' }}>
                             {selected.map((value) => {
                                 const dayInfo = daysOfWeekWithDates.find((d) => d.name === value);
                                 return (
@@ -250,7 +244,7 @@ const TimeSlots = ({
                                             maxWidth: '100%',
                                         }}
                                     >
-                                        {`${value} (${formatDate(dayInfo?.date)})`}
+                                        {`${t(`weekdays.${value}`, { ns: 'schedule' })} (${formatDate(dayInfo?.date)})`}
                                     </Box>
                                 );
                             })}
@@ -284,12 +278,10 @@ const TimeSlots = ({
                             value={day.name}
                             style={getStyles(day.name, selectedDays, theme)}
                             sx={{
-                                '&:hover': {
-                                    backgroundColor: 'var(--lightGreenColor) !important',
-                                },
+                                '&:hover': { backgroundColor: 'var(--lightGreenColor) !important' },
                             }}
                         >
-                            {`${day.name} (${formatDate(day.date)})`}
+                            {`${t(`weekdays.${day.name}`, { ns: 'schedule' })} (${formatDate(day.date)})`}
                         </MenuItem>
                     ))}
                 </Select>
@@ -298,29 +290,21 @@ const TimeSlots = ({
             {selectedDays.length > 0 && (
                 <div className={cx('middle-part')}>
                     <span>
-                        <h3>Available Shifts</h3>
-                        <p>(Morning: 8:00-11:30 | Afternoon: 13:00-16:00 | Evening: 18:00-21:00)</p>
+                        <h3>{t('timeSlots.availableShifts', { ns: 'profileSettingDoctor' })}</h3>
+                        <p>{t('timeSlots.shiftNote', { ns: 'profileSettingDoctor' })}</p>
                     </span>
                     {selectedDays.map((day) => {
                         const dayInfo = daysOfWeekWithDates.find((d) => d.name === day);
                         return (
                             <div key={day} className={cx('day-section')}>
-                                <h4>{`${day} (${formatDate(dayInfo?.date)})`}</h4>
+                                <h4>{`${t(`weekdays.${day}`, { ns: 'schedule' })} (${formatDate(dayInfo?.date)})`}</h4>
                                 <Select
                                     multiple
                                     value={selectedTimes[day] || []}
                                     onChange={handleTimeChange(day)}
                                     MenuProps={MenuProps}
                                     renderValue={(selected) => (
-                                        <Box
-                                            sx={{
-                                                display: 'flex',
-                                                flexDirection: 'row',
-                                                flexWrap: 'wrap',
-                                                gap: '5px',
-                                                width: '100%',
-                                            }}
-                                        >
+                                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '5px', width: '100%' }}>
                                             {selected.map((value) => (
                                                 <Box
                                                     key={value}
@@ -335,7 +319,7 @@ const TimeSlots = ({
                                                         maxWidth: '100%',
                                                     }}
                                                 >
-                                                    {value}
+                                                    {t(`shifts.${value}`, { ns: 'schedule' })}
                                                 </Box>
                                             ))}
                                         </Box>
@@ -369,12 +353,10 @@ const TimeSlots = ({
                                             value={option}
                                             style={getStyles(option, selectedTimes[day] || [], theme)}
                                             sx={{
-                                                '&:hover': {
-                                                    backgroundColor: 'var(--lightGreenColor) !important',
-                                                },
+                                                '&:hover': { backgroundColor: 'var(--lightGreenColor) !important' },
                                             }}
                                         >
-                                            {option}
+                                            {t(`shifts.${option}`, { ns: 'schedule' })}
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -386,16 +368,21 @@ const TimeSlots = ({
 
             {allTimeSlots.length > 0 && (
                 <div className={cx('lower-part')}>
-                    <h3>
-                        Generated Time Slots from <b>{formatDate(today)}</b> to <b>{formatDate(endDate)}</b>
-                    </h3>
+                    <h3
+                        dangerouslySetInnerHTML={{
+                            __html: t('timeSlots.generatedSlotsTitle', {
+                                ns: 'profileSettingDoctor',
+                                start: formatDate(today),
+                                end: formatDate(endDate),
+                            }),
+                        }}
+                    />
                     <table className={cx('slots-table')}>
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Time Slots</th>
-                                <th>Period</th>
-                                {/* <th>Status</th> */}
+                                <th>{t('timeSlots.table.date', { ns: 'profileSettingDoctor' })}</th>
+                                <th>{t('timeSlots.table.time', { ns: 'profileSettingDoctor' })}</th>
+                                <th>{t('timeSlots.table.period', { ns: 'profileSettingDoctor' })}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -403,24 +390,16 @@ const TimeSlots = ({
                                 <React.Fragment key={date}>
                                     {slots.map((slot, slotIndex) => (
                                         <tr key={`${groupIndex}-${slotIndex}`}>
-                                            {slotIndex === 0 ? (
+                                            {slotIndex === 0 && (
                                                 <td
                                                     rowSpan={slots.length}
                                                     className={cx(groupIndex % 2 === 0 ? 'odd-date' : 'even-date')}
                                                 >
                                                     {formatDate(date)}
                                                 </td>
-                                            ) : null}
+                                            )}
                                             <td>{`${convertTime(slot.start)} - ${convertTime(slot.end)}`}</td>
-                                            <td>{slot.period}</td>
-
-                                            {/* <td className={cx({ booked: isSlotBooked(slot) })}>{`${convertTime(
-                                                slot.start,
-                                            )} - ${convertTime(slot.end)}`}</td>
-                                            <td className={cx({ booked: isSlotBooked(slot) })}>{slot.period}</td>
-                                            <td className={cx({ booked: isSlotBooked(slot) })}>
-                                                {isSlotBooked(slot) ? 'Booked' : 'Available'}
-                                            </td> */}
+                                            <td>{t(`shifts.${slot.period}`, { ns: 'schedule' })}</td>
                                         </tr>
                                     ))}
                                 </React.Fragment>

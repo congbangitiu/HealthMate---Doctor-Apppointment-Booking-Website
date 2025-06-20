@@ -1,0 +1,64 @@
+{
+    "titles": {
+        "personalInfo": "Thông tin cá nhân",
+        "qualifications": "Bằng cấp",
+        "experiences": "Kinh nghiệm",
+        "timeSlots": "Khung giờ làm việc",
+        "about": "Giới thiệu thêm"
+    },
+    "fields": {
+        "fullname": "Họ và tên",
+        "email": "Email",
+        "phone": "Số điện thoại",
+        "bio": "Tiểu sử",
+        "bioPlaceholder": "Viết tiểu sử của bạn (tối đa 50 từ)",
+        "uploadPhoto": "Tải ảnh đại diện",
+        "uploadSignature": "Tải chữ ký",
+        "photoNote": "(Lưu ý: Ảnh tỷ lệ 1:1)",
+        "signatureNote": "(Lưu ý: Nên xoá nền)",
+        "gender": "Giới tính",
+        "genderSelect": "Chọn",
+        "male": "Nam",
+        "female": "Nữ",
+        "other": "Khác",
+        "ticketPrice": "Giá khám",
+        "specialty": "Chuyên khoa",
+        "subspecialty": "Chuyên khoa sâu",
+        "aboutPlaceholder": "Viết thêm thông tin chi tiết..."
+    },
+    "qualifications": {
+        "startingDate": "Ngày bắt đầu",
+        "endingDate": "Ngày kết thúc",
+        "degree": "Bằng cấp",
+        "university": "Trường đại học",
+        "add": "Thêm bằng cấp"
+    },
+    "experiences": {
+        "startingDate": "Ngày bắt đầu",
+        "endingDate": "Ngày kết thúc",
+        "position": "Chức danh",
+        "hospital": "Bệnh viện",
+        "add": "Thêm kinh nghiệm"
+    },
+    "actions": {
+        "edit": "Chỉnh sửa",
+        "save": "Lưu",
+        "delete": "Xoá",
+        "update": "Cập nhật hồ sơ"
+    },
+    "messages": {
+        "bioLimit": "Tối đa 350 ký tự !!!",
+        "success": "Cập nhật hồ sơ thành công"
+    },
+    "timeSlots": {
+        "availableDays": "Chọn ngày làm việc",
+        "availableShifts": "Chọn ca làm việc",
+        "shiftNote": "(Ca sáng: 8:00-11:30 | Ca chiều: 13:00-16:00 | Ca tối: 18:00-21:00)",
+        "generatedSlotsTitle": "Khung giờ khám được tạo từ <b>{{start}}</b> đến <b>{{end}}</b>",
+        "table": {
+            "date": "Ngày làm việc",
+            "time": "Khung giờ",
+            "period": "Ca trực"
+        }
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "title": "Danh sách cuộc hẹn",
+    "noAppointment": "Không có lịch hẹn nào phù hợp với bộ lọc!",
+    "columns": {
+        "fullname": "Họ tên",
+        "phone": "Số điện thoại",
+        "gender": "Giới tính",
+        "date": "Ngày",
+        "time": "Thời gian",
+        "status": "Trạng thái"
+    },
+    "filters": {
+        "allPatients": "Tất cả bệnh nhân",
+        "allStatuses": "Tất cả trạng thái",
+        "pending": "Đang chờ",
+        "done": "Hoàn tất",
+        "cancelled": "Đã huỷ",
+        "newest": "Mới nhất đến cũ nhất",
+        "oldest": "Cũ nhất đến mới nhất"
+    }
+}

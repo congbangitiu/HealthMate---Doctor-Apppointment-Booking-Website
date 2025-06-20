@@ -10,10 +10,11 @@ import Loader from '../../../components/Loader/Loader';
 import Error from '../../../components/Error/Error';
 import Selections from '../../../components/Selections/Selections';
 import Pagination from '../../../components/Pagination/Pagination';
-
+import { useTranslation } from 'react-i18next';
 const cx = classNames.bind(styles);
 
 const Appointments = () => {
+    const { t, i18n } = useTranslation('appointmentsDoctor');
     useEffect(() => {
         window.scrollTo({
             top: 0,
@@ -27,7 +28,7 @@ const Appointments = () => {
     const [selectedAppointmentStatus, setSelectedAppointmentStatus] = useState(null);
     const [selectedSchedule, setSelectedSchedule] = useState({
         value: 'newest',
-        label: 'Newest to Oldest',
+        label: t('filters.newest'),
     });
     const [filteredAppointments, setFilteredAppointments] = useState([]);
 
@@ -84,7 +85,7 @@ const Appointments = () => {
     }, [selectedPatient, selectedAppointmentStatus, selectedSchedule, appointments]);
 
     const patientsOptions = [
-        { value: 'all', label: 'All Patients' },
+        { value: 'all', label: t('filters.allPatients') },
         ...Array.from(new Set(appointments.map((appointment) => appointment.user?.fullname)))
             .filter((fullname) => fullname) // Remove value undefined/null
             .map((fullname) => ({
@@ -94,10 +95,10 @@ const Appointments = () => {
     ];
 
     const appointmentsStatusOptions = [
-        { value: 'all', label: 'All Statuses' },
-        { value: 'pending', label: 'Pending' },
-        { value: 'done', label: 'Done' },
-        { value: 'cancelled', label: 'Cancelled' },
+        { value: 'all', label: t('filters.allStatuses') },
+        { value: 'pending', label: t('filters.pending') },
+        { value: 'done', label: t('filters.done') },
+        { value: 'cancelled', label: t('filters.cancelled') },
     ];
 
     useEffect(() => {
@@ -106,9 +107,41 @@ const Appointments = () => {
         setCurrentItems(items);
     }, [currentPage, filteredAppointments, itemsPerPage]);
 
+    useEffect(() => {
+        // Rebuild schedule option based on language
+        if (selectedSchedule?.value) {
+            setSelectedSchedule({
+                value: selectedSchedule.value,
+                label: t(`filters.${selectedSchedule.value}`),
+            });
+        }
+
+        // Rebuild patient option
+        if (selectedPatient?.value === 'all') {
+            setSelectedPatient({
+                value: 'all',
+                label: t('filters.allPatients'),
+            });
+        }
+
+        // Rebuild appointment status option
+        if (selectedAppointmentStatus) {
+            const statusMap = {
+                all: t('filters.allStatuses'),
+                pending: t('filters.pending'),
+                done: t('filters.done'),
+                cancelled: t('filters.cancelled'),
+            };
+            setSelectedAppointmentStatus({
+                value: selectedAppointmentStatus.value,
+                label: statusMap[selectedAppointmentStatus.value],
+            });
+        }
+    }, [i18n.language]);
+
     return (
         <div className={cx('container-parent')}>
-            <h1>MY APPOINTMENTS</h1>
+            <h1>{t('title')}</h1>
             <div className={cx('selection')}>
                 <Selections
                     selectedPatient={selectedPatient}
@@ -132,12 +165,12 @@ const Appointments = () => {
                         <table>
                             <thead>
                                 <tr>
-                                    <th scope="col">Full name</th>
-                                    <th scope="col">Phone</th>
-                                    <th scope="col">Gender</th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Time</th>
-                                    <th scope="col">Status</th>
+                                    <th scope="col">{t('columns.fullname')}</th>
+                                    <th scope="col">{t('columns.phone')}</th>
+                                    <th scope="col">{t('columns.gender')}</th>
+                                    <th scope="col">{t('columns.date')}</th>
+                                    <th scope="col">{t('columns.time')}</th>
+                                    <th scope="col">{t('columns.status')}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -309,7 +342,7 @@ const Appointments = () => {
                             </tbody>
                         </table>
                     ) : (
-                        <div className={cx('no-appointment')}>No appointments match your selection!</div>
+                        <div className={cx('no-appointment')}>{t('noAppointment')}</div>
                     )}
                 </div>
             )}

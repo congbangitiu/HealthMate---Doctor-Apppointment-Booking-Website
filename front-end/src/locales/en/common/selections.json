@@ -1,0 +1,16 @@
+{
+    "doctor": "Doctor",
+    "patient": "Patient",
+    "schedule": "Schedule",
+    "status": "Status",
+    "placeholders": {
+        "doctor": "Select a doctor",
+        "patient": "Select a patient",
+        "schedule": "Select schedule",
+        "status": "Select status"
+    },
+    "scheduleOptions": {
+        "newest": "Newest to Oldest",
+        "oldest": "Oldest to Newest"
+    }
+}

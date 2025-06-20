@@ -28,6 +28,22 @@ import searchEn from '../../locales/en/common/search.json';
 import searchVi from '../../locales/vi/common/search.json';
 import notificationEN from '../../locales/en/common/notification.json';
 import notificationVI from '../../locales/vi/common/notification.json';
+import tabsDoctorEN from '../../locales/en/doctor-profile/tabs.json';
+import tabsDoctorVI from '../../locales/vi/doctor-profile/tabs.json';
+import aboutDoctorEN from '../../locales/en/doctor-profile/about.json';
+import aboutDoctorVI from '../../locales/vi/doctor-profile/about.json';
+import dashboarDoctorEN from '../../locales/en/doctor-profile/dashboard.json';
+import dashboarDoctorVI from '../../locales/vi/doctor-profile/dashboard.json';
+import appointmentsDoctorEN from '../../locales/en/doctor-profile/appointments.json';
+import appointmentsDoctorVI from '../../locales/vi/doctor-profile/appointments.json';
+import selectionsEN from '../../locales/en/common/selections.json';
+import selectionsVI from '../../locales/vi/common/selections.json';
+import paginationEN from '../../locales/en/common/pagination.json';
+import paginationVI from '../../locales/vi/common/pagination.json';
+import profileSettingDoctorEN from '../../locales/en/doctor-profile/profileSetting.json';
+import profileSettingDoctorVI from '../../locales/vi/doctor-profile/profileSetting.json';
+import scheduleEN from '../../locales/en/common/schedule.json';
+import scheduleVI from '../../locales/vi/common/schedule.json';
 
 const resources = {
     en: {
@@ -44,6 +60,14 @@ const resources = {
         doctorList: doctorList,
         search: searchEn,
         notification: notificationEN,
+        tabsDoctor: tabsDoctorEN,
+        aboutDoctor: aboutDoctorEN,
+        dashboardDoctor: dashboarDoctorEN,
+        appointmentsDoctor: appointmentsDoctorEN,
+        selections: selectionsEN,
+        pagination: paginationEN,
+        profileSettingDoctor: profileSettingDoctorEN,
+        schedule: scheduleEN,
     },
     vi: {
         homepage: homepageVI,
@@ -59,6 +83,14 @@ const resources = {
         doctorList: doctorListVI,
         search: searchVi,
         notification: notificationVI,
+        tabsDoctor: tabsDoctorVI,
+        aboutDoctor: aboutDoctorVI,
+        dashboardDoctor: dashboarDoctorVI,
+        appointmentsDoctor: appointmentsDoctorVI,
+        selections: selectionsVI,
+        pagination: paginationVI,
+        profileSettingDoctor: profileSettingDoctorVI,
+        schedule: scheduleVI,
     },
 };
 
@@ -77,10 +109,19 @@ i18n.use(LanguageDetector)
             'specialties',
             'specialtyDetails',
             'examinationService',
+            'treatmentService',
             'contact',
             'doctorList',
             'search',
             'notification',
+            'tabsDoctor',
+            'aboutDoctor',
+            'dashboardDoctor',
+            'appointmentsDoctor',
+            'selections',
+            'pagination',
+            'profileSettingDoctor',
+            'schedule',
         ],
         interpolation: { escapeValue: false },
         detection: {

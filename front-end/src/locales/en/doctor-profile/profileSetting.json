@@ -1,0 +1,64 @@
+{
+    "titles": {
+        "personalInfo": "Personal Information",
+        "qualifications": "Qualifications",
+        "experiences": "Experiences",
+        "timeSlots": "Time slots",
+        "about": "About"
+    },
+    "fields": {
+        "fullname": "Fullname",
+        "email": "Email",
+        "phone": "Phone No.",
+        "bio": "Biography",
+        "bioPlaceholder": "Write your bio here with a maximum of 50 words",
+        "uploadPhoto": "Upload photo",
+        "uploadSignature": "Upload signature",
+        "photoNote": "(Notice: 1:1 scale photo)",
+        "signatureNote": "(Notice: Remove background )",
+        "gender": "Gender",
+        "genderSelect": "Select",
+        "male": "Male",
+        "female": "Female",
+        "other": "Other",
+        "ticketPrice": "Ticket price",
+        "specialty": "Specialty",
+        "subspecialty": "Subspecialty",
+        "aboutPlaceholder": "Write more your details ..."
+    },
+    "qualifications": {
+        "startingDate": "Starting date",
+        "endingDate": "Ending date",
+        "degree": "Degree",
+        "university": "University",
+        "add": "Add qualification"
+    },
+    "experiences": {
+        "startingDate": "Starting date",
+        "endingDate": "Ending date",
+        "position": "Position",
+        "hospital": "Hospital",
+        "add": "Add experiences"
+    },
+    "actions": {
+        "edit": "Edit",
+        "save": "Save",
+        "delete": "Delete",
+        "update": "Update profile"
+    },
+    "messages": {
+        "bioLimit": "Maximum 350 characters !!!",
+        "success": "Profile updated successfully"
+    },
+    "timeSlots": {
+        "availableDays": "Available Days",
+        "availableShifts": "Available Shifts",
+        "shiftNote": "(Morning: 8:00-11:30 | Afternoon: 13:00-16:00 | Evening: 18:00-21:00)",
+        "generatedSlotsTitle": "Generated Time Slots from <b>{{start}}</b> to <b>{{end}}</b>",
+        "table": {
+            "date": "Date",
+            "time": "Time Slots",
+            "period": "Period"
+        }
+    }
+}

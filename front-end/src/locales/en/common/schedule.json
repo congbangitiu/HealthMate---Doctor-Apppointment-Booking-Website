@@ -1,0 +1,16 @@
+{
+    "weekdays": {
+        "Monday": "Monday",
+        "Tuesday": "Tuesday",
+        "Wednesday": "Wednesday",
+        "Thursday": "Thursday",
+        "Friday": "Friday",
+        "Saturday": "Saturday",
+        "Sunday": "Sunday"
+    },
+    "shifts": {
+        "Morning": "Morning",
+        "Afternoon": "Afternoon",
+        "Evening": "Evening"
+    }
+}

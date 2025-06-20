@@ -1,0 +1,16 @@
+{
+    "doctor": "Bác sĩ",
+    "patient": "Bệnh nhân",
+    "schedule": "Lịch khám",
+    "status": "Trạng thái",
+    "placeholders": {
+        "doctor": "Chọn bác sĩ",
+        "patient": "Chọn bệnh nhân",
+        "schedule": "Chọn lịch khám",
+        "status": "Chọn trạng thái"
+    },
+    "scheduleOptions": {
+        "newest": "Mới nhất đến cũ nhất",
+        "oldest": "Cũ nhất đến mới nhất"
+    }
+}

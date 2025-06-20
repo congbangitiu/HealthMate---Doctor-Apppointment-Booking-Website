@@ -1,0 +1,16 @@
+{
+    "weekdays": {
+        "Monday": "Thứ hai",
+        "Tuesday": "Thứ ba",
+        "Wednesday": "Thứ tư",
+        "Thursday": "Thứ năm",
+        "Friday": "Thứ sáu",
+        "Saturday": "Thứ bảy",
+        "Sunday": "Chủ nhật"
+    },
+    "shifts": {
+        "Morning": "Ca sáng",
+        "Afternoon": "Ca chiều",
+        "Evening": "Ca tối"
+    }
+}

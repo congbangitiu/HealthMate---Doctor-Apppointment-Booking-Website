@@ -6,10 +6,12 @@ import { PropTypes } from 'prop-types';
 import roundNumber from '../../utils/number/roundNumber';
 import DefaultMaleDoctorAvatar from '../../assets/images/default-male-doctor.png';
 import DefaultFemaleDoctorAvatar from '../../assets/images/default-female-doctor.png';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const Doctor = ({ smallMode, fullname, gender, bio, averageRating, totalRating, subspecialty, photo }) => {
+    const { t } = useTranslation('tabsDoctor');
     const defaultDoctorAvatar = gender === 'male' ? DefaultMaleDoctorAvatar : DefaultFemaleDoctorAvatar;
 
     useEffect(() => {
@@ -24,7 +26,9 @@ const Doctor = ({ smallMode, fullname, gender, bio, averageRating, totalRating, 
             <img src={photo || defaultDoctorAvatar} className={cx(smallMode && 'smallImg')} />
             <div className={cx('info', smallMode && 'small')}>
                 <div className={cx('name-expertise')}>
-                    <h4>Dr. {fullname}</h4>
+                    <h4>
+                        {t('titlePrefix')} {fullname}
+                    </h4>
                     <div className={cx('expertise')}>{subspecialty}</div>
                 </div>
                 <div className={cx('rating')}>

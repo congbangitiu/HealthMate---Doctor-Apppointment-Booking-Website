@@ -9,6 +9,7 @@ import ConfirmLogout from '../../../components/ConfirmLogout/ConfirmLogout';
 import { useMediaQuery, Dialog, Slide } from '@mui/material';
 import DefaultMaleDoctorAvatar from '../../../assets/images/default-male-doctor.png';
 import DefaultFemaleDoctorAvatar from '../../../assets/images/default-female-doctor.png';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -16,6 +17,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const Tabs = ({ tab, setTab, doctorData, setShowProfileMobile }) => {
+    const { t } = useTranslation('tabsDoctor');
     const isMobile = useMediaQuery('(max-width:768px)');
     const [showFormChangePassword, setShowFormChangePassword] = useState(false);
     const [showConfirmLogout, setShowConfirmLogout] = useState(false);
@@ -26,9 +28,12 @@ const Tabs = ({ tab, setTab, doctorData, setShowProfileMobile }) => {
         <div className={cx('container')}>
             <div className={cx('profile')}>
                 <img src={doctorData.photo || defaultDoctorAvatar} alt="" />
-                <h4>Dr. {doctorData.fullname}</h4>
+                <h4>
+                    {t('titlePrefix')} {doctorData.fullname}
+                </h4>
                 <span>{doctorData.specialty}</span>
             </div>
+
             <div className={cx('modes')}>
                 <button
                     className={cx('mode', tab === 'overview' && 'active')}
@@ -37,8 +42,9 @@ const Tabs = ({ tab, setTab, doctorData, setShowProfileMobile }) => {
                         setShowProfileMobile(false);
                     }}
                 >
-                    Overview
+                    {t('overview')}
                 </button>
+
                 {doctorData.isApproved === 'approved' && (
                     <button
                         className={cx('mode', tab === 'appointments' && 'active')}
@@ -47,9 +53,10 @@ const Tabs = ({ tab, setTab, doctorData, setShowProfileMobile }) => {
                             setShowProfileMobile(false);
                         }}
                     >
-                        Appointments
+                        {t('appointments')}
                     </button>
                 )}
+
                 <button
                     className={cx('mode', tab === 'setting' && 'active')}
                     onClick={() => {
@@ -57,16 +64,16 @@ const Tabs = ({ tab, setTab, doctorData, setShowProfileMobile }) => {
                         setShowProfileMobile(false);
                     }}
                 >
-                    Profile Setting
+                    {t('profileSetting')}
                 </button>
             </div>
 
             <div className={cx('account')}>
                 <button onClick={() => setShowFormChangePassword(true)}>
-                    Change password <TbStatusChange />
+                    {t('changePassword')} <TbStatusChange />
                 </button>
                 <button onClick={() => setShowConfirmLogout(true)}>
-                    Logout <MdLogout />
+                    {t('logout')} <MdLogout />
                 </button>
             </div>
 
@@ -93,7 +100,7 @@ const Tabs = ({ tab, setTab, doctorData, setShowProfileMobile }) => {
                 onClose={() => setShowConfirmLogout(false)}
                 sx={{
                     '& .MuiPaper-root': {
-                        width: isMobile ? '100%' : '20% ',
+                        width: isMobile ? '100%' : '20%',
                         borderRadius: '10px',
                     },
                 }}

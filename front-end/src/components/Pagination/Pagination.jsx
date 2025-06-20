@@ -3,10 +3,12 @@ import classNames from 'classnames/bind';
 import Paginate from 'react-paginate';
 import { PropTypes } from 'prop-types';
 import { useMediaQuery } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const Pagination = ({ data, itemsPerPage, currentPage, setCurrentPage }) => {
+    const { t } = useTranslation('pagination');
     const isMobile = useMediaQuery('(max-width:768px)');
     const pageCount = Math.ceil(data.length / itemsPerPage);
 
@@ -23,8 +25,8 @@ const Pagination = ({ data, itemsPerPage, currentPage, setCurrentPage }) => {
     return (
         <div className={cx('container')}>
             <Paginate
-                previousLabel={!isMobile ? 'Previous' : '<'}
-                nextLabel={!isMobile ? 'Next' : '>'}
+                previousLabel={!isMobile ? t('previous') : '<'}
+                nextLabel={!isMobile ? t('next') : '>'}
                 breakLabel={'...'}
                 breakClassName={'break-me'}
                 pageCount={pageCount}

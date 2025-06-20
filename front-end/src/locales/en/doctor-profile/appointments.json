@@ -1,0 +1,21 @@
+{
+    "title": "My Appointments",
+    "noAppointment": "No appointments match your selection!",
+    "columns": {
+        "fullname": "Full name",
+        "phone": "Phone",
+        "gender": "Gender",
+        "date": "Date",
+        "time": "Time",
+        "status": "Status"
+    },
+    "filters": {
+        "allPatients": "All Patients",
+        "allStatuses": "All Statuses",
+        "pending": "Pending",
+        "done": "Done",
+        "cancelled": "Cancelled",
+        "newest": "Newest to Oldest",
+        "oldest": "Oldest to Newest"
+    }
+}

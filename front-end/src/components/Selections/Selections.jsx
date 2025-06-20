@@ -3,6 +3,7 @@ import classNames from 'classnames/bind';
 import Select from 'react-select';
 import styles from './Selections.module.scss';
 import { useMediaQuery } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
@@ -22,6 +23,8 @@ const Selections = ({
     hideDoctor,
 }) => {
     const isMobile = useMediaQuery('(max-width:768px)');
+    const { t } = useTranslation('selections');
+
     const customStyles = {
         control: (provided) => ({
             ...provided,
@@ -55,19 +58,19 @@ const Selections = ({
     };
 
     const scheduleOptions = [
-        { value: 'newest', label: 'Newest to Oldest' },
-        { value: 'oldest', label: 'Oldest to Newest' },
+        { value: 'newest', label: t('scheduleOptions.newest') },
+        { value: 'oldest', label: t('scheduleOptions.oldest') },
     ];
 
     return (
         <div className={cx('container')}>
             {doctorsOptions && setSelectedDoctor && (
                 <div className={cx('selection', { hide: hideDoctor })}>
-                    <h4>Doctor</h4>
+                    <h4>{t('doctor')}</h4>
                     <Select
                         options={doctorsOptions}
                         styles={customStyles}
-                        placeholder={doctorsOptions.length > 0 ? doctorsOptions[0].label : 'Select a doctor'}
+                        placeholder={doctorsOptions.length > 0 ? doctorsOptions[0].label : t('placeholders.doctor')}
                         value={selectedDoctor}
                         onChange={setSelectedDoctor}
                     />
@@ -76,11 +79,11 @@ const Selections = ({
 
             {patientsOptions && setSelectedPatient && (
                 <div className={cx('selection', { hide: hidePatient })}>
-                    <h4>Patient</h4>
+                    <h4>{t('patient')}</h4>
                     <Select
                         options={patientsOptions}
                         styles={customStyles}
-                        placeholder={patientsOptions.length > 0 ? patientsOptions[0].label : 'Select a patient'}
+                        placeholder={patientsOptions.length > 0 ? patientsOptions[0].label : t('placeholders.patient')}
                         value={selectedPatient}
                         onChange={setSelectedPatient}
                     />
@@ -88,22 +91,22 @@ const Selections = ({
             )}
 
             <div className={cx('selection')}>
-                <h4>Schedule</h4>
+                <h4>{t('schedule')}</h4>
                 <Select
-                    options={scheduleOptions || []}
+                    options={scheduleOptions}
                     styles={customStyles}
-                    placeholder="Select Schedule"
+                    placeholder={t('placeholders.schedule')}
                     value={selectedSchedule}
                     onChange={setSelectedSchedule}
                 />
             </div>
 
             <div className={cx('selection')}>
-                <h4>Status</h4>
+                <h4>{t('status')}</h4>
                 <Select
                     options={appointmentsStatusOptions}
                     styles={customStyles}
-                    placeholder={appointmentsStatusOptions?.[0]?.label || 'Select Status'}
+                    placeholder={appointmentsStatusOptions?.[0]?.label || t('placeholders.status')}
                     value={selectedAppointmentStatus}
                     onChange={setSelectedAppointmentStatus}
                 />
