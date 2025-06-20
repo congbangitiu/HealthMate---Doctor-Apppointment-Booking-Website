@@ -8,10 +8,14 @@ import formatDate from '../../utils/date-time/formatDate';
 import convertTime from './../../utils/date-time/convertTime';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { useMediaQuery } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import translateSubspecialtyName from './../../utils/translation/translateSubspecialtyName';
+import translateAppointmentStatus from './../../utils/translation/translateAppointmentStatus';
 
 const cx = classNames.bind(styles);
 
 const PatientAppointment = ({ appointment, handleDelete }) => {
+    const { t, i18n } = useTranslation('myBookings');
     const isMobile = useMediaQuery('(max-width:768px)');
 
     const getStatusStyle = (status) => {
@@ -41,12 +45,14 @@ const PatientAppointment = ({ appointment, handleDelete }) => {
             <div className={cx('info')}>
                 <div className={cx('upperPart')}>
                     <div>
-                        <h4>Dr. {appointment.doctor.fullname}</h4>
-                        <span>{appointment.doctor.subspecialty}</span>
+                        <h4>
+                            {t('prefix')} {appointment.doctor.fullname}
+                        </h4>
+                        <span>{translateSubspecialtyName(appointment.doctor.subspecialty, i18n)}</span>
                     </div>
                     <div style={{ color: statusStyle.color }}>
                         {StatusIcon && <StatusIcon className={cx('icon')} style={{ color: statusStyle.color }} />}
-                        {appointment.status}{' '}
+                        {translateAppointmentStatus(appointment.status, t)}
                     </div>
                     {isMobile && appointment?.status === 'pending' && (
                         <span className={cx('cancel-icon')} onClick={(e) => handleDeleteForMobile(e, appointment)}>

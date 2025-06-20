@@ -1,0 +1,18 @@
+{
+    "filters": {
+        "allDoctors": "All Doctors",
+        "allStatuses": "All Statuses",
+        "pending": "Pending",
+        "done": "Done",
+        "cancelled": "Cancelled",
+        "newest": "Newest to Oldest",
+        "oldest": "Oldest to Newest"
+    },
+    "noAppointmentsMatch": "No appointments match your selection!",
+    "status": {
+        "pending": "Pending",
+        "done": "Done",
+        "cancelled": "Cancelled"
+    },
+    "prefix": "Dr."
+}

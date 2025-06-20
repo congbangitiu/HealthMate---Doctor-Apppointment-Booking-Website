@@ -58,6 +58,8 @@ import myAccountEN from '../../locales/en/patient-profile/myAccount.json';
 import myAccountVI from '../../locales/vi/patient-profile/myAccount.json';
 import updateInfoEN from '../../locales/en/patient-profile/updateInfo.json';
 import updateInfoVI from '../../locales/vi/patient-profile/updateInfo.json';
+import myBookingsEN from '../../locales/en/patient-profile/myBookings.json';
+import myBookingsVI from '../../locales/vi/patient-profile/myBookings.json';
 
 const resources = {
     en: {
@@ -89,6 +91,7 @@ const resources = {
         chatbot: chatbotEN,
         myAccount: myAccountEN,
         updateInfo: updateInfoEN,
+        myBookings: myBookingsEN,
     },
     vi: {
         homepage: homepageVI,
@@ -119,6 +122,7 @@ const resources = {
         chatbot: chatbotVI,
         myAccount: myAccountVI,
         updateInfo: updateInfoVI,
+        myBookings: myBookingsVI,
     },
 };
 
@@ -157,6 +161,7 @@ i18n.use(LanguageDetector)
             'chatbot',
             'myAccount',
             'updateInfo',
+            'myBookings',
         ],
         interpolation: { escapeValue: false },
         detection: {

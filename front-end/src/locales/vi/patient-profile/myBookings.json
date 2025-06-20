@@ -1,0 +1,18 @@
+{
+    "filters": {
+        "allDoctors": "Tất cả bác sĩ",
+        "allStatuses": "Tất cả trạng thái",
+        "pending": "Đang chờ",
+        "done": "Hoàn tất",
+        "cancelled": "Đã hủy",
+        "newest": "Mới nhất đến cũ nhất",
+        "oldest": "Cũ nhất đến mới nhất"
+    },
+    "noAppointmentsMatch": "Không có cuộc hẹn nào phù hợp với lựa chọn của bạn!",
+    "status": {
+        "pending": "Đang chờ",
+        "done": "Hoàn tất",
+        "cancelled": "Đã hủy"
+    },
+    "prefix": "BS."
+}

@@ -12,6 +12,7 @@ import Selections from '../../../components/Selections/Selections';
 import Pagination from '../../../components/Pagination/Pagination';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { Dialog, Slide } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -19,6 +20,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const MyBookings = () => {
+    const { t, i18n } = useTranslation('myBookings');
     const navigate = useNavigate();
 
     const { data: appointments, loading, error } = useFetchData(`${BASE_URL}/users/appointments/my-appointments`);
@@ -29,7 +31,7 @@ const MyBookings = () => {
     const [selectedAppointmentStatus, setSelectedAppointmentStatus] = useState(null);
     const [selectedSchedule, setSelectedSchedule] = useState({
         value: 'newest',
-        label: 'Newest to Oldest',
+        label: t('filters.newest'),
     });
     const [filteredAppointments, setFilteredAppointments] = useState([]);
 
@@ -91,7 +93,7 @@ const MyBookings = () => {
     };
 
     const doctorsOptions = [
-        { value: 'all', label: 'All Doctors' },
+        { value: 'all', label: t('filters.allDoctors') },
         ...Array.from(new Set(appointments.map((appointment) => appointment.doctor?.fullname)))
             .filter((fullname) => fullname) // Remove value undefined/null
             .map((fullname) => ({
@@ -101,11 +103,43 @@ const MyBookings = () => {
     ];
 
     const appointmentsStatusOptions = [
-        { value: 'all', label: 'All Statuses' },
-        { value: 'pending', label: 'Pending' },
-        { value: 'done', label: 'Done' },
-        { value: 'cancelled', label: 'Cancelled' },
+        { value: 'all', label: t('filters.allStatuses') },
+        { value: 'pending', label: t('filters.pending') },
+        { value: 'done', label: t('filters.done') },
+        { value: 'cancelled', label: t('filters.cancelled') },
     ];
+
+    useEffect(() => {
+        // Rebuild schedule option based on language
+        if (selectedSchedule?.value) {
+            setSelectedSchedule({
+                value: selectedSchedule.value,
+                label: t(`filters.${selectedSchedule.value}`),
+            });
+        }
+
+        // Rebuild patient option
+        if (selectedDoctor?.value === 'all') {
+            setSelectedDoctor({
+                value: 'all',
+                label: t('filters.allPatients'),
+            });
+        }
+
+        // Rebuild appointment status option
+        if (selectedAppointmentStatus) {
+            const statusMap = {
+                all: t('filters.allStatuses'),
+                pending: t('filters.pending'),
+                done: t('filters.done'),
+                cancelled: t('filters.cancelled'),
+            };
+            setSelectedAppointmentStatus({
+                value: selectedAppointmentStatus.value,
+                label: statusMap[selectedAppointmentStatus.value],
+            });
+        }
+    }, [i18n.language]);
 
     useEffect(() => {
         const offset = currentPage * itemsPerPage;
@@ -168,7 +202,7 @@ const MyBookings = () => {
                                     </div>
                                 ))
                             ) : (
-                                <h4>No appointments match your selection!</h4>
+                                <h4>{t('messages.noAppointmentsMatch')}</h4>
                             )}
                         </div>
 
