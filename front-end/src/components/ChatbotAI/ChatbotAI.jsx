@@ -16,7 +16,6 @@ import {
     isAskingAboutAppointments,
     isAskingAboutSymptoms,
 } from '../../utils/chatbot/determineQuestionType';
-import sampleAnswers from '../../assets/data/chatbot/sampleAnswer';
 import generatePrompt from '../../utils/chatbot/generatePrompt';
 import handleDoctorScheduleQuery from '../../utils/chatbot/handleDoctorScheduleQuery';
 import handleSymptomQuery from '../../utils/chatbot/handleSymptomQuery';
@@ -25,10 +24,12 @@ import {
     handleSymptomBasedResponse,
 } from '../../utils/chatbot/handlePatientQuestion';
 import { handleDoctorAppointments } from '../../utils/chatbot/handleDoctorQuestion';
+import { useTranslation, Trans } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const ChatbotAI = ({ setIsShowChatbot }) => {
+    const { t, i18n } = useTranslation('chatbot');
     // Get user and role information from authContext
     const { token, user, role } = useContext(authContext);
 
@@ -49,21 +50,18 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
     const inputRef = useRef(null);
     const chatBodyRef = useRef(null);
 
-    const [patientSuggestions, setPatientSuggestions] = useState([
-        'I am experiencing indigestion and heartburn, which specialist should I consult?',
-        'Can I get an online consultation with a dermatologist?',
-        'How can I find the most suitable doctor for my specific health concerns?',
-    ]);
-    const [doctorSuggestions, setDoctorSuggestions] = useState([
-        'How can I manage my appointment schedule more efficiently?',
-        'What are the most common concerns or questions from patients in my specialty?',
-        'Can I get feedback or reviews from patients after consultations to improve my service?',
-    ]);
-    const [adminSuggestions, setAdminSuggestions] = useState([
-        'List all pending doctor registrations.',
-        'Any system alerts today?',
-        'Which appointments were canceled this week?',
-    ]);
+    const [patientSuggestions, setPatientSuggestions] = useState([]);
+    const [doctorSuggestions, setDoctorSuggestions] = useState([]);
+    const [adminSuggestions, setAdminSuggestions] = useState([]);
+
+    useEffect(() => {
+        setPatientSuggestions(t('suggestions.patient', { returnObjects: true }));
+        setDoctorSuggestions(t('suggestions.doctor', { returnObjects: true }));
+        setAdminSuggestions(t('suggestions.admin', { returnObjects: true }));
+    }, [i18n.language, t]);
+
+    const questionaire = t('sampleQuestionaire', { returnObjects: true })?.[role] || {};
+    console.log('ChatbotAI questionaire:', questionaire);
 
     // Retry fetch function to handle rate limits and server overloads
     const retryFetch = async (url, options, retries = 3, delay = 1500) => {
@@ -80,7 +78,7 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
                 return response;
             }
         }
-        throw new Error('The model is overloaded. Please try again later.');
+        throw new Error(t('modelOverloadedError'));
     };
 
     // Send API request and update chat history
@@ -236,7 +234,7 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
 
     // Handle suggestion click for patient
     const handlePatientSuggestionClick = (text, index) => {
-        const predefined = sampleAnswers.patient[text];
+        const predefined = questionaire?.[text];
         if (predefined) {
             setChatHistory((prev) => [...prev, { role: 'user', text }, { role: 'model', text: predefined }]);
         } else {
@@ -247,7 +245,7 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
 
     // Handle suggestion click for doctor
     const handleDoctorSuggestionClick = (text, index) => {
-        const predefined = sampleAnswers.doctor[text];
+        const predefined = questionaire?.[text];
         if (predefined) {
             setChatHistory((prev) => [...prev, { role: 'user', text }, { role: 'model', text: predefined }]);
         } else {
@@ -258,7 +256,7 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
 
     // Handle suggestion click for admin
     const handleAdminSuggestionClick = (text, index) => {
-        const predefined = sampleAnswers.admin[text];
+        const predefined = questionaire?.[text];
         if (predefined) {
             setChatHistory((prev) => [...prev, { role: 'user', text }, { role: 'model', text: predefined }]);
         } else {
@@ -302,16 +300,17 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
                         <img src={ChatbotLogo} />
                         <div>
                             {!token || token === 'null' || token === 'undefined' ? (
-                                <>
-                                    Hi there! I&apos;m <b>HealthAid</b> - HealthMate Assistant! How can I help you
-                                    today?
-                                </>
+                                <Trans i18nKey="greeting" t={t} components={{ b: <b /> }} />
                             ) : (
-                                <>
-                                    Hi {role === 'doctor' ? 'Dr. ' : ''}
-                                    {extractName(user?.fullname)}, I&apos;m <b>HealthAid</b> - HealthMate Assistant! How
-                                    can I help you today?
-                                </>
+                                <Trans
+                                    i18nKey="greetingUser"
+                                    t={t}
+                                    values={{
+                                        prefix: role === 'doctor' ? (i18n.language === 'vi' ? 'BS. ' : 'Dr. ') : '',
+                                        name: extractName(user?.fullname),
+                                    }}
+                                    components={{ b: <b /> }}
+                                />
                             )}
                         </div>
                     </div>
@@ -416,7 +415,7 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
                     ref={inputRef}
                     type="text"
                     onChange={() => setInputValue(inputRef.current.value)}
-                    placeholder="Message ..."
+                    placeholder={t('inputPlaceholder')}
                     onKeyDown={handleKeyDown}
                 />
 

@@ -52,6 +52,8 @@ import doctorCardEN from '../../locales/en/common/doctorCard.json';
 import doctorCardVI from '../../locales/vi/common/doctorCard.json';
 import chatEN from '../../locales/en/common/chat.json';
 import chatVI from '../../locales/vi/common/chat.json';
+import chatbotEN from '../../locales/en/common/chatbot.json';
+import chatbotVI from '../../locales/vi/common/chatbot.json';
 
 const resources = {
     en: {
@@ -80,6 +82,7 @@ const resources = {
         logout: logoutEN,
         doctorCard: doctorCardEN,
         chat: chatEN,
+        chatbot: chatbotEN,
     },
     vi: {
         homepage: homepageVI,
@@ -107,6 +110,7 @@ const resources = {
         logout: logoutVI,
         doctorCard: doctorCardVI,
         chat: chatVI,
+        chatbot: chatbotVI,
     },
 };
 
@@ -141,6 +145,8 @@ i18n.use(LanguageDetector)
             'changePassword',
             'logout',
             'doctorCard',
+            'chat',
+            'chatbot',
         ],
         interpolation: { escapeValue: false },
         detection: {

@@ -1,0 +1,42 @@
+{
+    "greeting": "Xin chào! Tôi là <b>HealthAid</b> - Trợ lý HealthMate! Tôi có thể giúp gì cho bạn hôm nay?",
+    "greetingUser": "Xin chào {{prefix}}{{name}}, tôi là <b>HealthAid</b> - Trợ lý HealthMate! Tôi có thể giúp gì cho bạn hôm nay?",
+    "inputPlaceholder": "Nhập tin nhắn ...",
+    "stopGenerating": "Dừng tạo phản hồi",
+    "thinking": "Đang suy nghĩ...",
+    "suggestions": {
+        "patient": [
+            "Tôi bị khó tiêu và ợ nóng, nên khám chuyên khoa nào?",
+            "Tôi có thể đặt khám trực tuyến với bác sĩ da liễu không?",
+            "Làm thế nào để tìm bác sĩ phù hợp nhất với tình trạng sức khỏe của tôi?"
+        ],
+        "doctor": [
+            "Làm sao để quản lý lịch hẹn hiệu quả hơn?",
+            "Những vấn đề phổ biến mà bệnh nhân hay hỏi trong chuyên khoa của tôi là gì?",
+            "Tôi có thể nhận phản hồi từ bệnh nhân sau khi khám để cải thiện dịch vụ không?"
+        ],
+        "admin": [
+            "Liệt kê tất cả các đơn đăng ký bác sĩ đang chờ duyệt.",
+            "Hôm nay có cảnh báo hệ thống nào không?",
+            "Những cuộc hẹn nào đã bị hủy trong tuần này?"
+        ]
+    },
+    "sampleQuestionaire": {
+        "patient": {
+            "I am experiencing indigestion and heartburn, which specialist should I consult?": "Nếu bạn đang gặp các triệu chứng như đầy bụng và ợ nóng, bạn nên khám bác sĩ chuyên khoa tiêu hóa. Họ là những chuyên gia y tế chuyên chẩn đoán và điều trị các bệnh liên quan đến hệ tiêu hóa như trào ngược axit, loét, đầy hơi và các vấn đề dạ dày khác.",
+            "Can I get an online consultation with a dermatologist?": "Có, bạn có thể dễ dàng đặt lịch tư vấn trực tuyến với bác sĩ da liễu thông qua nền tảng HealthMate. Bác sĩ sẽ hỗ trợ các vấn đề về da như mụn, dị ứng, viêm da... một cách tiện lợi ngay tại nhà.",
+            "How can I find the most suitable doctor for my specific health concerns?": "Để tìm bác sĩ phù hợp, hãy truy cập trang 'Bác sĩ' trên HealthMate. Bạn có thể lọc theo chuyên khoa, đánh giá, ngôn ngữ, hình thức tư vấn và lịch trống để lựa chọn người phù hợp nhất với nhu cầu của mình."
+        },
+        "doctor": {
+            "How can I manage my appointment schedule more efficiently?": "Để quản lý lịch hẹn hiệu quả hơn, đăng nhập vào Bảng điều khiển Bác sĩ và vào tab 'Lịch hẹn'. Tại đây, bạn có thể xem, xác nhận, dời hoặc hủy lịch. Ngoài ra, bạn có thể bật thông báo nhắc lịch để tránh bị quên.",
+            "What are the most common concerns or questions from patients in my specialty?": "Bạn có thể nắm bắt các mối quan tâm thường gặp của bệnh nhân bằng cách xem lại các buổi tư vấn trước đó, phản hồi và đánh giá của bệnh nhân. HealthMate cũng cung cấp dữ liệu tổng hợp về các triệu chứng phổ biến theo từng chuyên khoa.",
+            "Can I get feedback or reviews from patients after consultations to improve my service?": "Có, sau mỗi buổi tư vấn, bệnh nhân có thể để lại nhận xét và đánh giá. Các phản hồi này được hiển thị trên hồ sơ bác sĩ và trong mục 'Phản hồi' của Bảng điều khiển Bác sĩ. Điều này giúp bạn cải thiện dịch vụ và tăng sự hài lòng."
+        },
+        "admin": {
+            "List all pending doctor registrations.": "Để xem các hồ sơ đăng ký bác sĩ đang chờ xử lý, hãy vào Bảng điều khiển Quản trị viên và chọn mục 'Quản lý bác sĩ'. Bạn sẽ thấy danh sách các bác sĩ đang chờ xác minh và phê duyệt.",
+            "Any system alerts today?": "Để kiểm tra thông báo hệ thống hôm nay, vào bảng thông báo trên giao diện quản trị. Bạn sẽ thấy cảnh báo liên quan đến hệ thống, bảo trì, bảo mật và cập nhật cần xử lý.",
+            "Which appointments were canceled this week?": "Để xem các lịch hẹn đã bị hủy trong tuần này, vào mục 'Quản lý lịch hẹn' và lọc theo trạng thái 'Đã hủy' và chọn khoảng thời gian là tuần hiện tại. Hệ thống sẽ hiển thị danh sách chi tiết."
+        }
+    },
+    "modelOverloadedError": "Hệ thống đang quá tải. Vui lòng thử lại sau."
+}
