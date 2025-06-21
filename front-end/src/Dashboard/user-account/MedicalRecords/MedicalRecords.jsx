@@ -12,10 +12,12 @@ import Tab from '@mui/material/Tab';
 import Prescription from '../Prescription/Prescription';
 import ExaminationForm from '../ExaminationForm/ExaminationForm';
 import ReExaminationAppointment from '../ReExaminationAppointment/ReExaminationAppointment';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const MedicalRecords = () => {
+    const { t } = useTranslation('medicalRecords');
     const { id } = useParams();
     const [activeTab, setActiveTab] = useState('examination-form');
     const { data: appointment, loading, error } = useFetchData(`${BASE_URL}/users/appointments/my-appointments/${id}`);
@@ -44,7 +46,7 @@ const MedicalRecords = () => {
                             <img src={appointment?.user?.photo} alt="" />
                             <h1>{appointment?.user?.fullname}</h1>
                             <p>
-                                <b>Email:</b>{' '}
+                                <b>{t('patient.email')}:</b>{' '}
                                 <InfoToolTip
                                     text={appointment?.user?.email}
                                     maxLength={20}
@@ -52,11 +54,11 @@ const MedicalRecords = () => {
                                 />
                             </p>
                             <p>
-                                <b>Phone number:</b> 0{appointment?.user?.phone}
+                                <b>{t('patient.phone')}:</b> 0{appointment?.user?.phone}
                             </p>
                             {appointment?.user?.dateOfBirth && (
                                 <p>
-                                    <b>Date of birth:</b> {appointment?.user?.dateOfBirth}
+                                    <b>{t('patient.dob')}:</b> {appointment?.user?.dateOfBirth}
                                 </p>
                             )}
                         </>
@@ -70,9 +72,11 @@ const MedicalRecords = () => {
                     ) : (
                         <>
                             <img src={appointment?.doctor?.photo} alt="" />
-                            <h1>Dr. {appointment?.doctor?.fullname}</h1>
+                            <h1>
+                                {t('doctor.title')} {appointment?.doctor?.fullname}
+                            </h1>
                             <p>
-                                <b>Email:</b>{' '}
+                                <b>{t('doctor.email')}:</b>{' '}
                                 <InfoToolTip
                                     text={appointment?.doctor?.email}
                                     maxLength={20}
@@ -80,7 +84,7 @@ const MedicalRecords = () => {
                                 />
                             </p>
                             <p>
-                                <b>Phone number:</b> 0{appointment?.doctor?.phone}
+                                <b>{t('doctor.phone')}:</b> 0{appointment?.doctor?.phone}
                             </p>
                         </>
                     )}
@@ -111,10 +115,10 @@ const MedicalRecords = () => {
                             },
                         }}
                     >
-                        <Tab value="examination-form" label="Examination Form" />
-                        <Tab value="prescription" label="Prescription" />
+                        <Tab value="examination-form" label={t('tabs.examinationForm')} />
+                        <Tab value="prescription" label={t('tabs.prescription')} />
                         {appointment.status === 'done' && appointment.nextAppointment?.timeSlot && (
-                            <Tab value="re-examination-appointment" label="Re-Examination Appointment" />
+                            <Tab value="re-examination-appointment" label={t('tabs.reExam')} />
                         )}
                     </Tabs>
                 </div>

@@ -60,6 +60,14 @@ import updateInfoEN from '../../locales/en/patient-profile/updateInfo.json';
 import updateInfoVI from '../../locales/vi/patient-profile/updateInfo.json';
 import myBookingsEN from '../../locales/en/patient-profile/myBookings.json';
 import myBookingsVI from '../../locales/vi/patient-profile/myBookings.json';
+import medicalRecordsEN from '../../locales/en/patient-profile/medicalRecords.json';
+import medicalRecordsVI from '../../locales/vi/patient-profile/medicalRecords.json';
+import examinationFormEN from '../../locales/en/doctor-patient/examinationForm.json';
+import examinationFormVI from '../../locales/vi/doctor-patient/examinationForm.json';
+import prescriptionEN from '../../locales/en/doctor-patient/prescription.json';
+import prescriptionVI from '../../locales/vi/doctor-patient/prescription.json';
+import reExamiationFormEN from '../../locales/en/doctor-patient/reExaminationForm.json';
+import reExamiationFormVI from '../../locales/vi/doctor-patient/reExaminationForm.json';
 
 const resources = {
     en: {
@@ -92,6 +100,10 @@ const resources = {
         myAccount: myAccountEN,
         updateInfo: updateInfoEN,
         myBookings: myBookingsEN,
+        medicalRecords: medicalRecordsEN,
+        examinationForm: examinationFormEN,
+        prescription: prescriptionEN,
+        reExaminationForm: reExamiationFormEN,
     },
     vi: {
         homepage: homepageVI,
@@ -123,6 +135,10 @@ const resources = {
         myAccount: myAccountVI,
         updateInfo: updateInfoVI,
         myBookings: myBookingsVI,
+        medicalRecords: medicalRecordsVI,
+        examinationForm: examinationFormVI,
+        prescription: prescriptionVI,
+        reExaminationForm: reExamiationFormVI,
     },
 };
 
@@ -162,6 +178,10 @@ i18n.use(LanguageDetector)
             'myAccount',
             'updateInfo',
             'myBookings',
+            'medicalRecords',
+            'examinationForm',
+            'prescription',
+            'reExaminationForm',
         ],
         interpolation: { escapeValue: false },
         detection: {

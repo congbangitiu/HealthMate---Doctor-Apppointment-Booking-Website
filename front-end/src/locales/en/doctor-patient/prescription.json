@@ -1,0 +1,43 @@
+{
+    "title": "PRESCRIPTION",
+    "pendingMessage": "Dr. {{name}} is still finalizing your prescription. Please check back later to view the full details.",
+    "disease": "Disease",
+    "table": {
+        "no": "No.",
+        "medicine": "Name of Medicine",
+        "quantity": "Quantity Per Time",
+        "timesPerDay": "Time(s) Per Day",
+        "timeOfDay": "Time(s) of Day",
+        "mealRelation": "Meal Relation",
+        "totalUnits": "Total Units",
+        "dosageForm": "Dosage Form"
+    },
+    "dosageForm": {
+        "Cream": "Cream",
+        "Injection": "Injection",
+        "Ointment": "Ointment",
+        "Syrup": "Syrup",
+        "Tablet": "Tablet",
+        "Inhaler": "Inhaler",
+        "Capsule": "Capsule",
+        "Drops": "Drops"
+    },
+    "mealRelation": {
+        "Before meal": "Before meal",
+        "After meal": "After meal"
+    },
+    "timeOfDay": {
+        "Morning": "Morning",
+        "Noon": "Noon",
+        "Afternoon": "Afternoon"
+    },
+    "totalTypes": "Total types of medications",
+    "doctorAdvice": "Doctor Advice",
+    "notesTitle": "Important Notes",
+    "notes": [
+        "This prescription is valid for one-time dispensing only",
+        "Return for re-examination when medication is finished or if no improvement",
+        "Kindly bring this prescription for your follow-up consultation"
+    ],
+    "download": "Download to PDF"
+}

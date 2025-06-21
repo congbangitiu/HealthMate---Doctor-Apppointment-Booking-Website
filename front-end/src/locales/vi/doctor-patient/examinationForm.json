@@ -1,0 +1,18 @@
+{
+    "title": "PHIẾU KHÁM BỆNH",
+    "pendingMessage": "Bác sĩ {{name}} đang hoàn tất báo cáo y tế của bạn. Vui lòng quay lại sau để xem chi tiết đầy đủ.",
+    "checkup": {
+        "chiefComplaint": "Lý do khám",
+        "clinicalIndications": "Chỉ định lâm sàng",
+        "ultrasoundRequest": "Yêu cầu siêu âm"
+    },
+    "ultrasoundResults": {
+        "title": "Kết quả siêu âm",
+        "organ": "Cơ quan",
+        "result": "Kết quả"
+    },
+    "confirmation": {
+        "locationAndDate": "HealthMate, {{date}}"
+    },
+    "download": "Tải xuống PDF"
+}

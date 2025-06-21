@@ -61,7 +61,6 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
     }, [i18n.language, t]);
 
     const questionaire = t('sampleQuestionaire', { returnObjects: true })?.[role] || {};
-    console.log('ChatbotAI questionaire:', questionaire);
 
     // Retry fetch function to handle rate limits and server overloads
     const retryFetch = async (url, options, retries = 3, delay = 1500) => {

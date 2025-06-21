@@ -1,0 +1,25 @@
+{
+    "patient": {
+        "fullname": "Patient's full name",
+        "email": "Email",
+        "dob": "Date of birth",
+        "genderLabel": "Gender",
+        "address": "Address",
+        "phone": "Phone number"
+    },
+    "gender": {
+        "m": "Male",
+        "female": "Female",
+        "other": "Other"
+    },
+    "doctor": {
+        "title": "Dr.",
+        "email": "Email",
+        "phone": "Phone number"
+    },
+    "tabs": {
+        "examinationForm": "Examination Form",
+        "prescription": "Prescription",
+        "reExam": "Re-Examination Appointment"
+    }
+}

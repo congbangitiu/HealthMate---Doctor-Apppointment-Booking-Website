@@ -79,12 +79,6 @@
                 display: flex;
                 justify-content: space-between;
 
-                &:nth-child(2) {
-                    & p:nth-child(2) {
-                        text-transform: capitalize;
-                    }
-                }
-
                 & p {
                     font-size: 20px;
                 }
@@ -155,12 +149,12 @@
                     }
                 }
             }
+        }
 
-            & h4 {
-                font-size: 20px;
-                font-weight: 500;
-                margin-top: 10px;
-            }
+        & h4 {
+            font-size: 20px;
+            font-weight: 500;
+            margin-top: 10px;
         }
 
         & .notes {

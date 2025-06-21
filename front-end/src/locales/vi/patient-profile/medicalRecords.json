@@ -1,0 +1,25 @@
+{
+    "patient": {
+        "fullname": "Họ tên bệnh nhân",
+        "email": "Email",
+        "dob": "Ngày sinh",
+        "genderLabel": "Giới tính",
+        "address": "Địa chỉ",
+        "phone": "Số điện thoại"
+    },
+    "gender": {
+        "male": "Nam",
+        "female": "Nữ",
+        "other": "Khác"
+    },
+    "doctor": {
+        "title": "BS.",
+        "email": "Email",
+        "phone": "Số điện thoại"
+    },
+    "tabs": {
+        "examinationForm": "Phiếu khám bệnh",
+        "prescription": "Đơn thuốc",
+        "reExam": "Lịch tái khám"
+    }
+}

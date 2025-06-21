@@ -1,0 +1,43 @@
+{
+    "title": "ĐƠN THUỐC",
+    "pendingMessage": "Bác sĩ {{name}} hiện đang hoàn tất đơn thuốc của bạn. Vui lòng quay lại sau để xem chi tiết đầy đủ.",
+    "disease": "Chẩn đoán bệnh",
+    "table": {
+        "no": "STT",
+        "medicine": "Tên thuốc",
+        "quantity": "Liều/lần",
+        "timesPerDay": "Lần/ngày",
+        "timeOfDay": "Thời điểm uống",
+        "mealRelation": "Liên quan bữa ăn",
+        "totalUnits": "Tổng liều",
+        "dosageForm": "Dạng thuốc"
+    },
+    "dosageForm": {
+        "Cream": "Kem bôi",
+        "Injection": "Tiêm",
+        "Ointment": "Thuốc mỡ",
+        "Syrup": "Siro",
+        "Tablet": "Viên nén",
+        "Inhaler": "Ống hít",
+        "Capsule": "Viên nang",
+        "Drops": "Thuốc nhỏ"
+    },
+    "mealRelation": {
+        "Before meal": "Trước bữa ăn",
+        "After meal": "Sau bữa ăn"
+    },
+    "timeOfDay": {
+        "Morning": "Sáng",
+        "Noon": "Trưa",
+        "Afternoon": "Chiều"
+    },
+    "totalTypes": "Tổng số loại thuốc",
+    "doctorAdvice": "Lời dặn của bác sĩ",
+    "notesTitle": "Lưu ý quan trọng",
+    "notes": [
+        "Đơn thuốc này chỉ có giá trị cho một lần cấp phát",
+        "Tái khám khi dùng hết thuốc hoặc nếu không có cải thiện",
+        "Vui lòng mang theo đơn thuốc này khi tái khám"
+    ],
+    "download": "Tải xuống PDF"
+}
