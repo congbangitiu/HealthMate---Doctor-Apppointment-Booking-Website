@@ -11,8 +11,24 @@
         "organ": "Organ",
         "result": "Result"
     },
+    "organ": {
+        "Liver": "Liver",
+        "Gallbladder": "Gallbladder",
+        "Pancreas": "Pancreas",
+        "Right Kidney": "Right Kidney",
+        "Left Kidney": "Left Kidney",
+        "Spleen": "Spleen",
+        "Bladder": "Bladder",
+        "Abdominal Cavity": "Abdominal Cavity"
+    },
+    "conclusion": "Conclusion",
     "confirmation": {
         "locationAndDate": "HealthMate, {{date}}"
     },
-    "download": "Download to PDF"
+    "button": {
+        "save": "Save examination form",
+        "download": "Download to PDF"
+    },
+    "pendingNoticeForDoctor": "You haven’t completed the health examination form for this appointment!"
+
 }

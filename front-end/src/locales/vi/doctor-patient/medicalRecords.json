@@ -21,5 +21,9 @@
         "examinationForm": "Phiếu khám bệnh",
         "prescription": "Đơn thuốc",
         "reExam": "Lịch tái khám"
+    },
+    "switch": {
+        "edit": "Chế độ chỉnh sửa",
+        "view": "Chế độ xem"
     }
 }

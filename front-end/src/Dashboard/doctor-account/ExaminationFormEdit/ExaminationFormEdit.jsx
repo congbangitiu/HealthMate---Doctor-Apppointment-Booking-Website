@@ -15,6 +15,10 @@ import { Image, Upload } from 'antd';
 import { uploadImageToCloudinary } from '../../../utils/services/uploadCloudinary';
 import { useMediaQuery } from '@mui/material';
 import SignatureConfirmation from '../../../components/SignatureConfirmation/SignatureConfirmation';
+import { useTranslation } from 'react-i18next';
+import translateGender from '../../../utils/translation/translateGender';
+import capitalizeFirstLetter from '../../../utils/text/capitalizeFirstLetter';
+import translateOrganName from '../../../utils/translation/translateOrganName';
 
 const cx = classNames.bind(styles);
 
@@ -46,6 +50,8 @@ const ExaminationFormEdit = ({
     setIsSigned,
     createdTime,
 }) => {
+    const { t: tMedicalRecords } = useTranslation('medicalRecords');
+    const { t: tExaminationForm } = useTranslation('examinationForm');
     const theme = useTheme();
     const isMobile = useMediaQuery('(max-width:768px)');
     const [loadingBtnSave, setLoadingBtnSave] = useState(false);
@@ -215,31 +221,32 @@ const ExaminationFormEdit = ({
                         <p>Your Wellness - Our Priority</p>
                     </div>
                 </div>
-                <h1>EXAMINATION FORM</h1>
+                <h1>{tExaminationForm('title')}</h1>
                 <div className={cx('patient-info')}>
                     <p>
-                        <b>Patient&apos;s full name:</b> {appointment?.user?.fullname}
+                        <b>{tMedicalRecords('patient.fullname')}:</b> {appointment?.user?.fullname}
                     </p>
                     <span>
                         <p>
-                            <b>Date of birth:</b> {appointment?.user?.dateOfBirth}
+                            <b>{tMedicalRecords('patient.dob')}:</b> {appointment?.user?.dateOfBirth}
                         </p>
-                        <p className={cx('gender')}>
-                            <b>Gender:</b> {appointment?.user?.gender}
+                        <p>
+                            <b>{tMedicalRecords('patient.genderLabel')}:</b>{' '}
+                            {capitalizeFirstLetter(translateGender(appointment?.user?.gender, tMedicalRecords))}
                         </p>
                     </span>
                     <span>
                         <p>
-                            <b>Address:</b> {appointment?.user?.address}
+                            <b>{tMedicalRecords('patient.address')}:</b> {appointment?.user?.address}
                         </p>
                         <p>
-                            <b>Phone number:</b> 0{appointment?.user?.phone}
+                            <b>{tMedicalRecords('patient.phone')}:</b> 0{appointment?.user?.phone}
                         </p>
                     </span>
                 </div>
                 <div className={cx('examination')}>
                     <div>
-                        <b>Chief Complaint:</b>
+                        <b>{tExaminationForm('checkup.chiefComplaint')}:</b>
                         <input
                             type="text"
                             name="Chief Complaint"
@@ -249,7 +256,7 @@ const ExaminationFormEdit = ({
                         />
                     </div>
                     <div>
-                        <b>Clinical Indications:</b>
+                        <b>{tExaminationForm('checkup.clinicalIndications')}:</b>
                         <input
                             type="text"
                             name="Clinical Indications"
@@ -259,7 +266,7 @@ const ExaminationFormEdit = ({
                         />
                     </div>
                     <div>
-                        <b>Ultrasound Request:</b>
+                        <b>{tExaminationForm('checkup.ultrasoundRequest')}:</b>
                         <Select
                             labelId="demo-multiple-name-label"
                             id="demo-multiple-name"
@@ -290,7 +297,7 @@ const ExaminationFormEdit = ({
                                                 maxWidth: '100%',
                                             }}
                                         >
-                                            {value}
+                                            {translateOrganName(value, tExaminationForm)}
                                         </Box>
                                     ))}
                                 </Box>
@@ -330,7 +337,7 @@ const ExaminationFormEdit = ({
                                         },
                                     }}
                                 >
-                                    {organ}
+                                    {translateOrganName(organ, tExaminationForm)}
                                 </MenuItem>
                             ))}
                         </Select>
@@ -338,7 +345,7 @@ const ExaminationFormEdit = ({
                 </div>
                 {ultrasoundRequest.length > 0 && (
                     <>
-                        <h2>Ultrasound Results</h2>
+                        <h2>{tExaminationForm('ultrasoundResults.title')}</h2>
                         <Upload
                             customRequest={customRequest}
                             listType="picture-card"
@@ -362,7 +369,7 @@ const ExaminationFormEdit = ({
                         <div className={cx('ultrasound-results')}>
                             {ultrasoundRequest.map((organ) => (
                                 <div key={organ}>
-                                    <b>{organ}:</b>
+                                    <b>{translateOrganName(organ, tExaminationForm)}:</b>
                                     <input
                                         type="text"
                                         name={organ}
@@ -376,7 +383,7 @@ const ExaminationFormEdit = ({
                     </>
                 )}
                 <div className={cx('conclusion')}>
-                    <b>Conclusion:</b>
+                    <b>{tExaminationForm('conclusion')}:</b>
                     <textarea
                         name="Conclusion"
                         value={conclusion}
@@ -392,7 +399,7 @@ const ExaminationFormEdit = ({
                     setAppointment={setAppointment}
                 />
                 <button type="submit" className={cx('submit-btn')}>
-                    {loadingBtnSave ? <SyncLoader size={10} color="#ffffff" /> : 'Save examination form'}
+                    {loadingBtnSave ? <SyncLoader size={10} color="#ffffff" /> : tExaminationForm('button.save')}
                 </button>
             </form>
         </div>

@@ -8,7 +8,7 @@
         "phone": "Phone number"
     },
     "gender": {
-        "m": "Male",
+        "male": "Male",
         "female": "Female",
         "other": "Other"
     },
@@ -21,5 +21,9 @@
         "examinationForm": "Examination Form",
         "prescription": "Prescription",
         "reExam": "Re-Examination Appointment"
+    },
+    "switch": {
+        "edit": "Edit mode",
+        "view": "View mode"
     }
 }

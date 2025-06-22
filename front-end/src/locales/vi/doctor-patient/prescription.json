@@ -39,5 +39,10 @@
         "Tái khám khi dùng hết thuốc hoặc nếu không có cải thiện",
         "Vui lòng mang theo đơn thuốc này khi tái khám"
     ],
-    "download": "Tải xuống PDF"
+    "button": {
+        "add": "Thêm thuốc",
+        "save": "Lưu đơn thuốc",
+        "download": "Tải xuống PDF"
+    },
+    "pendingNoticeForDoctor": "Bạn chưa hoàn tất đơn thuốc cho cuộc hẹn này!"
 }

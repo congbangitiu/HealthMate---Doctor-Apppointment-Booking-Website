@@ -6,6 +6,10 @@
         "start": "Giờ bắt đầu",
         "end": "Giờ kết thúc"
     },
+    "schedule": "Lịch hẹn",
     "notice": "Lưu ý: Bệnh nhân được yêu cầu quay lại tái khám vào ngày và giờ được chỉ định hoặc sớm hơn nếu có triệu chứng bất thường. Việc tái khám nên được thực hiện trong vòng 10 ngày làm việc kể từ ngày khám hiện tại, trừ khi có chỉ định khác.",
-    "download": "Tải PDF"
+    "button": {
+        "save": "Lưu phiếu hẹn tái khám",
+        "download": "Tải PDF"
+    }
 }

@@ -7,9 +7,15 @@ import SyncLoader from 'react-spinners/SyncLoader';
 import { toast } from 'react-toastify';
 import { BASE_URL, token } from '../../../../config';
 import { PropTypes } from 'prop-types';
-import { useMediaQuery, useTheme, Select, MenuItem, TextField, Autocomplete } from '@mui/material';
+import { useTheme, Select, MenuItem, TextField, Autocomplete } from '@mui/material';
 import Papa from 'papaparse';
 import SignatureConfirmation from '../../../components/SignatureConfirmation/SignatureConfirmation';
+import { useTranslation } from 'react-i18next';
+import capitalizeFirstLetter from '../../../utils/text/capitalizeFirstLetter';
+import translateGender from '../../../utils/translation/translateGender';
+import translateDosageForm from '../../../utils/translation/translateDosageForm';
+import translateMealRelation from '../../../utils/translation/translateMealRelation';
+import translateTimeOfDay from '../../../utils/translation/translateTimeOfDay';
 
 const cx = classNames.bind(styles);
 
@@ -27,8 +33,9 @@ const PrescriptionEdit = ({
     isSigned,
     setIsSigned,
 }) => {
+    const { t: tMedicalRecords } = useTranslation('medicalRecords');
+    const { t: tPrescription } = useTranslation('prescription');
     const theme = useTheme();
-    const isMobile = useMediaQuery('(max-width:768px)');
     const [loadingBtnSavePres, setLoadingBtnSavePres] = useState(false);
     const [medicineOptions, setMedicineOptions] = useState([]);
     const [customMedications, setCustomMedications] = useState([]);
@@ -251,29 +258,30 @@ const PrescriptionEdit = ({
                         <p>Your Wellness - Our Priority</p>
                     </div>
                 </div>
-                <h1>PRESCRIPTION</h1>
+                <h1>{tPrescription('title')}</h1>
                 <div className={cx('patient-info')}>
                     <p>
-                        <b>Patient&apos;s full name:</b> {appointment?.user?.fullname}
+                        <b>{tMedicalRecords('patient.fullname')}:</b> {appointment?.user?.fullname}
                     </p>
                     <span>
                         <p>
-                            <b>Date of birth:</b> {appointment?.user?.dateOfBirth}
+                            <b>{tMedicalRecords('patient.dob')}:</b> {appointment?.user?.dateOfBirth}
                         </p>
-                        <p className={cx('gender')}>
-                            <b>Gender:</b> {appointment?.user?.gender}
+                        <p>
+                            <b>{tMedicalRecords('patient.genderLabel')}:</b>{' '}
+                            {capitalizeFirstLetter(translateGender(appointment?.user?.gender, tMedicalRecords))}
                         </p>
                     </span>
                     <span>
                         <p>
-                            <b>Address:</b> {appointment?.user?.address}
+                            <b>{tMedicalRecords('patient.address')}:</b> {appointment?.user?.address}
                         </p>
                         <p>
-                            <b>Phone number:</b> 0{appointment?.user?.phone}
+                            <b>{tMedicalRecords('patient.phone')}:</b> 0{appointment?.user?.phone}
                         </p>
                     </span>
                     <div className={cx('disease')}>
-                        <b>Diagnosis:</b>
+                        <b>{tPrescription('disease')}:</b>
                         <input
                             type="text"
                             name="diseaseName"
@@ -288,7 +296,7 @@ const PrescriptionEdit = ({
                                 <div>
                                     <div className={cx('upper-part')}>
                                         <p>{index + 1}.</p>
-                                        <b>Name {isMobile ? ' :' : 'of medicine:'} </b>
+                                        <b>{tPrescription('table.medicine')} </b>
                                         <Autocomplete
                                             disablePortal
                                             freeSolo
@@ -385,7 +393,7 @@ const PrescriptionEdit = ({
                                     </div>
                                     <div className={cx('lower-part')}>
                                         <div>
-                                            <p>Quality Per Time: </p>
+                                            <p>{tPrescription('table.quantity')}: </p>
                                             <input
                                                 type="number"
                                                 value={medication.dosage.quantityPerTime}
@@ -396,7 +404,7 @@ const PrescriptionEdit = ({
                                             />
                                         </div>
                                         <div>
-                                            <p>Time(s) Per Day: </p>
+                                            <p>{tPrescription('table.timesPerDay')}: </p>
                                             <input
                                                 type="number"
                                                 value={medication.dosage.timesPerDay}
@@ -407,7 +415,7 @@ const PrescriptionEdit = ({
                                             />
                                         </div>
                                         <div>
-                                            <p>Total Units: </p>
+                                            <p>{tPrescription('table.totalUnits')}: </p>
                                             <input
                                                 type="number"
                                                 value={medication.dosage.totalUnits}
@@ -418,12 +426,15 @@ const PrescriptionEdit = ({
                                             />
                                         </div>
                                         <div>
-                                            <p>Time(s) of Day: </p>
+                                            <p>{tPrescription('table.timeOfDay')}: </p>
                                             <Select
                                                 labelId="demo-multiple-name-label"
                                                 id="demo-multiple-name"
                                                 multiple
                                                 value={medication.dosage.timeOfDay || []}
+                                                renderValue={(selected) =>
+                                                    selected.map((opt) => tPrescription(`timeOfDay.${opt}`)).join(', ')
+                                                }
                                                 onChange={(e) => {
                                                     const value =
                                                         typeof e.target.value === 'string'
@@ -449,16 +460,16 @@ const PrescriptionEdit = ({
                                                             },
                                                         }}
                                                     >
-                                                        {time}
+                                                        {translateTimeOfDay(time, tPrescription)}
                                                     </MenuItem>
                                                 ))}
                                             </Select>
                                         </div>
                                         <div>
-                                            <p>Dosage Form: </p>
+                                            <p>{tPrescription('table.dosageForm')}: </p>
                                             <input
                                                 type="text"
-                                                value={medication.dosage.dosageForm}
+                                                value={translateDosageForm(medication.dosage.dosageForm, tPrescription)}
                                                 onChange={(e) =>
                                                     handleMedicationChange(index, 'dosageForm', e.target.value)
                                                 }
@@ -470,7 +481,7 @@ const PrescriptionEdit = ({
                                             />
                                         </div>
                                         <div>
-                                            <p>Meal Relation: </p>
+                                            <p>{tPrescription('table.mealRelation')}: </p>
                                             <Select
                                                 labelId="demo-multiple-name-label"
                                                 id="demo-multiple-name"
@@ -496,7 +507,7 @@ const PrescriptionEdit = ({
                                                             },
                                                         }}
                                                     >
-                                                        {meal}
+                                                        {translateMealRelation(meal, tPrescription)}
                                                     </MenuItem>
                                                 ))}
                                             </Select>
@@ -509,12 +520,14 @@ const PrescriptionEdit = ({
                             </div>
                         ))}
                         <button type="button" className={cx('add-button')} onClick={addMedication}>
-                            Add medication
+                            {tPrescription('button.add')}
                         </button>
-                        <h4>Total types of medication: {medications.length}</h4>
+                        <h4>
+                            {tPrescription('totalTypes')}: {medications.length}
+                        </h4>
                     </div>
                     <div className={cx('advice')}>
-                        <b>Doctor Advice:</b>
+                        <b>{tPrescription('doctorAdvice')}:</b>
                         <textarea
                             type="text"
                             name="advice"
@@ -524,11 +537,11 @@ const PrescriptionEdit = ({
                         />
                     </div>
                     <div className={cx('notes')}>
-                        <b>Important Notes:</b>
+                        <b>{tPrescription('notesTitle')}:</b>
                         <ul>
-                            <li>This prescription is valid for one-time dispensing only</li>
-                            <li>Return for re-examination when medication is finished or if no improvement</li>
-                            <li>Kindly bring this prescription for your follow-up consultation</li>
+                            {tPrescription('notes', { returnObjects: true }).map((item, idx) => (
+                                <li key={idx}>{item}</li>
+                            ))}
                         </ul>
                     </div>
                 </div>
@@ -540,7 +553,7 @@ const PrescriptionEdit = ({
                     setAppointment={setAppointment}
                 />
                 <button type="submit" className={cx('submit-btn')}>
-                    {loadingBtnSavePres ? <SyncLoader size={10} color="#ffffff" /> : 'Save prescription'}
+                    {loadingBtnSavePres ? <SyncLoader size={10} color="#ffffff" /> : tPrescription('button.save')}
                 </button>
             </form>
         </div>

@@ -16,6 +16,16 @@
         "done": "Hoàn tất",
         "cancelled": "Đã huỷ",
         "newest": "Mới nhất đến cũ nhất",
-        "oldest": "Cũ nhất đến mới nhất"
+        "o,ldest": "Cũ nhất đến mới nhất"
+    },
+    "status": {
+        "pending": "Đang chờ",
+        "done": "Hoàn tất",
+        "cancelled": "Đã hủy"
+    },
+    "gender": {
+        "male": "Nam",
+        "female": "Nữ",
+        "other": "Khác"
     }
 }

@@ -142,7 +142,7 @@ const ReExaminationAppointment = ({ appointment }) => {
                                 <SyncLoader size={10} color="#ffffff" />
                             ) : (
                                 <p>
-                                    {tReExaminationForm('download')} <TbDownload className={cx('icon')} />
+                                    {tReExaminationForm('button.download')} <TbDownload className={cx('icon')} />
                                 </p>
                             )}
                         </button>

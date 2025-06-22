@@ -11,6 +11,9 @@ import Error from '../../../components/Error/Error';
 import Selections from '../../../components/Selections/Selections';
 import Pagination from '../../../components/Pagination/Pagination';
 import { useTranslation } from 'react-i18next';
+import translateAppointmentStatus from '../../../utils/translation/translateAppointmentStatus';
+import translateGender from '../../../utils/translation/translateGender';
+
 const cx = classNames.bind(styles);
 
 const Appointments = () => {
@@ -243,14 +246,14 @@ const Appointments = () => {
                                                             cancelledStatus: appointment.status === 'cancelled',
                                                         })}
                                                     >
-                                                        {appointment.user.gender}
+                                                        {translateGender(appointment.user.gender, t)}
                                                     </Link>
                                                 ) : (
                                                     <Link
                                                         to={`/doctors/appointments/my-appointments/${appointment._id}`}
                                                         className={cx('captitalized')}
                                                     >
-                                                        {appointment.user.gender}
+                                                        {translateGender(appointment.user.gender, t)}
                                                     </Link>
                                                 )
                                             ) : (
@@ -323,14 +326,14 @@ const Appointments = () => {
                                                             'captitalized',
                                                         )}
                                                     >
-                                                        {appointment.status}
+                                                        {translateAppointmentStatus(appointment.status, t)}
                                                     </Link>
                                                 ) : (
                                                     <Link
                                                         to={`/doctors/appointments/my-appointments/${appointment._id}`}
                                                         className={cx(appointment.status, 'captitalized')}
                                                     >
-                                                        {appointment.status}
+                                                        {translateAppointmentStatus(appointment.status, t)}
                                                     </Link>
                                                 )
                                             ) : (

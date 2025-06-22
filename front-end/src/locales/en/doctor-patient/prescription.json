@@ -4,7 +4,7 @@
     "disease": "Disease",
     "table": {
         "no": "No.",
-        "medicine": "Name of Medicine",
+        "medicine": "Name",
         "quantity": "Quantity Per Time",
         "timesPerDay": "Time(s) Per Day",
         "timeOfDay": "Time(s) of Day",
@@ -39,5 +39,10 @@
         "Return for re-examination when medication is finished or if no improvement",
         "Kindly bring this prescription for your follow-up consultation"
     ],
-    "download": "Download to PDF"
+    "button": {
+        "add": "Add medicine",
+        "save": "Save prescription",
+        "download": "Download to PDF"
+    },
+    "pendingNoticeForDoctor": "You haven’t completed the prescription for this appointment!"
 }

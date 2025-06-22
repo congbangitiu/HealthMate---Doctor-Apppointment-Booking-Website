@@ -6,10 +6,15 @@ import Logo from '../../../assets/images/logo.png';
 import SyncLoader from 'react-spinners/SyncLoader';
 import { BASE_URL, token } from '../../../../config';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
+import translateGender from '../../../utils/translation/translateGender';
+import capitalizeFirstLetter from '../../../utils/text/capitalizeFirstLetter';
 
 const cx = classNames.bind(styles);
 
 const ReExaminationAppointmentEdit = ({ appointment, prescription, schedule, setSchedule }) => {
+    const { t: tMedicalRecords } = useTranslation('medicalRecords');
+    const { t: tReExaminationForm } = useTranslation('reExaminationForm');
     const [loadingBtnSave, setLoadingBtnSave] = useState(false);
 
     const handleInputChange = (e) => {
@@ -137,25 +142,26 @@ const ReExaminationAppointmentEdit = ({ appointment, prescription, schedule, set
                         <p>Your Wellness - Our Priority</p>
                     </div>
                 </div>
-                <h1>RE-EXAMINATION APPOINTMENT FORM</h1>
+                <h1>{tReExaminationForm('title')}</h1>
                 <div className={cx('patient-info')}>
                     <p>
-                        <b>Patient&apos;s full name:</b> {appointment?.user?.fullname}
+                        <b>{tMedicalRecords('patient.fullname')}:</b> {appointment?.user?.fullname}
                     </p>
                     <span>
                         <p>
-                            <b>Date of birth:</b> {appointment?.user?.dateOfBirth}
+                            <b>{tMedicalRecords('patient.dob')}:</b> {appointment?.user?.dateOfBirth}
                         </p>
-                        <p className={cx('gender')}>
-                            <b>Gender:</b> {appointment?.user?.gender}
+                        <p>
+                            <b>{tMedicalRecords('patient.genderLabel')}:</b>{' '}
+                            {capitalizeFirstLetter(translateGender(appointment?.user?.gender, tMedicalRecords))}
                         </p>
                     </span>
                     <span>
                         <p>
-                            <b>Address:</b> {appointment?.user?.address}
+                            <b>{tMedicalRecords('patient.address')}:</b> {appointment?.user?.address}
                         </p>
                         <p>
-                            <b>Phone number:</b> 0{appointment?.user?.phone}
+                            <b>{tMedicalRecords('patient.phone')}:</b> 0{appointment?.user?.phone}
                         </p>
                     </span>
                 </div>
@@ -164,14 +170,14 @@ const ReExaminationAppointmentEdit = ({ appointment, prescription, schedule, set
                     <>
                         <div className={cx('notice')}>
                             <div>
-                                <b>Diagnosis:</b>
+                                <b>{tReExaminationForm('diagnosis')}:</b>
                                 <p>{prescription?.diseaseName || 'N/A'}</p>
                             </div>
                             <div>
-                                <b>Schedule:</b>
+                                <b>{tReExaminationForm('schedule')}:</b>
                                 <div className={cx('schedule')}>
                                     <div>
-                                        <label htmlFor="startingDate">Date</label>
+                                        <label htmlFor="startingDate">{tReExaminationForm('table.date')}</label>
                                         <input
                                             type="date"
                                             id="startingDate"
@@ -183,7 +189,7 @@ const ReExaminationAppointmentEdit = ({ appointment, prescription, schedule, set
                                         />
                                     </div>
                                     <div>
-                                        <label htmlFor="startingTime">Starting time</label>
+                                        <label htmlFor="startingTime">{tReExaminationForm('table.start')}</label>
                                         <input
                                             type="time"
                                             id="startingTime"
@@ -194,7 +200,7 @@ const ReExaminationAppointmentEdit = ({ appointment, prescription, schedule, set
                                         />
                                     </div>
                                     <div>
-                                        <label htmlFor="endingTime">Ending time</label>
+                                        <label htmlFor="endingTime">{tReExaminationForm('table.end')}</label>
                                         <input
                                             type="time"
                                             id="endingTime"
@@ -207,10 +213,8 @@ const ReExaminationAppointmentEdit = ({ appointment, prescription, schedule, set
                                 </div>
                             </div>
                             <div>
-                                <b>Notice: </b>The patient is requested to return for a re-examination on the specified
-                                date and time or earlier if there are any abnormal symptoms. The re-examination should
-                                be conducted within 10 working days from the date of this appointment, unless otherwise
-                                specified.
+                                <b>{tReExaminationForm('notice').split(':')[0]}:</b>{' '}
+                                {tReExaminationForm('notice').split(':').slice(1).join(':').trim()}
                             </div>
                         </div>
 
@@ -218,7 +222,7 @@ const ReExaminationAppointmentEdit = ({ appointment, prescription, schedule, set
                             {loadingBtnSave ? (
                                 <SyncLoader size={10} color="#ffffff" />
                             ) : (
-                                'Save re-examination appointment form'
+                                tReExaminationForm('button.save')
                             )}
                         </button>
                     </>

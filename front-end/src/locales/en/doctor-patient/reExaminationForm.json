@@ -6,6 +6,10 @@
         "start": "Starting time",
         "end": "Ending time"
     },
+    "schedule": "Schedule",
     "notice": "Notice: The patient is requested to return for a re-examination on the specified date and time or earlier if there are any abnormal symptoms. The re-examination should be conducted within 10 working days from the date of this appointment, unless otherwise specified.",
-    "download": "Download to PDF"
+    "button": {
+        "save": "Save re-examination appointment form",
+        "download": "Download to PDF"
+    }
 }

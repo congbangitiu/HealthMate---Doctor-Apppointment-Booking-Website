@@ -11,8 +11,23 @@
         "organ": "Cơ quan",
         "result": "Kết quả"
     },
+    "organ": {
+        "Liver": "Gan",
+        "Gallbladder": "Túi mật",
+        "Pancreas": "Tụy",
+        "Right Kidney": "Thận phải",
+        "Left Kidney": "Thận trái",
+        "Spleen": "Lách",
+        "Bladder": "Bàng quang",
+        "Abdominal Cavity": "Ổ bụng"
+    },
+    "conclusion": "Kết luận",
     "confirmation": {
         "locationAndDate": "HealthMate, {{date}}"
     },
-    "download": "Tải xuống PDF"
+    "button": {
+        "save": "Lưu phiếu khám bệnh",
+        "download": "Tải xuống PDF"
+    },
+    "pendingNoticeForDoctor": "Bạn chưa hoàn tất phiếu khám bệnh cho cuộc hẹn này!"
 }

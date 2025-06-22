@@ -77,9 +77,7 @@ const Prescription = () => {
                                 </div>
                             )}
                         </div>
-
                         <h1>{tPrescription('title')}</h1>
-
                         <div className={cx('patient-info')}>
                             <p>
                                 <b>{tMedicalRecords('patient.fullname')}:</b> {appointment?.user?.fullname}
@@ -192,7 +190,7 @@ const Prescription = () => {
                                 <SyncLoader size={10} color="#ffffff" />
                             ) : (
                                 <p>
-                                    {tPrescription('download')} <TbDownload className={cx('icon')} />
+                                    {tPrescription('button.download')} <TbDownload className={cx('icon')} />
                                 </p>
                             )}
                         </button>

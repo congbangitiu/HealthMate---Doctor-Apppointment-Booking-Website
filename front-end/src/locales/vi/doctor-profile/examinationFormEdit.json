@@ -1,0 +1,28 @@
+{
+    "error": {
+        "notFound": "Không tìm thấy phiếu khám!"
+    },
+    "toggle": {
+        "edit": "Chế độ chỉnh sửa",
+        "view": "Chế độ xem"
+    },
+    "section": {
+        "chiefComplaint": "Lý do khám",
+        "clinicalIndications": "Chỉ định lâm sàng",
+        "ultrasoundRequest": "Yêu cầu siêu âm",
+        "ultrasoundResults": "Kết quả siêu âm",
+        "conclusion": "Kết luận",
+        "signature": "Chữ ký",
+        "createdTime": "Cập nhật lần cuối"
+    },
+    "organ": {
+        "Liver": "Gan",
+        "Gallbladder": "Túi mật",
+        "Pancreas": "Tụy",
+        "Right Kidney": "Thận phải",
+        "Left Kidney": "Thận trái",
+        "Spleen": "Lách",
+        "Bladder": "Bàng quang",
+        "Abdominal Cavity": "Ổ bụng"
+    }
+}

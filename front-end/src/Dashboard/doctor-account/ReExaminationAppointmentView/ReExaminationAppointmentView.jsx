@@ -13,10 +13,15 @@ import { QRCodeSVG } from 'qrcode.react';
 import Loader from '../../../components/Loader/Loader';
 import { generateAndDownloadPDF, generatePDFBlob } from '../../../utils/file/handlePDF';
 import { useMediaQuery } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import translateGender from '../../../utils/translation/translateGender';
+import capitalizeFirstLetter from '../../../utils/text/capitalizeFirstLetter';
 
 const cx = classNames.bind(styles);
 
 const ReExaminationAppointmentView = ({ appointment, prescription, onPDFUploadSuccess }) => {
+    const { t: tMedicalRecords } = useTranslation('medicalRecords');
+    const { t: tReExaminationForm } = useTranslation('reExaminationForm');
     const isMobile = useMediaQuery('(max-width:768px)');
     const [loadingBtn, setLoadingBtn] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -124,25 +129,26 @@ const ReExaminationAppointmentView = ({ appointment, prescription, onPDFUploadSu
                                 </div>
                             )}
                         </div>
-                        <h1>RE-EXAMINATION APPOINTMENT FORM</h1>
+                        <h1>{tReExaminationForm('title')}</h1>
                         <div className={cx('patient-info')}>
                             <p>
-                                <b>Patient&apos;s full name:</b> {appointment?.user?.fullname}
+                                <b>{tMedicalRecords('patient.fullname')}:</b> {appointment?.user?.fullname}
                             </p>
                             <span>
                                 <p>
-                                    <b>Date of birth:</b> {appointment?.user?.dateOfBirth}
+                                    <b>{tMedicalRecords('patient.dob')}:</b> {appointment?.user?.dateOfBirth}
                                 </p>
-                                <p className={cx('gender')}>
-                                    <b>Gender:</b> {appointment?.user?.gender}
+                                <p>
+                                    <b>{tMedicalRecords('patient.genderLabel')}:</b>{' '}
+                                    {capitalizeFirstLetter(translateGender(appointment?.user?.gender, tMedicalRecords))}
                                 </p>
                             </span>
                             <span>
                                 <p>
-                                    <b>Address:</b> {appointment?.user?.address}
+                                    <b>{tMedicalRecords('patient.address')}:</b> {appointment?.user?.address}
                                 </p>
                                 <p>
-                                    <b>Phone number:</b> 0{appointment?.user?.phone}
+                                    <b>{tMedicalRecords('patient.phone')}:</b> 0{appointment?.user?.phone}
                                 </p>
                             </span>
                         </div>
@@ -150,15 +156,15 @@ const ReExaminationAppointmentView = ({ appointment, prescription, onPDFUploadSu
                             <>
                                 <div className={cx('notice')}>
                                     <div>
-                                        <b>Diagnosis:</b>
+                                        <b>{tReExaminationForm('diagnosis')}:</b>
                                         <p>{prescription?.diseaseName || 'N/A'}</p>
                                     </div>
                                     <table>
                                         <thead>
                                             <tr>
-                                                <th>Date</th>
-                                                <th>Starting time</th>
-                                                <th>Ending time</th>
+                                                <th>{tReExaminationForm('table.date')}</th>
+                                                <th>{tReExaminationForm('table.start')}</th>
+                                                <th>{tReExaminationForm('table.end')}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -167,18 +173,18 @@ const ReExaminationAppointmentView = ({ appointment, prescription, onPDFUploadSu
                                                 <td>
                                                     {convertTime(appointment.nextAppointment?.timeSlot?.startingTime)}
                                                 </td>
-                                                <td>{convertTime(appointment.nextAppointment?.timeSlot?.endingTime)}</td>
+                                                <td>
+                                                    {convertTime(appointment.nextAppointment?.timeSlot?.endingTime)}
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                     <div>
-                                        <b>Notice: </b>The patient is requested to return for a re-examination on the
-                                        specified date and time or earlier if there are any abnormal symptoms. The
-                                        re-examination should be conducted within 10 working days from the date of this
-                                        appointment, unless otherwise specified.
+                                        <b>{tReExaminationForm('notice').split(':')[0]}:</b>{' '}
+                                        {tReExaminationForm('notice').split(':').slice(1).join(':').trim()}
                                     </div>
                                 </div>
-                                <div className={cx('confirmation')}>
+                                {/* <div className={cx('confirmation')}>
                                     <div>
                                         <h4>
                                             HealthMate
@@ -190,7 +196,7 @@ const ReExaminationAppointmentView = ({ appointment, prescription, onPDFUploadSu
                                         </span>
                                         <p>{appointment?.doctor?.fullname}</p>
                                     </div>
-                                </div>
+                                </div> */}
                             </>
                         )}
                     </div>
@@ -201,7 +207,7 @@ const ReExaminationAppointmentView = ({ appointment, prescription, onPDFUploadSu
                                 <SyncLoader size={10} color="#ffffff" />
                             ) : (
                                 <p>
-                                    Download to PDF <TbDownload className={cx('icon')} />
+                                    {tReExaminationForm('button.download')} <TbDownload className={cx('icon')} />
                                 </p>
                             )}
                         </button>

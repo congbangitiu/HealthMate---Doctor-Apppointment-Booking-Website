@@ -14,10 +14,16 @@ import Loader from '../../../components/Loader/Loader';
 import { FaCircleExclamation } from 'react-icons/fa6';
 import { generateAndDownloadPDF, generatePDFBlob } from '../../../utils/file/handlePDF';
 import { useMediaQuery } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import translateOrganName from '../../../utils/translation/translateOrganName';
+import capitalizeFirstLetter from '../../../utils/text/capitalizeFirstLetter';
+import translateGender from '../../../utils/translation/translateGender';
 
 const cx = classNames.bind(styles);
 
 const ExaminationFormView = ({ appointment, examination, onPDFUploadSuccess }) => {
+    const { t: tMedicalRecords } = useTranslation('medicalRecords');
+    const { t: tExaminationForm } = useTranslation('examinationForm');
     const isMobile = useMediaQuery('(max-width:768px)');
     const [loadingBtn, setLoadingBtn] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -112,7 +118,7 @@ const ExaminationFormView = ({ appointment, examination, onPDFUploadSuccess }) =
                     {!examination && (
                         <div className={cx('pending-noti')}>
                             <FaCircleExclamation className={cx('icon')} />
-                            You haven’t completed the health examination form for this appointment!
+                            {tExaminationForm('pendingNoticeForDoctor')}
                         </div>
                     )}
                     <div id="examination" className={cx('examination')}>
@@ -130,25 +136,26 @@ const ExaminationFormView = ({ appointment, examination, onPDFUploadSuccess }) =
                                 </div>
                             )}
                         </div>
-                        <h1>EXAMINATION FORM</h1>
+                        <h1>{tExaminationForm('title')}</h1>
                         <div className={cx('patient-info')}>
                             <p>
-                                <b>Patient&apos;s full name:</b> {appointment?.user?.fullname}
+                                <b>{tMedicalRecords('patient.fullname')}:</b> {appointment?.user?.fullname}
                             </p>
                             <span>
                                 <p>
-                                    <b>Date of birth:</b> {appointment?.user?.dateOfBirth}
+                                    <b>{tMedicalRecords('patient.dob')}:</b> {appointment?.user?.dateOfBirth}
                                 </p>
-                                <p className={cx('gender')}>
-                                    <b>Gender:</b> {appointment?.user?.gender}
+                                <p>
+                                    <b>{tMedicalRecords('patient.genderLabel')}:</b>{' '}
+                                    {capitalizeFirstLetter(translateGender(appointment?.user?.gender, tMedicalRecords))}
                                 </p>
                             </span>
                             <span>
                                 <p>
-                                    <b>Address:</b> {appointment?.user?.address}
+                                    <b>{tMedicalRecords('patient.address')}:</b> {appointment?.user?.address}
                                 </p>
                                 <p>
-                                    <b>Phone number:</b> 0{appointment?.user?.phone}
+                                    <b>{tMedicalRecords('patient.phone')}:</b> 0{appointment?.user?.phone}
                                 </p>
                             </span>
                         </div>
@@ -156,19 +163,23 @@ const ExaminationFormView = ({ appointment, examination, onPDFUploadSuccess }) =
                             <>
                                 <div className={cx('check-up')}>
                                     <span>
-                                        <b>Chief Complaint:</b>
-                                        <p>{examination.chiefComplaint}</p>
+                                        <b>{tExaminationForm('checkup.chiefComplaint')}:</b>
+                                        <p>{examination?.chiefComplaint}</p>
                                     </span>
                                     <span>
-                                        <b>Clinical Indications:</b>
-                                        <p>{examination.clinicalIndications}</p>
+                                        <b>{tExaminationForm('checkup.clinicalIndications')}:</b>
+                                        <p>{examination?.clinicalIndications}</p>
                                     </span>
                                     <span>
-                                        <b>Ultrasound Request:</b>
-                                        <p>{examination.ultrasoundRequest.join(', ')}</p>
+                                        <b>{tExaminationForm('checkup.ultrasoundRequest')}:</b>
+                                        <p>
+                                            {examination?.ultrasoundRequest
+                                                ?.map((item) => translateOrganName(item, tExaminationForm))
+                                                .join(', ')}
+                                        </p>
                                     </span>
                                 </div>
-                                <h2>Ultrasound Results</h2>
+                                <h2>{tExaminationForm('ultrasoundResults.title')}</h2>
                                 <div className={cx('ultrasound-photos')}>
                                     <Image.PreviewGroup>
                                         {examination.ultrasoundPhotos?.map((photo, index) => (
@@ -180,15 +191,15 @@ const ExaminationFormView = ({ appointment, examination, onPDFUploadSuccess }) =
                                     <table>
                                         <thead>
                                             <tr>
-                                                <th>Organ</th>
-                                                <th>Result</th>
+                                                <th>{tExaminationForm('ultrasoundResults.organ')}</th>
+                                                <th>{tExaminationForm('ultrasoundResults.result')}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {Object.entries(examination.ultrasoundResults || '').map(
                                                 ([organ, result], index) => (
                                                     <tr key={index}>
-                                                        <td>{organ}</td>
+                                                        <td>{translateOrganName(organ, tExaminationForm)}</td>
                                                         <td>{result}</td>
                                                     </tr>
                                                 ),
@@ -196,6 +207,10 @@ const ExaminationFormView = ({ appointment, examination, onPDFUploadSuccess }) =
                                         </tbody>
                                     </table>
                                 </div>
+                                <p className={cx('conclusion')}>
+                                    <b>{tExaminationForm('conclusion')}: </b>
+                                    {examination?.conclusion}
+                                </p>
                                 <div className={cx('confirmation')}>
                                     <div>
                                         <h4>
@@ -219,7 +234,7 @@ const ExaminationFormView = ({ appointment, examination, onPDFUploadSuccess }) =
                                 <SyncLoader size={10} color="#ffffff" />
                             ) : (
                                 <p>
-                                    Download to PDF <TbDownload className={cx('icon')} />
+                                    {tExaminationForm('button.download')} <TbDownload className={cx('icon')} />
                                 </p>
                             )}
                         </button>

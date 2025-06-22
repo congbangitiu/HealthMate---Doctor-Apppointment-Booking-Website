@@ -1,13 +1,15 @@
 import classNames from 'classnames/bind';
 import styles from './ToggleButton.module.scss';
 import { PropTypes } from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const ToggleButton = ({ toggle, setToggle }) => {
+    const { t } = useTranslation('medicalRecords');
     return (
         <div className={cx('container')}>
-            {!toggle ? <h4>Edit mode</h4> : <h4>View mode</h4>}
+            {!toggle ? <h4>{t('switch.edit')}</h4> : <h4>{t('switch.view')}</h4>}
             <label className={cx('switch')}>
                 <input type="checkbox" checked={toggle} onChange={() => setToggle((prevState) => !prevState)} />
                 <div className={cx('slider')} />

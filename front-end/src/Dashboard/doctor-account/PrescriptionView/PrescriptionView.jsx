@@ -13,10 +13,18 @@ import { QRCodeSVG } from 'qrcode.react';
 import { FaCircleExclamation } from 'react-icons/fa6';
 import { generateAndDownloadPDF, generatePDFBlob } from '../../../utils/file/handlePDF';
 import { useMediaQuery } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import capitalizeFirstLetter from '../../../utils/text/capitalizeFirstLetter';
+import translateDosageForm from '../../../utils/translation/translateDosageForm';
+import translateTimeOfDay from '../../../utils/translation/translateTimeOfDay';
+import translateMealRelation from '../../../utils/translation/translateMealRelation';
+import translateGender from '../../../utils/translation/translateGender';
 
 const cx = classNames.bind(styles);
 
 const PrescriptionView = ({ appointment, prescription, onPDFUploadSuccess }) => {
+    const { t: tMedicalRecords } = useTranslation('medicalRecords');
+    const { t: tPrescription } = useTranslation('prescription');
     const isMobile = useMediaQuery('(max-width:768px)');
     const [loadingBtn, setLoadingBtn] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -110,7 +118,7 @@ const PrescriptionView = ({ appointment, prescription, onPDFUploadSuccess }) => 
                     {!prescription && (
                         <div className={cx('pending-noti')}>
                             <FaCircleExclamation className={cx('icon')} />
-                            You haven’t completed the prescription for this appointment!
+                            {tPrescription('pendingNoticeForDoctor')}
                         </div>
                     )}
                     <div id="prescription" className={cx('prescription')}>
@@ -128,44 +136,45 @@ const PrescriptionView = ({ appointment, prescription, onPDFUploadSuccess }) => 
                                 </div>
                             )}
                         </div>
-                        <h1>PRESCRIPTION</h1>
+                        <h1>{tPrescription('title')}</h1>
                         <div className={cx('patient-info')}>
                             <p>
-                                <b>Patient&apos;s full name:</b> {appointment?.user?.fullname}
+                                <b>{tMedicalRecords('patient.fullname')}:</b> {appointment?.user?.fullname}
                             </p>
                             <span>
                                 <p>
-                                    <b>Date of birth:</b> {appointment?.user?.dateOfBirth}
+                                    <b>{tMedicalRecords('patient.dob')}:</b> {appointment?.user?.dateOfBirth}
                                 </p>
-                                <p className={cx('gender')}>
-                                    <b>Gender:</b> {appointment?.user?.gender}
+                                <p>
+                                    <b>{tMedicalRecords('patient.genderLabel')}:</b>{' '}
+                                    {capitalizeFirstLetter(translateGender(appointment?.user?.gender, tMedicalRecords))}
                                 </p>
                             </span>
                             <span>
                                 <p>
-                                    <b>Address:</b> {appointment?.user?.address}
+                                    <b>{tMedicalRecords('patient.address')}:</b> {appointment?.user?.address}
                                 </p>
                                 <p>
-                                    <b>Phone number:</b> 0{appointment?.user?.phone}
+                                    <b>{tMedicalRecords('patient.phone')}:</b> 0{appointment?.user?.phone}
                                 </p>
                             </span>
                             {prescription && (
                                 <>
                                     <p>
-                                        <b>Diagnosis:</b> {prescription?.diseaseName}
+                                        <b>{tPrescription('disease')}:</b> {prescription?.diseaseName}
                                     </p>
                                     <div className={cx('medications')}>
                                         <table>
                                             <thead>
                                                 <tr>
-                                                    <th>No.</th>
-                                                    <th>Name of Medicine</th>
-                                                    <th>Quantity Per Time</th>
-                                                    <th>Time(s) Per Day</th>
-                                                    <th>Time(s) of Day</th>
-                                                    <th>Meal Relation</th>
-                                                    <th>Total Units</th>
-                                                    <th>Dosage Form</th>
+                                                    <th>{tPrescription('table.no')}</th>
+                                                    <th>{tPrescription('table.medicine')}</th>
+                                                    <th>{tPrescription('table.quantity')}</th>
+                                                    <th>{tPrescription('table.timesPerDay')}</th>
+                                                    <th>{tPrescription('table.timeOfDay')}</th>
+                                                    <th>{tPrescription('table.mealRelation')}</th>
+                                                    <th>{tPrescription('table.totalUnits')}</th>
+                                                    <th>{tPrescription('table.dosageForm')}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -175,31 +184,43 @@ const PrescriptionView = ({ appointment, prescription, onPDFUploadSuccess }) => 
                                                         <td>{medication.name}</td>
                                                         <td>{medication.dosage?.quantityPerTime}</td>
                                                         <td>{medication.dosage?.timesPerDay}</td>
-                                                        <td>{medication.dosage?.timeOfDay.join(', ')}</td>
-                                                        <td>{medication.dosage?.mealRelation}</td>
+                                                        <td>
+                                                            {translateTimeOfDay(
+                                                                medication.dosage?.timeOfDay.join(', '),
+                                                                tPrescription,
+                                                            )}
+                                                        </td>
+                                                        <td>
+                                                            {translateMealRelation(
+                                                                medication.dosage?.mealRelation,
+                                                                tPrescription,
+                                                            )}
+                                                        </td>
                                                         <td>{medication.dosage?.totalUnits}</td>
-                                                        <td>{medication.dosage?.dosageForm}</td>
+                                                        <td>
+                                                            {translateDosageForm(
+                                                                medication.dosage?.dosageForm,
+                                                                tPrescription,
+                                                            )}
+                                                        </td>
                                                     </tr>
                                                 ))}
                                             </tbody>
                                         </table>
                                     </div>
                                     <h4>
-                                        <b>Total types of medications:</b> {prescription?.medications?.length}
+                                        <b>{tPrescription('totalTypes')}:</b> {prescription?.medications?.length}
                                     </h4>
                                     <p>
-                                        <b>Doctor Advice: </b>
-                                        {prescription?.doctorAdvice}
+                                        <b>{tPrescription('doctorAdvice')}:</b> {prescription?.doctorAdvice}
                                     </p>
+
                                     <div className={cx('notes')}>
-                                        <b>Important Notes:</b>
+                                        <b>{tPrescription('notesTitle')}:</b>
                                         <ul>
-                                            <li>This prescription is valid for one-time dispensing only</li>
-                                            <li>
-                                                Return for re-examination when medication is finished or if no
-                                                improvement
-                                            </li>
-                                            <li>Kindly bring this prescription for your follow-up consultation</li>
+                                            {tPrescription('notes', { returnObjects: true }).map((item, idx) => (
+                                                <li key={idx}>{item}</li>
+                                            ))}
                                         </ul>
                                     </div>
                                 </>

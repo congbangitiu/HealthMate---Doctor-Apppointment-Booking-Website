@@ -17,5 +17,15 @@
         "cancelled": "Cancelled",
         "newest": "Newest to Oldest",
         "oldest": "Oldest to Newest"
+    },
+    "status": {
+        "pending": "Pending",
+        "done": "Done",
+        "cancelled": "Cancelled"
+    },
+    "gender": {
+        "male": "Male",
+        "female": "Female",
+        "other": "Other"
     }
 }

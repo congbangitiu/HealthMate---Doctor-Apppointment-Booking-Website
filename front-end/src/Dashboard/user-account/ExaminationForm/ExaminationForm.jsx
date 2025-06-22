@@ -25,7 +25,7 @@ const cx = classNames.bind(styles);
 
 const ExaminationForm = ({ appointment }) => {
     const { t: tMedicalRecords } = useTranslation('medicalRecords');
-    const { t: tExaminatioForm, i18n } = useTranslation('examinationForm');
+    const { t: tExaminationForm } = useTranslation('examinationForm');
     const { id } = useParams();
     const isMobile = useMediaQuery('(max-width:768px)');
     const [loadingBtn, setLoadingBtn] = useState(false);
@@ -52,7 +52,7 @@ const ExaminationForm = ({ appointment }) => {
                     {!examination?.createdAt && (
                         <div className={cx('pending-noti')}>
                             <FaCircleExclamation className={cx('icon')} />
-                            {tExaminatioForm('pendingMessage', { name: appointment?.doctor?.fullname })}
+                            {tExaminationForm('pendingMessage', { name: appointment?.doctor?.fullname })}
                         </div>
                     )}
                     <div id="examination" className={cx('examination')}>
@@ -70,7 +70,7 @@ const ExaminationForm = ({ appointment }) => {
                                 </div>
                             )}
                         </div>
-                        <h1>{tExaminatioForm('title')}</h1>
+                        <h1>{tExaminationForm('title')}</h1>
                         <div className={cx('patient-info')}>
                             <p>
                                 <b>{tMedicalRecords('patient.fullname')}:</b> {appointment?.user?.fullname}
@@ -97,23 +97,23 @@ const ExaminationForm = ({ appointment }) => {
                             <>
                                 <div className={cx('check-up')}>
                                     <span>
-                                        <b>{tExaminatioForm('checkup.chiefComplaint')}:</b>
+                                        <b>{tExaminationForm('checkup.chiefComplaint')}:</b>
                                         <p>{examination?.chiefComplaint}</p>
                                     </span>
                                     <span>
-                                        <b>{tExaminatioForm('checkup.clinicalIndications')}:</b>
+                                        <b>{tExaminationForm('checkup.clinicalIndications')}:</b>
                                         <p>{examination?.clinicalIndications}</p>
                                     </span>
                                     <span>
-                                        <b>{tExaminatioForm('checkup.ultrasoundRequest')}:</b>
+                                        <b>{tExaminationForm('checkup.ultrasoundRequest')}:</b>
                                         <p>
                                             {examination?.ultrasoundRequest
-                                                ?.map((item) => translateOrganName(item, i18n))
+                                                ?.map((item) => translateOrganName(item, tExaminationForm))
                                                 .join(', ')}
                                         </p>
                                     </span>
                                 </div>
-                                <h2>{tExaminatioForm('ultrasoundResults.title')}</h2>
+                                <h2>{tExaminationForm('ultrasoundResults.title')}</h2>
                                 <div className={cx('ultrasound-photos')}>
                                     <Image.PreviewGroup>
                                         {examination?.ultrasoundPhotos?.map((photo, index) => (
@@ -125,15 +125,15 @@ const ExaminationForm = ({ appointment }) => {
                                     <table>
                                         <thead>
                                             <tr>
-                                                <th>{tExaminatioForm('ultrasoundResults.organ')}</th>
-                                                <th>{tExaminatioForm('ultrasoundResults.result')}</th>
+                                                <th>{tExaminationForm('ultrasoundResults.organ')}</th>
+                                                <th>{tExaminationForm('ultrasoundResults.result')}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {Object.entries(examination?.ultrasoundResults || '').map(
                                                 ([organ, result], index) => (
                                                     <tr key={index}>
-                                                        <td>{translateOrganName(organ, i18n)}</td>
+                                                        <td>{translateOrganName(organ, tExaminationForm)}</td>
                                                         <td>{result}</td>
                                                     </tr>
                                                 ),
@@ -141,6 +141,10 @@ const ExaminationForm = ({ appointment }) => {
                                         </tbody>
                                     </table>
                                 </div>
+                                <p className={cx('conclusion')}>
+                                    <b>{tExaminationForm('conclusion')}: </b>
+                                    {examination?.conclusion}
+                                </p>
                                 <div className={cx('confirmation')}>
                                     <div>
                                         <h4>
@@ -164,7 +168,7 @@ const ExaminationForm = ({ appointment }) => {
                                 <SyncLoader size={10} color="#ffffff" />
                             ) : (
                                 <p>
-                                    {tExaminatioForm('download')} <TbDownload className={cx('icon')} />
+                                    {tExaminationForm('button.download')} <TbDownload className={cx('icon')} />
                                 </p>
                             )}
                         </button>
