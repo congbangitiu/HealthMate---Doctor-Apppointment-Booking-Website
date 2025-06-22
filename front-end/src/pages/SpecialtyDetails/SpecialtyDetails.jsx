@@ -9,7 +9,8 @@ const cx = classNames.bind(styles);
 
 const SpecialtyDetails = () => {
     const { id } = useParams();
-    const { t } = useTranslation(['specialties', 'specialtyDetails']);
+    const { t: tSpecialties } = useTranslation('specialties');
+    const { t: tDetails } = useTranslation('specialtyDetails');
 
     const specialty = specialties.find((item) => item.id === id);
 
@@ -26,7 +27,7 @@ const SpecialtyDetails = () => {
                         className={cx('tab', { active: id === item.id })}
                         to={`/specialties/${item.id}`}
                     >
-                        {t(`${item.id}.name`, { ns: 'specialties' })}
+                        {tSpecialties(`${item.id}.name`)}
                     </Link>
                 ))}
             </aside>
@@ -34,22 +35,22 @@ const SpecialtyDetails = () => {
                 {/* Header section */}
                 <header>
                     <h1>
-                        {t(`${id}.name`, { ns: 'specialties' })} ({t(`${id}.abbreviation`, { ns: 'specialties' })})
+                        {tSpecialties(`${id}.name`)} ({tSpecialties(`${id}.abbreviation`)})
                     </h1>
-                    <img src={specialty.image} alt={t(`${id}.name`, { ns: 'specialties' })} />
+                    <img src={specialty.image} alt={tSpecialties(`${id}.name`)} />
                 </header>
 
                 {/* Description */}
                 <div className={cx('overview')}>
-                    <h2>{t('overview', { ns: 'specialtyDetails' })}</h2>
-                    <p>{t(`${id}.description`, { ns: 'specialties' })}</p>
+                    <h2>{tDetails('overview')}</h2>
+                    <p>{tSpecialties(`${id}.description`)}</p>
                 </div>
 
                 {/* Subspecialties */}
                 <div className={cx('subspecialties')}>
-                    <h2>{t('subspecialtiesTitle', { ns: 'specialtyDetails' })}</h2>
+                    <h2>{tDetails('subspecialtiesTitle')}</h2>
                     <div className={cx('subspecialties-grid')}>
-                        {t(`${id}.subspecialties`, { ns: 'specialties', returnObjects: true }).map((sub, index) => (
+                        {tSpecialties(`${id}.subspecialties`, { returnObjects: true }).map((sub, index) => (
                             <div key={index} className={cx('subspecialty-card')}>
                                 <h3>{sub.name}</h3>
                                 <p>{sub.description}</p>
@@ -60,9 +61,9 @@ const SpecialtyDetails = () => {
 
                 {/* Key Functions */}
                 <div className={cx('key-functions')}>
-                    <h2>{t('keyFunctionsTitle', { ns: 'specialtyDetails' })}</h2>
+                    <h2>{tDetails('keyFunctionsTitle')}</h2>
                     <div className={cx('functions-grid')}>
-                        {t(`${id}.keyFunctions`, { ns: 'specialties', returnObjects: true }).map((func, index) => (
+                        {tSpecialties(`${id}.keyFunctions`, { returnObjects: true }).map((func, index) => (
                             <div key={index} className={cx('function-card')}>
                                 <h3>{func.title}</h3>
                                 <ul>
@@ -77,33 +78,31 @@ const SpecialtyDetails = () => {
 
                 {/* Clinical Workflow */}
                 <div className={cx('clinical-workflow')}>
-                    <h2>{t('clinicalWorkflowTitle', { ns: 'specialtyDetails' })}</h2>
+                    <h2>{tDetails('clinicalWorkflowTitle')}</h2>
                     <div className={cx('workflow')}>
-                        {t(`${id}.clinicalWorkflow.phases`, { ns: 'specialties', returnObjects: true }).map(
-                            (phase, index) => (
-                                <div key={index} className={cx('phase')}>
-                                    <h3 data-phase={index + 1}>{phase.stage}</h3>
-                                    <div className={cx('phase-content')}>
-                                        <div className={cx('steps')}>
-                                            <h4>{t('procedureSteps', { ns: 'specialtyDetails' })}</h4>
-                                            <ol>
-                                                {phase.steps.map((step, i) => (
-                                                    <li key={i}>{step}</li>
-                                                ))}
-                                            </ol>
-                                        </div>
-                                        <div className={cx('quality-control')}>
-                                            <h4>{t('qualityAssurance', { ns: 'specialtyDetails' })}</h4>
-                                            <ul>
-                                                {phase.qualityControl.map((qc, i) => (
-                                                    <li key={i}>{qc}</li>
-                                                ))}
-                                            </ul>
-                                        </div>
+                        {tSpecialties(`${id}.clinicalWorkflow.phases`, { returnObjects: true }).map((phase, index) => (
+                            <div key={index} className={cx('phase')}>
+                                <h3 data-phase={index + 1}>{phase.stage}</h3>
+                                <div className={cx('phase-content')}>
+                                    <div className={cx('steps')}>
+                                        <h4>{tDetails('procedureSteps')}</h4>
+                                        <ol>
+                                            {phase.steps.map((step, i) => (
+                                                <li key={i}>{step}</li>
+                                            ))}
+                                        </ol>
+                                    </div>
+                                    <div className={cx('quality-control')}>
+                                        <h4>{tDetails('qualityAssurance')}</h4>
+                                        <ul>
+                                            {phase.qualityControl.map((qc, i) => (
+                                                <li key={i}>{qc}</li>
+                                            ))}
+                                        </ul>
                                     </div>
                                 </div>
-                            ),
-                        )}
+                            </div>
+                        ))}
                     </div>
                 </div>
             </main>

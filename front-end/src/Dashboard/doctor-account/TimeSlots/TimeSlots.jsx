@@ -17,7 +17,8 @@ const TimeSlots = ({
     availableSchedules,
     onAvailableScheduleChange,
 }) => {
-    const { t } = useTranslation(['profileSettingDoctor', 'schedule']);
+    const { t: tProfileDoctor } = useTranslation('profileSettingDoctor');
+    const { t: tSchedule } = useTranslation('schedule');
     const isMobile = useMediaQuery('(max-width:768px)');
     const theme = useTheme();
 
@@ -220,7 +221,7 @@ const TimeSlots = ({
     return (
         <div className={cx('container')}>
             <div className={cx('upper-part')}>
-                <h3>{t('timeSlots.availableDays', { ns: 'profileSettingDoctor' })}</h3>
+                <h3>{tProfileDoctor('timeSlots.availableDays')}</h3>
                 <Select
                     multiple
                     value={selectedDays}
@@ -244,7 +245,7 @@ const TimeSlots = ({
                                             maxWidth: '100%',
                                         }}
                                     >
-                                        {`${t(`weekdays.${value}`, { ns: 'schedule' })} (${formatDate(dayInfo?.date)})`}
+                                        {`${tSchedule(`weekdays.${value}`)} (${formatDate(dayInfo?.date)})`}
                                     </Box>
                                 );
                             })}
@@ -281,7 +282,7 @@ const TimeSlots = ({
                                 '&:hover': { backgroundColor: 'var(--lightGreenColor) !important' },
                             }}
                         >
-                            {`${t(`weekdays.${day.name}`, { ns: 'schedule' })} (${formatDate(day.date)})`}
+                            {`${tSchedule(`weekdays.${day.name}`)} (${formatDate(day.date)})`}
                         </MenuItem>
                     ))}
                 </Select>
@@ -290,14 +291,14 @@ const TimeSlots = ({
             {selectedDays.length > 0 && (
                 <div className={cx('middle-part')}>
                     <span>
-                        <h3>{t('timeSlots.availableShifts', { ns: 'profileSettingDoctor' })}</h3>
-                        <p>{t('timeSlots.shiftNote', { ns: 'profileSettingDoctor' })}</p>
+                        <h3>{tProfileDoctor('timeSlots.availableShifts')}</h3>
+                        <p>{tProfileDoctor('timeSlots.shiftNote')}</p>
                     </span>
                     {selectedDays.map((day) => {
                         const dayInfo = daysOfWeekWithDates.find((d) => d.name === day);
                         return (
                             <div key={day} className={cx('day-section')}>
-                                <h4>{`${t(`weekdays.${day}`, { ns: 'schedule' })} (${formatDate(dayInfo?.date)})`}</h4>
+                                <h4>{`${tSchedule(`weekdays.${day}`)} (${formatDate(dayInfo?.date)})`}</h4>
                                 <Select
                                     multiple
                                     value={selectedTimes[day] || []}
@@ -319,7 +320,7 @@ const TimeSlots = ({
                                                         maxWidth: '100%',
                                                     }}
                                                 >
-                                                    {t(`shifts.${value}`, { ns: 'schedule' })}
+                                                    {tSchedule(`shifts.${value}`)}
                                                 </Box>
                                             ))}
                                         </Box>
@@ -356,7 +357,7 @@ const TimeSlots = ({
                                                 '&:hover': { backgroundColor: 'var(--lightGreenColor) !important' },
                                             }}
                                         >
-                                            {t(`shifts.${option}`, { ns: 'schedule' })}
+                                            {tSchedule(`shifts.${option}`)}
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -370,8 +371,7 @@ const TimeSlots = ({
                 <div className={cx('lower-part')}>
                     <h3
                         dangerouslySetInnerHTML={{
-                            __html: t('timeSlots.generatedSlotsTitle', {
-                                ns: 'profileSettingDoctor',
+                            __html: tProfileDoctor('timeSlots.generatedSlotsTitle', {
                                 start: formatDate(today),
                                 end: formatDate(endDate),
                             }),
@@ -380,9 +380,9 @@ const TimeSlots = ({
                     <table className={cx('slots-table')}>
                         <thead>
                             <tr>
-                                <th>{t('timeSlots.table.date', { ns: 'profileSettingDoctor' })}</th>
-                                <th>{t('timeSlots.table.time', { ns: 'profileSettingDoctor' })}</th>
-                                <th>{t('timeSlots.table.period', { ns: 'profileSettingDoctor' })}</th>
+                                <th>{tProfileDoctor('timeSlots.table.date')}</th>
+                                <th>{tProfileDoctor('timeSlots.table.time')}</th>
+                                <th>{tProfileDoctor('timeSlots.table.period')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -399,7 +399,7 @@ const TimeSlots = ({
                                                 </td>
                                             )}
                                             <td>{`${convertTime(slot.start)} - ${convertTime(slot.end)}`}</td>
-                                            <td>{t(`shifts.${slot.period}`, { ns: 'schedule' })}</td>
+                                            <td>{tSchedule(`shifts.${slot.period}`)}</td>
                                         </tr>
                                     ))}
                                 </React.Fragment>
