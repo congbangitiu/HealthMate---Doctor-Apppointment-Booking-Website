@@ -68,6 +68,8 @@ import prescriptionEN from '../../locales/en/doctor-patient/prescription.json';
 import prescriptionVI from '../../locales/vi/doctor-patient/prescription.json';
 import reExamiationFormEN from '../../locales/en/doctor-patient/reExaminationForm.json';
 import reExamiationFormVI from '../../locales/vi/doctor-patient/reExaminationForm.json';
+import loaderEN from '../../locales/en/common/loader.json';
+import loaderVI from '../../locales/vi/common/loader.json';
 
 const resources = {
     en: {
@@ -104,6 +106,7 @@ const resources = {
         examinationForm: examinationFormEN,
         prescription: prescriptionEN,
         reExaminationForm: reExamiationFormEN,
+        loader: loaderEN,
     },
     vi: {
         homepage: homepageVI,
@@ -139,6 +142,7 @@ const resources = {
         examinationForm: examinationFormVI,
         prescription: prescriptionVI,
         reExaminationForm: reExamiationFormVI,
+        loader: loaderVI,
     },
 };
 
@@ -182,6 +186,7 @@ i18n.use(LanguageDetector)
             'examinationForm',
             'prescription',
             'reExaminationForm',
+            'loader',
         ],
         interpolation: { escapeValue: false },
         detection: {
