@@ -1,76 +1,70 @@
-.container-parent {
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url(../../assets/images/Blur.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
     padding: 120px 120px 60px 120px;
     min-height: calc(100vh - 278px);
 
-    & .container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background-image: url(../../assets/images/Blur.png);
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
+    & h2 {
+        line-height: 60px;
+        font-size: 50px;
+        font-weight: 700;
+    }
 
-        & h2 {
-            line-height: 60px;
-            font-size: 50px;
-            font-weight: 700;
-        }
+    & .description {
+        margin-top: 10px;
+        font-size: 18px;
+        color: var(--darkGrayColor);
+    }
 
-        & .description {
-            margin-top: 10px;
-            font-size: 18px;
-            color: var(--darkGrayColor);
-        }
+    & .query {
+        display: grid;
+        grid-template-columns: 1.25fr 2.75fr;
+        width: 100%;
+        margin-top: 30px;
+        gap: 20px;
+    }
 
-        & .query {
+    & .doctors-wrapper {
+        margin-top: 50px;
+
+        & .doctors {
             display: grid;
-            grid-template-columns: 1.25fr 2.75fr;
-            width: 100%;
-            margin-top: 30px;
-            gap: 20px;
-        }
-
-        & .doctors-wrapper {
-            margin-top: 50px;
-
-            & .doctors {
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                justify-content: center;
-                gap: 30px;
-            }
+            grid-template-columns: repeat(4, 1fr);
+            justify-content: center;
+            gap: 30px;
         }
     }
 }
 
 // Responsive
 @media only screen and (max-width: 768px) {
-    .container-parent {
+    .container {
         padding: 80px 20px 50px 20px;
 
-        & .container {
-            & h2 {
-                font-size: 32px;
-                line-height: normal;
-            }
+        & h2 {
+            font-size: 32px;
+            line-height: normal;
+        }
 
-            & .description {
-                font-size: 16px;
-                margin-top: 5px !important;
-                width: 100%;
-                text-align: center;
-            }
+        & .description {
+            font-size: 16px;
+            margin-top: 5px !important;
+            width: 100%;
+        }
 
-            & .query {
+        & .query {
+            grid-template-columns: 1fr;
+        }
+
+        & .doctors-wrapper {
+            & .doctors {
                 grid-template-columns: 1fr;
-            }
-
-            & .doctors-wrapper {
-                & .doctors {
-                    grid-template-columns: 1fr;
-                }
             }
         }
     }

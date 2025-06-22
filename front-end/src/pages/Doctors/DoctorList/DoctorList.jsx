@@ -107,75 +107,71 @@ const DoctorList = () => {
     }, [currentPage, officialDoctors, itemsPerPage]);
 
     return (
-        <div className={cx('container-parent')}>
+        <div className={cx('container')}>
+            <h2>{t('heading')}</h2>
+            <p className={cx('description')}>{t('description')}</p>
+
+            <div className={cx('query')}>
+                <Select
+                    value={selectedSpecialty}
+                    onChange={(e) => setSelectedSpecialty(e.target.value)}
+                    MenuProps={MenuProps}
+                    inputProps={{ sx: { height: '50px' } }}
+                    sx={customStyles}
+                    displayEmpty
+                    renderValue={(selected) => {
+                        const selectedOption = specialtyOptions.find((opt) => opt.key === selected);
+                        return selectedOption ? selectedOption.value : t('allSpecialties');
+                    }}
+                >
+                    <MenuItem
+                        value=""
+                        sx={{
+                            '&:hover': { backgroundColor: 'var(--lightGreenColor)' },
+                            backgroundColor:
+                                selectedSpecialty === '' ? 'var(--primaryColor) !important' : 'transparent',
+                            fontWeight: selectedSpecialty === '' ? '500' : 'normal',
+                        }}
+                    >
+                        {t('allSpecialties')}
+                    </MenuItem>
+                    {specialtyOptions.map((option) => (
+                        <MenuItem
+                            key={option.key}
+                            value={option.key}
+                            sx={{
+                                '&:hover': { backgroundColor: 'var(--lightGreenColor)' },
+                                backgroundColor:
+                                    selectedSpecialty === option.key ? 'var(--primaryColor) !important' : 'transparent',
+                                fontWeight: selectedSpecialty === option.key ? '500' : 'normal',
+                            }}
+                        >
+                            {option.value}
+                        </MenuItem>
+                    ))}
+                </Select>
+
+                <Search query={query} setQuery={setQuery} handleSearch={handleSearch} />
+            </div>
+
             {loading ? (
                 <Loader />
             ) : error ? (
                 <Error errorMessage={error} />
             ) : (
-                <div className={cx('container')}>
-                    <h2>{t('heading')}</h2>
-                    <p className={cx('description')}>{t('description')}</p>
-
-                    <div className={cx('query')}>
-                        <Select
-                            value={selectedSpecialty}
-                            onChange={(e) => setSelectedSpecialty(e.target.value)}
-                            MenuProps={MenuProps}
-                            inputProps={{ sx: { height: '50px' } }}
-                            sx={customStyles}
-                            displayEmpty
-                            renderValue={(selected) => {
-                                const selectedOption = specialtyOptions.find((opt) => opt.key === selected);
-                                return selectedOption ? selectedOption.value : t('allSpecialties');
-                            }}
-                        >
-                            <MenuItem
-                                value=""
-                                sx={{
-                                    '&:hover': { backgroundColor: 'var(--lightGreenColor)' },
-                                    backgroundColor:
-                                        selectedSpecialty === '' ? 'var(--primaryColor) !important' : 'transparent',
-                                    fontWeight: selectedSpecialty === '' ? '500' : 'normal',
-                                }}
-                            >
-                                {t('allSpecialties')}
-                            </MenuItem>
-                            {specialtyOptions.map((option) => (
-                                <MenuItem
-                                    key={option.key}
-                                    value={option.key}
-                                    sx={{
-                                        '&:hover': { backgroundColor: 'var(--lightGreenColor)' },
-                                        backgroundColor:
-                                            selectedSpecialty === option.key
-                                                ? 'var(--primaryColor) !important'
-                                                : 'transparent',
-                                        fontWeight: selectedSpecialty === option.key ? '500' : 'normal',
-                                    }}
-                                >
-                                    {option.value}
-                                </MenuItem>
-                            ))}
-                        </Select>
-
-                        <Search query={query} setQuery={setQuery} handleSearch={handleSearch} />
+                <div className={cx('doctors-wrapper')}>
+                    <div className={cx('doctors')}>
+                        {officialDoctors.length > 0 &&
+                            currentItems.map((doctor) => <DoctorCard key={doctor._id} doctor={doctor} />)}
                     </div>
-
-                    <div className={cx('doctors-wrapper')}>
-                        <div className={cx('doctors')}>
-                            {officialDoctors.length > 0 &&
-                                currentItems.map((doctor) => <DoctorCard key={doctor._id} doctor={doctor} />)}
-                        </div>
-                        {!loading && officialDoctors.length > itemsPerPage && (
-                            <Panigation
-                                data={officialDoctors}
-                                itemsPerPage={itemsPerPage}
-                                currentPage={currentPage}
-                                setCurrentPage={setCurrentPage}
-                            />
-                        )}
-                    </div>
+                    {!loading && officialDoctors.length > itemsPerPage && (
+                        <Panigation
+                            data={officialDoctors}
+                            itemsPerPage={itemsPerPage}
+                            currentPage={currentPage}
+                            setCurrentPage={setCurrentPage}
+                        />
+                    )}
                 </div>
             )}
         </div>
