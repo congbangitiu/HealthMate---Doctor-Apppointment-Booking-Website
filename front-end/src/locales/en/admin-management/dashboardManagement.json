@@ -1,0 +1,59 @@
+{
+    "totalDoctors": "Total Doctors",
+    "totalPatients": "Total Patients",
+    "totalAppointments": "Total Appointments",
+    "totalRevenue": "Total Revenue",
+    "topDoctors": "Top Doctors",
+    "viewAll": "View All",
+    "timeAppointmentBarChart": {
+        "title": "Number of patients scheduled for appointments in {{time}} 2024",
+        "oldPatients": "Old Patients",
+        "newPatients": "New Patients",
+        "xAxis": "DOCTOR",
+        "yAxis": "NUMBER OF PATIENTS",
+        "tooltip": "{{count}} patients",
+        "select": {
+            "time": "Time",
+            "month": "Month",
+            "quarter": "Quarter",
+            "appointmentStatus": "Appointment Status",
+            "successful": "Successful",
+            "cancelled": "Cancelled"
+        },
+        "months": {
+            "Jan": "Jan",
+            "Feb": "Feb",
+            "Mar": "Mar",
+            "Apr": "Apr",
+            "May": "May",
+            "Jun": "Jun",
+            "Jul": "Jul",
+            "Aug": "Aug",
+            "Sep": "Sep",
+            "Oct": "Oct",
+            "Nov": "Nov",
+            "Dec": "Dec"
+        },
+        "quarters": {
+            "First": "First",
+            "Second": "Second",
+            "Third": "Third",
+            "Fourth": "Fourth"
+        }
+    },
+    "topDoctor": {
+        "prefix": "Dr."
+    },
+    "genderDonutChart": {
+        "title": "Gender",
+        "selectRole": {
+            "all": "All",
+            "doctor": "Doctor",
+            "patient": "Patient"
+        },
+        "legend": {
+            "male": "Male",
+            "female": "Female"
+        }
+    }
+}

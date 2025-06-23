@@ -4,10 +4,12 @@ import { BiSolidDashboard } from 'react-icons/bi';
 import { FaUserDoctor, FaHospitalUser, FaMoneyBill1Wave } from 'react-icons/fa6';
 import { FaCalendarAlt } from 'react-icons/fa';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const Tabs = ({ activeTab, setActiveTab, doctors, setIsShowTab }) => {
+    const { t } = useTranslation('management');
     const pendingDoctors = doctors.filter((doctor) => doctor.isApproved === 'pending');
 
     return (
@@ -20,7 +22,9 @@ const Tabs = ({ activeTab, setActiveTab, doctors, setIsShowTab }) => {
                 }}
             >
                 <BiSolidDashboard className={cx('icon')} />
-                <h4>Dashboard</h4>
+                <h4>
+                    <h4>{t('tabs.dashboard')}</h4>
+                </h4>
             </div>
             <div
                 className={cx('tab', { active: activeTab === 'doctor' })}
@@ -30,7 +34,9 @@ const Tabs = ({ activeTab, setActiveTab, doctors, setIsShowTab }) => {
                 }}
             >
                 <FaUserDoctor className={cx('icon')} />
-                <h4>Doctor</h4>
+                <h4>
+                    <h4>{t('tabs.doctor')}</h4>
+                </h4>
                 {pendingDoctors.length > 0 && <div className={cx('doctorTab')}>{pendingDoctors.length}</div>}
             </div>
             <div
@@ -41,7 +47,7 @@ const Tabs = ({ activeTab, setActiveTab, doctors, setIsShowTab }) => {
                 }}
             >
                 <FaHospitalUser className={cx('icon')} />
-                <h4>Patient</h4>
+                <h4>{t('tabs.patient')}</h4>
             </div>
             <div
                 className={cx('tab', { active: activeTab === 'appointment' })}
@@ -51,7 +57,7 @@ const Tabs = ({ activeTab, setActiveTab, doctors, setIsShowTab }) => {
                 }}
             >
                 <FaCalendarAlt className={cx('icon')} />
-                <h4>Appointment</h4>
+                <h4>{t('tabs.appointment')}</h4>
             </div>
             <div
                 className={cx('tab', { active: activeTab === 'revenue' })}
@@ -61,7 +67,7 @@ const Tabs = ({ activeTab, setActiveTab, doctors, setIsShowTab }) => {
                 }}
             >
                 <FaMoneyBill1Wave className={cx('icon')} />
-                <h4>Revenue</h4>
+                <h4>{t('tabs.revenue')}</h4>
             </div>
         </div>
     );

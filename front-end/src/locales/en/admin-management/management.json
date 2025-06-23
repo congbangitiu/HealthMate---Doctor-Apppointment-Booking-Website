@@ -1,0 +1,14 @@
+{
+    "mobileAccessLabel": "Management >>",
+    "warningDialog": {
+        "message": "Some features in Dashboard Management are only available on desktop. For the full admin experience and better usability, please use a desktop browser.",
+        "button": "I know"
+    },
+    "tabs": {
+        "dashboard": "Dashboard",
+        "doctor": "Doctor",
+        "patient": "Patient",
+        "appointment": "Appointment",
+        "revenue": "Revenue"
+    }
+}

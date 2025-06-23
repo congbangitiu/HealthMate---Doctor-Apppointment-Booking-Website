@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import * as d3 from 'd3';
 import classNames from 'classnames/bind';
 import styles from './TimeAppointmentBarChart.module.scss';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const TimeAppointmentBarChart = () => {
+    const { t, i18n } = useTranslation('dashboardManagement');
     const [selectedTime, setSelectedTime] = useState('month');
     const [selectedMonth, setSelectedMonth] = useState('Jan');
     const [selectedQuarter, setSelectedQuarter] = useState('First');
@@ -49,7 +51,7 @@ const TimeAppointmentBarChart = () => {
 
             drawChart(chartData);
         }
-    }, [data, selectedTime, selectedMonth, selectedQuarter, selectedStatus]);
+    }, [data, selectedTime, selectedMonth, selectedQuarter, selectedStatus, i18n.language]);
 
     const drawChart = (data) => {
         const margin = { top: 150, right: 30, bottom: 90, left: 70 };
@@ -81,6 +83,7 @@ const TimeAppointmentBarChart = () => {
 
         const color = d3.scaleOrdinal().domain(['old', 'new']).range(['#feb60d', '#30d5c8']);
 
+        // Create a tooltip
         const tooltip = d3
             .select('body')
             .append('div')
@@ -116,7 +119,7 @@ const TimeAppointmentBarChart = () => {
                 d3.select(this).style('opacity', 0.8);
                 tooltip.transition().duration(200).style('opacity', 0.9);
                 tooltip
-                    .html(`${d[1] - d[0]} patients`)
+                    .html(t('timeAppointmentBarChart.tooltip', { count: d[1] - d[0] }))
                     .style('left', event.pageX + 5 + 'px')
                     .style('top', event.pageY - 30 + 'px');
             })
@@ -154,9 +157,12 @@ const TimeAppointmentBarChart = () => {
             .style('font-size', '26px')
             .style('font-weight', 'bold')
             .text(
-                `Number of patients scheduled for appointments in ${
-                    selectedTime === 'month' ? selectedMonth + ',' : 'the ' + selectedQuarter + ' quarter of'
-                } 2024`,
+                t('timeAppointmentBarChart.title', {
+                    time:
+                        selectedTime === 'month'
+                            ? t(`timeAppointmentBarChart.months.${selectedMonth}`)
+                            : t(`timeAppointmentBarChart.quarters.${selectedQuarter}`),
+                }),
             );
 
         // Add legend
@@ -175,7 +181,7 @@ const TimeAppointmentBarChart = () => {
             .attr('dy', '0.4em')
             .style('text-anchor', 'start')
             .style('font-size', '18')
-            .text('Old Patients');
+            .text(t('timeAppointmentBarChart.oldPatients'));
 
         // New Patients legend
         legend.append('rect').attr('x', 200).attr('y', 0).attr('width', 20).attr('height', 20).style('fill', '#30d5c8');
@@ -187,7 +193,7 @@ const TimeAppointmentBarChart = () => {
             .attr('dy', '0.4em')
             .style('text-anchor', 'start')
             .style('font-size', '18')
-            .text('New Patients');
+            .text(t('timeAppointmentBarChart.newPatients'));
 
         // Add X Axis
         svg.append('g')
@@ -205,7 +211,7 @@ const TimeAppointmentBarChart = () => {
             .attr('text-anchor', 'middle')
             .attr('x', width / 2)
             .attr('y', height + margin.bottom - 30)
-            .text('DOCTOR')
+            .text(t('timeAppointmentBarChart.xAxis'))
             .style('font-weight', '500');
 
         // Add Y Axis
@@ -218,7 +224,7 @@ const TimeAppointmentBarChart = () => {
             .attr('transform', 'rotate(-90)')
             .attr('x', -height / 2)
             .attr('y', -margin.left + 15)
-            .text('NUMBER OF PATIENTS')
+            .text(t('timeAppointmentBarChart.yAxis'))
             .style('font-weight', '500');
     };
 
@@ -226,31 +232,31 @@ const TimeAppointmentBarChart = () => {
         <div className={cx('container')}>
             <div className={cx('selections')}>
                 <div className={cx('selection')}>
-                    <h4>Time</h4>
+                    <h4>{t('timeAppointmentBarChart.select.time')}</h4>
                     <select name="time" id="time" onChange={(e) => setSelectedTime(e.target.value)}>
-                        <option value="month">Month</option>
-                        <option value="quarter">Quarter</option>
+                        <option value="month">{t('timeAppointmentBarChart.select.month')}</option>
+                        <option value="quarter">{t('timeAppointmentBarChart.select.quarter')}</option>
                     </select>
                 </div>
 
                 {selectedTime === 'month' ? (
                     <div className={cx('selection')}>
-                        <h4>Month</h4>
+                        <h4>{t('timeAppointmentBarChart.select.month')}</h4>
                         <select name="month" id="month" onChange={(e) => setSelectedMonth(e.target.value)}>
                             {months.map((month, index) => (
                                 <option key={index} value={month}>
-                                    {month}
+                                    {t(`timeAppointmentBarChart.months.${month}`)}
                                 </option>
                             ))}
                         </select>
                     </div>
                 ) : (
                     <div className={cx('selection')}>
-                        <h4>Quarter</h4>
+                        <h4>{t('timeAppointmentBarChart.select.quarter')}</h4>
                         <select name="quarter" id="quarter" onChange={(e) => setSelectedQuarter(e.target.value)}>
                             {quarters.map((quarter, index) => (
                                 <option key={index} value={quarter}>
-                                    {quarter}
+                                    {t(`timeAppointmentBarChart.quarters.${quarter}`)}
                                 </option>
                             ))}
                         </select>
@@ -258,10 +264,10 @@ const TimeAppointmentBarChart = () => {
                 )}
 
                 <div className={cx('selection')}>
-                    <h4>Appointment Status</h4>
+                    <h4>{t('timeAppointmentBarChart.select.appointmentStatus')}</h4>
                     <select name="status" id="status" onChange={(e) => setSelectedStatus(e.target.value)}>
-                        <option value="Successful">Successful</option>
-                        <option value="Cancelled">Cancelled</option>
+                        <option value="Successful">{t('timeAppointmentBarChart.select.successful')}</option>
+                        <option value="Cancelled">{t('timeAppointmentBarChart.select.cancelled')}</option>
                     </select>
                 </div>
             </div>

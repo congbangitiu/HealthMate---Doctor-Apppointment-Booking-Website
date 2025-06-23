@@ -3,10 +3,12 @@ import * as d3 from 'd3';
 import classNames from 'classnames/bind';
 import styles from './GenderDonutChart.module.scss';
 import { PropTypes } from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const GenderDonutChart = ({ genderCount }) => {
+    const { t } = useTranslation('dashboardManagement');
     const [role, setRole] = useState('all');
     const data = {
         maleDoctors: genderCount.doctors.male,
@@ -38,18 +40,18 @@ const GenderDonutChart = ({ genderCount }) => {
         let genderData;
         if (role === 'all') {
             genderData = [
-                { label: 'Male', value: data.maleDoctors + data.malePatients },
-                { label: 'Female', value: data.femaleDoctors + data.femalePatients },
+                { label: t('genderDonutChart.legend.male'), value: data.maleDoctors + data.malePatients },
+                { label: t('genderDonutChart.legend.female'), value: data.femaleDoctors + data.femalePatients },
             ];
         } else if (role === 'doctor') {
             genderData = [
-                { label: 'Male', value: data.maleDoctors },
-                { label: 'Female', value: data.femaleDoctors },
+                { label: t('genderDonutChart.legend.male'), value: data.maleDoctors },
+                { label: t('genderDonutChart.legend.female'), value: data.femaleDoctors },
             ];
         } else {
             genderData = [
-                { label: 'Male', value: data.malePatients },
-                { label: 'Female', value: data.femalePatients },
+                { label: t('genderDonutChart.legend.male'), value: data.malePatients },
+                { label: t('genderDonutChart.legend.female'), value: data.femalePatients },
             ];
         }
 
@@ -119,11 +121,11 @@ const GenderDonutChart = ({ genderCount }) => {
     return (
         <div className={cx('container')}>
             <div className={cx('intro')}>
-                <h4>Gender</h4>
+                <h4>{t('genderDonutChart.title')}</h4>
                 <select name="role" id="role" onChange={(e) => setRole(e.target.value)}>
-                    <option value="all">All</option>
-                    <option value="doctor">Doctor</option>
-                    <option value="patient">Patient</option>
+                    <option value="all">{t('genderDonutChart.selectRole.all')}</option>
+                    <option value="doctor">{t('genderDonutChart.selectRole.doctor')}</option>
+                    <option value="patient">{t('genderDonutChart.selectRole.patient')}</option>
                 </select>
             </div>
             <div className={cx('chart')}>

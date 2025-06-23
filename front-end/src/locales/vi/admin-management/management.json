@@ -1,0 +1,14 @@
+{
+    "mobileAccessLabel": "Quản lý >>",
+    "warningDialog": {
+        "message": "Một số tính năng trong phần Quản lý chỉ khả dụng trên máy tính. Để có trải nghiệm quản trị đầy đủ và sử dụng thuận tiện hơn, vui lòng dùng trình duyệt trên máy tính.",
+        "button": "Tôi đã hiểu"
+    },
+    "tabs": {
+        "dashboard": "Tổng quan",
+        "doctor": "Bác sĩ",
+        "patient": "Bệnh nhân",
+        "appointment": "Cuộc hẹn",
+        "revenue": "Doanh thu"
+    }
+}

@@ -11,6 +11,7 @@ import { BASE_URL } from '../../../../config';
 import useFetchData from '../../../hooks/useFetchData';
 import { Dialog, Slide, Drawer, useMediaQuery } from '@mui/material';
 import { FaCircleExclamation } from 'react-icons/fa6';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -18,6 +19,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const Management = () => {
+    const { t } = useTranslation('management');
     const isMobile = useMediaQuery('(max-width:768px)');
     const [isShowTab, setIsShowTab] = useState(false);
     const [isShowWarningDevice, setIsShowWarningDevice] = useState(false);
@@ -43,7 +45,7 @@ const Management = () => {
         <div className={cx('container')}>
             {isMobile && (
                 <div className={cx('management-mobile-btn')} onClick={() => setIsShowTab(true)}>
-                    Management {'>>'}
+                    {t('mobileAccessLabel')} {'>>'}
                 </div>
             )}
             <div className={cx('inner')}>
@@ -110,11 +112,8 @@ const Management = () => {
                 >
                     <div className={cx('warning-devices')}>
                         <FaCircleExclamation className={cx('icon')} />
-                        <p>
-                            Some features in Dashboard Management are only available on desktop. For the full admin
-                            experience and better usability, please use a desktop browser.
-                        </p>
-                        <button onClick={() => setIsShowWarningDevice(false)}>I know</button>
+                        <p>{t('warningDialog.message')}</p>
+                        <button onClick={() => setIsShowWarningDevice(false)}> {t('warningDialog.button')}</button>
                     </div>
                 </Dialog>
             )}

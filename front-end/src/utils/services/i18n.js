@@ -70,6 +70,10 @@ import reExamiationFormEN from '../../locales/en/doctor-patient/reExaminationFor
 import reExamiationFormVI from '../../locales/vi/doctor-patient/reExaminationForm.json';
 import loaderEN from '../../locales/en/common/loader.json';
 import loaderVI from '../../locales/vi/common/loader.json';
+import managementEN from '../../locales/en/admin-management/management.json';
+import managementVI from '../../locales/vi/admin-management/management.json';
+import dashboardManagementEN from '../../locales/en/admin-management/dashboardManagement.json';
+import dashboardManagementVI from '../../locales/vi/admin-management/dashboardManagement.json';
 
 const resources = {
     en: {
@@ -107,6 +111,8 @@ const resources = {
         prescription: prescriptionEN,
         reExaminationForm: reExamiationFormEN,
         loader: loaderEN,
+        management: managementEN,
+        dashboardManagement: dashboardManagementEN,
     },
     vi: {
         homepage: homepageVI,
@@ -143,6 +149,8 @@ const resources = {
         prescription: prescriptionVI,
         reExaminationForm: reExamiationFormVI,
         loader: loaderVI,
+        management: managementVI,
+        dashboardManagement: dashboardManagementVI,
     },
 };
 
@@ -187,6 +195,7 @@ i18n.use(LanguageDetector)
             'prescription',
             'reExaminationForm',
             'loader',
+            'management',
         ],
         interpolation: { escapeValue: false },
         detection: {

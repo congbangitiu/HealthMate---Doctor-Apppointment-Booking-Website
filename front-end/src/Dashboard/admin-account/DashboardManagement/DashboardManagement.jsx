@@ -10,10 +10,13 @@ import GenderDonutChart from '../Charts/GenderDonutChart/GenderDonutChart';
 import { FaStar } from 'react-icons/fa';
 import { PropTypes } from 'prop-types';
 import roundNumber from '../../../utils/number/roundNumber';
+import { useTranslation } from 'react-i18next';
+import translateSubspecialtyName from '../../../utils/translation/translateSubspecialtyName';
 
 const cx = classNames.bind(styles);
 
 const DashboardManagement = ({ users, doctors, appointments }) => {
+    const { t, i18n } = useTranslation('dashboardManagement');
     const calculateRevenue = () => {
         const totalRevenue = appointments.reduce((acc, appointment) => acc + parseFloat(appointment.ticketPrice), 0);
         return totalRevenue;
@@ -95,7 +98,7 @@ const DashboardManagement = ({ users, doctors, appointments }) => {
                         />
                     </svg>
                     <div className={cx('content')}>
-                        <p>Total Doctors</p>
+                        <p>{t('totalDoctors')}</p>
                         <h4>
                             <CountUp duration={5} end={officialDoctors.length} />
                         </h4>
@@ -118,7 +121,7 @@ const DashboardManagement = ({ users, doctors, appointments }) => {
                         />
                     </svg>
                     <div className={cx('content')}>
-                        <p>Total Patients</p>
+                        <p>{t('totalPatients')}</p>
                         <h4>
                             <CountUp duration={5} end={patients.length} />
                         </h4>
@@ -147,7 +150,7 @@ const DashboardManagement = ({ users, doctors, appointments }) => {
                     </svg>
 
                     <div className={cx('content')}>
-                        <p>Total Appointments</p>
+                        <p>{t('totalAppointments')}</p>
                         <h4>
                             <CountUp duration={5} end={appointments.length} />
                         </h4>
@@ -171,7 +174,7 @@ const DashboardManagement = ({ users, doctors, appointments }) => {
                     </svg>
 
                     <div className={cx('content')}>
-                        <p>Total Revenue</p>
+                        <p>{t('totalRevenue')}</p>
                         <h4>
                             $<CountUp duration={5} end={calculateRevenue()} />
                         </h4>
@@ -185,8 +188,8 @@ const DashboardManagement = ({ users, doctors, appointments }) => {
                 <div className={cx('wrapper-childrens')}>
                     <div className={cx('top-doctors')}>
                         <div className={cx('intro')}>
-                            <h4>Top Doctors</h4>
-                            <p>View All</p>
+                            <h4>{t('topDoctors')}</h4>
+                            <p>{t('viewAll')}</p>
                         </div>
                         <div className={cx('doctors')}>
                             {topDoctorsList.map((topDoctor, index) => (
@@ -194,13 +197,15 @@ const DashboardManagement = ({ users, doctors, appointments }) => {
                                     <img src={topDoctor.photo} alt="" />
                                     <div>
                                         <span>
-                                            <h4>Dr. {topDoctor.fullname}</h4>
+                                            <h4>
+                                                {t('topDoctor.prefix')} {topDoctor.fullname}
+                                            </h4>
                                             <span>
                                                 <FaStar className={cx('stars')} />(
                                                 {roundNumber(topDoctor.averageRating, 2)})
                                             </span>
                                         </span>
-                                        <p>{topDoctor.subspecialty}</p>
+                                        <p>{translateSubspecialtyName(topDoctor.subspecialty, i18n)}</p>
                                     </div>
                                 </Link>
                             ))}
