@@ -1,0 +1,13 @@
+{
+    "title": "Patients",
+    "placeholder": "Type patient's name ...",
+    "field": {
+        "gender": "Gender",
+        "bloodType": "Blood type",
+        "username": "Username",
+        "dateOfBirth": "Date of birth",
+        "phone": "Phone",
+        "email": "Email",
+        "address": "Address"
+    }
+}

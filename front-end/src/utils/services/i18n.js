@@ -76,6 +76,8 @@ import dashboardManagementEN from '../../locales/en/admin-management/dashboardMa
 import dashboardManagementVI from '../../locales/vi/admin-management/dashboardManagement.json';
 import doctorManagementEN from '../../locales/en/admin-management/doctorManagement.json';
 import doctorManagementVI from '../../locales/vi/admin-management/doctorManagement.json';
+import patientManagementEN from '../../locales/en/admin-management/patientManagement.json';
+import patientManagementVI from '../../locales/vi/admin-management/patientManagement.json';
 
 const resources = {
     en: {
@@ -116,6 +118,7 @@ const resources = {
         management: managementEN,
         dashboardManagement: dashboardManagementEN,
         doctorManagement: doctorManagementEN,
+        patientManagement: patientManagementEN,
     },
     vi: {
         homepage: homepageVI,
@@ -155,6 +158,7 @@ const resources = {
         management: managementVI,
         dashboardManagement: dashboardManagementVI,
         doctorManagement: doctorManagementVI,
+        patientManagement: patientManagementVI,
     },
 };
 
@@ -202,6 +206,7 @@ i18n.use(LanguageDetector)
             'management',
             'dashboardManagement',
             'doctorManagement',
+            'patientManagement',
         ],
         interpolation: { escapeValue: false },
         detection: {

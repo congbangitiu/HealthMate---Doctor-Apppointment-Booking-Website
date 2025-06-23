@@ -1,0 +1,13 @@
+{
+    "title": "Bệnh nhân",
+    "placeholder": "Nhập tên bệnh nhân ...",
+    "field": {
+        "gender": "Giới tính",
+        "bloodType": "Nhóm máu",
+        "username": "Tên đăng nhập",
+        "dateOfBirth": "Ngày sinh",
+        "phone": "Số điện thoại",
+        "email": "Email",
+        "address": "Địa chỉ"
+    }
+}

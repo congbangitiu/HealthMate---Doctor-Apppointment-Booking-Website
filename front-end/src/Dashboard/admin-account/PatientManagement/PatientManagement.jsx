@@ -8,10 +8,12 @@ import { IoMdMale, IoMdFemale } from 'react-icons/io';
 import { PropTypes } from 'prop-types';
 import Pagination from '../../../components/Pagination/Pagination';
 import InfoToolTip from '../../../components/InfoToolTip/InfoToolTip';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const PatientManagement = ({ users, setDebouncedQuery, loading, error }) => {
+    const { t } = useTranslation('patientManagement');
     const [query, setQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const [currentItems, setCurrentItems] = useState([]);
@@ -44,9 +46,9 @@ const PatientManagement = ({ users, setDebouncedQuery, loading, error }) => {
     return (
         <div className={cx('container')}>
             <AdminSearch
-                title="Patients"
+                title={t('title')}
                 total={patients.length}
-                placeholder="Type patient's name ..."
+                placeholder={t('placeholder')}
                 query={query}
                 setQuery={setQuery}
             />
@@ -70,13 +72,13 @@ const PatientManagement = ({ users, setDebouncedQuery, loading, error }) => {
                                         })}
                                     >
                                         <div>{patient.gender === 'male' ? <IoMdMale /> : <IoMdFemale />}</div>
-                                        <p>Gender</p>
+                                        <p>{t('field.gender')}</p>
                                     </div>
 
                                     {patient.bloodType && (
                                         <div className={cx('blood-type')}>
                                             <div>{patient.bloodType}</div>
-                                            <p>Blood type</p>
+                                            <p>{t('field.bloodType')}</p>
                                         </div>
                                     )}
                                 </div>
@@ -84,22 +86,22 @@ const PatientManagement = ({ users, setDebouncedQuery, loading, error }) => {
                             <div className={cx('right-part')}>
                                 <h4>{patient.fullname}</h4>
                                 <div>
-                                    <p>Username</p>
+                                    <p>{t('field.username')}</p>
                                     <div>{patient.username}</div>
                                 </div>
 
                                 {patient.dateOfBirth && (
                                     <div>
-                                        <p>Date of birth</p>
+                                        <p>{t('field.dateOfBirth')}</p>
                                         <div>{patient.dateOfBirth}</div>
                                     </div>
                                 )}
                                 <div>
-                                    <p>Phone</p>
+                                    <p>{t('field.phone')}</p>
                                     <div>0{patient.phone}</div>
                                 </div>
                                 <div>
-                                    <p>Email</p>
+                                    <p>{t('field.email')}</p>
                                     <InfoToolTip
                                         text={patient.email}
                                         maxLength={26}
@@ -115,7 +117,7 @@ const PatientManagement = ({ users, setDebouncedQuery, loading, error }) => {
 
                                 {patient.address && (
                                     <div>
-                                        <p>Address</p>
+                                        <p>{t('field.address')}</p>
                                         <div>{patient.address}</div>
                                     </div>
                                 )}
