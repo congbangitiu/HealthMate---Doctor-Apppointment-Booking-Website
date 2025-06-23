@@ -1,0 +1,76 @@
+{
+    "title": "Revenue",
+    "timeRevenueBarChart": {
+        "select": {
+            "time": "Time",
+            "month": "Month",
+            "quarter": "Quarter"
+        },
+        "doctor": "DOCTOR",
+        "revenue": "REVENUE ($)",
+        "legendOld": "Old Patients",
+        "legendNew": "New Patients",
+        "title": "Revenue from patient appointments in {{time}} 2024",
+        "months": {
+            "Jan": "Jan",
+            "Feb": "Feb",
+            "Mar": "Mar",
+            "Apr": "Apr",
+            "May": "May",
+            "Jun": "Jun",
+            "Jul": "Jul",
+            "Aug": "Aug",
+            "Sep": "Sep",
+            "Oct": "Oct",
+            "Nov": "Nov",
+            "Dec": "Dec"
+        },
+        "quarters": {
+            "First": "First quarter",
+            "Second": "Second quarter",
+            "Third": "Third quarter",
+            "Fourth": "Fourth quarter"
+        }
+    },
+    "doctorRevenueBarChart": {
+        "title": "Revenue breakdown by {{time}} of Dr. {{doctor}} in 2024",
+        "legend": {
+            "oldPatients": "Old Patients",
+            "newPatients": "New Patients"
+        },
+        "axis": {
+            "x": "{{time}}",
+            "y": "REVENUE ($)"
+        },
+        "selections": {
+            "timeLabel": "Time",
+            "doctorLabel": "Doctor",
+            "chooseDoctor": "Choose a doctor",
+            "month": "Month",
+            "quarter": "Quarter"
+        },
+        "tooltip": "${{value}}",
+        "ticks": {
+            "months": {
+                "Jan": "Jan",
+                "Feb": "Feb",
+                "Mar": "Mar",
+                "Apr": "Apr",
+                "May": "May",
+                "Jun": "Jun",
+                "Jul": "Jul",
+                "Aug": "Aug",
+                "Sep": "Sep",
+                "Oct": "Oct",
+                "Nov": "Nov",
+                "Dec": "Dec"
+            },
+            "quarters": {
+                "First": "First quarter",
+                "Second": "Second quarter",
+                "Third": "Third quarter",
+                "Fourth": "Fourth quarter"
+            }
+        }
+    }
+}

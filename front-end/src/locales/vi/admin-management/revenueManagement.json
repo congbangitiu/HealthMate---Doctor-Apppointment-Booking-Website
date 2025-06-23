@@ -1,0 +1,76 @@
+{
+    "title": "Doanh thu",
+    "timeRevenueBarChart": {
+        "select": {
+            "time": "Thời gian",
+            "month": "Tháng",
+            "quarter": "Quý"
+        },
+        "doctor": "BÁC SĨ",
+        "revenue": "DOANH THU ($)",
+        "legendOld": "Bệnh nhân cũ",
+        "legendNew": "Bệnh nhân mới",
+        "title": "Doanh thu từ các cuộc hẹn trong {{time}} năm 2024",
+        "months": {
+            "Jan": "Tháng 1",
+            "Feb": "Tháng 2",
+            "Mar": "Tháng 3",
+            "Apr": "Tháng 4",
+            "May": "Tháng 5",
+            "Jun": "Tháng 6",
+            "Jul": "Tháng 7",
+            "Aug": "Tháng 8",
+            "Sep": "Tháng 9",
+            "Oct": "Tháng 10",
+            "Nov": "Tháng 11",
+            "Dec": "Tháng 12"
+        },
+        "quarters": {
+            "First": "Quý 1",
+            "Second": "Quý 2",
+            "Third": "Quý 3",
+            "Fourth": "Quý 4"
+        }
+    },
+    "doctorRevenueBarChart": {
+        "title": "Doanh thu theo {{time}} của BS. {{doctor}} trong năm 2024",
+        "legend": {
+            "oldPatients": "Bệnh nhân cũ",
+            "newPatients": "Bệnh nhân mới"
+        },
+        "axis": {
+            "x": "{{time}}",
+            "y": "DOANH THU ($)"
+        },
+        "selections": {
+            "timeLabel": "Thời gian",
+            "doctorLabel": "Bác sĩ",
+            "chooseDoctor": "Chọn bác sĩ",
+            "month": "Tháng",
+            "quarter": "Quý"
+        },
+        "tooltip": "${{value}}",
+        "ticks": {
+            "months": {
+                "Jan": "Tháng 1",
+                "Feb": "Tháng 2",
+                "Mar": "Tháng 3",
+                "Apr": "Tháng 4",
+                "May": "Tháng 5",
+                "Jun": "Tháng 6",
+                "Jul": "Tháng 7",
+                "Aug": "Tháng 8",
+                "Sep": "Tháng 9",
+                "Oct": "Tháng 10",
+                "Nov": "Tháng 11",
+                "Dec": "Tháng 12"
+            },
+            "quarters": {
+                "First": "Quý 1",
+                "Second": "Quý 2",
+                "Third": "Quý 3",
+                "Fourth": "Quý 4"
+            }
+        }
+    }
+}

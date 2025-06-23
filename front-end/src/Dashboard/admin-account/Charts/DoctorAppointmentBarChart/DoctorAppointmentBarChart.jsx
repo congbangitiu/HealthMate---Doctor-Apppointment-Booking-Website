@@ -77,7 +77,6 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
             .attr('text-anchor', 'middle')
             .style('font-size', '26px')
             .style('font-weight', 'bold')
-            .text(`Number of patients registered to see Dr. ${doctorChart} in 2024`)
             .text(
                 t('doctorAppointmentBarChart.title', {
                     doctor: doctorChart,

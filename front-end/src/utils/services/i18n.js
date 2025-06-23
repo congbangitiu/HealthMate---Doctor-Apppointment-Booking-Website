@@ -80,6 +80,8 @@ import patientManagementEN from '../../locales/en/admin-management/patientManage
 import patientManagementVI from '../../locales/vi/admin-management/patientManagement.json';
 import appointmentManagementEN from '../../locales/en/admin-management/appointmentManagement.json';
 import appointmentManagementVI from '../../locales/vi/admin-management/appointmentManagement.json';
+import revenueManegementEN from '../../locales/en/admin-management/revenueManagement.json';
+import revenueManegementVI from '../../locales/vi/admin-management/revenueManagement.json';
 
 const resources = {
     en: {
@@ -122,6 +124,7 @@ const resources = {
         doctorManagement: doctorManagementEN,
         patientManagement: patientManagementEN,
         appointmentManagement: appointmentManagementEN,
+        revenueManagement: revenueManegementEN,
     },
     vi: {
         homepage: homepageVI,
@@ -163,6 +166,7 @@ const resources = {
         doctorManagement: doctorManagementVI,
         patientManagement: patientManagementVI,
         appointmentManagement: appointmentManagementVI,
+        revenueManagement: revenueManegementVI,
     },
 };
 
@@ -212,6 +216,7 @@ i18n.use(LanguageDetector)
             'doctorManagement',
             'patientManagement',
             'appointmentManagement',
+            'revenueManagement',
         ],
         interpolation: { escapeValue: false },
         detection: {

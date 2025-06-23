@@ -76,18 +76,18 @@
         },
         "ticks": {
             "month": {
-                "Jan": "Thg 1",
-                "Feb": "Thg 2",
-                "Mar": "Thg 3",
-                "Apr": "Thg 4",
-                "May": "Thg 5",
-                "Jun": "Thg 6",
-                "Jul": "Thg 7",
-                "Aug": "Thg 8",
-                "Sep": "Thg 9",
-                "Oct": "Thg 10",
-                "Nov": "Thg 11",
-                "Dec": "Thg 12"
+                "Jan": "Tháng 1",
+                "Feb": "Tháng 2",
+                "Mar": "Tháng 3",
+                "Apr": "Tháng 4",
+                "May": "Tháng 5",
+                "Jun": "Tháng 6",
+                "Jul": "Tháng 7",
+                "Aug": "Tháng 8",
+                "Sep": "Tháng 9",
+                "Oct": "Tháng 10",
+                "Nov": "Tháng 11",
+                "Dec": "Tháng 12"
             },
             "quarter": {
                 "First": "Quý 1",

@@ -4,10 +4,12 @@ import styles from './RevenueManagement.module.scss';
 import TimeRevenueBarChart from '../Charts/TimeRevenueBarChart/TimeRevenueBarChart';
 import DoctorRevenueBarChart from '../Charts/DoctorRevenueBarChart/DoctorRevenueBarChart';
 import { PropTypes } from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const RevenueManagement = ({ appointments, doctors }) => {
+    const { t } = useTranslation('revenueManagement');
     const calculateRevenue = () => {
         const totalRevenue = appointments.reduce((acc, appointment) => acc + parseFloat(appointment.ticketPrice), 0);
         return totalRevenue;
@@ -24,7 +26,9 @@ const RevenueManagement = ({ appointments, doctors }) => {
 
     return (
         <div className={cx('container')}>
-            <h4>Revenue (${totalRevenue})</h4>
+            <h4>
+                {t('title')} (${totalRevenue})
+            </h4>
 
             <div className={cx('charts')}>
                 <TimeRevenueBarChart />

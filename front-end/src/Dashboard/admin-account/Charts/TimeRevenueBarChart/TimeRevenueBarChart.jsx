@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import * as d3 from 'd3';
 import classNames from 'classnames/bind';
 import styles from './TimeRevenueBarChart.module.scss';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const TimeRevenueBarChart = () => {
+    const { t, i18n } = useTranslation('revenueManagement');
     const [selectedTime, setSelectedTime] = useState('month');
     const [selectedMonth, setSelectedMonth] = useState('Jan');
     const [selectedQuarter, setSelectedQuarter] = useState('First');
@@ -53,7 +55,7 @@ const TimeRevenueBarChart = () => {
 
             drawChart(chartData);
         }
-    }, [data, selectedTime, selectedMonth, selectedQuarter]);
+    }, [data, selectedTime, selectedMonth, selectedQuarter, i18n.language]);
 
     const drawChart = (data) => {
         const margin = { top: 150, right: 30, bottom: 90, left: 100 };
@@ -158,9 +160,12 @@ const TimeRevenueBarChart = () => {
             .style('font-size', '26px')
             .style('font-weight', 'bold')
             .text(
-                `Revenue from patient appointments in ${
-                    selectedTime === 'month' ? selectedMonth + ',' : 'the ' + selectedQuarter + ' quarter of'
-                } 2024`,
+                t('timeRevenueBarChart.title', {
+                    time:
+                        selectedTime === 'month'
+                            ? t(`timeRevenueBarChart.months.${selectedMonth}`)
+                            : t(`timeRevenueBarChart.quarters.${selectedQuarter}`),
+                }),
             );
 
         // Add legend
@@ -178,7 +183,7 @@ const TimeRevenueBarChart = () => {
             .attr('dy', '0.4em')
             .style('text-anchor', 'start')
             .style('font-size', '18')
-            .text('Old Patients');
+            .text(t('timeRevenueBarChart.legendOld'));
 
         legend.append('rect').attr('x', 200).attr('y', 0).attr('width', 20).attr('height', 20).style('fill', '#30d5c8');
 
@@ -189,7 +194,7 @@ const TimeRevenueBarChart = () => {
             .attr('dy', '0.4em')
             .style('text-anchor', 'start')
             .style('font-size', '18')
-            .text('New Patients');
+            .text(t('timeRevenueBarChart.legendNew'));
 
         svg.append('g')
             .attr('class', 'x-axis')
@@ -205,7 +210,7 @@ const TimeRevenueBarChart = () => {
             .attr('text-anchor', 'middle')
             .attr('x', width / 2)
             .attr('y', height + margin.bottom - 30)
-            .text('DOCTOR')
+            .text(t('timeRevenueBarChart.doctor'))
             .style('font-weight', '500');
 
         svg.append('g').attr('class', 'y-axis').call(d3.axisLeft(y)).style('font-size', '14px');
@@ -216,7 +221,7 @@ const TimeRevenueBarChart = () => {
             .attr('transform', 'rotate(-90)')
             .attr('x', -height / 2)
             .attr('y', -margin.left + 15)
-            .text('REVENUE ($)')
+            .text(t('timeRevenueBarChart.revenue'))
             .style('font-weight', '500');
     };
 
@@ -224,31 +229,31 @@ const TimeRevenueBarChart = () => {
         <div className={cx('container')}>
             <div className={cx('selections')}>
                 <div className={cx('selection')}>
-                    <h4>Time</h4>
+                    <h4>{t('timeRevenueBarChart.select.time')}</h4>
                     <select name="time" id="time" onChange={(e) => setSelectedTime(e.target.value)}>
-                        <option value="month">Month</option>
-                        <option value="quarter">Quarter</option>
+                        <option value="month">{t('timeRevenueBarChart.select.month')}</option>
+                        <option value="quarter">{t('timeRevenueBarChart.select.quarter')}</option>
                     </select>
                 </div>
 
                 {selectedTime === 'month' ? (
                     <div className={cx('selection')}>
-                        <h4>Month</h4>
+                        <h4>{t('timeRevenueBarChart.select.month')}</h4>
                         <select name="month" id="month" onChange={(e) => setSelectedMonth(e.target.value)}>
                             {months.map((month, index) => (
                                 <option key={index} value={month}>
-                                    {month}
+                                    {t(`timeRevenueBarChart.months.${month}`)}
                                 </option>
                             ))}
                         </select>
                     </div>
                 ) : (
                     <div className={cx('selection')}>
-                        <h4>Quarter</h4>
+                        <h4>{t('timeRevenueBarChart.select.quarter')}</h4>
                         <select name="quarter" id="quarter" onChange={(e) => setSelectedQuarter(e.target.value)}>
                             {quarters.map((quarter, index) => (
                                 <option key={index} value={quarter}>
-                                    {quarter}
+                                    {t(`timeRevenueBarChart.quarters.${quarter}`)}
                                 </option>
                             ))}
                         </select>
