@@ -1,0 +1,29 @@
+{
+    "title": "Appointments",
+    "columns": {
+        "patient": "Patient",
+        "doctor": "Doctor",
+        "date": "Date",
+        "time": "Time",
+        "fee": "Fee",
+        "status": "Status"
+    },
+    "filter": {
+        "newest": "Newest to Oldest",
+        "oldest": "Oldest to Newest",
+        "allDoctors": "All Doctors",
+        "allPatients": "All Patients",
+        "allAppointments": "All Appointments"
+    },
+    "status": {
+        "allStatuses": "All Statuses",
+        "pending": "Pending",
+        "done": "Done",
+        "cancelled": "Cancelled"
+    },
+    "noEmail": "No email",
+    "noDate": "No date",
+    "na": "N/A",
+    "prefix": "Dr. ",
+    "noAppointments": "No appointments match your selection!"
+}

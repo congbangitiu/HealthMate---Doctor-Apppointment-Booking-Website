@@ -7,16 +7,19 @@ import { PropTypes } from 'prop-types';
 import convertTime from './../../../utils/date-time/convertTime';
 import formatDate from '../../../utils/date-time/formatDate';
 import Pagination from '../../../components/Pagination/Pagination';
+import { useTranslation } from 'react-i18next';
+import translateAppointmentStatus from './../../../utils/translation/translateAppointmentStatus';
 
 const cx = classNames.bind(styles);
 
 const AppointmentManagement = ({ users, doctors, appointments }) => {
+    const { t, i18n } = useTranslation('appointmentManagement');
     const [selectedDoctor, setSelectedDoctor] = useState(null);
     const [selectedPatient, setSelectedPatient] = useState(null);
     const [selectedAppointmentStatus, setSelectedAppointmentStatus] = useState(null);
     const [selectedSchedule, setSelectedSchedule] = useState({
         value: 'newest',
-        label: 'Newest to Oldest',
+        label: t('filter.newest'),
     });
     const [filteredAppointments, setFilteredAppointments] = useState(appointments);
 
@@ -28,15 +31,15 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
     const patients = users.filter((user) => user.role === 'patient');
 
     const doctorsOptions = [
-        { value: 'all', label: 'All Doctors' },
+        { value: 'all', label: t('filter.allDoctors') },
         ...officialDoctors.map((doctor) => ({
             value: doctor.fullname,
-            label: 'Dr. ' + doctor.fullname,
+            label: t('prefix') + doctor.fullname,
         })),
     ];
 
     const patientsOptions = [
-        { value: 'all', label: 'All Patients' },
+        { value: 'all', label: t('filter.allPatients') },
         ...patients.map((patient) => ({
             value: patient.fullname,
             label: patient.fullname,
@@ -44,10 +47,10 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
     ];
 
     const appointmentsStatusOptions = [
-        { value: 'all', label: 'All Appointments' },
-        { value: 'pending', label: 'Pending' },
-        { value: 'done', label: 'Done' },
-        { value: 'cancelled', label: 'Cancelled' },
+        { value: 'all', label: t('filter.allAppointments') },
+        { value: 'pending', label: t('status.pending') },
+        { value: 'done', label: t('status.done') },
+        { value: 'cancelled', label: t('status.cancelled') },
     ];
 
     useEffect(() => {
@@ -118,10 +121,44 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
         });
     }, []);
 
+    useEffect(() => {
+        // Rebuild schedule option based on language
+        if (selectedSchedule?.value) {
+            setSelectedSchedule({
+                value: selectedSchedule.value,
+                label: t(`filter.${selectedSchedule.value}`),
+            });
+        }
+
+        // Rebuild patient option
+        if (selectedDoctor?.value === 'all') {
+            setSelectedDoctor({
+                value: 'all',
+                label: t('filter.allPatients'),
+            });
+        }
+
+        // Rebuild appointment status option
+        if (selectedAppointmentStatus) {
+            const statusMap = {
+                all: t('status.allStatuses'),
+                pending: t('status.pending'),
+                done: t('status.done'),
+                cancelled: t('status.cancelled'),
+            };
+            setSelectedAppointmentStatus({
+                value: selectedAppointmentStatus.value,
+                label: statusMap[selectedAppointmentStatus.value],
+            });
+        }
+    }, [i18n.language]);
+
     return (
         <div className={cx('container')}>
             <div className={cx('upper-part')}>
-                <h4>Appointments ({filteredAppointments.length})</h4>
+                <h4>
+                    {t('title')} ({filteredAppointments.length})
+                </h4>
                 <div className={cx('selections')}>
                     <Selections
                         selectedDoctor={selectedDoctor}
@@ -144,12 +181,12 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
                     <table className={cx('appointment-table')}>
                         <thead>
                             <tr>
-                                <th>Patient</th>
-                                <th>Doctor</th>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Fee</th>
-                                <th>Status</th>
+                                <th>{t('columns.patient')}</th>
+                                <th>{t('columns.doctor')}</th>
+                                <th>{t('columns.date')}</th>
+                                <th>{t('columns.time')}</th>
+                                <th>{t('columns.fee')}</th>
+                                <th>{t('columns.status')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -170,7 +207,7 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
                                                     />
                                                     <div>
                                                         <div>{appointment.user.fullname}</div>
-                                                        <div>{appointment.user.email || 'No email'}</div>
+                                                        <div>{appointment.user.email || t('noEmail')}</div>
                                                     </div>
                                                 </Link>
                                             ) : (
@@ -185,12 +222,12 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
                                                     />
                                                     <div>
                                                         <div>{appointment.user.fullname}</div>
-                                                        <div>{appointment.user.email || 'No email'}</div>
+                                                        <div>{appointment.user.email || t('noEmail')}</div>
                                                     </div>
                                                 </Link>
                                             )
                                         ) : (
-                                            <div>N/A</div>
+                                            <div>{t('na')}</div>
                                         )}
                                     </td>
                                     <td
@@ -208,7 +245,7 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
                                                     />
                                                     <div>
                                                         <div>{appointment.doctor.fullname}</div>
-                                                        <div>{appointment.doctor.email || 'No email'}</div>
+                                                        <div>{appointment.doctor.email || t('noEmail')}</div>
                                                     </div>
                                                 </Link>
                                             ) : (
@@ -223,7 +260,7 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
                                                     />
                                                     <div>
                                                         <div>{appointment.doctor.fullname}</div>
-                                                        <div>{appointment.doctor.email || 'No email'}</div>
+                                                        <div>{appointment.doctor.email || t('noEmail')}</div>
                                                     </div>
                                                 </Link>
                                             )
@@ -239,11 +276,11 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
                                         {appointment.timeSlot ? (
                                             appointment.status === 'cancelled' ? (
                                                 <Link className={cx('cancelledStatus')}>
-                                                    {formatDate(appointment.timeSlot.day) || 'No date'}
+                                                    {formatDate(appointment.timeSlot.day) || t('noDate')}
                                                 </Link>
                                             ) : (
                                                 <Link to={`/users/appointments/my-appointments/${appointment._id}`}>
-                                                    {formatDate(appointment.timeSlot.day) || 'No date'}
+                                                    {formatDate(appointment.timeSlot.day) || t('noDate')}
                                                 </Link>
                                             )
                                         ) : (
@@ -297,21 +334,15 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
                                     >
                                         {appointment.status ? (
                                             appointment.status === 'cancelled' ? (
-                                                <Link
-                                                    className={cx(
-                                                        appointment.status,
-                                                        'cancelledStatus',
-                                                        'captitalized',
-                                                    )}
-                                                >
-                                                    {appointment.status}
+                                                <Link className={cx(appointment.status, 'cancelledStatus')}>
+                                                    {translateAppointmentStatus(appointment.status, t)}
                                                 </Link>
                                             ) : (
                                                 <Link
                                                     to={`/users/appointments/my-appointments/${appointment._id}`}
-                                                    className={cx(appointment.status, 'captitalized')}
+                                                    className={cx(appointment.status)}
                                                 >
-                                                    {appointment.status}
+                                                    {translateAppointmentStatus(appointment.status, t)}
                                                 </Link>
                                             )
                                         ) : (
@@ -323,7 +354,7 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
                         </tbody>
                     </table>
                 ) : (
-                    <div className={cx('no-appointment')}>No appointments match your selection!</div>
+                    <div className={cx('no-appointment')}>{t('noAppointments')}</div>
                 )}
             </div>
 

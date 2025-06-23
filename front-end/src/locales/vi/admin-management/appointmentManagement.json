@@ -1,0 +1,29 @@
+{
+    "title": "Lịch hẹn",
+    "columns": {
+        "patient": "Bệnh nhân",
+        "doctor": "Bác sĩ",
+        "date": "Ngày",
+        "time": "Giờ",
+        "fee": "Phí",
+        "status": "Trạng thái"
+    },
+    "filter": {
+        "newest": "Mới nhất đến cũ nhất",
+        "oldest": "Cũ nhất đến mới nhất",
+        "allDoctors": "Tất cả bác sĩ",
+        "allPatients": "Tất cả bệnh nhân",
+        "allAppointments": "Tất cả lịch hẹn"
+    },
+    "status": {
+        "allStatuses": "Tất cả cuộc hẹn",
+        "pending": "Chờ xác nhận",
+        "done": "Đã hoàn tất",
+        "cancelled": "Đã huỷ"
+    },
+    "noEmail": "Không có email",
+    "noDate": "Không có ngày",
+    "na": "Không xác định",
+    "prefix": "BS. ",
+    "noAppointments": "Không có lịch hẹn phù hợp với lựa chọn của bạn!"
+}
