@@ -19,6 +19,8 @@ import AdminSearch from '../AdminSearch/AdminSearch';
 import { toast } from 'react-toastify';
 import DefaultMaleDoctorAvatar from '../../../assets/images/default-male-doctor.png';
 import DefaultFemaleDoctorAvatar from '../../../assets/images/default-female-doctor.png';
+import { useTranslation } from 'react-i18next';
+import translateSubspecialtyName from './../../../utils/translation/translateSubspecialtyName';
 
 const cx = classNames.bind(styles);
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -26,6 +28,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
+    const { t, i18n } = useTranslation('doctorManagement');
     const isMobile = useMediaQuery('(max-width:768px)');
     const [query, setQuery] = useState('');
     const [doctorChart, setDoctorChart] = useState('');
@@ -85,13 +88,13 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
                 },
             );
 
-            toast.success('Doctor approved successfully');
+            toast.success(t('toast.approveSuccess'));
             setLoadingApprove(false);
             await delay(2000);
             window.location.reload();
         } catch (error) {
             setLoadingApprove(false);
-            toast.error('Fail to approved doctor');
+            toast.error(t('toast.approveFail'));
             console.error('Error approving doctor:', error);
         }
     };
@@ -112,12 +115,12 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
                 },
             );
 
-            toast.success('Doctor rejected successfully');
+            toast.success(t('toast.rejectSuccess'));
             setLoadingReject(false);
             await delay(2000);
             window.location.reload();
         } catch (error) {
-            toast.error('Fail to approved doctor');
+            toast.error(t('toast.rejectFail'));
             setLoadingReject(false);
             console.error('Error rejecting doctor:', error);
         }
@@ -127,15 +130,15 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
         <div className={cx('container')}>
             <div className={cx('upper-part')}>
                 <AdminSearch
-                    title="Doctors"
+                    title={t('title.main')}
                     total={officialDoctors.length}
-                    placeholder="Type doctor's name or subspecialty ..."
+                    placeholder={t('placeholder')}
                     query={query}
                     setQuery={setQuery}
                 />
                 <button onClick={() => setShowDoctorCreationForm(true)}>
                     <CiCirclePlus className={cx('icon')} />
-                    Add new doctor
+                    {t('button.add')}
                 </button>
             </div>
 
@@ -147,7 +150,7 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
                 <div className={cx('lower-part')}>
                     {pendingDoctors.length > 0 && (
                         <div className={cx('pending-doctors')}>
-                            <h4 className={cx('title')}>Pending Doctors</h4>
+                            <h4 className={cx('title')}>{t('title.pending')}</h4>
                             <div className={cx('doctors')}>
                                 {pendingDoctors.map((doctor, index) => (
                                     <div key={index} className={cx('doctor-card')}>
@@ -156,19 +159,23 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
                                             <div className={cx('info')}>
                                                 <div>
                                                     <div>
-                                                        <h4>Dr. {doctor.fullname}</h4>
-                                                        <span>{doctor.subspecialty}</span>
+                                                        <h4>
+                                                            {t('info.prefix')} {doctor.fullname}
+                                                        </h4>
+                                                        <span>
+                                                            {translateSubspecialtyName(doctor.subspecialty, i18n)}
+                                                        </span>
                                                     </div>
-                                                    <h4>PENDING</h4>
+                                                    <h4>{t('status.pending')}</h4>
                                                 </div>
                                                 <div>
                                                     <div>
                                                         <p>
-                                                            <b>Email: </b>
+                                                            <b>{t('info.email')}: </b>
                                                             {doctor.email}
                                                         </p>
                                                         <p>
-                                                            <b>Phone: </b>
+                                                            <b>{t('info.phone')}: </b>
                                                             {doctor.phone}
                                                         </p>
                                                     </div>
@@ -180,10 +187,18 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
                                         </div>
                                         <div className={cx('buttons')}>
                                             <button onClick={() => handleReject(doctor._id)}>
-                                                {loadingReject ? <SyncLoader size={6} color="#30d5c8" /> : 'Reject'}
+                                                {loadingReject ? (
+                                                    <SyncLoader size={6} color="#30d5c8" />
+                                                ) : (
+                                                    t('button.reject')
+                                                )}
                                             </button>
                                             <button onClick={() => handleApprove(doctor._id)}>
-                                                {loadingApprove ? <SyncLoader size={6} color="#ffffff" /> : 'Approve'}
+                                                {loadingApprove ? (
+                                                    <SyncLoader size={6} color="#ffffff" />
+                                                ) : (
+                                                    t('button.approve')
+                                                )}
                                             </button>
                                         </div>
                                     </div>
@@ -194,7 +209,7 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
 
                     {rejectedDoctors.length > 0 && (
                         <div className={cx('rejected-doctors')}>
-                            <h4 className={cx('title')}>Rejected Doctors</h4>
+                            <h4 className={cx('title')}>{t('title.rejected')}</h4>
                             <div className={cx('doctors')}>
                                 {rejectedDoctors.map((doctor, index) => (
                                     <div key={index} className={cx('doctor-card')}>
@@ -203,19 +218,23 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
                                             <div className={cx('info')}>
                                                 <div>
                                                     <div>
-                                                        <h4>Dr. {doctor.fullname}</h4>
-                                                        <span>{doctor.subspecialty}</span>
+                                                        <h4>
+                                                            {t('info.prefix')} {doctor.fullname}
+                                                        </h4>
+                                                        <span>
+                                                            {translateSubspecialtyName(doctor.subspecialty, i18n)}
+                                                        </span>
                                                     </div>
-                                                    <h4>REJECTED</h4>
+                                                    <h4>{t('status.rejected')}</h4>
                                                 </div>
                                                 <div>
                                                     <div>
                                                         <p>
-                                                            <b>Email: </b>
+                                                            <b>{t('info.email')}: </b>
                                                             {doctor.email}
                                                         </p>
                                                         <p>
-                                                            <b>Phone: </b>
+                                                            <b>{t('info.phone')}: </b>
                                                             {doctor.phone}
                                                         </p>
                                                     </div>
@@ -227,7 +246,11 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
                                         </div>
                                         <div className={cx('buttons')}>
                                             <button onClick={() => handleApprove(doctor._id)}>
-                                                {loadingApprove ? <SyncLoader size={6} color="#ffffff" /> : 'Approve'}
+                                                {loadingApprove ? (
+                                                    <SyncLoader size={6} color="#ffffff" />
+                                                ) : (
+                                                    t('button.approve')
+                                                )}
                                             </button>
                                         </div>
                                     </div>
@@ -237,7 +260,7 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
                     )}
 
                     <div className={cx('official-doctors')}>
-                        <h4 className={cx('title')}>Official Doctors</h4>
+                        <h4 className={cx('title')}>{t('title.official')}</h4>
                         <div className={cx('doctors')}>
                             {officialDoctors.map((doctor, index) => (
                                 <div key={index} className={cx('doctor', { activeDoctor: isActiveDoctor === index })}>
@@ -258,15 +281,17 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
                                         </div>
                                     </div>
                                     <div className={cx('info')}>
-                                        <h4>Dr. {doctor.fullname}</h4>
-                                        <p>{doctor.subspecialty}</p>
+                                        <h4>
+                                            {t('info.prefix')} {doctor.fullname}
+                                        </h4>
+                                        <p>{translateSubspecialtyName(doctor.subspecialty, i18n)}</p>
                                     </div>
                                     <div className={cx('buttons')}>
                                         <Link to={`/doctors/${doctor._id}`}>
-                                            <button>Details</button>
+                                            <button>{t('button.details')}</button>
                                         </Link>
                                         <button onClick={() => handleVisualizeChart(doctor.fullname, index)}>
-                                            Analysis
+                                            {t('button.analysis')}
                                         </button>
                                     </div>
                                 </div>
@@ -290,11 +315,7 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
                             ) : (
                                 <div className={cx('device-warning')}>
                                     <PiSmileySad className={cx('icon')} />
-                                    <p>
-                                        Chart analytics are NOT available on mobile devices. Please switch to a desktop
-                                        for full access to data visualizations and in-depth insights to better manage
-                                        the system.
-                                    </p>
+                                    <p>{t('chart.mobileWarning.text')}</p>
                                 </div>
                             )}
                         </Dialog>

@@ -6,10 +6,15 @@ import { TextField, Autocomplete } from '@mui/material';
 import specialties from '../../assets/data/mock-data/specialties';
 import { BASE_URL, token } from '../../../config';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
+import translateSpecialtyName from '../../utils/translation/translateSpecialtyName';
+import translateSubspecialtyName from '../../utils/translation/translateSubspecialtyName';
 
 const cx = classNames.bind(styles);
 
 const DoctorCreationForm = () => {
+    const { t, i18n } = useTranslation(['doctorManagement']);
+
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         fullname: '',
@@ -72,13 +77,13 @@ const DoctorCreationForm = () => {
 
     return (
         <div className={cx('container')}>
-            <h1>Doctor Creation Form</h1>
+            <h1>{t('doctorCreationForm.title')}</h1>
             <form onSubmit={handleSubmitForm}>
                 <div className={cx('fields')}>
                     <div className={cx('field')}>
-                        <p>Full name</p>
+                        <p>{t('doctorCreationForm.fields.fullname')}</p>
                         <input
-                            placeholder="Enter doctor's full name"
+                            placeholder={t('doctorCreationForm.fields.fullnamePlaceholder')}
                             name="fullname"
                             required
                             onChange={handleInputChange}
@@ -86,16 +91,16 @@ const DoctorCreationForm = () => {
                     </div>
                     <div className={cx('field-row')}>
                         <div className={cx('username')}>
-                            <p>Username</p>
+                            <p>{t('doctorCreationForm.fields.username')}</p>
                             <input
-                                placeholder="Enter doctor's username"
+                                placeholder={t('doctorCreationForm.fields.usernamePlaceholder')}
                                 name="username"
                                 required
                                 onChange={handleInputChange}
                             />
                         </div>
                         <div className={cx('gender')}>
-                            <p>Gender</p>
+                            <p>{t('doctorCreationForm.fields.gender')}</p>
                             <select
                                 name="gender"
                                 id="gender"
@@ -103,22 +108,27 @@ const DoctorCreationForm = () => {
                                 onChange={handleInputChange}
                                 required
                             >
-                                <option value="">Select</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
+                                <option value="">{t('doctorCreationForm.fields.genderSelect')}</option>
+                                <option value="male">{t('doctorCreationForm.fields.genderMale')}</option>
+                                <option value="female">{t('doctorCreationForm.fields.genderFemale')}</option>
+                                <option value="other">{t('doctorCreationForm.fields.genderOther')}</option>
                             </select>
                         </div>
                     </div>
                     <div className={cx('field')}>
-                        <p>Email</p>
-                        <input placeholder="Enter doctor's email" name="email" required onChange={handleInputChange} />
+                        <p>{t('doctorCreationForm.fields.email')}</p>
+                        <input
+                            placeholder={t('doctorCreationForm.fields.emailPlaceholder')}
+                            name="email"
+                            required
+                            onChange={handleInputChange}
+                        />
                     </div>
                     <div className={cx('field')}>
-                        <p>Password</p>
+                        <p>{t('doctorCreationForm.fields.password')}</p>
                         <input
                             type="password"
-                            placeholder="Password will be the same as username initially"
+                            placeholder={t('doctorCreationForm.fields.passwordNote')}
                             name="password"
                             required
                             value={formData.username}
@@ -128,23 +138,23 @@ const DoctorCreationForm = () => {
                     </div>
                     <div className={cx('field-row')}>
                         <div className={cx('specialty')}>
-                            <p>Specialty</p>
-
+                            <p>{t('doctorCreationForm.fields.specialty')}</p>
                             <input
                                 name="specialty"
                                 id="specialty"
+                                placeholder={t('doctorCreationForm.fields.specialtyNote')}
                                 required
                                 readOnly
-                                value={formData.specialty}
+                                value={translateSpecialtyName(formData.specialty, i18n)}
                                 className={cx('no-click')}
                             />
                         </div>
                         <div className={cx('subspecialty')}>
-                            <p>Subspecialty</p>
+                            <p>{t('doctorCreationForm.fields.subspecialty')}</p>
                             <Autocomplete
                                 disablePortal
                                 options={subspecialtyOptions}
-                                value={formData.subspecialty}
+                                value={translateSubspecialtyName(formData.subspecialty, i18n)}
                                 onChange={(event, value) => {
                                     const matchedSpecialty = specialties.find((spec) =>
                                         spec.subspecialties?.some((sub) => sub.name === value),
@@ -188,7 +198,7 @@ const DoctorCreationForm = () => {
                                             backgroundColor: selected ? 'var(--lightGreenColor)' : 'inherit',
                                         }}
                                     >
-                                        {option}
+                                        {translateSubspecialtyName(option, i18n)}
                                     </li>
                                 )}
                                 slotProps={{
@@ -208,7 +218,7 @@ const DoctorCreationForm = () => {
                     </div>
                 </div>
                 <button disabled={loading} className={cx('submit-btn')}>
-                    {loading ? <SyncLoader size={10} color="#ffffff" /> : 'Add new doctor'}
+                    {loading ? <SyncLoader size={10} color="#ffffff" /> : t('doctorCreationForm.button.submit')}
                 </button>
             </form>
         </div>

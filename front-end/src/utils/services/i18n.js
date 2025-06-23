@@ -74,6 +74,8 @@ import managementEN from '../../locales/en/admin-management/management.json';
 import managementVI from '../../locales/vi/admin-management/management.json';
 import dashboardManagementEN from '../../locales/en/admin-management/dashboardManagement.json';
 import dashboardManagementVI from '../../locales/vi/admin-management/dashboardManagement.json';
+import doctorManagementEN from '../../locales/en/admin-management/doctorManagement.json';
+import doctorManagementVI from '../../locales/vi/admin-management/doctorManagement.json';
 
 const resources = {
     en: {
@@ -113,6 +115,7 @@ const resources = {
         loader: loaderEN,
         management: managementEN,
         dashboardManagement: dashboardManagementEN,
+        doctorManagement: doctorManagementEN,
     },
     vi: {
         homepage: homepageVI,
@@ -151,6 +154,7 @@ const resources = {
         loader: loaderVI,
         management: managementVI,
         dashboardManagement: dashboardManagementVI,
+        doctorManagement: doctorManagementVI,
     },
 };
 
@@ -196,6 +200,8 @@ i18n.use(LanguageDetector)
             'reExaminationForm',
             'loader',
             'management',
+            'dashboardManagement',
+            'doctorManagement',
         ],
         interpolation: { escapeValue: false },
         detection: {

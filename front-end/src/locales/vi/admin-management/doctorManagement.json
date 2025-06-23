@@ -1,0 +1,100 @@
+{
+    "title": {
+        "main": "Bác sĩ",
+        "pending": "Bác sĩ chờ duyệt",
+        "rejected": "Bác sĩ bị từ chối",
+        "official": "Bác sĩ chính thức"
+    },
+    "placeholder": "Nhập tên bác sĩ hoặc chuyên khoa phụ ...",
+    "button": {
+        "add": "Thêm bác sĩ mới",
+        "approve": "Duyệt",
+        "reject": "Từ chối",
+        "details": "Chi tiết",
+        "analysis": "Phân tích"
+    },
+    "status": {
+        "pending": "CHỜ DUYỆT",
+        "rejected": "BỊ TỪ CHỐI"
+    },
+    "info": {
+        "prefix": "BS.",
+        "email": "Email",
+        "phone": "Số điện thoại"
+    },
+    "chart": {
+        "mobileWarning": {
+            "text": "Phân tích biểu đồ KHÔNG khả dụng trên thiết bị di động. Vui lòng chuyển sang máy tính để truy cập đầy đủ vào biểu đồ và thông tin chuyên sâu giúp quản lý hệ thống tốt hơn."
+        }
+    },
+    "toast": {
+        "approveSuccess": "Duyệt bác sĩ thành công",
+        "approveFail": "Không thể duyệt bác sĩ",
+        "rejectSuccess": "Từ chối bác sĩ thành công",
+        "rejectFail": "Không thể từ chối bác sĩ"
+    },
+    "doctorCreationForm": {
+        "title": "Tạo tài khoản bác sĩ",
+        "fields": {
+            "fullname": "Họ tên",
+            "fullnamePlaceholder": "Nhập họ tên bác sĩ",
+            "username": "Tên đăng nhập",
+            "usernamePlaceholder": "Nhập tên đăng nhập của bác sĩ",
+            "gender": "Giới tính",
+            "genderSelect": "Chọn",
+            "genderMale": "Nam",
+            "genderFemale": "Nữ",
+            "genderOther": "Khác",
+            "email": "Email",
+            "emailPlaceholder": "Nhập email bác sĩ",
+            "password": "Mật khẩu",
+            "passwordNote": "Mật khẩu ban đầu sẽ giống tên đăng nhập",
+            "specialty": "Chuyên khoa",
+            "specialtyNote": "Dựa vào chuyên khoa sâu",
+            "subspecialty": "Chuyên khoa sâu"
+        },
+        "button": {
+            "submit": "Thêm bác sĩ mới"
+        }
+    },
+    "doctorAppointmentBarChart": {
+        "title": "Số lượng bệnh nhân đã đăng ký khám với BS. {{doctor}} trong năm 2024",
+        "legend": {
+            "old": "Bệnh nhân cũ",
+            "new": "Bệnh nhân mới"
+        },
+        "tooltip": "{{count}} bệnh nhân",
+        "xAxis": "{{time}}",
+        "yAxis": "SỐ LƯỢNG BỆNH NHÂN",
+        "selection": {
+            "time": "Thời gian",
+            "status": "Trạng thái lịch hẹn",
+            "month": "Tháng",
+            "quarter": "Quý",
+            "successful": "Thành công",
+            "cancelled": "Đã huỷ"
+        },
+        "ticks": {
+            "month": {
+                "Jan": "Thg 1",
+                "Feb": "Thg 2",
+                "Mar": "Thg 3",
+                "Apr": "Thg 4",
+                "May": "Thg 5",
+                "Jun": "Thg 6",
+                "Jul": "Thg 7",
+                "Aug": "Thg 8",
+                "Sep": "Thg 9",
+                "Oct": "Thg 10",
+                "Nov": "Thg 11",
+                "Dec": "Thg 12"
+            },
+            "quarter": {
+                "First": "Quý 1",
+                "Second": "Quý 2",
+                "Third": "Quý 3",
+                "Fourth": "Quý 4"
+            }
+        }
+    }
+}

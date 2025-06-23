@@ -1,0 +1,100 @@
+{
+    "title": {
+        "main": "Doctors",
+        "pending": "Pending Doctors",
+        "rejected": "Rejected Doctors",
+        "official": "Official Doctors"
+    },
+    "placeholder": "Type doctor's name or subspecialty ...",
+    "button": {
+        "add": "Add new doctor",
+        "approve": "Approve",
+        "reject": "Reject",
+        "details": "Details",
+        "analysis": "Analysis"
+    },
+    "status": {
+        "pending": "PENDING",
+        "rejected": "REJECTED"
+    },
+    "info": {
+        "prefix": "Dr.",
+        "email": "Email",
+        "phone": "Phone"
+    },
+    "chart": {
+        "mobileWarning": {
+            "text": "Chart analytics are NOT available on mobile devices. Please switch to a desktop for full access to data visualizations and in-depth insights to better manage the system."
+        }
+    },
+    "toast": {
+        "approveSuccess": "Doctor approved successfully",
+        "approveFail": "Fail to approve doctor",
+        "rejectSuccess": "Doctor rejected successfully",
+        "rejectFail": "Fail to reject doctor"
+    },
+    "doctorCreationForm": {
+        "title": "Doctor Creation Form",
+        "fields": {
+            "fullname": "Full name",
+            "fullnamePlaceholder": "Enter doctor's full name",
+            "username": "Username",
+            "usernamePlaceholder": "Enter doctor's username",
+            "gender": "Gender",
+            "genderSelect": "Select",
+            "genderMale": "Male",
+            "genderFemale": "Female",
+            "genderOther": "Other",
+            "email": "Email",
+            "emailPlaceholder": "Enter doctor's email",
+            "password": "Password",
+            "passwordNote": "Password will be the same as username initially",
+            "specialty": "Specialty",
+            "specialtyNote": "By subspecialty",
+            "subspecialty": "Subspecialty"
+        },
+        "button": {
+            "submit": "Add new doctor"
+        }
+    },
+    "doctorAppointmentBarChart": {
+        "title": "Number of patients registered to see Dr. {{doctor}} in 2024",
+        "legend": {
+            "old": "Old Patients",
+            "new": "New Patients"
+        },
+        "tooltip": "{{count}} patients",
+        "xAxis": "{{time}}",
+        "yAxis": "NUMBER OF PATIENTS",
+        "selection": {
+            "time": "Time",
+            "status": "Appointment Status",
+            "month": "Month",
+            "quarter": "Quarter",
+            "successful": "Successful",
+            "cancelled": "Cancelled"
+        },
+        "ticks": {
+            "month": {
+                "Jan": "Jan",
+                "Feb": "Feb",
+                "Mar": "Mar",
+                "Apr": "Apr",
+                "May": "May",
+                "Jun": "Jun",
+                "Jul": "Jul",
+                "Aug": "Aug",
+                "Sep": "Sep",
+                "Oct": "Oct",
+                "Nov": "Nov",
+                "Dec": "Dec"
+            },
+            "quarter": {
+                "First": "First Quarter",
+                "Second": "Second Quarter",
+                "Third": "Third Quarter",
+                "Fourth": "Fourth Quarter"
+            }
+        }
+    }
+}

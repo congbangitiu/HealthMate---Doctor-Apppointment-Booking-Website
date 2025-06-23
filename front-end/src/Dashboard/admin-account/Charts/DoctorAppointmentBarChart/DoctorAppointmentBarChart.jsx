@@ -3,10 +3,12 @@ import * as d3 from 'd3';
 import classNames from 'classnames/bind';
 import styles from './DoctorAppointmentBarChart.module.scss';
 import { PropTypes } from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const DoctorAppointmentBarChart = ({ doctorChart }) => {
+    const { t, i18n } = useTranslation('doctorManagement');
     const [selectedTime, setSelectedTime] = useState('month');
     const [selectedStatus, setSelectedStatus] = useState('Successful');
     const [data, setData] = useState([]);
@@ -50,7 +52,7 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
 
             drawChart(preparedData);
         }
-    }, [data, doctorChart, selectedTime, selectedStatus]);
+    }, [data, doctorChart, selectedTime, selectedStatus, i18n.language]);
 
     const drawChart = (data) => {
         const margin = { top: 120, right: 30, bottom: 60, left: 60 };
@@ -75,7 +77,12 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
             .attr('text-anchor', 'middle')
             .style('font-size', '26px')
             .style('font-weight', 'bold')
-            .text(`Number of patients registered to see Dr. ${doctorChart} in 2024`);
+            .text(`Number of patients registered to see Dr. ${doctorChart} in 2024`)
+            .text(
+                t('doctorAppointmentBarChart.title', {
+                    doctor: doctorChart,
+                }),
+            );
 
         // Add legend
         const legend = svg
@@ -93,7 +100,7 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
             .attr('dy', '0.4em')
             .style('text-anchor', 'start')
             .style('font-size', '18')
-            .text('Old Patients');
+            .text(t('doctorAppointmentBarChart.legend.old'));
 
         // New Patients legend
         legend.append('rect').attr('x', 200).attr('y', 0).attr('width', 20).attr('height', 20).style('fill', '#30d5c8');
@@ -105,7 +112,7 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
             .attr('dy', '0.4em')
             .style('text-anchor', 'start')
             .style('font-size', '18')
-            .text('New Patients');
+            .text(t('doctorAppointmentBarChart.legend.new'));
 
         const x = d3
             .scaleBand()
@@ -156,7 +163,7 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
                 d3.select(this).style('opacity', 0.8);
                 tooltip.transition().duration(200).style('opacity', 0.9);
                 tooltip
-                    .html(`${d[1] - d[0]} patients`)
+                    .html(t('doctorAppointmentBarChart.tooltip', { count: d[1] - d[0] }))
                     .style('left', event.pageX + 5 + 'px')
                     .style('top', event.pageY - 30 + 'px');
             })
@@ -187,7 +194,17 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
         svg.append('g')
             .attr('class', 'x-axis')
             .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(x))
+            .call(
+                d3.axisBottom(x).tickFormat((d) => {
+                    if (selectedTime === 'month') {
+                        return t(`doctorAppointmentBarChart.ticks.month.${d}`);
+                    } else if (selectedTime === 'quarter') {
+                        return t(`doctorAppointmentBarChart.ticks.quarter.${d}`);
+                    }
+                    return d;
+                }),
+            )
+
             .style('font-size', '14px');
 
         // Add X Axis Label
@@ -196,7 +213,12 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
             .attr('text-anchor', 'middle')
             .attr('x', width / 2)
             .attr('y', height + margin.bottom / 2 + 15)
-            .text(`${selectedTime.toUpperCase()}`)
+            .text(
+                selectedTime === 'month'
+                    ? t('doctorAppointmentBarChart.selection.month').toUpperCase()
+                    : t('doctorAppointmentBarChart.selection.quarter').toUpperCase(),
+            )
+
             .style('font-weight', '500');
 
         // Add Y Axis
@@ -209,7 +231,7 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
             .attr('transform', 'rotate(-90)')
             .attr('x', -height / 2)
             .attr('y', -margin.left / 2 - 15)
-            .text('NUMBER OF PATIENTS')
+            .text(t('doctorAppointmentBarChart.yAxis'))
             .style('font-weight', '500');
     };
 
@@ -217,17 +239,17 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
         <div className={cx('container')}>
             <div className={cx('selections')}>
                 <div className={cx('selection')}>
-                    <h4>Time</h4>
+                    <h4>{t('doctorAppointmentBarChart.selection.time')}</h4>
                     <select name="time" id="time" onChange={(e) => setSelectedTime(e.target.value)}>
-                        <option value="month">Month</option>
-                        <option value="quarter">Quarter</option>
+                        <option value="month">{t('doctorAppointmentBarChart.selection.month')}</option>
+                        <option value="quarter">{t('doctorAppointmentBarChart.selection.quarter')}</option>
                     </select>
                 </div>
                 <div className={cx('selection')}>
-                    <h4>Appointment Status</h4>
+                    <h4>{t('doctorAppointmentBarChart.selection.status')}</h4>
                     <select name="status" id="status" onChange={(e) => setSelectedStatus(e.target.value)}>
-                        <option value="Successful">Successful</option>
-                        <option value="Cancelled">Cancelled</option>
+                        <option value="Successful">{t('doctorAppointmentBarChart.selection.successful')}</option>
+                        <option value="Cancelled">{t('doctorAppointmentBarChart.selection.cancelled')}</option>
                     </select>
                 </div>
             </div>
