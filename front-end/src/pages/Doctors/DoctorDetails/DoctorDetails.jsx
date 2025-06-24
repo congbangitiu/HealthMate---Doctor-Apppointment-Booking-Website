@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './DoctorDetails.module.scss';
 import axios from 'axios';
@@ -15,10 +15,12 @@ import { authContext } from '../../../context/AuthContext';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
 import { Dialog, useMediaQuery } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const DoctorDetails = () => {
+    const { t } = useTranslation('doctorDetails');
     const [activeTab, setActiveTab] = useState('about');
     const { id } = useParams();
     const isMobile = useMediaQuery('(max-width:768px)');
@@ -52,13 +54,13 @@ const DoctorDetails = () => {
                 },
             );
 
-            toast.success('Doctor approved successfully');
+            toast.success(t('toast.approveSuccess'));
             setLoadingApprove(false);
             await delay(2000);
             window.location.href = '/admins/management';
         } catch (error) {
             setLoadingApprove(false);
-            toast.error('Fail to approved doctor');
+            toast.error(t('toast.approveFail'));
             console.error('Error approving doctor:', error);
         }
     };
@@ -79,12 +81,12 @@ const DoctorDetails = () => {
                 },
             );
 
-            toast.success('Doctor rejected successfully');
+            toast.success(t('toast.rejectSuccess'));
             setLoadingReject(false);
             await delay(2000);
             window.location.href = '/admins/management';
         } catch (error) {
-            toast.error('Fail to approved doctor');
+            toast.error(t('toast.rejectFail'));
             setLoadingReject(false);
             console.error('Error rejecting doctor:', error);
         }
@@ -94,13 +96,13 @@ const DoctorDetails = () => {
         <div className={cx('container-parent')}>
             {doctor.isApproved === 'pending' && role === 'admin' && (
                 <div className={cx('verification', 'pending')}>
-                    <h4>Do you want to approve this doctor&apos;s account ?</h4>
+                    <h4>{t('verifyPrompt')}</h4>
                     <div className={cx('buttons')}>
                         <button onClick={() => handleReject(doctor._id)}>
-                            {loadingReject ? <SyncLoader size={7} color="#30d5c8" /> : 'Reject'}
+                            {loadingReject ? <SyncLoader size={7} color="#30d5c8" /> : t('button.reject')}
                         </button>
                         <button onClick={() => handleApprove(doctor._id)}>
-                            {loadingApprove ? <SyncLoader size={7} color="#ffffff" /> : 'Approve'}
+                            {loadingApprove ? <SyncLoader size={7} color="#ffffff" /> : t('button.approve')}
                         </button>
                     </div>
                 </div>
@@ -108,10 +110,10 @@ const DoctorDetails = () => {
 
             {doctor.isApproved === 'rejected' && role === 'admin' && (
                 <div className={cx('verification', 'rejected')}>
-                    <h4>Do you want to approve this doctor&apos;s account ?</h4>
+                    <h4>{t('verifyPrompt')}</h4>
                     <div className={cx('buttons')}>
                         <button onClick={() => handleApprove(doctor._id)}>
-                            {loadingApprove ? <SyncLoader size={7} color="#ffffff" /> : 'Approve'}
+                            {loadingApprove ? <SyncLoader size={7} color="#ffffff" /> : t('button.approve')}
                         </button>
                     </div>
                 </div>
@@ -186,14 +188,14 @@ const DoctorDetails = () => {
                     </div>
                     <div className={cx('bar')}>
                         <div className={cx({ active: activeTab === 'about' })} onClick={() => setActiveTab('about')}>
-                            About
+                            {t('tab.about')}
                             <div></div>
                         </div>
                         <div
                             className={cx({ active: activeTab === 'feedback' })}
                             onClick={() => setActiveTab('feedback')}
                         >
-                            Feedback
+                            {t('tab.feedback')}
                             <div></div>
                         </div>
                     </div>

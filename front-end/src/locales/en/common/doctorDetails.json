@@ -1,0 +1,63 @@
+{
+    "verifyPrompt": "Do you want to approve this doctor's account?",
+    "button": {
+        "approve": "Approve",
+        "reject": "Reject"
+    },
+    "tab": {
+        "about": "About",
+        "feedback": "Feedback"
+    },
+    "toast": {
+        "approveSuccess": "Doctor approved successfully",
+        "approveFail": "Failed to approve doctor",
+        "rejectSuccess": "Doctor rejected successfully",
+        "rejectFail": "Failed to reject doctor"
+    },
+    "sidePanel": {
+        "ticketPrice": "Ticket price",
+        "sessionUnit": "/session",
+        "availableSlots": "Available Time Slots",
+        "fullyBooked": "Dr. {{doctorName}} is fully booked at the moment. We’re working to add more slots - please check back later!",
+        "bookButton": "Book appointment"
+    },
+    "confirmBooking": {
+        "title": "Booking Confirmation",
+        "doctorPrefix": "Dr.",
+        "date": "Date",
+        "time": "Time",
+        "price": "Price",
+        "paymentMethod": "Payment method",
+        "eWallet": "E-Wallet",
+        "cash": "Cash",
+        "confirmButton": "Confirm",
+        "toast": {
+            "noSlot": "Please select a time slot",
+            "noPayment": "Please select a payment method",
+            "bookingSuccess": "Booking successful!",
+            "createBookingFail": "Failed to create booking.",
+            "checkoutFail": "Failed to create checkout session.",
+            "chatFail": "Failed to create chat. Please try again."
+        }
+    },
+    "aboutDoctor": {
+        "title": "About",
+        "education": "Education",
+        "experience": "Experience",
+        "present": "Present"
+    },
+    "feedbackDoctor": {
+        "allReviews": "All reviews ({{count}})",
+        "sortedBy": "Sorted by:",
+        "sort": {
+            "newest": "Newest",
+            "oldest": "Oldest",
+            "mostFavourite": "Most Favourite"
+        },
+        "loading": "Loading...",
+        "noReview": "There is no review for this doctor yet.",
+        "beFirst": "Be the first to give feedback!",
+        "like": "Like",
+        "giveFeedback": "Give your feedback"
+    }
+}

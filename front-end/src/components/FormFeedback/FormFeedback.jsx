@@ -8,10 +8,12 @@ import { useParams } from 'react-router-dom';
 import { BASE_URL, token } from '../../../config';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const FormFeedback = ({ setShowFormFeedback }) => {
+    const { t } = useTranslation('formFeedback');
     const [rating, setRating] = useState(0);
     const [hover, setHover] = useState(0);
     const [reviewText, setReviewText] = useState('');
@@ -27,7 +29,7 @@ const FormFeedback = ({ setShowFormFeedback }) => {
         try {
             if (!rating || !reviewText) {
                 setLoading(false);
-                return toast.error('Please fill in all fields');
+                return toast.error(t('toast.incomplete'));
             }
 
             const res = await fetch(`${BASE_URL}/doctors/${id}/reviews`, {
@@ -58,9 +60,9 @@ const FormFeedback = ({ setShowFormFeedback }) => {
             <div className={cx('close-icon-wrapper')} onClick={() => setShowFormFeedback(false)}>
                 <IoMdClose className={cx('close-icon')} />
             </div>
-            <h1>FEEDBACK</h1>
+            <h1>{t('title')}</h1>
             <div className={cx('voting')}>
-                <h4 className={cx('question')}>How would you rate the overall experience ?</h4>
+                <h4 className={cx('question')}>{t('ratingQuestion')}</h4>
                 <div>
                     {[...Array(5).keys()].map((_, index) => {
                         index += 1;
@@ -89,17 +91,17 @@ const FormFeedback = ({ setShowFormFeedback }) => {
             </div>
 
             <div className={cx('suggestion')}>
-                <h4 className={cx('question')}>Share your feedback or suggestion</h4>
+                <h4 className={cx('question')}>{t('textQuestion')}</h4>
                 <textarea
                     id=""
                     rows="5"
-                    placeholder="Write your feedback or suggestion here"
+                    placeholder={t('placeholder')}
                     onChange={(e) => setReviewText(e.target.value)}
                 />
             </div>
 
             <button type="submit" className={cx('submit-btn')} onClick={handleSubmitReview}>
-                {loading ? <SyncLoader size={6} color="#ffffff" /> : 'Submit'}
+                {loading ? <SyncLoader size={6} color="#ffffff" /> : t('submit')}
             </button>
         </form>
     );

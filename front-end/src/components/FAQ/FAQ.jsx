@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 const cx = classNames.bind(styles);
 
 const FAQ = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('homepage');
     const [openIndexes, setOpenIndexes] = useState([]);
 
     const faqs = t('faqs.list', { returnObjects: true });

@@ -57,17 +57,13 @@
         }
 
         & span {
-            display: flex;
-            justify-content: space-between;
-
             & b {
                 font-size: 18px;
             }
 
             & span {
                 display: flex;
-                justify-content: space-between;
-                gap: 25px;
+                justify-content: space-around;
 
                 & p {
                     font-size: 18px;

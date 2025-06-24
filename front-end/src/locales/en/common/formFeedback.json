@@ -1,0 +1,10 @@
+{
+    "title": "Feedback Form",
+    "ratingQuestion": "How would you rate the overall experience?",
+    "textQuestion": "Share your feedback or suggestion",
+    "placeholder": "Write your feedback or suggestion here",
+    "submit": "Submit",
+    "toast": {
+        "incomplete": "Please fill in all fields"
+    }
+}

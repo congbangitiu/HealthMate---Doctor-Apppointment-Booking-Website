@@ -1,0 +1,63 @@
+{
+    "verifyPrompt": "Bạn có muốn duyệt tài khoản của bác sĩ này không?",
+    "button": {
+        "approve": "Duyệt",
+        "reject": "Từ chối"
+    },
+    "tab": {
+        "about": "Thông tin",
+        "feedback": "Đánh giá"
+    },
+    "toast": {
+        "approveSuccess": "Duyệt bác sĩ thành công",
+        "approveFail": "Duyệt bác sĩ thất bại",
+        "rejectSuccess": "Từ chối bác sĩ thành công",
+        "rejectFail": "Từ chối bác sĩ thất bại"
+    },
+    "sidePanel": {
+        "ticketPrice": "Giá khám",
+        "sessionUnit": "/lượt khám",
+        "availableSlots": "Khung giờ khả dụng",
+        "fullyBooked": "Bác sĩ {{doctorName}} hiện đã hết lịch. Chúng tôi đang bổ sung thêm khung giờ – vui lòng quay lại sau!",
+        "bookButton": "Đặt lịch khám"
+    },
+    "confirmBooking": {
+        "title": "Xác nhận đặt lịch",
+        "doctorPrefix": "BS.",
+        "date": "Ngày",
+        "time": "Giờ",
+        "price": "Giá khám",
+        "paymentMethod": "Phương thức thanh toán",
+        "eWallet": "Ví điện tử",
+        "cash": "Tiền mặt",
+        "confirmButton": "Xác nhận",
+        "toast": {
+            "noSlot": "Vui lòng chọn khung giờ khám",
+            "noPayment": "Vui lòng chọn phương thức thanh toán",
+            "bookingSuccess": "Đặt lịch thành công!",
+            "createBookingFail": "Tạo lịch hẹn thất bại.",
+            "checkoutFail": "Tạo phiên thanh toán thất bại.",
+            "chatFail": "Tạo cuộc trò chuyện thất bại. Vui lòng thử lại."
+        }
+    },
+    "aboutDoctor": {
+        "title": "Giới thiệu",
+        "education": "Học vấn",
+        "experience": "Kinh nghiệm",
+        "present": "Hiện tại"
+    },
+    "feedbackDoctor": {
+        "allReviews": "Tất cả đánh giá ({{count}})",
+        "sortedBy": "Sắp xếp theo:",
+        "sort": {
+            "newest": "Mới nhất",
+            "oldest": "Cũ nhất",
+            "mostFavourite": "Yêu thích nhất"
+        },
+        "loading": "Đang tải...",
+        "noReview": "Chưa có đánh giá nào cho bác sĩ này.",
+        "beFirst": "Hãy là người đầu tiên đánh giá!",
+        "like": "Thích",
+        "giveFeedback": "Gửi đánh giá của bạn"
+    }
+}

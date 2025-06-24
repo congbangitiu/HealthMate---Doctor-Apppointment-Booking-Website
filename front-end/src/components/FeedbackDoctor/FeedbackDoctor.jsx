@@ -9,6 +9,7 @@ import { SlLike } from 'react-icons/sl';
 import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
 import FormFeedback from '../FormFeedback/FormFeedback';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -16,6 +17,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const FeedbackDoctor = ({ reviews, role }) => {
+    const { t } = useTranslation('doctorDetails');
     const [showFormFeedback, setShowFormFeedback] = useState(false);
     const [usersInfo, setUsersInfo] = useState({});
     const [sortCriteria, setSortCriteria] = useState('Newest');
@@ -67,13 +69,13 @@ const FeedbackDoctor = ({ reviews, role }) => {
     return (
         <div className={cx('container')}>
             <div className={cx('intro')}>
-                <h4>All reviews ({reviews.length})</h4>
+                <h4>{t('feedbackDoctor.allReviews', { count: reviews.length })}</h4>
                 <div className={cx('sort')}>
-                    <label htmlFor="priorities">Sorted by: </label>
+                    <label htmlFor="priorities">{t('feedbackDoctor.sortedBy')}</label>
                     <select name="" id="priorities" value={sortCriteria} onChange={handleSortChange}>
-                        <option value="Newest">Newest</option>
-                        <option value="Oldest">Oldest</option>
-                        <option value="Most Favourite">Most Favourite</option>
+                        <option value="Newest">{t('feedbackDoctor.sort.newest')}</option>
+                        <option value="Oldest">{t('feedbackDoctor.sort.oldest')}</option>
+                        <option value="Most Favourite">{t('feedbackDoctor.sort.mostFavourite')}</option>
                     </select>
                 </div>
             </div>
@@ -86,7 +88,7 @@ const FeedbackDoctor = ({ reviews, role }) => {
                             <div className={cx('details')}>
                                 <div className={cx('name-time')}>
                                     <p className={cx('name')}>
-                                        {usersInfo[review.user._id]?.data.fullname || 'Loading...'}
+                                        {usersInfo[review.user._id]?.data.fullname || t('feedbackDoctor.loading')}
                                     </p>
                                     <p className={cx('time')}>{formatDate(review?.createdAt)}</p>
                                 </div>
@@ -99,7 +101,7 @@ const FeedbackDoctor = ({ reviews, role }) => {
                                 <div className={cx('reaction')}>
                                     <div className={cx('react')}>
                                         <SlLike />
-                                        <p>Like</p>
+                                        <p>{t('feedbackDoctor.like')}</p>
                                     </div>
                                 </div>
                             </div>
@@ -107,7 +109,7 @@ const FeedbackDoctor = ({ reviews, role }) => {
                     ))
                 ) : (
                     <p className={cx('no-feedback')}>
-                        There is no review for this doctor yet. {role === 'patient' && 'Be the first to give feedback!'}
+                        {t('feedbackDoctor.noReview')} {role === 'patient' && t('feedbackDoctor.beFirst')}
                     </p>
                 )}
             </div>
@@ -115,7 +117,7 @@ const FeedbackDoctor = ({ reviews, role }) => {
             {role === 'patient' && (
                 <div className={cx('feedback-btn-wrapper')}>
                     <button className={cx('feedback-btn')} onClick={() => setShowFormFeedback(true)}>
-                        Give your feedback
+                        {t('feedbackDoctor.giveFeedback')}
                     </button>
                 </div>
             )}

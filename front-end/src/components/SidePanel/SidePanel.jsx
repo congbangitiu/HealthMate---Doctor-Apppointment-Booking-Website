@@ -7,6 +7,7 @@ import ConfirmBooking from '../../Dashboard/user-account/ConfirmBooking/ConfirmB
 import { Dialog, Slide, useMediaQuery } from '@mui/material';
 import formatDate from '../../utils/date-time/formatDate';
 import { BiExpandAlt, BiCollapseAlt } from 'react-icons/bi';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -23,6 +24,7 @@ const SidePanel = ({
     expandeSidePanel,
     setExpandeSidePanel,
 }) => {
+    const { t } = useTranslation('doctorDetails');
     const isMobile = useMediaQuery('(max-width:768px)');
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [timeSlots, setTimeSlots] = useState(initialTimeSlots);
@@ -52,11 +54,14 @@ const SidePanel = ({
     return (
         <div className={cx('container')}>
             <div className={cx('price')}>
-                <h4>Ticket price</h4>
-                <h3>${ticketPrice}</h3>
+                <h4>{t('sidePanel.ticketPrice')}</h4>
+                <h3>
+                    <span className={cx('price-number')}>${ticketPrice}</span>
+                    <span className={cx('price-unit')}>{t('sidePanel.sessionUnit')}</span>
+                </h3>
             </div>
             <div>
-                <h4>Available Time Slots:</h4>
+                <h4>{t('sidePanel.availableSlots')}</h4>
                 {timeSlots.length > 0 &&
                     (expandeSidePanel ? (
                         <BiCollapseAlt className={cx('icon')} onClick={() => setExpandeSidePanel(false)} />
@@ -91,10 +96,7 @@ const SidePanel = ({
                         </div>
                     ))
                 ) : (
-                    <p className={cx('no-slot')}>
-                        Dr. {doctorName} is fully booked at the moment. We’re working to add more slots - please check
-                        back later!
-                    </p>
+                    <p className={cx('no-slot')}>{t('sidePanel.fullyBooked', { doctorName })}</p>
                 )}
             </div>
             {role === 'patient' && timeSlots.length > 0 && (
@@ -104,7 +106,7 @@ const SidePanel = ({
                         onClick={handleClickOpenDialog}
                         disabled={!selectedSlot}
                     >
-                        Book appointment
+                        {t('sidePanel.bookButton')}
                     </button>
                 </div>
             )}

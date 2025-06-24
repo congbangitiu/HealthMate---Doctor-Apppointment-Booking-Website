@@ -1,0 +1,10 @@
+{
+    "title": "Phiếu đánh giá",
+    "ratingQuestion": "Bạn đánh giá trải nghiệm tổng thể như thế nào?",
+    "textQuestion": "Chia sẻ đánh giá hoặc góp ý của bạn",
+    "placeholder": "Viết đánh giá hoặc góp ý của bạn tại đây",
+    "submit": "Gửi",
+    "toast": {
+        "incomplete": "Vui lòng điền đầy đủ thông tin"
+    }
+}

@@ -7,21 +7,23 @@ import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
 import convertTime from '../../../utils/date-time/convertTime';
 import formatDate from '../../../utils/date-time/formatDate';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticketPrice, setTimeSlots }) => {
+    const { t } = useTranslation('doctorDetails');
     const [loading, setLoading] = useState(false);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
 
     const bookingHandler = async () => {
         if (!selectedSlot) {
-            toast.error('Please select a time slot');
+            toast.error(t('confirmBooking.toast.noSlot'));
             return;
         }
 
         if (!selectedPaymentMethod) {
-            toast.error('Please select a payment method');
+            toast.error(t('confirmBooking.toast.noPayment'));
             return;
         }
 
@@ -50,12 +52,12 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
 
                 const bookingData = await bookingRes.json();
                 if (!bookingRes.ok) {
-                    throw new Error(bookingData.message || 'Failed to create booking.');
+                    throw new Error(bookingData.message || t('confirmBooking.toast.createBookingFail'));
                 }
 
                 localStorage.setItem('appointmentId', bookingData.booking._id);
 
-                toast.success('Booking successful!');
+                toast.success(t('confirmBooking.toast.bookingSuccess'));
                 setTimeSlots((prevSlots) => prevSlots.filter((slot) => slot !== selectedSlot));
 
                 // Redirect to success page immediately
@@ -73,7 +75,7 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
 
                 const appointmentData = await appointmentRes.json();
                 if (!appointmentRes.ok) {
-                    throw new Error(appointmentData.message || 'Failed to create checkout session.');
+                    throw new Error(appointmentData.message || t('confirmBooking.toast.checkoutFail'));
                 }
 
                 if (appointmentData.session.url) {
@@ -97,7 +99,7 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
 
             const chatData = await chatRes.json();
             if (!chatRes.ok) {
-                throw new Error(chatData.message || 'Failed to create chat. Please try again.');
+                throw new Error(chatData.message || t('confirmBooking.toast.chatFail'));
             }
 
             setLoading(false);
@@ -109,18 +111,18 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
 
     return (
         <div className={cx('container')}>
-            <h1>BOOKING CONFIRMATION</h1>
+            <h1>{t('confirmBooking.title')}</h1>
             <div className={cx('appointment')}>
                 <img src={doctorPhoto} alt="" />
                 {selectedSlot && (
                     <div>
-                        <h2>Dr. {doctorName}</h2>
+                        <h2>{`${t('confirmBooking.doctorPrefix')} ${doctorName}`}</h2>
                         <p>
-                            <b>Date: </b>
+                            <b>{t('confirmBooking.date')}: </b>
                             {formatDate(selectedSlot.day)}
                         </p>
                         <p>
-                            <b>Time: </b>
+                            <b>{t('confirmBooking.time')}: </b>
                             {convertTime(selectedSlot.startingTime)} - {convertTime(selectedSlot.endingTime)}
                         </p>
                     </div>
@@ -128,10 +130,10 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
             </div>
             <div className={cx('payment-method')}>
                 <p>
-                    <b>Price: </b>${ticketPrice}
+                    <b>{t('confirmBooking.price')}: </b>${ticketPrice}
                 </p>
                 <span>
-                    <b>Payment method: </b>
+                    <b>{t('confirmBooking.paymentMethod')}: </b>
                     <span>
                         <p onClick={() => setSelectedPaymentMethod('E-Wallet')}>
                             <input
@@ -141,7 +143,7 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
                                 checked={selectedPaymentMethod === 'E-Wallet'}
                                 onChange={() => setSelectedPaymentMethod('E-Wallet')}
                             />
-                            E-Wallet
+                            {t('confirmBooking.eWallet')}
                         </p>
                         <p onClick={() => setSelectedPaymentMethod('Cash')}>
                             <input
@@ -151,7 +153,7 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
                                 checked={selectedPaymentMethod === 'Cash'}
                                 onChange={() => setSelectedPaymentMethod('Cash')}
                             />
-                            Cash
+                            {t('confirmBooking.cash')}
                         </p>
                     </span>
                 </span>
@@ -162,7 +164,7 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
                 onClick={bookingHandler}
                 disabled={!selectedPaymentMethod}
             >
-                {loading ? <SyncLoader size={8} color="#ffffff" /> : 'Confirm'}
+                {loading ? <SyncLoader size={8} color="#ffffff" /> : t('confirmBooking.confirmButton')}
             </button>
         </div>
     );

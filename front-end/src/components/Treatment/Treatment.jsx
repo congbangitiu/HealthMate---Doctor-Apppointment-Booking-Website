@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 const cx = classNames.bind(styles);
 
 const Treatment = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('homepage');
 
     return (
         <div className={cx('container')}>

@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 const cx = classNames.bind(styles);
 
 const AboutDoctor = ({ fullname, about, qualifications, experiences, hidden }) => {
-    const { t } = useTranslation('aboutDoctor');
+    const { t } = useTranslation('doctorDetails');
 
     return (
         <div className={cx('container')}>
@@ -20,13 +20,13 @@ const AboutDoctor = ({ fullname, about, qualifications, experiences, hidden }) =
             <div className={cx('content')}>
                 <div className={cx('about')}>
                     <h4>
-                        {t('title')} <span>{fullname}</span>
+                        {t('aboutDoctor.title')} <span>{fullname}</span>
                     </h4>
                     <p>{about}</p>
                 </div>
 
                 <div className={cx('education')}>
-                    <h4>{t('education')}</h4>
+                    <h4>{t('aboutDoctor.education')}</h4>
                     <div className={cx('education-details')}>
                         {qualifications?.map((qualification, index) => (
                             <div key={index} className={cx('education-detail')}>
@@ -43,13 +43,15 @@ const AboutDoctor = ({ fullname, about, qualifications, experiences, hidden }) =
                 </div>
 
                 <div className={cx('experience')}>
-                    <h4>{t('experience')}</h4>
+                    <h4>{t('aboutDoctor.experience')}</h4>
                     <div className={cx('experience-details')}>
                         {experiences?.map((experience, index) => (
                             <div key={index} className={cx('experience-detail')}>
                                 <p>
                                     {formatDate(experience.startingDate)} -{' '}
-                                    {experience.endingDate ? formatDate(experience.endingDate) : t('present')}
+                                    {experience.endingDate
+                                        ? formatDate(experience.endingDate)
+                                        : t('aboutDoctor.present')}
                                 </p>
                                 <p>{experience.position}</p>
                                 <p>{experience.hospital}</p>

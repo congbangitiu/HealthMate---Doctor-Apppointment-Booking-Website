@@ -13,7 +13,7 @@ import patientAvatar from '../../assets/images/patient-avatar.png';
 const cx = classNames.bind(styles);
 
 const Testimonial = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('homepage');
     const comments = t('testimonial.comments', { returnObjects: true });
 
     return (

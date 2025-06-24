@@ -30,8 +30,6 @@ import notificationEN from '../../locales/en/common/notification.json';
 import notificationVI from '../../locales/vi/common/notification.json';
 import tabsDoctorEN from '../../locales/en/doctor-profile/tabs.json';
 import tabsDoctorVI from '../../locales/vi/doctor-profile/tabs.json';
-import aboutDoctorEN from '../../locales/en/doctor-profile/about.json';
-import aboutDoctorVI from '../../locales/vi/doctor-profile/about.json';
 import dashboarDoctorEN from '../../locales/en/doctor-profile/dashboard.json';
 import dashboarDoctorVI from '../../locales/vi/doctor-profile/dashboard.json';
 import appointmentsDoctorEN from '../../locales/en/doctor-profile/appointments.json';
@@ -82,6 +80,10 @@ import appointmentManagementEN from '../../locales/en/admin-management/appointme
 import appointmentManagementVI from '../../locales/vi/admin-management/appointmentManagement.json';
 import revenueManegementEN from '../../locales/en/admin-management/revenueManagement.json';
 import revenueManegementVI from '../../locales/vi/admin-management/revenueManagement.json';
+import doctorDetailsEN from '../../locales/en/common/doctorDetails.json';
+import doctorDetailsVI from '../../locales/vi/common/doctorDetails.json';
+import formFeedbackEN from '../../locales/en/common/formFeedback.json';
+import formFeedbackVI from '../../locales/vi/common/formFeedback.json';
 
 const resources = {
     en: {
@@ -99,7 +101,6 @@ const resources = {
         search: searchEn,
         notification: notificationEN,
         tabsDoctor: tabsDoctorEN,
-        aboutDoctor: aboutDoctorEN,
         dashboardDoctor: dashboarDoctorEN,
         appointmentsDoctor: appointmentsDoctorEN,
         selections: selectionsEN,
@@ -125,6 +126,8 @@ const resources = {
         patientManagement: patientManagementEN,
         appointmentManagement: appointmentManagementEN,
         revenueManagement: revenueManegementEN,
+        doctorDetails: doctorDetailsEN,
+        formFeedback: formFeedbackEN,
     },
     vi: {
         homepage: homepageVI,
@@ -141,7 +144,6 @@ const resources = {
         search: searchVi,
         notification: notificationVI,
         tabsDoctor: tabsDoctorVI,
-        aboutDoctor: aboutDoctorVI,
         dashboardDoctor: dashboarDoctorVI,
         appointmentsDoctor: appointmentsDoctorVI,
         selections: selectionsVI,
@@ -167,6 +169,8 @@ const resources = {
         patientManagement: patientManagementVI,
         appointmentManagement: appointmentManagementVI,
         revenueManagement: revenueManegementVI,
+        doctorDetails: doctorDetailsVI,
+        formFeedback: formFeedbackVI,
     },
 };
 
@@ -191,7 +195,6 @@ i18n.use(LanguageDetector)
             'search',
             'notification',
             'tabsDoctor',
-            'aboutDoctor',
             'dashboardDoctor',
             'appointmentsDoctor',
             'selections',
@@ -217,6 +220,8 @@ i18n.use(LanguageDetector)
             'patientManagement',
             'appointmentManagement',
             'revenueManagement',
+            'doctorDetails',
+            'formFeedback',
         ],
         interpolation: { escapeValue: false },
         detection: {
