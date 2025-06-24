@@ -33,8 +33,8 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
     const [query, setQuery] = useState('');
     const [doctorChart, setDoctorChart] = useState('');
     const [isActiveDoctor, setIsActiveDoctor] = useState();
-    const [loadingApprove, setLoadingApprove] = useState(false);
-    const [loadingReject, setLoadingReject] = useState(false);
+    const [loadingApproveId, setLoadingApproveId] = useState(false);
+    const [loadingRejectId, setLoadingRejectId] = useState(false);
     const [showChart, setShowChart] = useState(false);
     const [showDoctorCreationForm, setShowDoctorCreationForm] = useState(false);
     const chartRef = useRef(null);
@@ -75,54 +75,39 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
 
     const handleApprove = async (doctorId) => {
         try {
-            setLoadingApprove(true);
+            setLoadingApproveId(doctorId);
             await axios.put(
                 `${BASE_URL}/doctors/${doctorId}`,
-                {
-                    isApproved: 'approved',
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                },
+                { isApproved: 'approved' },
+                { headers: { Authorization: `Bearer ${token}` } },
             );
-
             toast.success(t('toast.approveSuccess'));
-            setLoadingApprove(false);
             await delay(2000);
             window.location.reload();
         } catch (error) {
-            setLoadingApprove(false);
             toast.error(t('toast.approveFail'));
             console.error('Error approving doctor:', error);
+        } finally {
+            setLoadingApproveId(false);
         }
     };
 
     const handleReject = async (doctorId) => {
         try {
-            setLoadingReject(true);
-
+            setLoadingRejectId(doctorId);
             await axios.put(
                 `${BASE_URL}/doctors/${doctorId}`,
-                {
-                    isApproved: 'rejected',
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                },
+                { isApproved: 'rejected' },
+                { headers: { Authorization: `Bearer ${token}` } },
             );
-
             toast.success(t('toast.rejectSuccess'));
-            setLoadingReject(false);
             await delay(2000);
             window.location.reload();
         } catch (error) {
             toast.error(t('toast.rejectFail'));
-            setLoadingReject(false);
             console.error('Error rejecting doctor:', error);
+        } finally {
+            setLoadingRejectId(false);
         }
     };
 
@@ -187,14 +172,15 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
                                         </div>
                                         <div className={cx('buttons')}>
                                             <button onClick={() => handleReject(doctor._id)}>
-                                                {loadingReject ? (
+                                                {loadingRejectId === doctor._id ? (
                                                     <SyncLoader size={6} color="#30d5c8" />
                                                 ) : (
                                                     t('button.reject')
                                                 )}
                                             </button>
+
                                             <button onClick={() => handleApprove(doctor._id)}>
-                                                {loadingApprove ? (
+                                                {loadingApproveId === doctor._id ? (
                                                     <SyncLoader size={6} color="#ffffff" />
                                                 ) : (
                                                     t('button.approve')
@@ -246,7 +232,7 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
                                         </div>
                                         <div className={cx('buttons')}>
                                             <button onClick={() => handleApprove(doctor._id)}>
-                                                {loadingApprove ? (
+                                                {loadingApproveId === doctor._id ? (
                                                     <SyncLoader size={6} color="#ffffff" />
                                                 ) : (
                                                     t('button.approve')

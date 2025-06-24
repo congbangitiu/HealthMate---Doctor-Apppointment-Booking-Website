@@ -22,7 +22,7 @@ router.use('/:doctorId/reviews', reviewRouter);
 
 router.get('/:id', getSingleDoctor);
 router.get('/', getAllDoctors);
-router.put('/:id', authenticate, restrict(['doctor']), updateProfile);
+router.put('/:id', authenticate, restrict(['doctor', 'admin']), updateProfile);
 router.delete('/:id', authenticate, restrict(['doctor', 'admin']), deleteDoctor);
 router.get('/profile/me', authenticate, restrict(['doctor', 'admin']), getDoctorProfile);
 router.get('/appointments/my-appointments', authenticate, restrict(['doctor', 'admin']), getAllDoctorAppointments);
