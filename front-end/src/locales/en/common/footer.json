@@ -3,7 +3,10 @@
     "services": "Services",
     "support": "Support",
     "copyright": "Copyright ©2025 developed by <1>@CongBang</1> all right reserved",
-    "language": "Language",
+    "language": {
+        "en": "English",
+        "vi": "Vietnamese"
+    },
     "links": {
         "home": "Home",
         "about": "About us",

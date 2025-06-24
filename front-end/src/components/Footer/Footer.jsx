@@ -92,8 +92,8 @@ const Footer = () => {
                     </div>
                 </div>
                 <select onChange={(e) => handleChangeLanguage(e.target.value)} value={i18n.language}>
-                    <option value="en">English</option>
-                    <option value="vi">Tiếng Việt</option>
+                    <option value="en">{t('language.en')}</option>
+                    <option value="vi">{t('language.vi')}</option>
                 </select>
             </div>
             <div className={cx('right-part')}>
