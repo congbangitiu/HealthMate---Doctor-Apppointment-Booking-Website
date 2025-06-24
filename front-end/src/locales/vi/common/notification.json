@@ -15,17 +15,17 @@
         "suffix": "cuộc hẹn vào ngày"
     },
     "prescriptionIssued": {
-        "prefix": "Bác sĩ",
+        "prefix": "BS.",
         "action": "đã kê",
         "suffix": "đơn thuốc cho cuộc hẹn vào ngày"
     },
     "prescriptionUpdated": {
-        "prefix": "Bác sĩ",
+        "prefix": "BS.",
         "action": "đã cập nhật",
         "suffix": "đơn thuốc cho cuộc hẹn vào ngày"
     },
     "reExamination": {
-        "prefix": "Bác sĩ",
+        "prefix": "BS.",
         "action": "đã hẹn lịch tái khám",
         "suffix": "cho bạn vào ngày"
     },

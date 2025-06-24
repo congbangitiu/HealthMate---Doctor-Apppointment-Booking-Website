@@ -84,6 +84,8 @@ import doctorDetailsEN from '../../locales/en/common/doctorDetails.json';
 import doctorDetailsVI from '../../locales/vi/common/doctorDetails.json';
 import formFeedbackEN from '../../locales/en/common/formFeedback.json';
 import formFeedbackVI from '../../locales/vi/common/formFeedback.json';
+import checkoutSucessEN from '../../locales/en/common/checkoutSuccess.json';
+import checkoutSucessVI from '../../locales/vi/common/checkoutSuccess.json';
 
 const resources = {
     en: {
@@ -128,6 +130,7 @@ const resources = {
         revenueManagement: revenueManegementEN,
         doctorDetails: doctorDetailsEN,
         formFeedback: formFeedbackEN,
+        checkoutSuccess: checkoutSucessEN,
     },
     vi: {
         homepage: homepageVI,
@@ -171,6 +174,7 @@ const resources = {
         revenueManagement: revenueManegementVI,
         doctorDetails: doctorDetailsVI,
         formFeedback: formFeedbackVI,
+        checkoutSuccess: checkoutSucessVI,
     },
 };
 
@@ -222,6 +226,7 @@ i18n.use(LanguageDetector)
             'revenueManagement',
             'doctorDetails',
             'formFeedback',
+            'checkoutSuccess',
         ],
         interpolation: { escapeValue: false },
         detection: {

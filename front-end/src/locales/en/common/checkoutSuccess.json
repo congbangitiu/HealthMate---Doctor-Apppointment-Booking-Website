@@ -1,0 +1,19 @@
+{
+    "title": "Booking confirmed successfully!",
+    "description1": "Thank you for choosing HealthMate. Your reservation is confirmed. We’re excited to see you soon!",
+    "description2": "📩 Please check your email for the booking details, including the appointment time, doctor’s information, and payment confirmation.",
+    "description3": "🔔 Reminder: Kindly arrive on time for your appointment to ensure a smooth experience.",
+    "appointmentDetails": "Appointment details",
+    "doctor": "Doctor",
+    "date": "Date",
+    "time": "Time",
+    "price": "Price",
+    "paymentMethod": "Payment Method",
+    "paymentStatus": "Payment Status",
+    "paid": "Paid",
+    "unpaid": "Unpaid",
+    "viewAppointments": "View all appointments",
+    "goHome": "Go back to home",
+    "paymentSuccess": "Payment success!",
+    "loading": "Loading..."
+}

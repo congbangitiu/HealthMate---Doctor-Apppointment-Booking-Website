@@ -9,10 +9,12 @@ import { BASE_URL, token } from '../../../config';
 import convertTime from '../../utils/date-time/convertTime';
 import formatDate from '../../utils/date-time/formatDate';
 import { useMediaQuery } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const CheckoutSuccess = () => {
+    const { t } = useTranslation('checkoutSuccess');
     const isMobile = useMediaQuery('(max-width:768px)');
     const [appointment, setAppointment] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -97,30 +99,29 @@ const CheckoutSuccess = () => {
     return (
         <div className={cx('container')}>
             <div className={cx('left-part')}>
-                <h1>Booking confirmed successfully!</h1>
-                <p>Thank you for choosing HealthMate. Your reservation is confirmed. We’re excited to see you soon!</p>
+                <h1>{t('title')}</h1>
+                <p>{t('description1')}</p>
                 <p>
-                    <b>📩 Please check your email</b> for the booking details, including the appointment time, doctor’s
-                    information, and payment confirmation.
+                    <b>{t('description2')}</b>
                 </p>
                 <p>
-                    <b>🔔 Reminder:</b> Kindly arrive on time for your appointment to ensure a smooth experience.
+                    <b>{t('description3')}</b>
                 </p>
 
                 {isMobile && (
                     <div className={cx('lower-part')}>
-                        <h2>Appointment details</h2>
+                        <h2>{t('appointmentDetails')}</h2>
                         <div className={cx('appointment-details')}>
                             <span>
-                                <p>Doctor</p>
+                                <p>{t('doctor')}</p>
                                 <p>{appointment?.doctor?.fullname || 'N/A'}</p>
                             </span>
                             <span>
-                                <p>Date</p>
+                                <p>{t('date')}</p>
                                 <p>{formatDate(appointment?.timeSlot?.day) || 'N/A'}</p>
                             </span>
                             <span>
-                                <p>Time</p>
+                                <p>{t('time')}</p>
                                 <p>
                                     {appointment?.timeSlot?.startingTime
                                         ? convertTime(appointment.timeSlot.startingTime)
@@ -133,26 +134,26 @@ const CheckoutSuccess = () => {
                             </span>
 
                             <span>
-                                <p>Price</p>
+                                <p>{t('price')}</p>
                                 <p>${appointment?.ticketPrice || 'N/A'}</p>
                             </span>
                             <span>
-                                <p>Payment Method</p>
+                                <p>{t('paymentMethod')}</p>
                                 <p>{appointment?.paymentMethod.toUpperCase() || 'N/A'}</p>
                             </span>
                             <span>
-                                <p>Payment Status</p>
-                                <p>{appointment?.isPaid ? 'Paid' : 'Unpaid'}</p>
+                                <p>{t('paymentStatus')}</p>
+                                <p>{appointment?.isPaid ? t('paid') : t('unpaid')}</p>
                             </span>
                         </div>
                     </div>
                 )}
                 <div className={cx('navigation-buttons')}>
                     <Link to="/users/profile/me" className={cx('button-1')}>
-                        View all appointments
+                        {t('viewAppointments')}
                     </Link>
                     <Link to="/home" className={cx('button-2')}>
-                        Go back to home
+                        {t('goHome')}
                     </Link>
                 </div>
             </div>
@@ -160,26 +161,26 @@ const CheckoutSuccess = () => {
                 <div className={cx('right-part')}>
                     <div className={cx('upper-part')}>
                         <div>
-                            {loading ? <p>Loading...</p> : <h2>${appointment?.ticketPrice}</h2>}
-                            <p>Payment success!</p>
+                            {loading ? t('loading') : <h2>${appointment?.ticketPrice}</h2>}
+                            <p>{t('paymentSuccess')}</p>
                         </div>
                         <div className={cx('icon-wrapper')}>
                             <MdDone className={cx('icon')} />
                         </div>
                     </div>
                     <div className={cx('lower-part')}>
-                        <h2>Appointment details</h2>
+                        <h2>{t('appointmentDetails')}</h2>
                         <div className={cx('appointment-details')}>
                             <span>
-                                <p>Doctor</p>
+                                <p>{t('doctor')}</p>
                                 <p>{appointment?.doctor?.fullname || 'N/A'}</p>
                             </span>
                             <span>
-                                <p>Date</p>
+                                <p>{t('date')}</p>
                                 <p>{formatDate(appointment?.timeSlot?.day) || 'N/A'}</p>
                             </span>
                             <span>
-                                <p>Time</p>
+                                <p>{t('time')}</p>
                                 <p>
                                     {appointment?.timeSlot?.startingTime
                                         ? convertTime(appointment.timeSlot.startingTime)
@@ -192,16 +193,16 @@ const CheckoutSuccess = () => {
                             </span>
 
                             <span>
-                                <p>Price</p>
+                                <p>{t('price')}</p>
                                 <p>${appointment?.ticketPrice || 'N/A'}</p>
                             </span>
                             <span>
-                                <p>Payment Method</p>
+                                <p>{t('paymentMethod')}</p>
                                 <p>{appointment?.paymentMethod.toUpperCase() || 'N/A'}</p>
                             </span>
                             <span>
-                                <p>Payment Status</p>
-                                <p>{appointment?.isPaid ? 'Paid' : 'Unpaid'}</p>
+                                <p>{t('paymentStatus')}</p>
+                                <p>{appointment?.isPaid ? t('paid') : t('unpaid')}</p>
                             </span>
                         </div>
                     </div>
