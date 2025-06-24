@@ -10,10 +10,12 @@ import { toast } from 'react-toastify';
 import ToggleButton from '../../../components/ToggleButton/ToggleButton';
 import ReExaminationAppointmentEdit from '../ReExaminationAppointmentEdit/ReExaminationAppointmentEdit';
 import ReExaminationAppointmentView from '../ReExaminationAppointmentView/ReExaminationAppointmentView';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const ReExaminationAppointment = () => {
+    const { t } = useTranslation('reExaminationForm');
     const { id } = useParams();
     const [appointment, setAppointment] = useState(null);
     const [toggle, setToggle] = useState(false);
@@ -68,7 +70,7 @@ const ReExaminationAppointment = () => {
             {appointment.status === 'pending' && (
                 <div className={cx('pending-noti')}>
                     <FaCircleExclamation className={cx('icon')} />
-                    You can only schedule a follow-up once both the examination form and prescription are available.
+                    {t('pendingNoti')}
                 </div>
             )}
 

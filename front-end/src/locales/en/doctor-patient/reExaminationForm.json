@@ -1,5 +1,6 @@
 {
     "title": "RE-EXAMINATION APPOINTMENT FORM",
+    "pendingNoti": "You can only schedule a follow-up once both the examination form and prescription are available.",
     "diagnosis": "Diagnosis",
     "table": {
         "date": "Date",

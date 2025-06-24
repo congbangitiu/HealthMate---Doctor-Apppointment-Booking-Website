@@ -189,7 +189,9 @@ const DashboardManagement = ({ users, doctors, appointments }) => {
                     <div className={cx('top-doctors')}>
                         <div className={cx('intro')}>
                             <h4>{t('topDoctors')}</h4>
-                            <p>{t('viewAll')}</p>
+                            <p>
+                                <Link to={'/doctors'}>{t('viewAll')}</Link>
+                            </p>
                         </div>
                         <div className={cx('doctors')}>
                             {topDoctorsList.map((topDoctor, index) => (

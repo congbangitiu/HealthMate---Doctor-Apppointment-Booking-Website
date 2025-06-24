@@ -1,5 +1,6 @@
 {
     "title": "PHIẾU HẸN TÁI KHÁM",
+    "pendingNoti": "Bạn chỉ có thể đặt lịch tái khám khi đã có đầy đủ đơn thuốc và phiếu khám bệnh.",
     "diagnosis": "Chẩn đoán",
     "table": {
         "date": "Ngày",
