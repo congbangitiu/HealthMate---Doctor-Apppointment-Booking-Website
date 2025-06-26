@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './SidebarChat.module.scss';
 import { FaSearch } from 'react-icons/fa';
@@ -9,6 +9,7 @@ import Error from '../../components/Error/Error';
 import truncateFullname from './../../utils/text/truncateFullname';
 import formatTimestamp from './../../utils/date-time/formatTimestamp';
 import truncateText from '../../utils/text/truncateText';
+import socket from '../../utils/services/socket';
 import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
@@ -35,6 +36,12 @@ const SidebarChat = ({ chats, selectedChat, handleSelectChat, role, userId, isLo
             chat.doctor.fullname.toLowerCase().includes(query.toLowerCase()) ||
             chat.user.fullname.toLowerCase().includes(query.toLowerCase()),
     );
+
+    useEffect(() => {
+        if (selectedChat && userId) {
+            socket.emit('mark-as-read', { chatId: selectedChat._id, userId });
+        }
+    }, [selectedChat, userId]);
 
     return (
         <div className={cx('container')}>

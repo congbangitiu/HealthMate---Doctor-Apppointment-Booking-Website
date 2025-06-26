@@ -39,63 +39,12 @@ export const getUserChats = async (req, res) => {
             .populate('messages.sender', 'fullname');
 
         if (!chats) {
-            return res.status(404).json({ message: 'No chats found for this user.' });
+            return res.status(404).json({ message: 'No chats found for this user' });
         }
 
         res.status(200).json(chats);
     } catch (error) {
-        res.status(500).json({ message: 'Failed to retrieve chats.', error: error.message });
-    }
-};
-
-// Send a message in a chat
-export const sendMessage = async (req, res) => {
-    const { chatId, senderId, senderModel, type, mediaType, content, documentDetails } = req.body;
-
-    try {
-        const chat = await Chat.findById(chatId);
-        if (!chat) {
-            return res.status(404).json({ error: 'Chat not found' });
-        }
-
-        let newMessage;
-        if (type === 'media') {
-            if (!mediaType || !['image', 'video'].includes(mediaType)) {
-                return res.status(400).json({ error: 'Invalid or missing mediaType for media message' });
-            }
-            newMessage = { sender: senderId, senderModel, type, mediaType, content };
-        } else if (type === 'document') {
-            if (
-                !documentDetails ||
-                !documentDetails.documentName ||
-                !documentDetails.documentType ||
-                !documentDetails.documentSize
-            ) {
-                return res.status(400).json({ error: 'Missing document details for document message' });
-            }
-            newMessage = { sender: senderId, senderModel, type, content, documentDetails };
-        } else {
-            // 'text' or 'link' or anything else
-            newMessage = { sender: senderId, senderModel, type, content };
-        }
-
-        // Push new message to chat
-        chat.messages.push(newMessage);
-
-        // Increase unread count for recipient
-        const receiverId = senderModel === 'Doctor' ? chat.user._id : chat.doctor._id;
-        if (!chat.unreadMessages.has(receiverId.toString())) {
-            chat.unreadMessages.set(receiverId.toString(), 0);
-        }
-        chat.unreadMessages.set(receiverId.toString(), chat.unreadMessages.get(receiverId.toString()) + 1);
-
-        // Save chat
-        await chat.save();
-
-        return res.status(200).json(chat);
-    } catch (error) {
-        console.error('Failed to send message:', error);
-        return res.status(500).json({ error: 'Failed to send message' });
+        res.status(500).json({ message: 'Failed to retrieve chats', error: error.message });
     }
 };
 

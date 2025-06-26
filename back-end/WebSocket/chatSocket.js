@@ -6,56 +6,71 @@ const userSockets = {}; // Used to manage sockets by userId
 
 const chatSocketHandler = (io) => {
     io.on('connection', (socket) => {
-        socket.on('send-message', async ({ chatId, senderId, content, type, mediaType, documentDetails }) => {
-            try {
-                const chat = await Chat.findById(chatId);
-                if (chat) {
-                    // Create a new message object
-                    const newMessage = {
-                        sender: senderId,
-                        content,
-                        type,
-                        timestamp: new Date(),
-                    };
+        socket.on(
+            'send-message',
+            async ({ chatId, senderId, senderModel, content, type, mediaType, documentDetails }) => {
+                try {
+                    const chat = await Chat.findById(chatId);
+                    if (chat) {
+                        // Create a new message object
+                        const newMessage = {
+                            sender: senderId,
+                            senderModel,
+                            content,
+                            type,
+                            timestamp: new Date(),
+                        };
 
-                    // If media => store mediaType
-                    if (type === 'media') {
-                        newMessage.mediaType = mediaType;
+                        // If media => store mediaType
+                        if (type === 'media') {
+                            newMessage.mediaType = mediaType;
+                        }
+
+                        // If document => store documentDetails
+                        if (type === 'document') {
+                            newMessage.documentDetails = documentDetails;
+                        }
+
+                        chat.messages.push(newMessage);
+
+                        // Handle unread messages
+                        const receiverId =
+                            senderModel === 'Doctor'
+                                ? chat.user?._id?.toString?.() || chat.user?.toString()
+                                : chat.doctor?._id?.toString?.() || chat.doctor?.toString();
+
+                        if (receiverId) {
+                            const currentUnread = chat.unreadMessages.get(receiverId) || 0;
+                            chat.unreadMessages.set(receiverId, currentUnread + 1);
+                        }
+
+                        // Store the chat to the database
+                        await chat.save();
+
+                        // After saving, retrieve the inserted message
+                        const savedMessage = chat.messages[chat.messages.length - 1];
+
+                        // Emit to everyone in room
+                        io.to(chatId).emit('new-message', {
+                            chatId,
+                            _id: savedMessage._id,
+                            content: savedMessage.content,
+                            sender: { _id: senderId },
+                            timestamp: savedMessage.timestamp,
+                            type: savedMessage.type,
+                            ...(savedMessage.type === 'media' && { mediaType: savedMessage.mediaType }),
+                            ...(savedMessage.type === 'document' && {
+                                documentDetails: savedMessage.documentDetails,
+                            }),
+                        });
+                    } else {
+                        console.error(`Chat with ID ${chatId} not found`);
                     }
-
-                    // If document => store documentDetails
-                    if (type === 'document') {
-                        newMessage.documentDetails = documentDetails;
-                    }
-
-                    chat.messages.push(newMessage);
-
-                    // Store the chat to the database
-                    await chat.save();
-
-                    // After saving, retrieve the inserted message
-                    const savedMessage = chat.messages[chat.messages.length - 1];
-
-                    // Emit to everyone in room
-                    io.to(chatId).emit('new-message', {
-                        chatId,
-                        _id: savedMessage._id,
-                        content: savedMessage.content,
-                        sender: { _id: senderId },
-                        timestamp: savedMessage.timestamp,
-                        type: savedMessage.type,
-                        ...(savedMessage.type === 'media' && { mediaType: savedMessage.mediaType }),
-                        ...(savedMessage.type === 'document' && {
-                            documentDetails: savedMessage.documentDetails,
-                        }),
-                    });
-                } else {
-                    console.error(`Chat with ID ${chatId} not found`);
+                } catch (error) {
+                    console.error('Error sending message:', error);
                 }
-            } catch (error) {
-                console.error('Error sending message:', error);
-            }
-        });
+            },
+        );
 
         socket.on('remove-message', async ({ chatId, messageId }) => {
             try {
@@ -88,6 +103,19 @@ const chatSocketHandler = (io) => {
                 io.to(chatId).emit('message-edited', { chatId, messageId, newContent });
             } catch (error) {
                 console.error('Error editing message:', error);
+            }
+        });
+
+        socket.on('mark-as-read', async ({ chatId, userId }) => {
+            const chat = await Chat.findById(chatId);
+            if (chat) {
+                chat.unreadMessages.set(userId, 0);
+                await chat.save();
+
+                io.to(chatId).emit('unread-messages-updated', {
+                    chatId,
+                    unreadMessages: Object.fromEntries(chat.unreadMessages),
+                });
             }
         });
 

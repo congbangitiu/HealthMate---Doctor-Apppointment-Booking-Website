@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Layout.module.scss';
@@ -11,14 +11,32 @@ import ChatIcon from '../assets/images/chat-icon.svg';
 import { FaPlus } from 'react-icons/fa6';
 import { FaChevronUp } from 'react-icons/fa';
 import { Drawer, useMediaQuery } from '@mui/material';
+import { BASE_URL } from '../../config';
+import { authContext } from '../context/AuthContext';
+import socket from '../utils/services/socket';
 
 const cx = classNames.bind(styles);
 
+// Create a single global socket instance
+
 const Layout = () => {
+    const { user } = useContext(authContext);
     const isMobile = useMediaQuery('(max-width:768px)');
     const [isHovered, setIsHovered] = useState(false);
-    const user = useMemo(() => JSON.parse(localStorage.getItem('user')), []); // Memoize user
     const [isShowChatbot, setIsShowChatbot] = useState(false);
+    const [chats, setChats] = useState([]);
+
+    useEffect(() => {
+        const fetchChats = async () => {
+            const res = await fetch(`${BASE_URL}/chats/user-chats/${user?._id}`);
+            const data = await res.json();
+            setChats(data);
+        };
+
+        if (user?._id) {
+            fetchChats();
+        }
+    }, [user?._id]);
 
     // Handle hover effect when the user hovers over the plus icon
     const handleMouseEnter = () => {
@@ -29,6 +47,58 @@ const Layout = () => {
     const handleMouseLeave = () => {
         setIsHovered(false);
     };
+
+    const handleNewMessage = useCallback(
+        (message) => {
+            const senderId = typeof message.sender === 'object' ? message.sender._id : message.sender;
+            if (senderId !== user._id) {
+                setChats((prevChats) =>
+                    prevChats.map((chat) => {
+                        if (chat._id === message.chatId) {
+                            const updatedChat = { ...chat };
+                            const prevCount = updatedChat.unreadMessages?.[user._id] || 0;
+                            updatedChat.unreadMessages = {
+                                ...updatedChat.unreadMessages,
+                                [user._id]: prevCount + 1,
+                            };
+                            return updatedChat;
+                        }
+                        return chat;
+                    }),
+                );
+            }
+        },
+        [user?._id],
+    );
+
+    const handleUnreadMessagesUpdated = useCallback(
+        ({ chatId, unreadMessages }) => {
+            console.log(`Unread messages updated for chat ${chatId}:`, unreadMessages);
+
+            setChats((prevChats) =>
+                prevChats.map((chat) => (chat._id === chatId ? { ...chat, unreadMessages } : chat)),
+            );
+        },
+        [chats._id],
+    );
+
+    useEffect(() => {
+        socket.on('new-message', handleNewMessage);
+        return () => {
+            socket.off('new-message', handleNewMessage);
+        };
+    }, [handleNewMessage]);
+
+    useEffect(() => {
+        socket.on('unread-messages-updated', handleUnreadMessagesUpdated);
+        return () => {
+            socket.off('unread-messages-updated', handleUnreadMessagesUpdated);
+        };
+    }, [handleUnreadMessagesUpdated]);
+
+    const totalUnreadCount = chats.reduce((total, chat) => {
+        return total + (chat.unreadMessages?.[user?._id] || 0);
+    }, 0);
 
     return (
         <div className={cx('container')}>
@@ -54,6 +124,7 @@ const Layout = () => {
 
                             <div className={cx('fab-options')}>
                                 <Link to="/chats" className={cx('icon-wrapper')}>
+                                    {totalUnreadCount > 0 && <span>{totalUnreadCount}</span>}
                                     <img src={ChatIcon} alt="Chat icon" />
                                 </Link>
                                 <div className={cx('icon-wrapper')} onClick={() => setIsShowChatbot(!isShowChatbot)}>

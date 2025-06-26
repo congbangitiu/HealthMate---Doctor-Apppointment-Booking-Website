@@ -21,14 +21,12 @@ import notificationSound from '../../assets/sounds/notificationSound.wav';
 import DefaultMaleDoctorAvatar from '../../assets/images/default-male-doctor.png';
 import DefaultFemaleDoctorAvatar from '../../assets/images/default-female-doctor.png';
 import { useTranslation } from 'react-i18next';
-import { io } from 'socket.io-client';
+import socket from '../../utils/services/socket';
 
 const cx = classNames.bind(styles);
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
-// Create a single global socket instance
-const socket = io(import.meta.env.VITE_REACT_PUBLIC_SOCKET_URL);
 
 const Header = () => {
     const { t } = useTranslation('navbar');

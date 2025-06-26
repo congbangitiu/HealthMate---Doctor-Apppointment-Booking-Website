@@ -122,6 +122,18 @@
                 & .icon-wrapper:nth-child(1) {
                     bottom: -15px;
                     left: 20px;
+
+                    & span {
+                        position: absolute;
+                        bottom: -4px;
+                        left: -2px;
+                        background-color: var(--yellowColor);
+                        color: var(--whiteColor);
+                        transform: rotate(-180deg);
+                        padding: 0 6px;
+                        border-radius: 10px;
+                        font-size: 12px;
+                    }
                 }
 
                 & .icon-wrapper:nth-child(2) {

@@ -24,9 +24,7 @@ import convertFileSize from '../../utils/file/convertFileSize';
 import truncateText from '../../utils/text/truncateText';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useTranslation } from 'react-i18next';
-
-import { io } from 'socket.io-client';
-const socket = io(import.meta.env.VITE_REACT_PUBLIC_SOCKET_URL);
+import socket from './../../utils/services/socket';
 
 const cx = classNames.bind(styles);
 

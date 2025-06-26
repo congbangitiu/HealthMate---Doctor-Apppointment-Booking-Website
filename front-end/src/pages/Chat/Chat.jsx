@@ -8,14 +8,9 @@ import ContentChat from '../../components/ContentChat/ContentChat';
 import { token } from '../../../config';
 import { authContext } from '../../context/AuthContext';
 import { useMediaQuery } from '@mui/material';
-
-// Import socket.io-client ONCE here
-import { io } from 'socket.io-client';
+import socket from '../../utils/services/socket';
 
 const cx = classNames.bind(styles);
-
-// Create a single global socket instance
-const socket = io(import.meta.env.VITE_REACT_PUBLIC_SOCKET_URL);
 
 const Chat = () => {
     const isMobile = useMediaQuery('(max-width:768px)');

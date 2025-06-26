@@ -14,7 +14,7 @@
     "content": {
         "prefix": "Dr.",
         "selectChatPrompt": "Select a chat to start messaging",
-        "online": "Online",
+        "online": "Active",
         "noMessageYet": "No message yet",
         "editMessage": "Edit message",
         "you": "You",
