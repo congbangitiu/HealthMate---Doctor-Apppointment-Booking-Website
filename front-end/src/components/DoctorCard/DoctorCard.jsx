@@ -22,7 +22,9 @@ const DoctorCard = ({ doctor }) => {
                 {t('prefix')} {doctor.fullname}
             </h4>
             <div className={cx('expertise-rating')}>
-                <div className={cx('expertise')}>{translateSubspecialtyName(doctor.subspecialty, i18n)}</div>
+                <div className={cx('expertise')}>
+                    <InfoToolTip text={translateSubspecialtyName(doctor.subspecialty, i18n)} maxLength={15} />
+                </div>
                 <div className={cx('rating')}>
                     <FaStar className={cx('stars')} />
                     <p>{doctor.avgRating}</p>

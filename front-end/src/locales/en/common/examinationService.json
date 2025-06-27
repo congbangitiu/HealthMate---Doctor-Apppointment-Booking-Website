@@ -8,11 +8,11 @@
         },
         "findLocation": {
             "title": "Find a Location",
-            "description": "From consultation to care, our health system delivers unmatched expertise, wherever you are."
+            "description": "From consultation to treatment, our health system delivers expert, connected care - wherever you are."
         },
         "bookAppointment": {
             "title": "Book an Appointment",
-            "description": "Your journey to health starts here. Our system provides expert care from the clinic to the lab."
+            "description": "Your journey to better health starts here. Our system provides expert care - from the clinic to the lab."
         }
     }
 }

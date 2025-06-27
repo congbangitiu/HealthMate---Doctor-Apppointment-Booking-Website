@@ -106,6 +106,10 @@ const DoctorList = () => {
         setCurrentItems(items);
     }, [currentPage, officialDoctors, itemsPerPage]);
 
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [selectedSpecialty, debouncedQuery]);
+
     return (
         <div className={cx('container')}>
             <h2>{t('heading')}</h2>
