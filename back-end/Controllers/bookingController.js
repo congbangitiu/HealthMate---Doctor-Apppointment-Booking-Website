@@ -31,8 +31,8 @@ const sendBookingConfirmationEmail = async (userEmail, bookingInfo) => {
                     <tr>
                         <th style="text-align: left;">Time</th>
                         <td>${convertTime(bookingInfo.timeSlot.startingTime)} - ${convertTime(
-                bookingInfo.timeSlot.endingTime,
-            )}</td>
+                            bookingInfo.timeSlot.endingTime,
+                        )}</td>
                     </tr>
                     <tr>
                         <th style="text-align: left;">Price</th>
@@ -166,8 +166,8 @@ const sendReExaminationConfirmationEmail = async (userEmail, bookingInfo) => {
                     <tr>
                         <th style="text-align: left;">Time</th>
                         <td>${convertTime(bookingInfo.timeSlot.startingTime)} - ${convertTime(
-                bookingInfo.timeSlot.endingTime,
-            )}</td>
+                            bookingInfo.timeSlot.endingTime,
+                        )}</td>
                     </tr>
                     <tr>
                         <th style="text-align: left;">Price</th>

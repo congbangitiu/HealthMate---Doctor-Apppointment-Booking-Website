@@ -29,8 +29,8 @@ const generateAppointmentWrapper = (appointments, doctor) => {
             <p style="margin-bottom: 6px;">Dear Dr. ${doctor.fullname},</p>
             <p style="margin-bottom: 16px;">
                 Here ${appointments.length > 1 ? 'are' : 'is'} the appointment${
-        appointments.length > 1 ? 's' : ''
-    } booked today 
+                    appointments.length > 1 ? 's' : ''
+                } booked today 
                 <strong>(${formatDate(new Date())})</strong>:
             </p>
             ${rows}
