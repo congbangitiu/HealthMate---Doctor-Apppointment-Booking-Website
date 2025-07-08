@@ -54,6 +54,16 @@ export const isGeneralWebsiteQuestion = (text) => {
     return keywordGroups.some((keyword) => lower.includes(keyword));
 };
 
+export const isGeneralMedicalQuestion = (text) => {
+    const lower = text.toLowerCase();
+    const vietnamesePattern =
+        /là thuốc gì|có tác dụng gì|triệu chứng|bệnh gì|uống mấy viên|tác dụng phụ|chống chỉ định/;
+    const englishPattern = /what is|used for|symptoms|what disease|how many pills|side effects|contraindications/;
+    const blacklistPattern = /code|bài tập|giải phương trình|debug|lập trình|programming|solve|calculate/;
+
+    return (vietnamesePattern.test(lower) || englishPattern.test(lower)) && !blacklistPattern.test(lower);
+};
+
 export const isAskingAboutAppointments = (text) => {
     const lower = text.toLowerCase();
     return lower.includes('appointment') && (lower.includes('today') || lower.includes('tomorrow'));

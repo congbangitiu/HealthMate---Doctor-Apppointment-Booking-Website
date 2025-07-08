@@ -13,6 +13,7 @@ import extractName from '../../utils/text/extractName';
 import formatListResponse from '../../utils/chatbot/formatListResponse';
 import {
     isGeneralWebsiteQuestion,
+    isGeneralMedicalQuestion,
     isAskingAboutAppointments,
     isAskingAboutSymptoms,
 } from '../../utils/chatbot/determineQuestionType';
@@ -151,8 +152,12 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
             return;
         }
 
-        // General website questions
-        if (isGeneralWebsiteQuestion(userMessage)) {
+        // General questions
+        if (isGeneralMedicalQuestion(userMessage)) {
+            return generateBotResponse([...chatHistory, { role: 'user', text: userMessage }]).finally(() =>
+                setIsThinking(false),
+            );
+        } else if (isGeneralWebsiteQuestion(userMessage)) {
             const prompt = generatePrompt({
                 text: userMessage,
                 token,
