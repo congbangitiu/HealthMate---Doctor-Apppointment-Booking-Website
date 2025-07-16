@@ -14,5 +14,14 @@
         "done": "Done",
         "cancelled": "Cancelled"
     },
-    "prefix": "Dr."
+    "prefix": "Dr.",
+    "confirmCancel": {
+        "title": "Are you sure you want to cancel this appointment?",
+        "date": "Date",
+        "time": "Time",
+        "quit": "Quit",
+        "confirm": "Confirm",
+        "success": "Appointment cancelled successfully!",
+        "error": "An error occurred"
+    }
 }

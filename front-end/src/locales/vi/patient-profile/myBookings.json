@@ -14,5 +14,14 @@
         "done": "Hoàn tất",
         "cancelled": "Đã hủy"
     },
-    "prefix": "BS."
+    "prefix": "BS.",
+    "confirmCancel": {
+        "title": "Bạn có chắc chắn muốn hủy cuộc hẹn này không?",
+        "date": "Ngày",
+        "time": "Thời gian",
+        "quit": "Thoát",
+        "confirm": "Xác nhận",
+        "success": "Hủy cuộc hẹn thành công!",
+        "error": "Đã xảy ra lỗi"
+    }
 }

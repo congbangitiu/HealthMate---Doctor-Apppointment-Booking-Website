@@ -60,7 +60,7 @@
         & button {
             width: 150px;
             height: 50px;
-            border-radius: 5px;
+            border-radius: 10px;
             font-weight: 500;
 
             &:hover {
@@ -78,7 +78,7 @@
             }
 
             &:last-child {
-                background-color: var(--primaryColor);
+                background: var(--buttonBgColor);
                 color: var(--whiteColor);
 
                 &:hover {
