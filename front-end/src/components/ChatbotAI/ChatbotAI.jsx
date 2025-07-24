@@ -366,7 +366,7 @@ const ChatbotAI = ({ setIsShowChatbot }) => {
                                                     setTypewriterInstance(typewriter);
 
                                                     typewriter
-                                                        .changeDelay(15)
+                                                        .changeDelay(10)
                                                         .typeString(chat.text)
                                                         .callFunction(() => {
                                                             // Scroll to the bottom when text is being typed

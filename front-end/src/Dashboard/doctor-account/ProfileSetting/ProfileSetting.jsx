@@ -17,6 +17,7 @@ const cx = classNames.bind(styles);
 
 const ProfileSetting = ({ doctorData, isMobile }) => {
     const { t, i18n } = useTranslation(['profileSettingDoctor', 'specialties']);
+    
     useEffect(() => {
         window.scrollTo({
             top: 0,
