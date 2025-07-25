@@ -149,12 +149,20 @@
 # 🦾 FEATURE
 
 - [x] **AI-Powered Assistance:** AI guides users, answers health questions, suggests specialties, displays doctors’ schedules, and summarizes appointments for doctors.
+
 - [x] **Real-Time Doctor Chat:** Patients can chat instantly with doctors for quick advice and trust building.
+
 - [x] **Automatic Time Slot Updates:** Cronjob keeps doctors’ availability updated automatically, ensuring accurate scheduling.
+
 - [x] **Realtime Notifications:** Instant alerts for bookings and medical record updates to improve transparency and responsiveness.
+
 - [x] **Secure Online Payments:** Integrated payment options for seamless and convenient transactions during booking.
+
 - [x] **Admin Dashboard with Analytics:** Interactive charts provide insights on appointments, revenue, and user stats for better management.
+
 - [x] **Multilingual Support:** Real-time language switching between English and Vietnamese for accessibility and inclusivity.
+
+- [ ] **Detailed medical documentation:** The form cannot capture complex clinical data, lacks support for attaching diagnostic results, and does not include a digital doctor’s signature, reducing authenticity and professionalism.
 
 
 <!-- CONTRIBUTING -->
