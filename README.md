@@ -191,5 +191,5 @@ For any inquiries of feedback, please contact:
 We want to express our sincerest thanks to our advisor and the people who have helped us to achieve this project's
 goals:
 
--   []() Dr. Le Thanh Son
+-   []() MSc. Le Thanh Son
 -   []() The README.md template from **[othneildrew](https://github.com/othneildrew/Best-README-Template)**
