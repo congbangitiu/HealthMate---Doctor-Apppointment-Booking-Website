@@ -34,7 +34,7 @@
 
 ## Demo
 
-<video src="front-end/src/assets/videos/Demo.mp4" controls width="600"></video>
+[![Watch the video](https://img.youtube.com/vi/1n_eCRAPhvc/0.jpg)](https://youtu.be/1n_eCRAPhvc)
 
 ## Objectives
 
