@@ -5,7 +5,7 @@
   <img src="front-end/src/assets/images/logo.png" alt="Logo" width="200">
   <h1 align="center">HealthMate</h1>
   <h3 align="center">
-    Doctor Appointment Booking Platform <br />International University - VNU
+    Intelligent Doctor Appointment Booking Platform <br />International University - VNU
     <br />
     <br />
     <a href="https://github.com/congbangitiu/HealthMate---Doctor-Apppointment-Booking-Website.git">Report Bug</a>
@@ -38,17 +38,17 @@
 
 ## Objectives
 
-**Online Appointment Scheduling:** Provide an intuitive interface for easy online appointment booking, with real-time updates and efficient appointment management.
+- **Online Appointment Scheduling:** Provide an intuitive interface for easy online appointment booking, with real-time updates and efficient appointment management.
 
-**Doctor & Service Information:** Display detailed profiles of doctors and medical services to help users make informed decisions.
+- **Doctor & Service Information:** Display detailed profiles of doctors and medical services to help users make informed decisions.
 
-**Search, Rating & Review:** Offer a quick search tool and allow patients to rate and review doctors and services to enhance transparency and trust.
+- **Search, Rating & Review:** Offer a quick search tool and allow patients to rate and review doctors and services to enhance transparency and trust.
 
-**Personalized Experience:** Suggest suitable doctors based on medical history and location, and allow users to store and track personal health records.
+- **Personalized Experience:** Suggest suitable doctors based on medical history and location, and allow users to store and track personal health records.
 
-**AI Support & Interactivity:** Integrate an AI assistant to answer common health-related questions and improve user engagement without requiring in-person visits.
+- **AI Support & Interactivity:** Integrate an AI assistant to answer common health-related questions and improve user engagement without requiring in-person visits.
 
-**Secure Online Payment:** Enable safe, convenient payment through third-party services, ensuring confidentiality and seamless booking confirmation.
+- **Secure Online Payment:** Enable safe, convenient payment through third-party services, ensuring confidentiality and seamless booking confirmation.
 
 <!-- Technologies Used -->
 
@@ -58,13 +58,13 @@
 
 -   **Frameworks & Library:** ReactJs, NodeJs, D3.js, Material UI
 
--   **External Services:** Stripe, Cloudinary, Gemini API
+-   **External Services:** Stripe, Cloudinary, Gemini API, Ngrok
 
 -   **Database:** MongoDB
 
 -   **Version Control:** GitHub
 
--   **IDE:** Android Studio
+-   **IDE:** Visual Studio Code
 
 <!-- Diagrams -->
 
@@ -90,46 +90,16 @@
 
 ## 4. Sequence Diagrams
 
-**4.1. Log in**
-
-<div align="center">
-<img src="front-end/src/assets/Diagram/SD - Login.png" alt="">
-</div>
-
-**6.2. Register**
-
-<div align="center">
-<img src="front-end/src/assets/Diagram/SD - Register.png" alt="">
-</div>
-
-**6.3. Booking Appointment**
+**4.1. Booking Appointment**
 
 <div align="center">
 <img src="front-end/src/assets/Diagram/SD - Booking Appointment.png" alt="">
 </div>
 
-**6.4. Managing Patient’s Medical Record**
-
-<div align="center">
-<img src="front-end/src/assets/Diagram/SD - Manage Medical Record.png" alt="">
-</div>
-
-**6.5. Real-time Medical Chatting**
-
-<div align="center">
-<img src="front-end/src/assets/Diagram/SD - Chat with Other.png" alt="">
-</div>
-
-**6.6. Interacting with AI Assistant**
+**4.2. Interacting with AI Assistant**
 
 <div align="center">
 <img src="front-end/src/assets/Diagram/SD - Interact with AI.png" alt="">
-</div>
-
-**6.7. Managing System**
-
-<div align="center">
-<img src="front-end/src/assets/Diagram/SD - Manage System.png" alt="">
 </div>
 
 <!-- INSTALLATION -->
@@ -178,19 +148,19 @@
 
 # 🦾 FEATURE
 
-**AI-Powered Assistance:** AI guides users, answers health questions, suggests specialties, displays doctors’ schedules, and summarizes appointments for doctors.
+[x] **AI-Powered Assistance:** AI guides users, answers health questions, suggests specialties, displays doctors’ schedules, and summarizes appointments for doctors.
 
-**Real-Time Doctor Chat:** Patients can chat instantly with doctors for quick advice and trust building.
+[x] **Real-Time Doctor Chat:** Patients can chat instantly with doctors for quick advice and trust building.
 
-**Automatic Time Slot Updates:** Cronjob keeps doctors’ availability updated automatically, ensuring accurate scheduling.
+[x] **Automatic Time Slot Updates:** Cronjob keeps doctors’ availability updated automatically, ensuring accurate scheduling.
 
-**Realtime Notifications:** Instant alerts for bookings and medical record updates to improve transparency and responsiveness.
+[x] **Realtime Notifications:** Instant alerts for bookings and medical record updates to improve transparency and responsiveness.
 
-**Secure Online Payments:** Integrated payment options for seamless and convenient transactions during booking.
+[x] **Secure Online Payments:** Integrated payment options for seamless and convenient transactions during booking.
 
-**Admin Dashboard with Analytics:** Interactive charts provide insights on appointments, revenue, and user stats for better management.
+[x] **Admin Dashboard with Analytics:** Interactive charts provide insights on appointments, revenue, and user stats for better management.
 
-**Multilingual Support:** Real-time language switching between English and Vietnamese for accessibility and inclusivity.
+[x] **Multilingual Support:** Real-time language switching between English and Vietnamese for accessibility and inclusivity.
 
 <!-- CONTRIBUTING -->
 
