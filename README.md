@@ -1,6 +1,6 @@
 <div id="top" align="center">
 </div>
-<!-- PROJECT LOGO -->
+<img src="front-end/src/assets/images/SwiperImg1.jpg" alt="Logo">
 <div align="center">
   <img src="front-end/src/assets/images/logo.png" alt="Logo" width="200">
   <h1 align="center">HealthMate</h1>
@@ -38,17 +38,17 @@
 
 ## Objectives
 
-- **Online Appointment Scheduling:** Provide an intuitive interface for easy online appointment booking, with real-time updates and efficient appointment management.
+-   **Online Appointment Scheduling:** Provide an intuitive interface for easy online appointment booking, with real-time updates and efficient appointment management.
 
-- **Doctor & Service Information:** Display detailed profiles of doctors and medical services to help users make informed decisions.
+-   **Doctor & Service Information:** Display detailed profiles of doctors and medical services to help users make informed decisions.
 
-- **Search, Rating & Review:** Offer a quick search tool and allow patients to rate and review doctors and services to enhance transparency and trust.
+-   **Search, Rating & Review:** Offer a quick search tool and allow patients to rate and review doctors and services to enhance transparency and trust.
 
-- **Personalized Experience:** Suggest suitable doctors based on medical history and location, and allow users to store and track personal health records.
+-   **Personalized Experience:** Suggest suitable doctors based on medical history and location, and allow users to store and track personal health records.
 
-- **AI Support & Interactivity:** Integrate an AI assistant to answer common health-related questions and improve user engagement without requiring in-person visits.
+-   **AI Support & Interactivity:** Integrate an AI assistant to answer common health-related questions and improve user engagement without requiring in-person visits.
 
-- **Secure Online Payment:** Enable safe, convenient payment through third-party services, ensuring confidentiality and seamless booking confirmation.
+-   **Secure Online Payment:** Enable safe, convenient payment through third-party services, ensuring confidentiality and seamless booking confirmation.
 
 <!-- Technologies Used -->
 
@@ -106,7 +106,7 @@
 
 # 🔧 INSTALLATION
 
-1. Clone the repo
+1. Clone the repository
     ```sh
     https://github.com/congbangitiu/HealthMate---Doctor-Apppointment-Booking-Website.git
     ```
@@ -141,29 +141,28 @@
     cd back-end
     npx ngrok http 5000
 
-    // Then go to mode “Developers” of Stripe, choose “Webhooks” tab and edit the URL
+    // Then go to mode “Developers” of Stripe, choose “Webhooks” tab and edit the URL by replacing http://localhost:5000
     ```
 
 <!-- FEATURE -->
 
 # 🦾 FEATURE
 
-- [x] **AI-Powered Assistance:** AI guides users, answers health questions, suggests specialties, displays doctors’ schedules, and summarizes appointments for doctors.
+-   [x] **AI-Powered Assistance:** AI guides users, answers health questions, suggests specialties, displays doctors’ schedules, and summarizes appointments for doctors.
 
-- [x] **Real-Time Doctor Chat:** Patients can chat instantly with doctors for quick advice and trust building.
+-   [x] **Real-Time Doctor Chat:** Patients can chat instantly with doctors for quick advice and trust building.
 
-- [x] **Automatic Time Slot Updates:** Cronjob keeps doctors’ availability updated automatically, ensuring accurate scheduling.
+-   [x] **Automatic Time Slot Updates:** Cronjob keeps doctors’ availability updated automatically, ensuring accurate scheduling.
 
-- [x] **Realtime Notifications:** Instant alerts for bookings and medical record updates to improve transparency and responsiveness.
+-   [x] **Realtime Notifications:** Instant alerts for bookings and medical record updates to improve transparency and responsiveness.
 
-- [x] **Secure Online Payments:** Integrated payment options for seamless and convenient transactions during booking.
+-   [x] **Secure Online Payments:** Integrated payment options for seamless and convenient transactions during booking.
 
-- [x] **Admin Dashboard with Analytics:** Interactive charts provide insights on appointments, revenue, and user stats for better management.
+-   [x] **Admin Dashboard with Analytics:** Interactive charts provide insights on appointments, revenue, and user stats for better management.
 
-- [x] **Multilingual Support:** Real-time language switching between English and Vietnamese for accessibility and inclusivity.
+-   [x] **Multilingual Support:** Real-time language switching between English and Vietnamese for accessibility and inclusivity.
 
-- [ ] **Detailed medical documentation:** The form cannot capture complex clinical data, lacks support for attaching diagnostic results, and does not include a digital doctor’s signature, reducing authenticity and professionalism.
-
+-   [ ] **Detailed medical documentation:** The form cannot capture complex clinical data, lacks support for attaching diagnostic results, and does not include a digital doctor’s signature, reducing authenticity and professionalism.
 
 <!-- CONTRIBUTING -->
 
