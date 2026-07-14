@@ -20,9 +20,6 @@ import { stripeWebhook } from './Controllers/bookingController.js';
 import { initSlotGenerationCron } from './utils/slotManager.js';
 import { initDoctorDigestMailCron } from './utils/digestEmailSender.js';
 
-import Doctor from './Models/DoctorSchema.js';
-import Booking from './Models/BookingSchema.js';
-
 dotenv.config();
 
 const app = express();
