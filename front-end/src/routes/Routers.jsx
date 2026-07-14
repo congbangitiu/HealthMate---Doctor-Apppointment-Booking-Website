@@ -1,28 +1,33 @@
+import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-import Home from './../pages/Home/Home';
-import Services from './../pages/Services/Services';
-import Login from './../pages/Login/Login';
-import Register from './../pages/Register/Register';
-import Contact from './../pages/Contact/Contact';
-import Specialties from './../pages/Specialties/Specialties';
-import SpecialtyDetails from '../pages/SpecialtyDetails/SpecialtyDetails';
-import DoctorList from './../pages/Doctors/DoctorList/DoctorList';
-import DoctorDetails from './../pages/Doctors/DoctorDetails/DoctorDetails';
-import ServiceDetails from '../pages/ServiceDetails/ServiceDetails';
-import MyAccount from '../Dashboard/user-account/MyAccount/MyAccount';
-import Dashboard from '../Dashboard/doctor-account/Dashboard/Dashboard';
-import CheckoutSucess from '../pages/CheckoutSuccess/CheckoutSuccess';
 import ProtectedRoute from './ProtectedRoute';
-import CompleteSignUp from '../pages/CompleteSignUp/CompleteSignUp';
-import MedicalRecordsPatient from '../Dashboard/user-account/MedicalRecords/MedicalRecords';
-import MedicalRecordsDoctor from '../Dashboard/doctor-account/MedicalRecords/MedicalRecords';
-import Management from '../Dashboard/admin-account/Management/Management';
-import Chat from '../pages/Chat/Chat';
-import ContentChat from '../components/ContentChat/ContentChat';
+import Loader from '../components/Loader/Loader';
+
+// Tải lười (lazy) từng trang: mỗi trang được tách thành chunk riêng và chỉ được tải khi người dùng truy cập route tương ứng, giúp giảm mạnh bundle ban đầu.
+const Home = lazy(() => import('./../pages/Home/Home'));
+const Services = lazy(() => import('./../pages/Services/Services'));
+const Login = lazy(() => import('./../pages/Login/Login'));
+const Register = lazy(() => import('./../pages/Register/Register'));
+const Contact = lazy(() => import('./../pages/Contact/Contact'));
+const Specialties = lazy(() => import('./../pages/Specialties/Specialties'));
+const SpecialtyDetails = lazy(() => import('../pages/SpecialtyDetails/SpecialtyDetails'));
+const DoctorList = lazy(() => import('./../pages/Doctors/DoctorList/DoctorList'));
+const DoctorDetails = lazy(() => import('./../pages/Doctors/DoctorDetails/DoctorDetails'));
+const ServiceDetails = lazy(() => import('../pages/ServiceDetails/ServiceDetails'));
+const MyAccount = lazy(() => import('../Dashboard/user-account/MyAccount/MyAccount'));
+const Dashboard = lazy(() => import('../Dashboard/doctor-account/Dashboard/Dashboard'));
+const CheckoutSucess = lazy(() => import('../pages/CheckoutSuccess/CheckoutSuccess'));
+const CompleteSignUp = lazy(() => import('../pages/CompleteSignUp/CompleteSignUp'));
+const MedicalRecordsPatient = lazy(() => import('../Dashboard/user-account/MedicalRecords/MedicalRecords'));
+const MedicalRecordsDoctor = lazy(() => import('../Dashboard/doctor-account/MedicalRecords/MedicalRecords'));
+const Management = lazy(() => import('../Dashboard/admin-account/Management/Management'));
+const Chat = lazy(() => import('../pages/Chat/Chat'));
+const ContentChat = lazy(() => import('../components/ContentChat/ContentChat'));
 
 const Routers = () => {
     return (
+        <Suspense fallback={<Loader iconSize={15} />}>
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
@@ -81,6 +86,7 @@ const Routers = () => {
                 }
             />
         </Routes>
+        </Suspense>
     );
 };
 
