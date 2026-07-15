@@ -1,8 +1,8 @@
 import mailTransporter from '../utils/mailTransporter.js';
 import Booking from '../Models/BookingSchema.js';
 import Doctor from '../Models/DoctorSchema.js';
-import formatDate from '../../front-end/src/utils/date-time/formatDate.js';
-import convertTime from '../../front-end/src/utils/date-time/convertTime.js';
+import formatDate from './date-time/formatDate.js';
+import convertTime from './date-time/convertTime.js';
 import cron from 'node-cron';
 
 const generateAppointmentWrapper = (appointments, doctor) => {
