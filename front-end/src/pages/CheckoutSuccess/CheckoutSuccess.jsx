@@ -23,7 +23,12 @@ const CheckoutSuccess = () => {
     const queryParams = new URLSearchParams(location.search);
     const sessionId = queryParams.get('session_id');
 
-    const fetchAppointment = async () => {
+    // For Stripe payments, the booking is created asynchronously by the webhook, so it may not exist in the DB yet right after Stripe redirects here.
+    // We retry a few times before giving up to cover that race condition.
+    const MAX_RETRIES = 6;
+    const RETRY_DELAY_MS = 2000;
+
+    const fetchAppointment = async (retriesLeft = MAX_RETRIES) => {
         try {
             let appointmentId = localStorage.getItem('appointmentId');
 
@@ -41,6 +46,7 @@ const CheckoutSuccess = () => {
 
                 const data = await response.json();
                 setAppointment(data.appointment);
+                setLoading(false);
                 return;
             } else if (appointmentId) {
                 // Cash payment
@@ -56,13 +62,18 @@ const CheckoutSuccess = () => {
 
                 const data = await response.json();
                 setAppointment(data.appointment);
+                setLoading(false);
                 return;
             }
 
             throw new Error('No appointmentId or sessionId found');
         } catch (error) {
+            // Booking may not be created by the Stripe webhook yet — retry.
+            if (sessionId && retriesLeft > 0) {
+                setTimeout(() => fetchAppointment(retriesLeft - 1), RETRY_DELAY_MS);
+                return;
+            }
             console.error('Error fetching appointment:', error);
-        } finally {
             setLoading(false);
         }
     };
