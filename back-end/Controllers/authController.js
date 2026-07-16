@@ -3,9 +3,9 @@ import Doctor from '../Models/DoctorSchema.js';
 import Otp from '../Models/OtpSchema.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import nodemailer from 'nodemailer';
 import twilio from 'twilio';
 import dotenv from 'dotenv';
+import mailTransporter from '../utils/mailTransporter.js';
 
 dotenv.config();
 
@@ -14,16 +14,6 @@ const generateToken = (user) => {
         expiresIn: '15d',
     });
 };
-
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD,
-    },
-});
 
 export const registerAndVerifyOTP = async (req, res) => {
     const { fullname, username, phone, email, password, confirmedPassword, role, photo, gender, otp } = req.body;
@@ -206,7 +196,7 @@ export const sendEmailOTP = async (req, res) => {
             `,
         };
 
-        transporter.sendMail(mailOptions, (err, info) => {
+        mailTransporter.sendMail(mailOptions, (err, info) => {
             if (err) {
                 console.log('Error: ', err);
                 res.status(400).json({ error: 'Failed to send email' });
