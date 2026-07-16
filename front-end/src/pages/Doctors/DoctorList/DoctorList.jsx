@@ -41,7 +41,8 @@ const DoctorList = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
-    const specialtiesData = i18n.getResource(i18n.language, 'specialties');
+    const currentLang = (i18n.resolvedLanguage || i18n.language || 'en').split('-')[0];
+    const specialtiesData = i18n.getResource(currentLang, 'specialties') || i18n.getResource('en', 'specialties') || {};
     const specialtyOptions = Object.entries(specialtiesData).map(([key, value]) => ({
         key,
         value: value.name,

@@ -183,6 +183,12 @@ i18n.use(LanguageDetector)
     .init({
         resources,
         fallbackLng: 'en',
+        // Chuẩn hoá mã vùng về ngôn ngữ gốc: 'en-US' -> 'en', 'vi-VN' -> 'vi'.
+        // Nếu không, trên trình duyệt trả navigator = 'en-US' thì i18n.language
+        // = 'en-US' và getResource('en-US', ns) trả undefined -> crash.
+        supportedLngs: ['en', 'vi'],
+        load: 'languageOnly',
+        nonExplicitSupportedLngs: true,
         defaultNS: 'homepage',
         ns: [
             'homepage',
