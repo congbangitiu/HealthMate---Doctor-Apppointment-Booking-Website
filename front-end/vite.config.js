@@ -22,37 +22,11 @@ export default defineConfig({
         }),
     ],
     build: {
-        // Nâng nhẹ ngưỡng cảnh báo: các vendor chunk lớn (pdf, firebase) là bình thường và đã được tách riêng, nên cảnh báo 500 kB gây nhiễu.
-        chunkSizeWarningLimit: 800,
-        rollupOptions: {
-            output: {
-                // Tách các thư viện nặng thành chunk vendor riêng để cache tốt hơn và tránh gộp tất cả vào một bundle khổng lồ.
-                manualChunks(id) {
-                    if (!id.includes('node_modules')) return;
-
-                    if (id.includes('react-router') || id.includes('/react-dom/') || /\/react\//.test(id)) {
-                        return 'react-vendor';
-                    }
-                    if (id.includes('@mui') || id.includes('@emotion')) return 'mui-vendor';
-                    if (id.includes('antd') || id.includes('rc-') || id.includes('@ant-design')) return 'antd-vendor';
-                    if (id.includes('firebase') || id.includes('@firebase')) return 'firebase-vendor';
-                    if (id.includes('/d3') || id.includes('d3-')) return 'd3-vendor';
-                    if (
-                        id.includes('jspdf') ||
-                        id.includes('pdf-lib') ||
-                        id.includes('@react-pdf') ||
-                        id.includes('html2canvas') ||
-                        id.includes('react-to-pdf') ||
-                        id.includes('react-to-print')
-                    ) {
-                        return 'pdf-vendor';
-                    }
-                    if (id.includes('emoji-mart') || id.includes('@emoji-mart')) return 'emoji-vendor';
-                    if (id.includes('swiper')) return 'swiper-vendor';
-
-                    return 'vendor';
-                },
-            },
-        },
+        // Nâng ngưỡng cảnh báo vì chunk vendor mặc định có thể vượt 500 kB.
+        // KHÔNG dùng manualChunks tự chế: việc tách react ra khỏi các package
+        // phụ thuộc react gây lỗi "Cannot access '...' before initialization"
+        // (circular dependency giữa các chunk) khi chạy. Vite mặc định + lazy
+        // route (React.lazy) đã tách bundle an toàn và đúng thứ tự khởi tạo.
+        chunkSizeWarningLimit: 1000,
     },
 });
