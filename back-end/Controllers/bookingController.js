@@ -384,7 +384,7 @@ export const getCheckoutSession = async (req, res) => {
             payment_method_types: ['card'],
             mode: 'payment',
             success_url: `${process.env.CLIENT_SITE_URL}/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${req.protocol}://${req.get('host')}/doctors/${doctor.id}`,
+            cancel_url: `${process.env.CLIENT_SITE_URL}/doctors/${doctor.id}`,
             customer_email: user.email,
             client_reference_id: req.params.doctorId,
             metadata: {
