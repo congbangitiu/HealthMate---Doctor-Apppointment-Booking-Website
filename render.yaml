@@ -35,11 +35,15 @@ services:
         sync: false
       - key: UPLOAD_PRESET
         sync: false
+      # Địa chỉ Gmail dùng làm người gửi (chính tài khoản đã cấp OAuth bên dưới).
       - key: EMAIL_USERNAME
         sync: false
-      - key: EMAIL_PASSWORD
+      # Gmail API OAuth2 — gửi mail qua HTTP (Render chặn SMTP). Lấy từ Google Cloud.
+      - key: GMAIL_CLIENT_ID
         sync: false
-      - key: BREVO_API_KEY
+      - key: GMAIL_CLIENT_SECRET
+        sync: false
+      - key: GMAIL_REFRESH_TOKEN
         sync: false
       - key: TWILIO_ACCOUNT_SID
         sync: false
