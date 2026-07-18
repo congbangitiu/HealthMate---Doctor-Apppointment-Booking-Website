@@ -8,7 +8,10 @@ services:
     runtime: node
     plan: free
     rootDir: back-end
-    buildCommand: npm ci
+    # Dùng "npm install" thay vì "npm ci": npm ci đòi lock khớp tuyệt đối với
+    # package.json, nhưng npm của Render (Node 22) và local (Node 24) giải cây
+    # phụ thuộc googleapis hơi khác nhau -> ci báo lệch. "npm install" tự hòa giải.
+    buildCommand: npm install
     startCommand: npm start
     # Render tự ping "/" để health check; index.js đã trả "API is working".
     healthCheckPath: /
