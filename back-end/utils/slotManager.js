@@ -97,10 +97,33 @@ export const generateWeeklySlotsForAllDoctors = async () => {
                 );
             });
 
-            if (newUniqueSlots.length > 0) {
+            // Gộp slot cũ + mới rồi sắp xếp theo ngày -> giờ bắt đầu.
+            // day dạng 'YYYY-MM-DD' và startingTime dạng 'HH:MM' (có padding) nên so sánh chuỗi cho ra đúng thứ tự thời gian.
+            const mergedSlots = [
+                ...existingSlots.map((s) => ({
+                    day: s.day,
+                    startingTime: s.startingTime,
+                    endingTime: s.endingTime,
+                })),
+                ...newUniqueSlots,
+            ].sort((a, b) => {
+                if (a.day !== b.day) return a.day < b.day ? -1 : 1;
+                return a.startingTime.localeCompare(b.startingTime);
+            });
+
+            // Chỉ ghi DB khi có slot mới HOẶC thứ tự hiện tại chưa đúng
+            const orderChanged = existingSlots.some(
+                (s, i) =>
+                    !mergedSlots[i] ||
+                    s.day !== mergedSlots[i].day ||
+                    s.startingTime !== mergedSlots[i].startingTime ||
+                    s.endingTime !== mergedSlots[i].endingTime,
+            );
+
+            if (newUniqueSlots.length > 0 || orderChanged) {
                 await Doctor.findByIdAndUpdate(
                     doctor._id,
-                    { $push: { timeSlots: { $each: newUniqueSlots } } },
+                    { $set: { timeSlots: mergedSlots } },
                     { new: true },
                 );
             }
