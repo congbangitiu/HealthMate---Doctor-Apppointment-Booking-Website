@@ -88,11 +88,17 @@ const TimeRevenueBarChart = () => {
         const color = d3.scaleOrdinal().domain(['oldRevenue', 'newRevenue']).range(['#feb60d', '#30d5c8']);
 
         // Add tooltip
+        // Xoá tooltip cũ của chính chart này (tránh rò rỉ DOM khi vẽ lại)
+        d3.select('body').selectAll('div.d3-tooltip-timeRevenue').remove();
+
         const tooltip = d3
             .select('body')
             .append('div')
-            .attr('class', 'tooltip')
+            .attr('class', 'tooltip d3-tooltip-timeRevenue')
             .style('position', 'absolute')
+            // top/left = 0 để div absolute không nằm ở cuối body -> không tạo dải trắng dưới trang
+            .style('top', 0)
+            .style('left', 0)
             .style('text-align', 'center')
             .style('width', '80px')
             .style('height', '28px')
