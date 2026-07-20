@@ -17,7 +17,11 @@ import prescriptionRoute from './Routes/prescription.js';
 import examinationRoute from './Routes/examination.js';
 import chatRoute from './Routes/chat.js';
 import { stripeWebhook } from './Controllers/bookingController.js';
-import { initSlotGenerationCron } from './utils/slotManager.js';
+import {
+    initSlotGenerationCron,
+    removeExpiredSlotsForAllDoctors,
+    generateWeeklySlotsForAllDoctors,
+} from './utils/slotManager.js';
 import { initDoctorDigestMailCron } from './utils/digestEmailSender.js';
 
 dotenv.config();
@@ -78,6 +82,29 @@ app.use('/api/v1/bookings', bookingRoute);
 app.use('/api/v1/prescriptions', prescriptionRoute);
 app.use('/api/v1/examinations', examinationRoute);
 app.use('/api/v1/chats', chatRoute);
+
+// Endpoint cho external cron gọi lúc 17:00 UTC (00:00 VN).
+// Bảo vệ bằng header x-cron-secret khớp process.env.CRON_SECRET.
+// Trả 202 ngay lập tức để pinger không bị timeout khi web service cold-start
+app.post('/api/v1/cron/slot-maintenance', (req, res) => {
+    const secret = req.headers['x-cron-secret'];
+    if (!process.env.CRON_SECRET || secret !== process.env.CRON_SECRET) {
+        return res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
+
+    res.status(202).json({ success: true, message: 'Slot maintenance started' });
+
+    (async () => {
+        try {
+            console.log('[cron] Slot maintenance triggered via HTTP');
+            await removeExpiredSlotsForAllDoctors();
+            await generateWeeklySlotsForAllDoctors();
+            console.log('[cron] Slot maintenance finished successfully');
+        } catch (error) {
+            console.error('[cron] Slot maintenance failed:', error);
+        }
+    })();
+});
 
 // Attach Socket.IO logic
 chatSocketHandler(io);

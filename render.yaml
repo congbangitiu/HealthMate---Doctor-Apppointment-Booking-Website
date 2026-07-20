@@ -54,18 +54,7 @@ services:
         sync: false
       - key: PHONE_NUMBER
         sync: false
-
-  # Cron Job: dọn slot hết hạn + sinh slot tuần mới cho bác sĩ.
-  - type: cron
-    name: healthmate-slot-maintenance
-    runtime: node
-    plan: free
-    rootDir: back-end
-    buildCommand: npm install
-    schedule: "0 17 * * *"
-    startCommand: npm run slot-maintenance
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: MONGO_URL
+      # Secret bảo vệ endpoint /api/v1/cron/slot-maintenance. Tự sinh 1 chuỗi ngẫu nhiên dài và nhập trong dashboard.
+      # External cron phải gửi header x-cron-secret khớp giá trị này.
+      - key: CRON_SECRET
         sync: false
