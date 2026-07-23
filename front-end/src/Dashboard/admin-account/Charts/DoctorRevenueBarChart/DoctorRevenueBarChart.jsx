@@ -26,6 +26,13 @@ const DoctorRevenueBarChart = ({ doctors }) => {
         loadCSVData();
     }, []);
 
+    // Dọn tooltip khỏi <body> khi component unmount (tránh còn sót lại gây dải trắng ở các trang khác)
+    useEffect(() => {
+        return () => {
+            d3.select('body').selectAll('div.d3-tooltip-doctorRevenue').remove();
+        };
+    }, []);
+
     useEffect(() => {
         if (data.length > 0 && selectedDoctor) {
             const filteredData = data.filter((d) => d.Doctor === selectedDoctor);
@@ -181,7 +188,12 @@ const DoctorRevenueBarChart = ({ doctors }) => {
             })
             .on('mouseout', function () {
                 d3.select(this).style('opacity', 1);
-                tooltip.transition().duration(500).style('opacity', 0);
+                tooltip
+                    .transition()
+                    .duration(500)
+                    .style('opacity', 0)
+                    // Đưa tooltip về góc trên-trái sau khi ẩn -> không để div absolute nằm dưới trang tạo dải trắng
+                    .on('end', () => tooltip.style('top', 0).style('left', 0));
             })
             .transition()
             .duration(750)
