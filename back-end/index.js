@@ -83,16 +83,17 @@ app.use('/api/v1/prescriptions', prescriptionRoute);
 app.use('/api/v1/examinations', examinationRoute);
 app.use('/api/v1/chats', chatRoute);
 
-// Endpoint cho external cron gọi lúc 17:00 UTC (00:00 VN).
+// Endpoint cho external cron (cron-job.org) gọi lúc 17:00 UTC (00:00 VN).
+// Dùng app.all để nhận cả GET lẫn POST (cron-job.org mặc định GET).
 // Bảo vệ bằng header x-cron-secret khớp process.env.CRON_SECRET.
-// Trả 202 ngay lập tức để pinger không bị timeout khi web service cold-start
-app.post('/api/v1/cron/slot-maintenance', (req, res) => {
+// Trả text ngắn gọn (Content-Length rõ ràng) rồi chạy nền, tránh timeout khi cold-start.
+app.all('/api/v1/cron/slot-maintenance', (req, res) => {
     const secret = req.headers['x-cron-secret'];
     if (!process.env.CRON_SECRET || secret !== process.env.CRON_SECRET) {
-        return res.status(401).json({ success: false, message: 'Unauthorized' });
+        return res.status(401).type('text/plain').send('Unauthorized');
     }
 
-    res.status(202).json({ success: true, message: 'Slot maintenance started' });
+    res.status(200).type('text/plain').send('ok');
 
     (async () => {
         try {
