@@ -141,8 +141,7 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
             .select('body')
             .append('div')
             .attr('class', 'tooltip d3-tooltip-doctorAppointment')
-            .style('position', 'absolute')
-            // top/left = 0 để div absolute không nằm ở cuối body -> không tạo dải trắng dưới trang
+            .style('position', 'fixed')
             .style('top', 0)
             .style('left', 0)
             .style('text-align', 'center')
@@ -176,8 +175,8 @@ const DoctorAppointmentBarChart = ({ doctorChart }) => {
                 tooltip.transition().duration(200).style('opacity', 0.9);
                 tooltip
                     .html(t('doctorAppointmentBarChart.tooltip', { count: d[1] - d[0] }))
-                    .style('left', event.pageX + 5 + 'px')
-                    .style('top', event.pageY - 30 + 'px');
+                    .style('left', event.clientX + 5 + 'px')
+                    .style('top', event.clientY - 30 + 'px');
             })
             .on('mouseout', function () {
                 d3.select(this).style('opacity', 1);

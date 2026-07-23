@@ -25,6 +25,7 @@ const Layout = () => {
     const [isHovered, setIsHovered] = useState(false);
     const [isShowChatbot, setIsShowChatbot] = useState(false);
     const [chats, setChats] = useState([]);
+    const [isScrolled, setIsScrolled] = useState(false);
 
     useEffect(() => {
         const fetchChats = async () => {
@@ -37,6 +38,26 @@ const Layout = () => {
             fetchChats();
         }
     }, [user?._id]);
+
+    useEffect(() => {
+        const SCROLL_THRESHOLD = 0.4; // 40% quãng cuộn được
+
+        const handleScroll = () => {
+            const scrollTop = window.scrollY;
+            const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+            // scrollable <= 0 nghĩa là trang không cuộn được -> không hiện nút
+            const percent = scrollable > 0 ? scrollTop / scrollable : 0;
+            setIsScrolled(percent > SCROLL_THRESHOLD);
+        };
+
+        handleScroll(); // Tính ngay lần đầu
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('resize', handleScroll); // Chiều dài trang đổi khi resize
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('resize', handleScroll);
+        };
+    }, []);
 
     // Handle hover effect when the user hovers over the plus icon
     const handleMouseEnter = () => {
@@ -108,7 +129,7 @@ const Layout = () => {
                 <Routers />
 
                 <div className={cx('fab-container')}>
-                    {!isShowChatbot && (
+                    {!isShowChatbot && isScrolled && (
                         <div
                             className={cx('up-btn', { hidden: isHovered })}
                             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
