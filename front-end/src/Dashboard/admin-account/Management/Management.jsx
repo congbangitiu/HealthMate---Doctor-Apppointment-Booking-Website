@@ -12,18 +12,25 @@ import useFetchData from '../../../hooks/useFetchData';
 import { Dialog, Slide, Drawer, useMediaQuery } from '@mui/material';
 import { FaCircleExclamation } from 'react-icons/fa6';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
+const TABS = ['dashboard', 'doctor', 'patient', 'appointment', 'revenue'];
+const DEFAULT_TAB = 'dashboard';
+
 const Management = () => {
     const { t } = useTranslation('management');
     const isMobile = useMediaQuery('(max-width:768px)');
+    const { tab } = useParams();
+    const navigate = useNavigate();
     const [isShowTab, setIsShowTab] = useState(false);
     const [isShowWarningDevice, setIsShowWarningDevice] = useState(false);
-    const [activeTab, setActiveTab] = useState('dashboard');
+    const activeTab = TABS.includes(tab) ? tab : DEFAULT_TAB;
+    const setActiveTab = (nextTab) => navigate(`/admins/management/${nextTab}`);
     const [debouncedQuery, setDebouncedQuery] = useState('');
     const {
         data: users,
@@ -41,6 +48,12 @@ const Management = () => {
         setIsShowWarningDevice(true);
     }, [isMobile]);
 
+    useEffect(() => {
+        if (!TABS.includes(tab)) {
+            navigate(`/admins/management/${DEFAULT_TAB}`, { replace: true });
+        }
+    }, [tab, navigate]);
+
     return (
         <div className={cx('container')}>
             {isMobile && (
@@ -50,7 +63,12 @@ const Management = () => {
             )}
             <div className={cx('inner')}>
                 {!isMobile ? (
-                    <Tabs activeTab={activeTab} setActiveTab={setActiveTab} doctors={doctors} />
+                    <Tabs
+                        activeTab={activeTab}
+                        setActiveTab={setActiveTab}
+                        doctors={doctors}
+                        setIsShowTab={setIsShowTab}
+                    />
                 ) : (
                     <Drawer
                         open={isShowTab}

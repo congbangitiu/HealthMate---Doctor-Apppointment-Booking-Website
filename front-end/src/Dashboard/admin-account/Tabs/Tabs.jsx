@@ -77,7 +77,7 @@ Tabs.propTypes = {
     activeTab: PropTypes.string.isRequired,
     setActiveTab: PropTypes.func.isRequired,
     doctors: PropTypes.array.isRequired,
-    setIsShowTab: PropTypes.bool.isRequired,
+    setIsShowTab: PropTypes.func.isRequired,
 };
 
 export default Tabs;

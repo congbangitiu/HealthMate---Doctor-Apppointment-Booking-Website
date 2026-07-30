@@ -57,7 +57,7 @@ const DoctorDetails = () => {
             toast.success(t('toast.approveSuccess'));
             setLoadingApprove(false);
             await delay(2000);
-            window.location.href = '/admins/management';
+            window.location.href = '/admins/management/doctor';
         } catch (error) {
             setLoadingApprove(false);
             toast.error(t('toast.approveFail'));
@@ -84,7 +84,7 @@ const DoctorDetails = () => {
             toast.success(t('toast.rejectSuccess'));
             setLoadingReject(false);
             await delay(2000);
-            window.location.href = '/admins/management';
+            window.location.href = '/admins/management/doctor';
         } catch (error) {
             toast.error(t('toast.rejectFail'));
             setLoadingReject(false);

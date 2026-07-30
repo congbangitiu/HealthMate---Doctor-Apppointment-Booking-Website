@@ -1,10 +1,9 @@
 import { lazy, Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import ProtectedRoute from './ProtectedRoute';
 import Loader from '../components/Loader/Loader';
 
-// Tải lười (lazy) từng trang: mỗi trang được tách thành chunk riêng và chỉ được tải khi người dùng truy cập route tương ứng, giúp giảm mạnh bundle ban đầu.
 const Home = lazy(() => import('./../pages/Home/Home'));
 const Services = lazy(() => import('./../pages/Services/Services'));
 const Login = lazy(() => import('./../pages/Login/Login'));
@@ -79,6 +78,10 @@ const Routers = () => {
 
             <Route
                 path="/admins/management"
+                element={<Navigate to="/admins/management/dashboard" replace />}
+            />
+            <Route
+                path="/admins/management/:tab"
                 element={
                     <ProtectedRoute allowedRoles={['admin']}>
                         <Management />

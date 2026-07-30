@@ -101,7 +101,7 @@ const Header = () => {
     };
 
     const handlePath = () => {
-        if (role === 'admin') window.location.href = '/admins/management';
+        if (role === 'admin') window.location.href = '/admins/management/dashboard';
         else if (role === 'patient') window.location.href = '/users/profile/me';
         else if (role === 'doctor') window.location.href = '/doctors/profile/me';
     };
