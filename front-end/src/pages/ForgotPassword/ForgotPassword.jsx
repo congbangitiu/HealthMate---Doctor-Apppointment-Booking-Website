@@ -183,23 +183,25 @@ const ForgotPassword = () => {
                 )}
 
                 {step === 'otp' && (
-                    <VerifyOTP
-                        formData={{ email }}
-                        tab="email"
-                        endpoint="/auth/forgot-password/verify"
-                        buildPayload={(otp) => ({ email, otp })}
-                        onVerified={handleOtpVerified}
-                        onResend={sendOTP}
-                        resendCooldown={RESEND_COOLDOWN}
-                        initialCooldown={initialCooldown}
-                        verifyLabel={t('verify')}
-                        heading={
-                            <>
-                                {t('otpHeading')} <b>{email}</b> <br />
-                                {t('otpSpamNote')}
-                            </>
-                        }
-                    />
+                    <div className={cx('otp-wrapper')}>
+                        <VerifyOTP
+                            formData={{ email }}
+                            tab="email"
+                            endpoint="/auth/forgot-password/verify"
+                            buildPayload={(otp) => ({ email, otp })}
+                            onVerified={handleOtpVerified}
+                            onResend={sendOTP}
+                            resendCooldown={RESEND_COOLDOWN}
+                            initialCooldown={initialCooldown}
+                            verifyLabel={t('verify')}
+                            heading={
+                                <>
+                                    {t('otpHeading')} <b>{email}</b> <br />
+                                    {t('otpSpamNote')}
+                                </>
+                            }
+                        />
+                    </div>
                 )}
 
                 {step === 'reset' && (
