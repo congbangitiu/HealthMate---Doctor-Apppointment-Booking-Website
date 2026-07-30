@@ -8,6 +8,7 @@ const Home = lazy(() => import('./../pages/Home/Home'));
 const Services = lazy(() => import('./../pages/Services/Services'));
 const Login = lazy(() => import('./../pages/Login/Login'));
 const Register = lazy(() => import('./../pages/Register/Register'));
+const ForgotPassword = lazy(() => import('./../pages/ForgotPassword/ForgotPassword'));
 const Contact = lazy(() => import('./../pages/Contact/Contact'));
 const Specialties = lazy(() => import('./../pages/Specialties/Specialties'));
 const SpecialtyDetails = lazy(() => import('../pages/SpecialtyDetails/SpecialtyDetails'));
@@ -34,6 +35,7 @@ const Routers = () => {
             <Route path="/doctors/:id" element={<DoctorDetails />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/services" element={<Services />} />
             <Route path="/specialties" element={<Specialties />} />

@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Login.module.scss';
 import { MdOutlineEmail } from 'react-icons/md';
@@ -16,6 +16,7 @@ const cx = classNames.bind(styles);
 
 const Login = () => {
     const { t } = useTranslation('login');
+    const location = useLocation();
 
     useEffect(() => {
         window.scrollTo({
@@ -27,7 +28,8 @@ const Login = () => {
     const [passwordEmpty, setPasswordEmpty] = useState(true);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
-        email: '',
+        // Giữ lại email khi người dùng đi sang trang quên mật khẩu rồi quay lại
+        email: location.state?.email || '',
         password: '',
     });
 
@@ -133,7 +135,13 @@ const Login = () => {
                             <input type="checkbox" />
                             <p className={cx('question')}>{t('remember')}</p>
                         </div>
-                        <p className={cx('forgot')}>{t('forgot')}</p>
+                        <Link
+                            to="/forgot-password"
+                            state={{ email: formData.email }}
+                            className={cx('forgot')}
+                        >
+                            {t('forgot')}
+                        </Link>
                     </div>
                     <button disabled={loading} className={cx('login-btn')}>
                         {loading ? <SyncLoader size={8} color="#ffffff" /> : t('signIn')}

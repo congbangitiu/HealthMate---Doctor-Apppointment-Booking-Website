@@ -12,6 +12,8 @@ import loginEn from '../../locales/en/common/login.json';
 import loginVi from '../../locales/vi/common/login.json';
 import registerEn from '../../locales/en/common/register.json';
 import registerVi from '../../locales/vi/common/register.json';
+import forgotPasswordEN from '../../locales/en/common/forgotPassword.json';
+import forgotPasswordVI from '../../locales/vi/common/forgotPassword.json';
 import specialtiesEN from '../../locales/en/common/specialties.json';
 import specialtiesVI from '../../locales/vi/common/specialties.json';
 import specialtyDetailsEN from '../../locales/en/common/specialtyDetails.json';
@@ -94,6 +96,7 @@ const resources = {
         footer: footerEN,
         login: loginEn,
         register: registerEn,
+        forgotPassword: forgotPasswordEN,
         specialties: specialtiesEN,
         specialtyDetails: specialtyDetailsEN,
         examinationService: examinationServiceEN,
@@ -138,6 +141,7 @@ const resources = {
         footer: footerVI,
         login: loginVi,
         register: registerVi,
+        forgotPassword: forgotPasswordVI,
         specialties: specialtiesVI,
         specialtyDetails: specialtyDetailsVI,
         examinationService: examinationServiceVI,
@@ -196,6 +200,7 @@ i18n.use(LanguageDetector)
             'footer',
             'login',
             'register',
+            'forgotPassword',
             'specialties',
             'specialtyDetails',
             'examinationService',
