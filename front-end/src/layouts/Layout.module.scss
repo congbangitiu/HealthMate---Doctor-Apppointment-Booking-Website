@@ -1,3 +1,9 @@
+// Easing kiểu "back-out": nút vọt lên hơi quá đích rồi lắng lại, tạo cảm giác trôi nổi
+$float-ease: cubic-bezier(0.34, 1.56, 0.64, 1);
+// visibility là thuộc tính rời rạc nên phải đổi trễ khi ẩn, để nút kịp trôi xuống trước khi mất
+$float-out: opacity 0.3s ease, transform 0.4s $float-ease, background-color 0.3s, visibility 0s linear 0.4s;
+$float-in: opacity 0.3s ease, transform 0.4s $float-ease, background-color 0.3s, visibility 0s linear 0s;
+
 .container {
     display: flex;
     flex-direction: column;
@@ -29,15 +35,33 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: transform 0.3s, background-color 0.3s, opacity 0.3s, visibility 0.3s;
 
+            // Trạng thái nghỉ: nằm thấp hơn vị trí thật 20px, chờ trôi lên
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: translateY(20px);
+            transition: $float-out;
+
+            &.visible {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+                transform: translateY(0);
+                transition: $float-in;
+
+                &:active {
+                    transform: translateY(0) scale(0.8);
+                }
+            }
+
+            // Tạm ẩn khi mở FAB để không che các tuỳ chọn
             &.hidden {
                 opacity: 0;
                 visibility: hidden;
-            }
-
-            &:active {
-                transform: scale(0.8);
+                pointer-events: none;
+                transform: translateY(20px);
+                transition: $float-out;
             }
 
             & .icon {
@@ -207,5 +231,17 @@
 @media screen and (max-width: 768px) {
     .container {
         overflow-x: hidden;
+    }
+}
+
+// Tôn trọng thiết lập giảm hiệu ứng của hệ thống: chỉ mờ dần, không trôi
+@media (prefers-reduced-motion: reduce) {
+    .container main .fab-container .up-btn {
+        transform: none;
+
+        &.visible,
+        &.hidden {
+            transform: none;
+        }
     }
 }
