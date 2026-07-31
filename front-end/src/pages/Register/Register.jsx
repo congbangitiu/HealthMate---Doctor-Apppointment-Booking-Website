@@ -396,7 +396,8 @@ const Register = () => {
 
             <div id="recaptcha-container"></div>
 
-            <div className={cx('form-wrapper')}>
+            {showVerifyOTP && (
+                <div className={cx('form-wrapper')}>
                     <div className={cx('overlay')} onClick={() => setShowVerifyOTP(false)}></div>
                     <div className={cx('form-update', 'verifyOTP')}>
                         <VerifyOTP
@@ -421,6 +422,7 @@ const Register = () => {
                         />
                     </div>
                 </div>
+            )}
         </div>
     );
 };
