@@ -44,9 +44,20 @@ const Management = () => {
     } = useFetchData(`${BASE_URL}/doctors?query=${debouncedQuery}`);
     const { data: appointments } = useFetchData(`${BASE_URL}/bookings`);
 
+    const STORAGE_KEY = 'managementWarningAccepted';
+
     useEffect(() => {
-        setIsShowWarningDevice(true);
+        if (isMobile && !localStorage.getItem(STORAGE_KEY)) {
+            setIsShowWarningDevice(true);
+        } else {
+            setIsShowWarningDevice(false);
+        }
     }, [isMobile]);
+
+    const handleCloseWarningDialog = () => {
+        localStorage.setItem(STORAGE_KEY, 'true');
+        setIsShowWarningDevice(false);
+    };
 
     useEffect(() => {
         if (!TABS.includes(tab)) {
@@ -131,7 +142,7 @@ const Management = () => {
                     <div className={cx('warning-devices')}>
                         <FaCircleExclamation className={cx('icon')} />
                         <p>{t('warningDialog.message')}</p>
-                        <button onClick={() => setIsShowWarningDevice(false)}> {t('warningDialog.button')}</button>
+                        <button onClick={handleCloseWarningDialog}> {t('warningDialog.button')}</button>
                     </div>
                 </Dialog>
             )}
