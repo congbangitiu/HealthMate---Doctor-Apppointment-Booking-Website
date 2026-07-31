@@ -194,6 +194,8 @@ const ForgotPassword = () => {
                             resendCooldown={RESEND_COOLDOWN}
                             initialCooldown={initialCooldown}
                             verifyLabel={t('verify')}
+                            resendLabel={t('resend')}
+                            resendCountdownLabel={(seconds) => t('resendIn', { seconds })}
                             heading={
                                 <>
                                     {t('otpHeading')} <b>{email}</b> <br />

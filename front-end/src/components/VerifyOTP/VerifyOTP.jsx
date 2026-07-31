@@ -24,6 +24,8 @@ const VerifyOTP = ({
     initialCooldown,
     heading,
     verifyLabel = 'Verify OTP',
+    resendLabel = 'Resend OTP',
+    resendCountdownLabel = (seconds) => `Resend OTP in ${seconds}s`,
 }) => {
     const [OTP, setOTP] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -149,10 +151,10 @@ const VerifyOTP = ({
             {onResend && (
                 <div className={cx('resend-otp')}>
                     {secondsLeft > 0 ? (
-                        <span>Resend OTP in {secondsLeft}s</span>
+                        <span>{resendCountdownLabel(secondsLeft)}</span>
                     ) : (
                         <button onClick={handleResend} disabled={isResending}>
-                            {isResending ? <SyncLoader size={7} color="#ffffff" /> : 'Resend OTP'}
+                            {isResending ? <SyncLoader size={7} color="#ffffff" /> : resendLabel}
                         </button>
                     )}
                 </div>
@@ -172,6 +174,8 @@ VerifyOTP.propTypes = {
     initialCooldown: PropTypes.number,
     heading: PropTypes.node,
     verifyLabel: PropTypes.string,
+    resendLabel: PropTypes.string,
+    resendCountdownLabel: PropTypes.func,
 };
 
 export default VerifyOTP;

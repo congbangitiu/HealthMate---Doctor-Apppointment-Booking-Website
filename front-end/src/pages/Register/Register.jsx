@@ -13,6 +13,8 @@ import { CiMobile3 } from 'react-icons/ci';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
 import VerifyOTP from '../../components/VerifyOTP/VerifyOTP.jsx';
+import parseJsonResponse from '../../utils/services/parseJsonResponse.js';
+import truncateNumber from '../../utils/number/truncateNumber';
 import { auth, RecaptchaVerifier, signInWithPhoneNumber } from '../../utils/services/firebase';
 import { useTranslation } from 'react-i18next';
 
@@ -136,47 +138,48 @@ const Register = () => {
     //     }
     // };
 
+    // Hai hàm gửi OTP dưới đây chỉ lo việc gửi và throw khi thất bại, không tự mở modal
+    // hay toast lỗi. Nhờ vậy dùng lại được cho nút "Gửi lại" trong VerifyOTP: resend lỗi
+    // thì đồng hồ đếm ngược không bị reset oan.
     const sendOTPBySMS = async () => {
         const phoneNumber = formData.phone.startsWith('+') ? formData.phone : `+84${formData.phone.replace(/^0/, '')}`;
 
         try {
             const appVerifier = window.recaptchaVerifier;
-            const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
-            setConfirmationResult(confirmationResult);
-            setShowVerifyOTP(true);
+            const result = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
+            setConfirmationResult(result);
         } catch (error) {
             console.log('Error during send OTP:', error);
-            toast.error('Failed to send OTP. Please try again.');
             if (window.recaptchaVerifier) {
                 window.recaptchaVerifier.reset(window.recaptchaWidgetId);
             }
+            throw new Error('Failed to send OTP. Please try again.');
         }
     };
 
     const sendOTPByEmail = async () => {
-        setLoading(true);
+        const res = await fetch(`${BASE_URL}/auth/send-email-otp`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ fullname: formData.fullname, email: formData.email }),
+        });
 
-        try {
-            const res = await fetch(`${BASE_URL}/auth/send-email-otp`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ fullname: formData.fullname, email: formData.email }),
-            });
+        const data = await parseJsonResponse(res);
 
-            const data = await res.json();
+        if (!res.ok) {
+            throw new Error(data.error || data.message || 'Failed to send OTP');
+        }
 
-            if (!res.ok) {
-                throw new Error(data.error || 'Failed to send OTP');
-            }
+        toast.success('OTP sent successfully to your email!');
+    };
 
-            toast.success('OTP sent successfully to your email!');
-            setShowVerifyOTP(true);
-        } catch (error) {
-            toast.error(error.message || 'Failed to send OTP. Please try again.');
-        } finally {
-            setLoading(false);
+    const sendOTP = async () => {
+        if (tab === 'email') {
+            await sendOTPByEmail();
+        } else {
+            await sendOTPBySMS();
         }
     };
 
@@ -188,14 +191,15 @@ const Register = () => {
             return;
         }
 
+        setLoading(true);
+
         try {
-            if (tab === 'email') {
-                await sendOTPByEmail();
-            } else {
-                await sendOTPBySMS();
-            }
+            await sendOTP();
+            setShowVerifyOTP(true);
         } catch (error) {
             toast.error(error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -392,14 +396,31 @@ const Register = () => {
 
             <div id="recaptcha-container"></div>
 
-            {showVerifyOTP && (
-                <div className={cx('form-wrapper')}>
+            <div className={cx('form-wrapper')}>
                     <div className={cx('overlay')} onClick={() => setShowVerifyOTP(false)}></div>
                     <div className={cx('form-update', 'verifyOTP')}>
-                        <VerifyOTP formData={formData} tab={tab} />
+                        <VerifyOTP
+                            formData={formData}
+                            tab={tab}
+                            onResend={sendOTP}
+                            verifyLabel={t('otp.verify')}
+                            resendLabel={t('otp.resend')}
+                            resendCountdownLabel={(seconds) => t('otp.resendIn', { seconds })}
+                            heading={
+                                tab === 'email' ? (
+                                    <>
+                                        {t('otp.checkEmail')} <b>{formData.email}</b> <br />
+                                        {t('otp.spamNote')}
+                                    </>
+                                ) : (
+                                    <>
+                                        {t('otp.checkPhone')} <b>{truncateNumber(formData.phone)}</b>
+                                    </>
+                                )
+                            }
+                        />
                     </div>
                 </div>
-            )}
         </div>
     );
 };

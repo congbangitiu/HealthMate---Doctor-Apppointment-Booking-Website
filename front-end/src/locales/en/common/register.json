@@ -33,6 +33,14 @@
         "email": "Email Authenticator",
         "sms": "SMS Authenticator"
     },
+    "otp": {
+        "checkEmail": "Please check email",
+        "spamNote": "(including spam)",
+        "checkPhone": "Please enter the OTP code sent to phone number",
+        "verify": "Verify OTP",
+        "resend": "Resend OTP",
+        "resendIn": "Resend OTP in {{seconds}}s"
+    },
     "agreement": "I agree with the terms of use",
     "button": {
         "register": "Sign up"

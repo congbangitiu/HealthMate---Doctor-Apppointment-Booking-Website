@@ -33,6 +33,14 @@
         "email": "Xác thực qua Email",
         "sms": "Xác thực qua SMS"
     },
+    "otp": {
+        "checkEmail": "Vui lòng kiểm tra email",
+        "spamNote": "(bao gồm cả hộp thư rác)",
+        "checkPhone": "Vui lòng nhập mã OTP đã được gửi tới số điện thoại",
+        "verify": "Xác thực OTP",
+        "resend": "Gửi lại mã OTP",
+        "resendIn": "Gửi lại mã OTP sau {{seconds}}s"
+    },
     "agreement": "Tôi đồng ý với điều khoản sử dụng",
     "button": {
         "register": "Đăng ký"
