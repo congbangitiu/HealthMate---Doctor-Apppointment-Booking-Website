@@ -102,6 +102,40 @@
 }
 
 // Responsive
+@media only screen and (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+
+        & img {
+            display: none;
+        }
+
+        & .content {
+            width: 100%;
+            margin-top: 0;
+
+            & h2 {
+                font-size: 42px;
+                line-height: normal;
+            }
+        }
+
+        & .faqs {
+            margin-top: 20px;
+
+            & .faq {
+                & .question {
+                    & p {
+                        line-height: 28px;
+                    }
+                }
+            }
+        }
+    }
+}
+
 @media only screen and (max-width: 768px) {
     .container {
         flex-direction: column;
@@ -126,8 +160,6 @@
 
             & .faq {
                 & .question {
-                    & p {
-                    }
                     & .icon {
                         display: none;
                     }

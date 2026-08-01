@@ -46,6 +46,35 @@
 }
 
 // Responsive
+@media only screen and (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        gap: 30px;
+
+        & .img-wrapper {
+            display: none;
+        }
+
+        & .content {
+            width: 100%;
+            margin-top: 0;
+
+            & h2 {
+                font-size: 42px;
+                line-height: normal;
+            }
+
+            & p {
+                margin-top: 20px;
+            }
+        }
+
+        & .more-details {
+            margin-top: 24px;
+        }
+    }
+}
+
 @media only screen and (max-width: 768px) {
     .container {
         flex-direction: column;

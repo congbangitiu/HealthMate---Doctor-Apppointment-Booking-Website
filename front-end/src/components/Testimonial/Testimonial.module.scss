@@ -71,6 +71,20 @@
 }
 
 // Responsive
+@media only screen and (max-width: 1024px) {
+    .container {
+        & h2 {
+            font-size: 42px;
+        }
+
+        & .content {
+            & .comment {
+                padding: 16px;
+            }
+        }
+    }
+}
+
 @media only screen and (max-width: 768px) {
     .container {
         padding-bottom: 50px;

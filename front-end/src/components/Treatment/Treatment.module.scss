@@ -109,6 +109,48 @@
 }
 
 // Responsive
+@media only screen and (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        gap: 32px;
+        align-items: center;
+
+        & .content {
+            width: 100%;
+
+            & h2 {
+                line-height: normal;
+                font-size: 42px;
+            }
+
+            & .steps {
+                margin-left: 0;
+            }
+        }
+
+        & .more-details {
+            margin-top: 24px;
+        }
+
+        & .info {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+
+            & img {
+                width: 320px;
+                height: auto;
+            }
+
+            & .card {
+                left: 20px;
+                bottom: 20px;
+                width: 260px;
+            }
+        }
+    }
+}
+
 @media only screen and (max-width: 768px) {
     .container {
         flex-direction: column;
