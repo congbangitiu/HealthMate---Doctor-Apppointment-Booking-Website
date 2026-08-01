@@ -191,6 +191,12 @@
     }
 }
 
+@media only screen and (max-width: 1024px) {
+    .logout {
+        width: 40%;
+    }
+}
+
 // Responsive
 @media only screen and (max-width: 768px) {
     .container-parent {

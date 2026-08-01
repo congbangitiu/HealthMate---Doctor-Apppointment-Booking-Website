@@ -20,6 +20,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const Tabs = ({ tab, setTab, doctorData, setShowProfileMobile }) => {
     const { t, i18n } = useTranslation('tabsDoctor');
     const isMobile = useMediaQuery('(max-width:768px)');
+    const isTablet = useMediaQuery('(min-width:769px) and (max-width:1024px)');
     const [showFormChangePassword, setShowFormChangePassword] = useState(false);
     const [showConfirmLogout, setShowConfirmLogout] = useState(false);
 
@@ -101,7 +102,7 @@ const Tabs = ({ tab, setTab, doctorData, setShowProfileMobile }) => {
                 onClose={() => setShowConfirmLogout(false)}
                 sx={{
                     '& .MuiPaper-root': {
-                        width: isMobile ? '100%' : '20%',
+                        width: isMobile ? '100%' : isTablet ? '40%' : '20%',
                         borderRadius: '10px',
                     },
                 }}

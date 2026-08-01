@@ -286,6 +286,71 @@
 }
 
 // Responsive design
+@media only screen and (max-width: 1024px) {
+    .container {
+        padding: 10px 40px;
+
+        & > div:first-child {
+            & .logo {
+                width: 70px;
+                height: 70px;
+            }
+        }
+
+        & .navigation {
+            & .menu {
+                gap: 30px;
+
+                & .link {
+                    font-size: 15px;
+                }
+            }
+        }
+
+        & .authentication {
+            gap: 8px;
+            margin-right: 0;
+
+            & > div:first-child {
+                & .inner {
+                    border-radius: 500px;
+                    right: 120px;
+
+                    & .name {
+                        display: none;
+                    }
+                }
+
+                &:hover {
+                    & .inner {
+                        transform: none;
+                    }
+                }
+
+                & .logout-btn {
+                    opacity: 1;
+                }
+            }
+
+            & .noti {
+                & .icon {
+                    font-size: 28px;
+                }
+            }
+
+            & .login,
+            & .register {
+                padding: 8px 12px;
+                font-size: 15px;
+            }
+        }
+    }
+
+    .logout {
+        width: 40%;
+    }
+}
+
 @media only screen and (max-width: 768px) {
     .container {
         padding: 5px 20px;
