@@ -12,7 +12,7 @@
             cursor: pointer;
 
             & a {
-                padding: 10px;
+                padding: 8px 14px;
                 border: 1px solid var(--lightGrayColor);
                 color: var(--primaryColor);
                 text-decoration: none;
@@ -26,6 +26,7 @@
             }
 
             &.active a {
+                padding: 10px 16px;
                 background: var(--buttonBgColor);
                 color: var(--whiteColor);
                 border: 1px solid var(--buttonBgColor);
@@ -46,38 +47,37 @@
 }
 
 /* Responsive */
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1024px) {
     .container {
         margin-top: 40px;
-    }
 
-    .pagination {
-        gap: 4px;
+        & .pagination {
+            gap: 4px;
 
-        & li {
-            margin: 0 2px;
+            & li {
+                margin: 0 3px;
 
-            & a {
-                padding: 8px 10px;
-                font-size: 14px;
+                & a {
+                    padding: 8px 12px;
+                    font-size: 14px;
+                }
             }
-        }
-
-        & .previous a,
-        & .next a {
-            display: none;
         }
     }
 }
 
-@media only screen and (max-width: 480px) {
-    .pagination {
-        & li {
-            margin: 0 1px;
+@media only screen and (max-width: 768px) {
+    .container {
+        & .pagination {
+            gap: 4px;
 
-            & a {
-                padding: 6px 8px;
-                font-size: 12px;
+            & li {
+                margin: 0 2px;
+            }
+
+            & .previous a,
+            & .next a {
+                display: none;
             }
         }
     }

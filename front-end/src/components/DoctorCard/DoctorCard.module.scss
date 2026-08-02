@@ -149,26 +149,49 @@
 }
 
 // Responsive
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1024px) {
     .container {
+        padding: 15px;
+        border-radius: 20px;
+
+        &:hover {
+            transform: none;
+            box-shadow: none;
+
+            &::before {
+                opacity: 0;
+            }
+        }
+
         & h4 {
-            font-size: 24px;
+            font-size: 20px;
         }
 
         & .expertise-rating {
-            & .expertise,
-            & .rating {
-                font-size: 18px;
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .container {
+        & h4 {
+            font-size: 17px;
+        }
+
+        & .expertise-rating {
+            flex-direction: column;
+            gap: 10px;
+
+            & .expertise {
+                font-size: 15px;
             }
         }
 
         & .details {
             & .patients {
-                font-size: 18px;
-            }
-
-            & .office {
-                font-size: 16px;
+                font-size: 15px;
             }
         }
     }

@@ -309,7 +309,6 @@
 
         & .authentication {
             gap: 8px;
-            margin-right: 0;
 
             & > div:first-child {
                 & .inner {
@@ -341,6 +340,7 @@
             & .login {
                 padding: 8px 12px;
                 font-size: 16px;
+                margin-right: -6px;
             }
 
             & .register {
@@ -450,6 +450,10 @@
                 & .logout-btn {
                     opacity: 1;
                 }
+            }
+
+            & .login {
+                margin-right: 0;
             }
 
             & .register {

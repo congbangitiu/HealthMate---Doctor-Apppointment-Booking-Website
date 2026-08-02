@@ -8,11 +8,14 @@ import DefaultMaleDoctorAvatar from '../../assets/images/default-male-doctor.png
 import DefaultFemaleDoctorAvatar from '../../assets/images/default-female-doctor.png';
 import { useTranslation } from 'react-i18next';
 import translateSubspecialtyName from '../../utils/translation/translateSubspecialtyName';
+import { useMediaQuery } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
 const DoctorCard = ({ doctor }) => {
     const { t, i18n } = useTranslation('doctorCard');
+    const isMobile = useMediaQuery('(max-width:768px)');
+
     const defaultDoctorAvatar = doctor.gender === 'male' ? DefaultMaleDoctorAvatar : DefaultFemaleDoctorAvatar;
 
     return (
@@ -23,7 +26,10 @@ const DoctorCard = ({ doctor }) => {
             </h4>
             <div className={cx('expertise-rating')}>
                 <div className={cx('expertise')}>
-                    <InfoToolTip text={translateSubspecialtyName(doctor.subspecialty, i18n)} maxLength={15} />
+                    <InfoToolTip
+                        text={translateSubspecialtyName(doctor.subspecialty, i18n)}
+                        maxLength={isMobile ? 10 : 15}
+                    />
                 </div>
                 <div className={cx('rating')}>
                     <FaStar className={cx('stars')} />
@@ -39,7 +45,7 @@ const DoctorCard = ({ doctor }) => {
                 )}
                 {doctor.experiences.length > 0 && (
                     <p className={cx('office')}>
-                        <InfoToolTip text={doctor.experiences[0]?.hospital} maxLength={30} />
+                        <InfoToolTip text={doctor.experiences[0]?.hospital} maxLength={isMobile ? 25 : 30} />
                     </p>
                 )}
             </div>

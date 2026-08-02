@@ -4,6 +4,7 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+    overflow-x: hidden;
 
     & .carousel {
         width: 100vw;
@@ -127,8 +128,7 @@
 
 @media only screen and (max-width: 1024px) {
     .container {
-        padding: 80px 60px 60px 60px;
-        overflow-x: hidden;
+        padding: 80px 40px 60px 40px;
 
         & .carousel {
             width: 100vw;

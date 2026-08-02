@@ -43,6 +43,19 @@
 }
 
 // Responsive
+@media only screen and (max-width: 1024px) {
+    .container {
+        padding: 110px 40px 50px 40px;
+
+        & .doctors-wrapper {
+            & .doctors {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+        }
+    }
+}
+
 @media only screen and (max-width: 768px) {
     .container {
         padding: 80px 20px 50px 20px;
@@ -64,7 +77,8 @@
 
         & .doctors-wrapper {
             & .doctors {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
             }
         }
     }
