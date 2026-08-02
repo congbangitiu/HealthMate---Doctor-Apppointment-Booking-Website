@@ -24,6 +24,7 @@ const DoctorDetails = () => {
     const [activeTab, setActiveTab] = useState('about');
     const { id } = useParams();
     const isMobile = useMediaQuery('(max-width:768px)');
+    const isTablet = useMediaQuery('(max-width:1024px)');
     const { data: doctor, loading, error } = useFetchData(`${BASE_URL}/doctors/${id}`);
     const { role } = useContext(authContext);
     const [loadingApprove, setLoadingApprove] = useState(false);
@@ -141,10 +142,10 @@ const DoctorDetails = () => {
                                     '& .MuiPaper-root': {
                                         borderRadius: '16px',
                                         height: 'max-content',
-                                        width: isMobile ? '100%' : '800px',
+                                        width: isMobile || isTablet ? '100%' : '800px',
                                         padding: isMobile ? '20px' : '30px',
-                                        boxShadow: isMobile ? 'none' : '0 10px 30px var(--black-08)',
-                                        border: isMobile ? 'none' : '1px solid var(--black-05)',
+                                        boxShadow: isMobile || isTablet ? 'none' : '0 10px 30px var(--black-08)',
+                                        border: isMobile || isTablet ? 'none' : '1px solid var(--black-05)',
                                         margin: '0',
                                     },
                                 }}
@@ -163,14 +164,14 @@ const DoctorDetails = () => {
                         ) : (
                             <div
                                 style={{
-                                    width: isMobile ? '100%' : '450px',
-                                    padding: isMobile ? '10px 0' : '20px',
-                                    boxShadow: isMobile ? 'none' : '0 10px 30px var(--black-08)',
-                                    border: isMobile ? 'none' : '1px solid var(--black-05)',
-                                    borderTop: isMobile ? '1px solid var(--darkGrayColor)' : 'none',
-                                    borderBottom: isMobile ? '1px solid var(--darkGrayColor)' : 'none',
-                                    borderRadius: isMobile ? '0' : '16px',
-                                    margin: isMobile ? '20px 0' : '0',
+                                    width: isMobile || isTablet ? '100%' : '450px',
+                                    padding: isMobile ? '10px 0' : isTablet ? '16px' : '20px',
+                                    boxShadow: isMobile || isTablet ? 'none' : '0 10px 30px var(--black-08)',
+                                    border: isMobile || isTablet ? 'none' : '1px solid var(--black-05)',
+                                    borderTop: isMobile || isTablet ? '1px solid var(--darkGrayColor)' : 'none',
+                                    borderBottom: isMobile || isTablet ? '1px solid var(--darkGrayColor)' : 'none',
+                                    borderRadius: isMobile || isTablet ? '0' : '16px',
+                                    margin: isMobile || isTablet ? '20px 0' : '0',
                                 }}
                             >
                                 <SidePanel

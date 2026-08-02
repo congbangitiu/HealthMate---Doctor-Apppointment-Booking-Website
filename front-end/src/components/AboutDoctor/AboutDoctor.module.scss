@@ -197,6 +197,27 @@
 }
 
 // Responsive
+@media only screen and (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        gap: 30px;
+
+        & .activities {
+            display: none;
+        }
+
+        & .content {
+            gap: 24px;
+
+            & .experience {
+                & .experience-details {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                }
+            }
+        }
+    }
+}
+
 @media only screen and (max-width: 768px) {
     .container {
         flex-direction: column;

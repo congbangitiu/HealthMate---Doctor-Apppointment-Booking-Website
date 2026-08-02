@@ -153,6 +153,35 @@
 }
 
 // Responsive
+@media only screen and (max-width: 1024px) {
+    .container {
+        & .intro {
+            & h4 {
+                font-size: 20px;
+                width: 50%;
+            }
+
+            & .sort {
+                width: 100%;
+                justify-content: end;
+            }
+        }
+
+        & .feedback {
+            & .details {
+                & .name-time {
+                    gap: 20px;
+                    flex-wrap: wrap;
+                }
+            }
+        }
+    }
+
+    .form-feedback {
+        width: 75%;
+    }
+}
+
 @media only screen and (max-width: 768px) {
     .container {
         & .intro {

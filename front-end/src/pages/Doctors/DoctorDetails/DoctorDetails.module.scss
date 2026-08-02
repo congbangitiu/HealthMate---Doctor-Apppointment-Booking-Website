@@ -140,6 +140,34 @@
 }
 
 // Responsive
+@media only screen and (max-width: 1024px) {
+    .container-parent {
+        padding: 90px 0 50px 0;
+
+        & .verification {
+            padding: 15px 20px;
+        }
+
+        & .container {
+            padding: 40px 40px 0 40px;
+
+            & .doctor-slots {
+                flex-direction: column;
+                gap: 24px;
+                align-items: stretch;
+
+                & span {
+                    width: 100%;
+                }
+            }
+
+            & .bar {
+                margin-top: 16px;
+            }
+        }
+    }
+}
+
 @media only screen and (max-width: 768px) {
     .container-parent {
         padding: 80px 0 50px 0;

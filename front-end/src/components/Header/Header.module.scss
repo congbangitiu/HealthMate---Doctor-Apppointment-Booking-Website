@@ -314,9 +314,17 @@
                 & .inner {
                     border-radius: 500px;
                     right: 120px;
+                    padding: 3px;
 
-                    & .name {
-                        display: none;
+                    & .info {
+                        & .avatar {
+                            width: 40px;
+                            height: 40px;
+                        }
+                        
+                        & .name {
+                            display: none;
+                        }
                     }
                 }
 

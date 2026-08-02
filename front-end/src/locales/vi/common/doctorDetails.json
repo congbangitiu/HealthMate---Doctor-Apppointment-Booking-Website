@@ -16,7 +16,7 @@
     },
     "sidePanel": {
         "ticketPrice": "Giá khám",
-        "sessionUnit": "/lượt khám",
+        "sessionUnit": "/lượt",
         "availableSlots": "Khung giờ khả dụng",
         "fullyBooked": "Bác sĩ {{doctorName}} hiện đã hết lịch. Chúng tôi đang bổ sung thêm khung giờ – vui lòng quay lại sau!",
         "bookButton": "Đặt lịch khám"
