@@ -4,15 +4,19 @@ import styles from './TreatmentService.module.scss';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Treatments from '../../assets/data/mock-data/services';
+import { useMediaQuery } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
 const TreatmentService = () => {
     const { t } = useTranslation('treatmentService');
-    const [visibleServices, setVisibleServices] = useState(6);
+    const isSmallScreen = useMediaQuery('(max-width:1024px)');
+    const serviceNumberLoaded = isSmallScreen ? 6 : 8;
+
+    const [visibleServices, setVisibleServices] = useState(serviceNumberLoaded);
 
     const handleLoadMore = () => {
-        setVisibleServices((prevCount) => prevCount + 6);
+        setVisibleServices((prevCount) => prevCount + serviceNumberLoaded);
     };
 
     return (

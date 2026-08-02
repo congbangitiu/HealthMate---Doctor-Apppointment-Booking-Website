@@ -258,6 +258,91 @@
 }
 
 // Responsive
+@media only screen and (max-width: 1024px) {
+    .container {
+        padding: 60px 40px 60px 40px;
+
+        & .intro {
+            gap: 24px;
+            padding: 24px;
+            align-items: start;
+
+            & img {
+                width: 60%;
+                max-width: 320px;
+            }
+
+            & div {
+                width: 100%;
+
+                & h4 {
+                    font-size: 30px;
+                }
+
+                & p {
+                    font-size: 16px;
+                }
+            }
+        }
+
+        & .info {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+            margin-top: 48px;
+
+            & div {
+                transition: none;
+
+                &:hover {
+                    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+                    background: linear-gradient(145deg, #ffffff, #f8faff);
+                }
+
+                & span {
+                    font-size: 18px;
+                    padding: 10px 0;
+                    transition: none;
+
+                    &:after {
+                        transition: none;
+                    }
+                }
+
+                & ul {
+                    & li {
+                        font-size: 16px;
+                        transition: none;
+
+                        &:hover {
+                            transform: none;
+                            color: inherit;
+                        }
+
+                        &:before {
+                            transition: none;
+                        }
+                    }
+                }
+            }
+        }
+
+        & .relevant-doctors {
+            & h4:first-child {
+                font-size: 25px;
+            }
+
+            & .doctors {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 24px;
+            }
+
+            & .no-doctor {
+                font-size: 16px;
+            }
+        }
+    }
+}
+
 @media only screen and (max-width: 768px) {
     .container {
         padding: 80px 20px 50px 20px;
@@ -275,6 +360,8 @@
 
             & img {
                 width: 100%;
+                max-width: 100%;
+                display: block;
 
                 &:hover {
                     transform: none;
@@ -302,13 +389,34 @@
             margin-top: 50px;
 
             & div {
+                transition: none;
+
+                &:hover {
+                    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+                    background: linear-gradient(145deg, #ffffff, #f8faff);
+                }
+
                 & span {
-                    font-size: 18px;
-                    padding: 8px 0;
+                    transition: none;
+
+                    &:after {
+                        transition: none;
+                    }
                 }
 
                 & ul {
-                    padding: 15px 20px;
+                    & li {
+                        transition: none;
+
+                        &:hover {
+                            transform: none;
+                            color: inherit;
+                        }
+
+                        &:before {
+                            transition: none;
+                        }
+                    }
                 }
             }
         }
@@ -317,16 +425,12 @@
             margin-top: 40px;
 
             & h4:first-child {
-                font-size: 26px;
+                font-size: 24px;
             }
 
             & .doctors {
                 margin-top: 30px;
                 grid-template-columns: 1fr;
-            }
-
-            & .no-doctor {
-                font-size: 16px;
             }
         }
     }

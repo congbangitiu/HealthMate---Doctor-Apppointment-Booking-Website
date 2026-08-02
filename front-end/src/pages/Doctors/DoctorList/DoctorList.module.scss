@@ -47,6 +47,10 @@
     .container {
         padding: 115px 40px 50px 40px;
 
+        & h2 {
+            font-size: 42px;
+        }
+
         & .doctors-wrapper {
             & .doctors {
                 grid-template-columns: repeat(3, 1fr);
