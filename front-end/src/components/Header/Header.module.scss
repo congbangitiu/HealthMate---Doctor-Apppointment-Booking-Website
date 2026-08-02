@@ -302,7 +302,7 @@
                 gap: 30px;
 
                 & .link {
-                    font-size: 15px;
+                    font-size: 16px;
                 }
             }
         }
@@ -338,10 +338,13 @@
                 }
             }
 
-            & .login,
-            & .register {
+            & .login {
                 padding: 8px 12px;
-                font-size: 15px;
+                font-size: 16px;
+            }
+
+            & .register {
+                display: none;
             }
         }
     }
