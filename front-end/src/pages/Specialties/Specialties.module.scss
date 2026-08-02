@@ -6,6 +6,9 @@
     background-size: cover;
 
     & .carousel {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+
         & img {
             height: 600px;
         }
@@ -124,17 +127,30 @@
 
 @media only screen and (max-width: 1024px) {
     .container {
-        padding: 100px 60px 60px 60px;
+        padding: 80px 60px 60px 60px;
+        overflow-x: hidden;
+
+        & .carousel {
+            width: 100vw;
+            margin-left: calc(50% - 50vw);
+
+            & img {
+                height: 380px;
+            }
+        }
     }
 }
 
 @media only screen and (max-width: 768px) {
     .container {
-        padding: 80px 20px 40px 20px;
+        padding: 60px 20px 40px 20px;
 
         & .carousel {
+            width: 100vw;
+            margin-left: calc(50% - 50vw);
+
             & img {
-                height: 200px;
+                height: 220px;
             }
         }
 
