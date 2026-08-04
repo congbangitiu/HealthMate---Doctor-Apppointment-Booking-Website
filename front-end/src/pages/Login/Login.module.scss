@@ -196,6 +196,32 @@
     }
 }
 
+@media only screen and (max-width: 1024px) {
+    .container {
+        padding: 170px 40px 90px 40px;
+        min-height: calc(100vh - 90px - 200px);
+
+        & .inner {
+            width: 100%;
+            padding: 25px 25px 30px 25px;
+
+            & form {
+                gap: 20px;
+
+                & .authentication {
+                    & .info {
+                        gap: 10px;
+
+                        & input {
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 @media only screen and (max-width: 768px) {
     .container {
         padding: 100px 15px 40px 15px;

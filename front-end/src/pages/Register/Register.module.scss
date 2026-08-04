@@ -330,6 +330,45 @@
     align-items: center;
 }
 
+@media only screen and (max-width: 1024px) {
+    .container {
+        padding: 120px 40px 40px 40px;
+
+        & .inner {
+            width: 100%;
+            padding: 25px 25px 30px 25px;
+
+            & .fields {
+                grid-template-columns: 1fr 1fr;
+                gap: 18px;
+            }
+
+            & .selection {
+                flex-wrap: wrap;
+                justify-content: space-between !important;
+                gap: 20px;
+            }
+
+            & .authenticators {
+                width: 100% !important;
+            }
+
+            & .register-btn {
+                width: 60%;
+            }
+        }
+    }
+
+    .form-update {
+        width: min(520px, calc(100% - 40px));
+        padding: 22px;
+    }
+
+    .verifyOTP {
+        width: 100%;
+    }
+}
+
 @media only screen and (max-width: 768px) {
     .container {
         padding: 100px 15px 40px 15px;
