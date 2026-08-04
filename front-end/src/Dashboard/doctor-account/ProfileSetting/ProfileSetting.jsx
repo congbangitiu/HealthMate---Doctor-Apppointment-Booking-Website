@@ -6,6 +6,7 @@ import { FaRegTrashAlt } from 'react-icons/fa';
 import { MdOutlineModeEditOutline, MdFileUpload } from 'react-icons/md';
 import { LiaSaveSolid } from 'react-icons/lia';
 import { uploadImageToCloudinary } from '../../../utils/services/uploadCloudinary';
+import { sanitizePhoneNumber } from '../../../utils/number/sanitizePhoneNumber';
 import { BASE_URL, token } from '../../../../config';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
@@ -17,7 +18,7 @@ const cx = classNames.bind(styles);
 
 const ProfileSetting = ({ doctorData, isMobile }) => {
     const { t, i18n } = useTranslation(['profileSettingDoctor', 'specialties']);
-    
+
     useEffect(() => {
         window.scrollTo({
             top: 0,
@@ -166,6 +167,11 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
         } else {
             setFormData({ ...formData, [name]: value });
         }
+    };
+
+    const handlePhoneChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: sanitizePhoneNumber(value) });
     };
 
     const handleUploadAvatar = async (e) => {
@@ -380,12 +386,14 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                     <div className={cx('info')}>
                         <label htmlFor="phone">{t('fields.phone')}</label>
                         <input
-                            type="text"
+                            type="tel"
                             id="phone"
                             placeholder={t('fields.phone')}
+                            inputMode="numeric"
+                            pattern="[0-9]*"
                             value={formData.phone}
                             name="phone"
-                            onChange={handleInputChange}
+                            onChange={handlePhoneChange}
                             required
                         />
                     </div>

@@ -16,6 +16,7 @@ import VerifyOTP from '../../components/VerifyOTP/VerifyOTP.jsx';
 import parseJsonResponse from '../../utils/services/parseJsonResponse.js';
 import truncateNumber from '../../utils/number/truncateNumber';
 import { auth, RecaptchaVerifier, signInWithPhoneNumber } from '../../utils/services/firebase';
+import { sanitizePhoneNumber } from '../../utils/number/sanitizePhoneNumber';
 import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
@@ -78,6 +79,10 @@ const Register = () => {
 
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handlePhoneChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: sanitizePhoneNumber(e.target.value) });
     };
 
     const handlePasswordChange = (e) => {
@@ -245,11 +250,13 @@ const Register = () => {
                             <p>{t('fields.phone')}</p>
                             <div className={cx('info')}>
                                 <input
-                                    type="text"
+                                    type="tel"
                                     placeholder={t('fields.enterPhone')}
                                     name="phone"
+                                    inputMode="numeric"
+                                    pattern="[0-9]*"
                                     value={formData.phone}
-                                    onChange={handleInputChange}
+                                    onChange={handlePhoneChange}
                                     required
                                 />
                                 <CiMobile3 className={cx('icon')} />

@@ -9,6 +9,7 @@ import { IoMdClose } from 'react-icons/io';
 import { IoHomeOutline } from 'react-icons/io5';
 import { LiaBirthdayCakeSolid } from 'react-icons/lia';
 import { toast } from 'react-toastify';
+import { sanitizePhoneNumber } from '../../../utils/number/sanitizePhoneNumber';
 import SyncLoader from 'react-spinners/SyncLoader';
 import { uploadImageToCloudinary } from '../../../utils/services/uploadCloudinary';
 import { BASE_URL, token } from '../../../../config';
@@ -53,6 +54,10 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
 
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handlePhoneChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: sanitizePhoneNumber(e.target.value) });
     };
 
     const handleFileInputChange = async (e) => {
@@ -133,11 +138,13 @@ const UpdateInformation = ({ setShowFormUpdateInfo, userData }) => {
                         <p>{t('fields.phone')}</p>
                         <div className={cx('info')}>
                             <input
-                                type="text"
+                                type="tel"
                                 placeholder={t('fields.phonePlaceholder')}
                                 name="phone"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
                                 value={formData.phone}
-                                onChange={handleInputChange}
+                                onChange={handlePhoneChange}
                             />
                             <CiMobile3 className={cx('icon')} />
                         </div>

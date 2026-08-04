@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Contact.module.scss';
 import { useTranslation } from 'react-i18next';
+import { sanitizePhoneNumber } from '../../utils/number/sanitizePhoneNumber';
 
 const cx = classNames.bind(styles);
 
@@ -14,6 +15,10 @@ const Contact = () => {
             behavior: 'smooth',
         });
     }, []);
+
+    const handlePhoneInput = (event) => {
+        event.target.value = sanitizePhoneNumber(event.target.value);
+    };
 
     return (
         <div className={cx('container')}>
@@ -31,7 +36,14 @@ const Contact = () => {
                     </div>
                     <div className={cx('info')}>
                         <label htmlFor="phone">{t('phone')}</label>
-                        <input type="text" id="phone" placeholder={t('phonePlaceholder')} />
+                        <input
+                            type="tel"
+                            id="phone"
+                            placeholder={t('phonePlaceholder')}
+                            inputMode="numeric"
+                            pattern="[0-9]*"
+                            onInput={handlePhoneInput}
+                        />
                     </div>
                     <div className={cx('info')}>
                         <label htmlFor="subject">{t('subject')}</label>
