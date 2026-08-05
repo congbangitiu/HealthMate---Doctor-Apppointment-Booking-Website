@@ -198,7 +198,7 @@
 
 @media only screen and (max-width: 1024px) {
     .container {
-        padding: 170px 40px 90px 40px;
+        padding: 170px 150px 90px 150px;
         min-height: calc(100vh - 90px - 200px);
 
         & .inner {
@@ -224,7 +224,7 @@
 
 @media only screen and (max-width: 768px) {
     .container {
-        padding: 100px 15px 40px 15px;
+        padding: 100px 20px 40px 20px;
         width: 100%;
 
         & .inner {
