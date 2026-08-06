@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext, useRef } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Chat.module.scss';
 import axios from 'axios';
@@ -13,6 +14,8 @@ import socket from '../../utils/services/socket';
 const cx = classNames.bind(styles);
 
 const Chat = () => {
+    const navigate = useNavigate();
+    const { id: chatIdFromParams } = useParams();
     const isMobile = useMediaQuery('(max-width:768px)');
     const user = JSON.parse(localStorage.getItem('user'));
     const { role } = useContext(authContext);
@@ -73,6 +76,19 @@ const Chat = () => {
             fetchUserChats();
         }
     }, [user?._id]);
+
+    // Keep selected chat in sync with URL param
+    useEffect(() => {
+        if (!userChats.length) return;
+
+        if (!chatIdFromParams) {
+            setSelectedChat(null);
+            return;
+        }
+
+        const chatFromUrl = userChats.find((chat) => chat._id === chatIdFromParams);
+        setSelectedChat(chatFromUrl ?? null);
+    }, [chatIdFromParams, userChats]);
 
     // Join all rooms so we can receive new-message for any chat
     const joinedRooms = useRef(new Set());
@@ -272,6 +288,12 @@ const Chat = () => {
         }
 
         setSelectedChat(updatedChat);
+        navigate(`/chats/${updatedChat._id}`);
+    };
+
+    const handleDeselectChat = () => {
+        setSelectedChat(null);
+        if (chatIdFromParams) navigate('/chats');
     };
 
     return (
@@ -291,6 +313,7 @@ const Chat = () => {
                 <ContentChat
                     selectedChat={selectedChat}
                     setSelectedChat={setSelectedChat}
+                    onBack={handleDeselectChat}
                     userId={user?._id}
                     role={role}
                     isMobile={isMobile}

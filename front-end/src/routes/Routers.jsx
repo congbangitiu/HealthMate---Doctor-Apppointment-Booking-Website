@@ -23,74 +23,70 @@ const MedicalRecordsPatient = lazy(() => import('../Dashboard/user-account/Medic
 const MedicalRecordsDoctor = lazy(() => import('../Dashboard/doctor-account/MedicalRecords/MedicalRecords'));
 const Management = lazy(() => import('../Dashboard/admin-account/Management/Management'));
 const Chat = lazy(() => import('../pages/Chat/Chat'));
-const ContentChat = lazy(() => import('../components/ContentChat/ContentChat'));
 
 const Routers = () => {
     return (
         <Suspense fallback={<Loader iconSize={15} />}>
-        <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/doctors" element={<DoctorList />} />
-            <Route path="/doctors/:id" element={<DoctorDetails />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/specialties" element={<Specialties />} />
-            <Route path="/specialties/:id" element={<SpecialtyDetails />} />
-            <Route path="/services/:id" element={<ServiceDetails />} />
-            <Route path="/checkout-success" element={<CheckoutSucess />} />
-            <Route path="/chats" element={<Chat />} />
-            <Route path="/chats/:id" element={<ContentChat />} />
-            <Route
-                path="/users/profile/me"
-                element={
-                    <ProtectedRoute allowedRoles={['patient']}>
-                        <MyAccount />
-                    </ProtectedRoute>
-                }
-            />
-            <Route
-                path="/users/appointments/my-appointments/:id"
-                element={
-                    <ProtectedRoute allowedRoles={['patient', 'admin']}>
-                        <MedicalRecordsPatient />
-                    </ProtectedRoute>
-                }
-            />
-            <Route
-                path="/doctors/profile/me"
-                element={
-                    <ProtectedRoute allowedRoles={['doctor']}>
-                        <Dashboard />
-                    </ProtectedRoute>
-                }
-            />
-            <Route
-                path="/doctors/appointments/my-appointments/:id"
-                element={
-                    <ProtectedRoute allowedRoles={['doctor']}>
-                        <MedicalRecordsDoctor />
-                    </ProtectedRoute>
-                }
-            />
-            <Route path="/complete-sign-up" element={<CompleteSignUp />} />
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/doctors" element={<DoctorList />} />
+                <Route path="/doctors/:id" element={<DoctorDetails />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/specialties" element={<Specialties />} />
+                <Route path="/specialties/:id" element={<SpecialtyDetails />} />
+                <Route path="/services/:id" element={<ServiceDetails />} />
+                <Route path="/checkout-success" element={<CheckoutSucess />} />
+                <Route path="/chats" element={<Chat />} />
+                <Route path="/chats/:id" element={<Chat />} />
+                <Route
+                    path="/users/profile/me"
+                    element={
+                        <ProtectedRoute allowedRoles={['patient']}>
+                            <MyAccount />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/users/appointments/my-appointments/:id"
+                    element={
+                        <ProtectedRoute allowedRoles={['patient', 'admin']}>
+                            <MedicalRecordsPatient />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/doctors/profile/me"
+                    element={
+                        <ProtectedRoute allowedRoles={['doctor']}>
+                            <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/doctors/appointments/my-appointments/:id"
+                    element={
+                        <ProtectedRoute allowedRoles={['doctor']}>
+                            <MedicalRecordsDoctor />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route path="/complete-sign-up" element={<CompleteSignUp />} />
 
-            <Route
-                path="/admins/management"
-                element={<Navigate to="/admins/management/dashboard" replace />}
-            />
-            <Route
-                path="/admins/management/:tab"
-                element={
-                    <ProtectedRoute allowedRoles={['admin']}>
-                        <Management />
-                    </ProtectedRoute>
-                }
-            />
-        </Routes>
+                <Route path="/admins/management" element={<Navigate to="/admins/management/dashboard" replace />} />
+                <Route
+                    path="/admins/management/:tab"
+                    element={
+                        <ProtectedRoute allowedRoles={['admin']}>
+                            <Management />
+                        </ProtectedRoute>
+                    }
+                />
+            </Routes>
         </Suspense>
     );
 };

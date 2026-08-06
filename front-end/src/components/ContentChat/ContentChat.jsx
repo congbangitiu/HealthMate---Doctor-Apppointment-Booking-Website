@@ -28,7 +28,7 @@ import socket from './../../utils/services/socket';
 
 const cx = classNames.bind(styles);
 
-const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile }) => {
+const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile, onBack }) => {
     const { t } = useTranslation('chat');
     const [openPicker, setOpenPicker] = useState(false);
     const [activeMenuIndex, setActiveMenuIndex] = useState(null);
@@ -391,7 +391,7 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile }) 
         <div className={cx('container')}>
             <div className={cx('header-part')}>
                 <div className={cx('info')}>
-                    {isMobile && <IoIosArrowBack className={cx('icon')} onClick={() => setSelectedChat(null)} />}
+                    {isMobile && <IoIosArrowBack className={cx('icon')} onClick={onBack} />}
                     <div className={cx('img-wrapper')}>
                         <img src={role === 'doctor' ? selectedChat.user.photo : selectedChat.doctor.photo} alt="" />
                         {role === 'doctor'
@@ -636,6 +636,7 @@ ContentChat.propTypes = {
     setSelectedChat: PropTypes.func,
     role: PropTypes.string,
     isMobile: PropTypes.bool,
+    onBack: PropTypes.func,
 };
 
 export default ContentChat;

@@ -188,6 +188,21 @@
     }
 }
 
+@media screen and (max-width: 1024px) {
+    .container {
+        width: 400px;
+        height: 550px;
+
+        & footer {
+            padding: 12px;
+
+            & .icon {
+                font-size: 28px;
+            }
+        }
+    }
+}
+
 @media screen and (max-width: 768px) {
     .container {
         width: 100%;

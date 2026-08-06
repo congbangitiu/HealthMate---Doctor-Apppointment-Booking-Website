@@ -502,6 +502,25 @@
     }
 }
 
+@media only screen and (max-width: 1024px) {
+    .container {
+        width: 60%;
+
+        & .footer-part {
+            & .edit-file-type {
+                & .file-part {
+                    padding: 10px;
+                    gap: 10px;
+                }
+            }
+        }
+    }
+
+    .not-selected-chat {
+        width: 60%;
+    }
+}
+
 @media only screen and (max-width: 768px) {
     .container {
         width: 100%;
@@ -526,8 +545,8 @@
 
             & .edit-file-type {
                 & .file-part {
-                    padding: 10px;
-                    gap: 10px;
+                    padding: 5px;
+                    gap: 5px;
 
                     & .file-wrapper {
                         & img,
