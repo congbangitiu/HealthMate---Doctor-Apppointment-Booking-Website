@@ -22,6 +22,7 @@ const Selections = ({
     hidePatient,
     hideDoctor,
 }) => {
+    const isTablet = useMediaQuery('(min-width: 769px) and (max-width: 1024px)');
     const isMobile = useMediaQuery('(max-width:768px)');
     const { t } = useTranslation('selections');
 
@@ -31,7 +32,7 @@ const Selections = ({
             border: '2px solid var(--primaryColor)',
             borderRadius: '5px',
             boxShadow: 'none',
-            width: !isMobile ? '250px' : '100%',
+            width: isTablet ? '220px' : isMobile ? '100%' : '250px',
             height: '45px',
             display: 'flex',
             alignItems: 'center',

@@ -1,4 +1,4 @@
-import React, { useState, useTransition } from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './MyAccount.module.scss';
 import { TbStatusChange } from 'react-icons/tb';
@@ -21,6 +21,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const MyAccount = () => {
     const { t } = useTranslation('myAccount');
+    const isTablet = useMediaQuery('(max-width:1024px)');
     const isMobile = useMediaQuery('(max-width:768px)');
     const { data: userData, loading, error } = useFetchProfile(`${BASE_URL}/users/profile/me`);
     const [showFormUpdateInfo, setShowFormUpdateInfo] = useState(false);
@@ -36,12 +37,12 @@ const MyAccount = () => {
                 <Error errorMessage={error} />
             ) : (
                 <div className={cx('container')}>
-                    {isMobile && (
-                        <div className={cx('profile-mobile-btn')} onClick={() => setShowProfileMobile(true)}>
+                    {isTablet && (
+                        <div className={cx('profile-small-screen-btn')} onClick={() => setShowProfileMobile(true)}>
                             {t('profile')} {'>>'}
                         </div>
                     )}
-                    {!loading && !error && !isMobile && (
+                    {!isTablet && (
                         <div className={cx('info')}>
                             <img src={userData.photo} alt="" />
                             <h1>{userData.fullname}</h1>
@@ -91,15 +92,15 @@ const MyAccount = () => {
                         anchor="left"
                         open={showProfileMobile}
                         onClose={() => setShowProfileMobile(false)}
-                        BackdropProps={{ style: { top: '60px' } }}
+                        BackdropProps={{ style: { top: isMobile ? '60px' : '90px' } }}
                         sx={{
                             '& .MuiPaper-root': {
-                                width: '85%',
-                                top: '60px',
+                                width: 'max-content',
+                                top: isMobile ? '60px' : '90px',
                             },
                         }}
                     >
-                        <div className={cx('info')}>
+                        <div className={cx('info-mobile')}>
                             <img src={userData.photo} alt="" />
                             <h1>{userData.fullname}</h1>
                             <h4>{userData.username}</h4>

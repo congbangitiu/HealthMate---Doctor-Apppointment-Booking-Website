@@ -27,7 +27,7 @@ import { initDoctorDigestMailCron } from './utils/digestEmailSender.js';
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 5000;
 const corsOptions = { origin: true };
 
 // Create HTTP server

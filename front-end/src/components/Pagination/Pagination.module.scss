@@ -12,6 +12,9 @@
             cursor: pointer;
 
             & a {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
                 padding: 8px 14px;
                 border: 1px solid var(--lightGrayColor);
                 color: var(--primaryColor);

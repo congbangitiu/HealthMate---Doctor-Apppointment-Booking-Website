@@ -9,20 +9,6 @@
         background-size: cover;
         gap: 50px;
 
-        & .profile-mobile-btn {
-            position: fixed;
-            top: 70px;
-            left: 0;
-            background-color: var(--primaryColor);
-            padding: 5px 10px;
-            font-size: 16px;
-            color: var(--whiteColor);
-            font-weight: 600;
-            border-top-right-radius: 8px;
-            border-bottom-right-radius: 8px;
-            z-index: 100;
-        }
-
         & .info {
             display: flex;
             flex-direction: column;
@@ -191,19 +177,27 @@
     }
 }
 
-@media only screen and (max-width: 1024px) {
-    .logout {
-        width: 40%;
-    }
-}
-
 // Responsive
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1024px) {
     .container-parent {
-        padding: 80px 20px 0 20px;
+        padding: 80px 40px 0 40px;
 
         & .container {
             flex-direction: column;
+
+            & .profile-small-screen-btn {
+                position: fixed;
+                top: 105px;
+                left: 0;
+                background-color: var(--primaryColor);
+                padding: 5px 10px;
+                font-size: 16px;
+                color: var(--whiteColor);
+                font-weight: 600;
+                border-top-right-radius: 8px;
+                border-bottom-right-radius: 8px;
+                z-index: 100;
+            }
 
             & .info {
                 width: 100%;
@@ -221,7 +215,7 @@
         }
     }
 
-    .info {
+    .info-mobile {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -349,5 +343,23 @@
         &.logout {
             width: 80%;
         }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .container-parent {
+        padding: 80px 20px 0 20px;
+
+        & .container {
+            flex-direction: column;
+
+            & .profile-small-screen-btn {
+                top: 70px;
+            }
+        }
+    }
+
+    .info-mobile {
+        width: max-content;
     }
 }
