@@ -6,7 +6,8 @@ import { MdLogout } from 'react-icons/md';
 import { TbStatusChange } from 'react-icons/tb';
 import ChangePassword from '../ChangePassword/ChangePassword';
 import ConfirmLogout from '../../../components/ConfirmLogout/ConfirmLogout';
-import { useMediaQuery, Dialog, Slide } from '@mui/material';
+import { Dialog, Slide } from '@mui/material';
+import useResponsive from '../../../hooks/useResponsive';
 import DefaultMaleDoctorAvatar from '../../../assets/images/default-male-doctor.png';
 import DefaultFemaleDoctorAvatar from '../../../assets/images/default-female-doctor.png';
 import { useTranslation } from 'react-i18next';
@@ -19,8 +20,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const Tabs = ({ tab, setTab, doctorData, setShowProfileMobile }) => {
     const { t, i18n } = useTranslation('tabsDoctor');
-    const isMobile = useMediaQuery('(max-width:768px)');
-    const isTablet = useMediaQuery('(min-width:769px) and (max-width:1024px)');
+    const { isMobile, isTablet } = useResponsive();
     const [showFormChangePassword, setShowFormChangePassword] = useState(false);
     const [showConfirmLogout, setShowConfirmLogout] = useState(false);
 

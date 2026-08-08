@@ -13,7 +13,7 @@ import { BASE_URL, token } from '../../../../config';
 import Loader from '../../../components/Loader/Loader';
 import { FaCircleExclamation } from 'react-icons/fa6';
 import { generateAndDownloadPDF, generatePDFBlob } from '../../../utils/file/handlePDF';
-import { useMediaQuery } from '@mui/material';
+import useResponsive from '../../../hooks/useResponsive';
 import { useTranslation } from 'react-i18next';
 import translateOrganName from '../../../utils/translation/translateOrganName';
 import capitalizeFirstLetter from '../../../utils/text/capitalizeFirstLetter';
@@ -24,7 +24,7 @@ const cx = classNames.bind(styles);
 const ExaminationFormView = ({ appointment, examination, onPDFUploadSuccess }) => {
     const { t: tMedicalRecords } = useTranslation('medicalRecords');
     const { t: tExaminationForm } = useTranslation('examinationForm');
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile } = useResponsive();
     const [loadingBtn, setLoadingBtn] = useState(false);
     const [loading, setLoading] = useState(false);
 

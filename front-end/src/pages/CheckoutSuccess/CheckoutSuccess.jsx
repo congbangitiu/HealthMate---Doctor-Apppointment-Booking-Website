@@ -8,14 +8,14 @@ import confetti from 'canvas-confetti';
 import { BASE_URL, token } from '../../../config';
 import convertTime from '../../utils/date-time/convertTime';
 import formatDate from '../../utils/date-time/formatDate';
-import { useMediaQuery } from '@mui/material';
+import useResponsive from '../../hooks/useResponsive';
 import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const CheckoutSuccess = () => {
     const { t } = useTranslation('checkoutSuccess');
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile } = useResponsive();
     const [appointment, setAppointment] = useState(null);
     const [loading, setLoading] = useState(true);
     // Get the session_id from the URL

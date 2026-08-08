@@ -8,13 +8,13 @@ import DefaultMaleDoctorAvatar from '../../assets/images/default-male-doctor.png
 import DefaultFemaleDoctorAvatar from '../../assets/images/default-female-doctor.png';
 import { useTranslation } from 'react-i18next';
 import translateSubspecialtyName from '../../utils/translation/translateSubspecialtyName';
-import { useMediaQuery } from '@mui/material';
+import useResponsive from '../../hooks/useResponsive';
 
 const cx = classNames.bind(styles);
 
 const DoctorCard = ({ doctor }) => {
     const { t, i18n } = useTranslation('doctorCard');
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile } = useResponsive();
 
     const defaultDoctorAvatar = doctor.gender === 'male' ? DefaultMaleDoctorAvatar : DefaultFemaleDoctorAvatar;
 

@@ -14,7 +14,8 @@ import { useParams } from 'react-router-dom';
 import { authContext } from '../../../context/AuthContext';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
-import { Dialog, useMediaQuery } from '@mui/material';
+import { Dialog } from '@mui/material';
+import useResponsive from '../../../hooks/useResponsive';
 import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
@@ -23,8 +24,7 @@ const DoctorDetails = () => {
     const { t } = useTranslation('doctorDetails');
     const [activeTab, setActiveTab] = useState('about');
     const { id } = useParams();
-    const isMobile = useMediaQuery('(max-width:768px)');
-    const isTablet = useMediaQuery('(max-width:1024px)');
+    const { isMobile, isTabletOrMobile: isTablet } = useResponsive();
     const { data: doctor, loading, error } = useFetchData(`${BASE_URL}/doctors/${id}`);
     const { role } = useContext(authContext);
     const [loadingApprove, setLoadingApprove] = useState(false);

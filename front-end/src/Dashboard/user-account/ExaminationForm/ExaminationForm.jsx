@@ -15,7 +15,7 @@ import { BASE_URL } from '../../../../config';
 import useFetchData from '../../../hooks/useFetchData';
 import { FaCircleExclamation } from 'react-icons/fa6';
 import { generateAndDownloadPDF } from '../../../utils/file/handlePDF';
-import { useMediaQuery } from '@mui/material';
+import useResponsive from '../../../hooks/useResponsive';
 import { useTranslation } from 'react-i18next';
 import translateOrganName from '../../../utils/translation/translateOrganName';
 import capitalizeFirstLetter from '../../../utils/text/capitalizeFirstLetter';
@@ -27,7 +27,7 @@ const ExaminationForm = ({ appointment }) => {
     const { t: tMedicalRecords } = useTranslation('medicalRecords');
     const { t: tExaminationForm } = useTranslation('examinationForm');
     const { id } = useParams();
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile } = useResponsive();
     const [loadingBtn, setLoadingBtn] = useState(false);
     const { data: examination, loading } = useFetchData(`${BASE_URL}/examinations/${id}`);
 

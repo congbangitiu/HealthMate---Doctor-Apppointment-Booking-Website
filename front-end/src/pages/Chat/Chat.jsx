@@ -8,7 +8,7 @@ import SidebarChat from '../../components/SidebarChat/SidebarChat';
 import ContentChat from '../../components/ContentChat/ContentChat';
 import { token } from '../../../config';
 import { authContext } from '../../context/AuthContext';
-import { useMediaQuery } from '@mui/material';
+import useResponsive from '../../hooks/useResponsive';
 import socket from '../../utils/services/socket';
 
 const cx = classNames.bind(styles);
@@ -16,7 +16,7 @@ const cx = classNames.bind(styles);
 const Chat = () => {
     const navigate = useNavigate();
     const { id: chatIdFromParams } = useParams();
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile } = useResponsive();
     const user = JSON.parse(localStorage.getItem('user'));
     const { role } = useContext(authContext);
 

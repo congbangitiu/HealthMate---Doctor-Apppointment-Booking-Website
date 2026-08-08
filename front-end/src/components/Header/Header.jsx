@@ -11,7 +11,8 @@ import { RxHamburgerMenu } from 'react-icons/rx';
 import { FaUserDoctor } from 'react-icons/fa6';
 import { MdMedicalServices, MdContactSupport } from 'react-icons/md';
 import { FaStethoscope } from 'react-icons/fa';
-import { Popover, Dialog, Drawer, Slide, useMediaQuery } from '@mui/material';
+import { Popover, Dialog, Drawer, Slide } from '@mui/material';
+import useResponsive from '../../hooks/useResponsive';
 import { authContext } from '../../context/AuthContext';
 import ConfirmLogout from '../ConfirmLogout/ConfirmLogout';
 import Notifications from '../Notifications/Notifications';
@@ -31,7 +32,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const Header = () => {
     const { t } = useTranslation('navbar');
     const location = useLocation();
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile } = useResponsive();
     const { user, role, token } = useContext(authContext);
     const [showConfirmLogout, setShowConfirmLogout] = useState(false);
     const [notifications, setNotifications] = useState([]);

@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 import { PlusOutlined } from '@ant-design/icons';
 import { Image, Upload } from 'antd';
 import { uploadImageToCloudinary } from '../../../utils/services/uploadCloudinary';
-import { useMediaQuery } from '@mui/material';
+import useResponsive from '../../../hooks/useResponsive';
 import SignatureConfirmation from '../../../components/SignatureConfirmation/SignatureConfirmation';
 import { useTranslation } from 'react-i18next';
 import translateGender from '../../../utils/translation/translateGender';
@@ -53,7 +53,7 @@ const ExaminationFormEdit = ({
     const { t: tMedicalRecords } = useTranslation('medicalRecords');
     const { t: tExaminationForm } = useTranslation('examinationForm');
     const theme = useTheme();
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile } = useResponsive();
     const [loadingBtnSave, setLoadingBtnSave] = useState(false);
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');

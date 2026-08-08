@@ -13,7 +13,7 @@ import SyncLoader from 'react-spinners/SyncLoader';
 import { FaCircleExclamation } from 'react-icons/fa6';
 import { QRCodeSVG } from 'qrcode.react';
 import { generateAndDownloadPDF } from '../../../utils/file/handlePDF';
-import { useMediaQuery } from '@mui/material';
+import useResponsive from '../../../hooks/useResponsive';
 import { useTranslation } from 'react-i18next';
 import capitalizeFirstLetter from '../../../utils/text/capitalizeFirstLetter';
 import translateDosageForm from '../../../utils/translation/translateDosageForm';
@@ -26,7 +26,7 @@ const cx = classNames.bind(styles);
 const Prescription = () => {
     const { t: tMedicalRecords } = useTranslation('medicalRecords');
     const { t: tPrescription } = useTranslation('prescription');
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile } = useResponsive();
     const { id: appointmentId } = useParams();
     const { data: appointment, loading } = useFetchData(
         `${BASE_URL}/users/appointments/my-appointments/${appointmentId}`,

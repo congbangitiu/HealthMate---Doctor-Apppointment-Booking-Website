@@ -4,7 +4,8 @@ import classNames from 'classnames/bind';
 import styles from './SidePanel.module.scss';
 import convertTime from '../../utils/date-time/convertTime';
 import ConfirmBooking from '../../Dashboard/user-account/ConfirmBooking/ConfirmBooking';
-import { Dialog, Slide, useMediaQuery } from '@mui/material';
+import { Dialog, Slide } from '@mui/material';
+import useResponsive from '../../hooks/useResponsive';
 import formatDate from '../../utils/date-time/formatDate';
 import { BiExpandAlt, BiCollapseAlt } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +26,7 @@ const SidePanel = ({
     setExpandeSidePanel,
 }) => {
     const { t } = useTranslation('doctorDetails');
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile } = useResponsive();
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [timeSlots, setTimeSlots] = useState(initialTimeSlots);
     const [openDialog, setOpenDialog] = useState(false);

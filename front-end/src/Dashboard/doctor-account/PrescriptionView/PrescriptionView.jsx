@@ -12,7 +12,7 @@ import Loader from '../../../components/Loader/Loader';
 import { QRCodeSVG } from 'qrcode.react';
 import { FaCircleExclamation } from 'react-icons/fa6';
 import { generateAndDownloadPDF, generatePDFBlob } from '../../../utils/file/handlePDF';
-import { useMediaQuery } from '@mui/material';
+import useResponsive from '../../../hooks/useResponsive';
 import { useTranslation } from 'react-i18next';
 import capitalizeFirstLetter from '../../../utils/text/capitalizeFirstLetter';
 import translateDosageForm from '../../../utils/translation/translateDosageForm';
@@ -25,7 +25,7 @@ const cx = classNames.bind(styles);
 const PrescriptionView = ({ appointment, prescription, onPDFUploadSuccess }) => {
     const { t: tMedicalRecords } = useTranslation('medicalRecords');
     const { t: tPrescription } = useTranslation('prescription');
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile } = useResponsive();
     const [loadingBtn, setLoadingBtn] = useState(false);
     const [loading, setLoading] = useState(false);
 

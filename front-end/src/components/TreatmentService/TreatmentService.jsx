@@ -4,13 +4,13 @@ import styles from './TreatmentService.module.scss';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Treatments from '../../assets/data/mock-data/services';
-import { useMediaQuery } from '@mui/material';
+import useResponsive from '../../hooks/useResponsive';
 
 const cx = classNames.bind(styles);
 
 const TreatmentService = () => {
     const { t } = useTranslation('treatmentService');
-    const isSmallScreen = useMediaQuery('(max-width:1024px)');
+    const { isTabletOrMobile: isSmallScreen } = useResponsive();
     const serviceNumberLoaded = isSmallScreen ? 6 : 8;
 
     const [visibleServices, setVisibleServices] = useState(serviceNumberLoaded);

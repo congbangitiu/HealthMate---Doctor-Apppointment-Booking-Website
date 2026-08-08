@@ -9,7 +9,8 @@ import ChangePassword from '../ChangePassword/ChangePassword';
 import Loader from '../../../components/Loader/Loader';
 import Error from '../../../components/Error/Error';
 import ConfirmLogout from '../../../components/ConfirmLogout/ConfirmLogout';
-import { Dialog, Slide, Drawer, useMediaQuery } from '@mui/material';
+import { Dialog, Slide, Drawer } from '@mui/material';
+import useResponsive from '../../../hooks/useResponsive';
 import useFetchProfile from '../../../hooks/useFetchData';
 import { BASE_URL } from '../../../../config';
 import { useTranslation } from 'react-i18next';
@@ -21,8 +22,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const MyAccount = () => {
     const { t } = useTranslation('myAccount');
-    const isTablet = useMediaQuery('(max-width:1024px)');
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile, isTabletOrMobile: isTablet } = useResponsive();
     const { data: userData, loading, error } = useFetchProfile(`${BASE_URL}/users/profile/me`);
     const [showFormUpdateInfo, setShowFormUpdateInfo] = useState(false);
     const [showFormChangePassword, setShowFormChangePassword] = useState(false);

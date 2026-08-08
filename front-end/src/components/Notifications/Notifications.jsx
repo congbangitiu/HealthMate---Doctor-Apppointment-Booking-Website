@@ -7,7 +7,7 @@ import formatTimeAgo from '../../utils/date-time/formatTimeAgo';
 import formatDate from '../../utils/date-time/formatDate';
 import convertTime from '../../utils/date-time/convertTime';
 import { IoIosNotifications, IoIosArrowBack } from 'react-icons/io';
-import { useMediaQuery } from '@mui/material';
+import useResponsive from '../../hooks/useResponsive';
 import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
@@ -15,7 +15,7 @@ const cx = classNames.bind(styles);
 const Notifications = ({ notifications, role, handleCloseNotifications }) => {
     const { t, i18n } = useTranslation('notification');
     const navigate = useNavigate();
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile } = useResponsive();
     const [timeAgoMap, setTimeAgoMap] = useState({});
 
     useEffect(() => {

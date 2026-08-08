@@ -12,7 +12,7 @@ import { BASE_URL, token } from '../../../../config';
 import { QRCodeSVG } from 'qrcode.react';
 import Loader from '../../../components/Loader/Loader';
 import { generateAndDownloadPDF, generatePDFBlob } from '../../../utils/file/handlePDF';
-import { useMediaQuery } from '@mui/material';
+import useResponsive from '../../../hooks/useResponsive';
 import { useTranslation } from 'react-i18next';
 import translateGender from '../../../utils/translation/translateGender';
 import capitalizeFirstLetter from '../../../utils/text/capitalizeFirstLetter';
@@ -22,7 +22,7 @@ const cx = classNames.bind(styles);
 const ReExaminationAppointmentView = ({ appointment, prescription, onPDFUploadSuccess }) => {
     const { t: tMedicalRecords } = useTranslation('medicalRecords');
     const { t: tReExaminationForm } = useTranslation('reExaminationForm');
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile } = useResponsive();
     const [loadingBtn, setLoadingBtn] = useState(false);
     const [loading, setLoading] = useState(false);
 

@@ -14,7 +14,7 @@ import Loader from '../../../components/Loader/Loader';
 import ErrorSign from '../../../components/Error/Error';
 import { QRCodeSVG } from 'qrcode.react';
 import { generateAndDownloadPDF } from '../../../utils/file/handlePDF';
-import { useMediaQuery } from '@mui/material';
+import useResponsive from '../../../hooks/useResponsive';
 import { useTranslation } from 'react-i18next';
 import translateGender from '../../../utils/translation/translateGender';
 import capitalizeFirstLetter from '../../../utils/text/capitalizeFirstLetter';
@@ -24,7 +24,7 @@ const cx = classNames.bind(styles);
 const ReExaminationAppointment = ({ appointment }) => {
     const { t: tMedicalRecords } = useTranslation('medicalRecords');
     const { t: tReExaminationForm } = useTranslation('reExaminationForm');
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile } = useResponsive();
     const [loadingBtn, setLoadingBtn] = useState(false);
     const { data: prescription, loading, error } = useFetchData(`${BASE_URL}/prescriptions/${appointment._id}`);
 

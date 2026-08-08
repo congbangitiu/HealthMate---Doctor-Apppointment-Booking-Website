@@ -7,7 +7,7 @@ import { IoMdClose } from 'react-icons/io';
 import formatDate from '../../utils/date-time/formatDate';
 import convertTime from './../../utils/date-time/convertTime';
 import { FaRegTrashAlt } from 'react-icons/fa';
-import { useMediaQuery } from '@mui/material';
+import useResponsive from '../../hooks/useResponsive';
 import { useTranslation } from 'react-i18next';
 import translateSubspecialtyName from './../../utils/translation/translateSubspecialtyName';
 import translateAppointmentStatus from './../../utils/translation/translateAppointmentStatus';
@@ -16,7 +16,7 @@ const cx = classNames.bind(styles);
 
 const PatientAppointment = ({ appointment, handleDelete }) => {
     const { t, i18n } = useTranslation('myBookings');
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile } = useResponsive();
 
     const getStatusStyle = (status) => {
         switch (status) {

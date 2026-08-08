@@ -10,7 +10,8 @@ import ChatbotLogo from '../assets/images/Chatbot-Logo.png';
 import ChatIcon from '../assets/images/chat-icon.svg';
 import { FaPlus } from 'react-icons/fa6';
 import { FaChevronUp } from 'react-icons/fa';
-import { Drawer, useMediaQuery } from '@mui/material';
+import { Drawer } from '@mui/material';
+import useResponsive from '../hooks/useResponsive';
 import { BASE_URL } from '../../config';
 import { authContext } from '../context/AuthContext';
 import socket from '../utils/services/socket';
@@ -21,7 +22,7 @@ const cx = classNames.bind(styles);
 
 const Layout = () => {
     const { user } = useContext(authContext);
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile } = useResponsive();
     const [isHovered, setIsHovered] = useState(false);
     const [isShowChatbot, setIsShowChatbot] = useState(false);
     const [chats, setChats] = useState([]);

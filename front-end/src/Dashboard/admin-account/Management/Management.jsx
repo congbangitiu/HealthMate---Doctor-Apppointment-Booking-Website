@@ -9,7 +9,8 @@ import AppointmentManagement from '../AppointmentManagement/AppointmentManagemen
 import RevenueManagement from '../RevenueManagement/RevenueManagement';
 import { BASE_URL } from '../../../../config';
 import useFetchData from '../../../hooks/useFetchData';
-import { Dialog, Slide, Drawer, useMediaQuery } from '@mui/material';
+import { Dialog, Slide, Drawer } from '@mui/material';
+import useResponsive from '../../../hooks/useResponsive';
 import { FaCircleExclamation } from 'react-icons/fa6';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -24,7 +25,7 @@ const DEFAULT_TAB = 'dashboard';
 
 const Management = () => {
     const { t } = useTranslation('management');
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile } = useResponsive();
     const { tab } = useParams();
     const navigate = useNavigate();
     const [isShowTab, setIsShowTab] = useState(false);

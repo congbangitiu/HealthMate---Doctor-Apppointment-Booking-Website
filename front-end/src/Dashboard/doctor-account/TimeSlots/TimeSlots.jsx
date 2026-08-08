@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './TimeSlots.module.scss';
 import PropTypes from 'prop-types';
-import { MenuItem, Select, Box, useMediaQuery, useTheme } from '@mui/material';
+import { MenuItem, Select, Box, useTheme } from '@mui/material';
+import useResponsive from '../../../hooks/useResponsive';
 import formatDate from '../../../utils/date-time/formatDate';
 import convertTime from '../../../utils/date-time/convertTime';
 import getDateForDay from '../../../utils/date-time/getDateForDay';
@@ -19,7 +20,7 @@ const TimeSlots = ({
 }) => {
     const { t: tProfileDoctor } = useTranslation('profileSettingDoctor');
     const { t: tSchedule } = useTranslation('schedule');
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile } = useResponsive();
     const theme = useTheme();
 
     const today = new Date();

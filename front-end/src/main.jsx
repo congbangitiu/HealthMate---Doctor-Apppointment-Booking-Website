@@ -6,11 +6,11 @@ import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthContextProvider } from './context/AuthContext.jsx';
-import { useMediaQuery } from '@mui/material';
+import useResponsive from './hooks/useResponsive';
 import './utils/services/i18n.js';
 
 const ToastWrapper = () => {
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile } = useResponsive();
 
     return (
         <ToastContainer

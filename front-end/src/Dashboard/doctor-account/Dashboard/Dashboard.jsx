@@ -11,14 +11,15 @@ import Doctor from '../../../components/Doctor/Doctor';
 import AboutDoctor from '../../../components/AboutDoctor/AboutDoctor';
 import ProfileSetting from '../ProfileSetting/ProfileSetting';
 import Appointments from '../Appointments/Appointments';
-import { Drawer, useMediaQuery } from '@mui/material';
+import { Drawer } from '@mui/material';
+import useResponsive from '../../../hooks/useResponsive';
 import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 const Dashboard = () => {
     const { t } = useTranslation('dashboardDoctor');
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile } = useResponsive();
     const { data: doctorData, loading, error } = useGetProfile(`${BASE_URL}/doctors/profile/me`);
     const [tab, setTab] = useState('overview');
     const [showProfileMobile, setShowProfileMobile] = useState(false);

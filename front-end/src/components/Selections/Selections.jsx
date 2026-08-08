@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import Select from 'react-select';
 import styles from './Selections.module.scss';
-import { useMediaQuery } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import useResponsive from '../../hooks/useResponsive';
 
 const cx = classNames.bind(styles);
 
@@ -22,8 +22,7 @@ const Selections = ({
     hidePatient,
     hideDoctor,
 }) => {
-    const isTablet = useMediaQuery('(min-width: 769px) and (max-width: 1024px)');
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isTablet, isMobile } = useResponsive();
     const { t } = useTranslation('selections');
 
     const customStyles = {

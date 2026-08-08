@@ -8,7 +8,8 @@ import { BASE_URL, token } from '../../../../config';
 import { FaStar, FaLongArrowAltRight } from 'react-icons/fa';
 import { PiSmileySad } from 'react-icons/pi';
 import { CiCirclePlus } from 'react-icons/ci';
-import { Dialog, Slide, useMediaQuery } from '@mui/material';
+import { Dialog, Slide } from '@mui/material';
+import useResponsive from '../../../hooks/useResponsive';
 import roundNumber from '../../../utils/number/roundNumber';
 import Loader from '../../../components/Loader/Loader';
 import Error from '../../../components/Error/Error';
@@ -29,7 +30,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
     const { t, i18n } = useTranslation('doctorManagement');
-    const isMobile = useMediaQuery('(max-width:768px)');
+    const { isMobile } = useResponsive();
     const [query, setQuery] = useState('');
     const [doctorChart, setDoctorChart] = useState('');
     const [isActiveDoctor, setIsActiveDoctor] = useState();
