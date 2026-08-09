@@ -38,7 +38,7 @@ const MyAccount = () => {
             ) : (
                 <div className={cx('container')}>
                     {isTablet && (
-                        <div className={cx('profile-small-screen-btn')} onClick={() => setShowProfileMobile(true)}>
+                        <div className={cx('profile-tablet-mobile-btn')} onClick={() => setShowProfileMobile(true)}>
                             {t('profile')} {'>>'}
                         </div>
                     )}

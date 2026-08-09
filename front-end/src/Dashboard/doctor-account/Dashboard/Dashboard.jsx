@@ -33,7 +33,7 @@ const Dashboard = () => {
             ) : (
                 <div className={cx('container')}>
                     {isMobile && (
-                        <div className={cx('profile-small-screen-btn')} onClick={() => setShowProfileMobile(true)}>
+                        <div className={cx('profile-tablet-mobile-btn')} onClick={() => setShowProfileMobile(true)}>
                             {t('profileMobileBtn')}
                         </div>
                     )}
