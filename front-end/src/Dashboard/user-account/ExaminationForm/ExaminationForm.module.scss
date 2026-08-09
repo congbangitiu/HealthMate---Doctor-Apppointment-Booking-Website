@@ -254,6 +254,72 @@
     }
 }
 
+// Responsive
+@media only screen and (max-width: 1024px) {
+    .container {
+        & .examination {
+            & div:first-child {
+                & .brand {
+                    & img {
+                        width: 80px;
+                        height: 80px;
+                    }
+                }
+            }
+
+            & h1 {
+                font-size: 26px;
+            }
+
+            & h2 {
+                font-size: 24px;
+            }
+
+            & .ultrasound-results {
+                margin-top: 0;
+            }
+
+            & .patient-info p,
+            & .patient-info span p,
+            & .check-up span,
+            & .conclusion {
+                font-size: 18px;
+            }
+
+            & .confirmation {
+                & > div {
+                    & h4 {
+                        font-size: 18px;
+                    }
+
+                    & span {
+                        align-items: center;
+
+                        & img:first-child {
+                            width: 120px;
+                            height: 120px;
+                        }
+
+                        & img:last-child {
+                            width: 150px;
+                            top: 40px;
+                            left: 75px;
+                        }
+                    }
+
+                    & p {
+                        font-size: 18px;
+                    }
+                }
+            }
+        }
+
+        & button {
+            margin-top: 40px;
+        }
+    }
+}
+
 @media only screen and (max-width: 768px) {
     .container {
         width: 100%;
@@ -268,6 +334,10 @@
         }
 
         & .examination {
+            & h1 {
+                font-size: 22px;
+            }
+
             & div:first-child {
                 & .brand {
                     gap: 10px;
@@ -289,22 +359,18 @@
                 }
             }
 
-            & h1 {
-                font-size: 25px;
-            }
-
             & .patient-info {
                 gap: 0;
 
                 & p {
-                    font-size: 18px;
+                    font-size: 17px;
                 }
 
                 & span {
                     flex-direction: column;
 
                     & p {
-                        font-size: 18px;
+                        font-size: 17px;
                     }
                 }
             }
@@ -316,12 +382,17 @@
                 & span {
                     flex-direction: column;
                     gap: 0;
-                    font-size: 18px;
+                    font-size: 17px;
                 }
             }
 
             & h2 {
-                margin: 30px 0 20px 0;
+                font-size: 22px;
+            }
+
+            & .ultrasound-results table,
+            & .conclusion {
+                font-size: 17px;
             }
 
             & .confirmation {
@@ -330,13 +401,7 @@
                 & > div {
                     transform: translateX(12.5%);
 
-                    & h4 {
-                        font-size: 18px;
-                    }
-
                     & span {
-                        align-items: center;
-
                         & img:first-child {
                             width: 90px;
                             height: 90px;
@@ -347,11 +412,6 @@
                             top: 20px;
                             left: 90px;
                         }
-                    }
-
-                    & p {
-                        font-size: 18px;
-                        font-weight: 500;
                     }
                 }
             }
