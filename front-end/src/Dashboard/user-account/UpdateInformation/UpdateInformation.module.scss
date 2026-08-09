@@ -166,6 +166,40 @@
 }
 
 // Responsive
+@media only screen and (max-width: 1024px) {
+    .container {
+        overflow-y: auto;
+        padding: 0;
+
+        & .close-icon-wrapper {
+            margin-top: 0;
+
+            & .close-icon {
+                margin-right: 0;
+            }
+        }
+
+        & h1 {
+            font-size: 25px;
+            margin-bottom: 20px;
+        }
+
+        & form {
+            & .fields {
+                gap: 10px;
+
+                & .authentication {
+                    & .info {
+                        & .icon {
+                            font-size: 20px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 @media only screen and (max-width: 768px) {
     .container {
         overflow-y: auto;

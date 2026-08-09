@@ -332,8 +332,7 @@
     .form-update {
         &.update-info {
             width: 90%;
-            height: 90%;
-            padding: 20px;
+            padding: 30px;
         }
 
         &.change-password {
@@ -341,7 +340,7 @@
         }
 
         &.logout {
-            width: 80%;
+            width: max-content;
         }
     }
 }
