@@ -43,6 +43,9 @@ const ExaminationForm = ({ appointment }) => {
         }
     };
 
+    console.log(examination?.pdfInfo);
+    
+
     return (
         <>
             {loading ? (
@@ -64,7 +67,7 @@ const ExaminationForm = ({ appointment }) => {
                                     <p>Your Wellness - Our Priority</p>
                                 </div>
                             </div>
-                            {examination.updatedAt && (
+                            {examination?.pdfInfo?.url && (
                                 <div className={cx('qr-code')}>
                                     <QRCodeSVG value={examination?.pdfInfo?.url} size={isMobile ? 45 : 60} />
                                 </div>

@@ -273,6 +273,7 @@
 
             & h2 {
                 font-size: 24px;
+                margin: 25px 0 15px;
             }
 
             & .ultrasound-results {
@@ -376,12 +377,10 @@
             }
 
             & .check-up {
-                gap: 5px;
-                margin-top: 15px;
+                gap: 0;
+                margin-top: 0;
 
                 & span {
-                    flex-direction: column;
-                    gap: 0;
                     font-size: 17px;
                 }
             }
