@@ -4,7 +4,7 @@ import styles from './PrescriptionView.module.scss';
 import Logo from '../../../assets/images/logo.png';
 import Watermark from '../../../assets/images/watermark30.png';
 import { TbDownload } from 'react-icons/tb';
-import formatDate from '../../../utils/date-time/formatDate';
+import formatDateForDisplay from '../../../utils/date-time/formatDateForDisplay';
 import SyncLoader from 'react-spinners/SyncLoader';
 import { BASE_URL, token } from '../../../../config';
 import { PropTypes } from 'prop-types';
@@ -231,7 +231,7 @@ const PrescriptionView = ({ appointment, prescription, onPDFUploadSuccess }) => 
                                 <div>
                                     <h4>
                                         HealthMate
-                                        {prescription?.updatedAt && ', ' + formatDate(prescription?.updatedAt)}
+                                        {prescription?.updatedAt && ', ' + formatDateForDisplay(prescription?.updatedAt)}
                                     </h4>
                                     <span>
                                         <img src={Watermark} alt="" />

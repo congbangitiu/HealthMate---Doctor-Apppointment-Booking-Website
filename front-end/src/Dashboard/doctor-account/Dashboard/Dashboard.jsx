@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Dashboard.module.scss';
 import Tabs from '../Tabs/Tabs';
@@ -16,13 +17,24 @@ import useResponsive from '../../../hooks/useResponsive';
 import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
+const dashboardTabs = ['overview', 'appointments', 'setting'];
 
 const Dashboard = () => {
     const { t } = useTranslation('dashboardDoctor');
-    const { isMobile } = useResponsive();
+    const { isMobile, isTabletOrMobile } = useResponsive();
     const { data: doctorData, loading, error } = useGetProfile(`${BASE_URL}/doctors/profile/me`);
-    const [tab, setTab] = useState('overview');
+    const [searchParams, setSearchParams] = useSearchParams();
     const [showProfileMobile, setShowProfileMobile] = useState(false);
+    const requestedTab = searchParams.get('tab');
+    const tab = dashboardTabs.includes(requestedTab) ? requestedTab : 'overview';
+
+    const setTab = (nextTab) => {
+        setSearchParams((currentSearchParams) => {
+            const nextSearchParams = new URLSearchParams(currentSearchParams);
+            nextSearchParams.set('tab', nextTab);
+            return nextSearchParams;
+        });
+    };
 
     return (
         <div className={cx('container-parent')}>
@@ -32,7 +44,7 @@ const Dashboard = () => {
                 <Error errorMessage={error} />
             ) : (
                 <div className={cx('container')}>
-                    {isMobile && (
+                    {isTabletOrMobile && (
                         <div className={cx('profile-tablet-mobile-btn')} onClick={() => setShowProfileMobile(true)}>
                             {t('profileMobileBtn')}
                         </div>
@@ -82,10 +94,10 @@ const Dashboard = () => {
                         anchor="left"
                         open={showProfileMobile}
                         onClose={() => setShowProfileMobile(false)}
-                        BackdropProps={{ style: { top: '60px' } }}
+                        BackdropProps={{ style: { top: !isMobile ? '90px' : '60px' } }}
                         sx={{
                             '& .MuiPaper-root': {
-                                top: '60px',
+                                top: !isMobile ? '90px' : '60px',
                             },
                         }}
                     >

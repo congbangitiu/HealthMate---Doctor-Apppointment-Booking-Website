@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Appointments.module.scss';
 import { Link } from 'react-router-dom';
-import formatDate from '../../../utils/date-time/formatDate';
+import formatDateForDisplay from '../../../utils/date-time/formatDateForDisplay';
 import convertTime from '../../../utils/date-time/convertTime';
 import useFetchData from '../../../hooks/useFetchData';
 import { BASE_URL } from '../../../../config';
@@ -272,13 +272,13 @@ const Appointments = () => {
                                                             cancelledStatus: appointment.status === 'cancelled',
                                                         })}
                                                     >
-                                                        {formatDate(appointment.timeSlot.day)}
+                                                        {formatDateForDisplay(appointment.timeSlot.day)}
                                                     </Link>
                                                 ) : (
                                                     <Link
                                                         to={`/doctors/appointments/my-appointments/${appointment._id}`}
                                                     >
-                                                        {formatDate(appointment.timeSlot.day)}
+                                                        {formatDateForDisplay(appointment.timeSlot.day)}
                                                     </Link>
                                                 )
                                             ) : (

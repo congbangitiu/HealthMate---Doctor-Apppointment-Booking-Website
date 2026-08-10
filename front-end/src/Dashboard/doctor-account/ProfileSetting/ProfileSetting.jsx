@@ -13,6 +13,7 @@ import SyncLoader from 'react-spinners/SyncLoader';
 import { TextField, Autocomplete } from '@mui/material';
 import TimeSlots from '../TimeSlots/TimeSlots';
 import { useTranslation } from 'react-i18next';
+import formatDateToYYYYMMDD from '../../../utils/date-time/formatDateToYYYYMMDD';
 
 const cx = classNames.bind(styles);
 
@@ -297,17 +298,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
         deleteItem('experiences', index);
     };
 
-    // Format date to YYYY-MM-DD to match the date picker format
-    const formatDateToYYYYMMDD = (date) => {
-        const d = new Date(date);
-        const year = d.getFullYear();
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
-
-    // Generate days of week with actual dates
-    const getDaysOfWeekWithDates = () => {
+    const daysOfWeekWithDates = useMemo(() => {
         const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         const today = new Date();
         const currentDay = today.getDay(); // 0 (Sunday) to 6 (Saturday)
@@ -329,19 +320,32 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                 };
             })
             .filter((day) => day.name !== 'Sunday'); // Remove Sunday if not needed
-    };
-
-    const daysOfWeekWithDates = getDaysOfWeekWithDates();
+    }, []);
 
     const handleTimeSlotsChange = useCallback(
         (slots) => {
-            setFormData((prev) => ({
-                ...prev,
-                timeSlots: slots,
-            }));
+            setFormData((prev) => {
+                if (JSON.stringify(prev.timeSlots) === JSON.stringify(slots)) return prev;
+
+                return {
+                    ...prev,
+                    timeSlots: slots,
+                };
+            });
         },
-        [daysOfWeekWithDates],
+        [],
     );
+
+    const handleAvailableScheduleChange = useCallback((updatedSchedules) => {
+        setFormData((prev) => {
+            if (JSON.stringify(prev.availableSchedules) === JSON.stringify(updatedSchedules)) return prev;
+
+            return {
+                ...prev,
+                availableSchedules: updatedSchedules,
+            };
+        });
+    }, []);
 
     // Edit
     const toggleEditable = (key, index) => {
@@ -718,12 +722,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                 daysOfWeekWithDates={daysOfWeekWithDates}
                 currentTimeSlots={doctorData.timeSlots}
                 availableSchedules={formData.availableSchedules}
-                onAvailableScheduleChange={(updated) =>
-                    setFormData((prev) => ({
-                        ...prev,
-                        availableSchedules: updated,
-                    }))
-                }
+                onAvailableScheduleChange={handleAvailableScheduleChange}
             />
 
             {/* ABOUT */}

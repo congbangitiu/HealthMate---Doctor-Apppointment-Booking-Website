@@ -1,4 +1,4 @@
-import formatDate from '../../utils/date-time/formatDate';
+import formatDateForDisplay from '../../utils/date-time/formatDateForDisplay';
 import classNames from 'classnames/bind';
 import styles from './AboutDoctor.module.scss';
 import DoctorActivity1 from '../../assets/images/doctor-activity-1.webp';
@@ -31,7 +31,7 @@ const AboutDoctor = ({ fullname, about, qualifications, experiences, hidden }) =
                         {qualifications?.map((qualification, index) => (
                             <div key={index} className={cx('education-detail')}>
                                 <p>
-                                    {formatDate(qualification.startingDate)} - {formatDate(qualification.endingDate)}
+                                    {formatDateForDisplay(qualification.startingDate)} - {formatDateForDisplay(qualification.endingDate)}
                                 </p>
                                 <div className={cx('education-location')}>
                                     <p>{qualification.degree}</p>
@@ -48,9 +48,9 @@ const AboutDoctor = ({ fullname, about, qualifications, experiences, hidden }) =
                         {experiences?.map((experience, index) => (
                             <div key={index} className={cx('experience-detail')}>
                                 <p>
-                                    {formatDate(experience.startingDate)} -{' '}
+                                    {formatDateForDisplay(experience.startingDate)} -{' '}
                                     {experience.endingDate
-                                        ? formatDate(experience.endingDate)
+                                        ? formatDateForDisplay(experience.endingDate)
                                         : t('aboutDoctor.present')}
                                 </p>
                                 <p>{experience.position}</p>

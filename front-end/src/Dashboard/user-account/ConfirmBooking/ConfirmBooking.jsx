@@ -6,7 +6,7 @@ import { BASE_URL, token } from '../../../../config';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
 import convertTime from '../../../utils/date-time/convertTime';
-import formatDate from '../../../utils/date-time/formatDate';
+import formatDateForDisplay from '../../../utils/date-time/formatDateForDisplay';
 import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
@@ -119,7 +119,7 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
                         <h2>{`${t('confirmBooking.doctorPrefix')} ${doctorName}`}</h2>
                         <p>
                             <b>{t('confirmBooking.date')}: </b>
-                            {formatDate(selectedSlot.day)}
+                            {formatDateForDisplay(selectedSlot.day)}
                         </p>
                         <p>
                             <b>{t('confirmBooking.time')}: </b>

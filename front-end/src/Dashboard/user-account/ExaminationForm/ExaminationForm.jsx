@@ -6,7 +6,7 @@ import { PropTypes } from 'prop-types';
 import { TbDownload } from 'react-icons/tb';
 import Logo from '../../../assets/images/logo.png';
 import Watermark from '../../../assets/images/watermark30.png';
-import formatDate from '../../../utils/date-time/formatDate';
+import formatDateForDisplay from '../../../utils/date-time/formatDateForDisplay';
 import SyncLoader from 'react-spinners/SyncLoader';
 import Loader from '../../../components/Loader/Loader';
 import { Image } from 'antd';
@@ -152,7 +152,7 @@ const ExaminationForm = ({ appointment }) => {
                                     <div>
                                         <h4>
                                             HealthMate
-                                            {examination?.updatedAt && ', ' + formatDate(examination?.updatedAt)}
+                                            {examination?.updatedAt && ', ' + formatDateForDisplay(examination?.updatedAt)}
                                         </h4>
                                         <span>
                                             <img src={Watermark} alt="" />

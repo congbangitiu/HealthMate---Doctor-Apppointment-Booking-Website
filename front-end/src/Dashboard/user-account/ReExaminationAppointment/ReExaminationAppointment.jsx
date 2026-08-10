@@ -4,7 +4,7 @@ import styles from './ReExaminationAppointment.module.scss';
 import Logo from '../../../assets/images/logo.png';
 import Watermark from '../../../assets/images/watermark30.png';
 import { TbDownload } from 'react-icons/tb';
-import formatDate from '../../../utils/date-time/formatDate';
+import formatDateForDisplay from '../../../utils/date-time/formatDateForDisplay';
 import convertTime from '../../../utils/date-time/convertTime';
 import SyncLoader from 'react-spinners/SyncLoader';
 import { PropTypes } from 'prop-types';
@@ -106,7 +106,7 @@ const ReExaminationAppointment = ({ appointment }) => {
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>{formatDate(appointment.nextAppointment.timeSlot?.day)}</td>
+                                                <td>{formatDateForDisplay(appointment.nextAppointment.timeSlot?.day)}</td>
                                                 <td>
                                                     {convertTime(appointment.nextAppointment.timeSlot?.startingTime)}
                                                 </td>
@@ -123,7 +123,7 @@ const ReExaminationAppointment = ({ appointment }) => {
                                     <div>
                                         <h4>
                                             HealthMate
-                                            {prescription?.updatedAt && ', ' + formatDate(prescription?.updatedAt)}
+                                            {prescription?.updatedAt && ', ' + formatDateForDisplay(prescription?.updatedAt)}
                                         </h4>
                                         <span>
                                             <img src={Watermark} alt="" />

@@ -7,7 +7,7 @@ import Watermark from '../../../assets/images/watermark30.png';
 import { BASE_URL } from '../../../../config';
 import useFetchData from '../../../hooks/useFetchData';
 import Loader from '../../../components/Loader/Loader';
-import formatDate from '../../../utils/date-time/formatDate';
+import formatDateForDisplay from '../../../utils/date-time/formatDateForDisplay';
 import { TbDownload } from 'react-icons/tb';
 import SyncLoader from 'react-spinners/SyncLoader';
 import { FaCircleExclamation } from 'react-icons/fa6';
@@ -173,7 +173,7 @@ const Prescription = () => {
                         {prescription?.createdAt && (
                             <div className={cx('confirmation')}>
                                 <div>
-                                    <h4>HealthMate, {formatDate(prescription?.updatedAt)}</h4>
+                                    <h4>HealthMate, {formatDateForDisplay(prescription?.updatedAt)}</h4>
                                     <span>
                                         <img src={Watermark} alt="" />
                                         <img src={appointment?.doctor?.signature} alt="" />

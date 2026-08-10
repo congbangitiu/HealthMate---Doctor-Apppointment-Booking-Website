@@ -1,15 +1,55 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import classNames from 'classnames/bind';
 import styles from './TimeSlots.module.scss';
 import PropTypes from 'prop-types';
 import { MenuItem, Select, Box, useTheme } from '@mui/material';
 import useResponsive from '../../../hooks/useResponsive';
-import formatDate from '../../../utils/date-time/formatDate';
+import formatDateForDisplay from '../../../utils/date-time/formatDateForDisplay';
 import convertTime from '../../../utils/date-time/convertTime';
 import getDateForDay from '../../../utils/date-time/getDateForDay';
 import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
+
+const timePeriods = {
+    Morning: { start: '08:00', end: '11:30' },
+    Afternoon: { start: '13:00', end: '16:00' },
+    Evening: { start: '18:00', end: '21:00' },
+};
+
+const availableTime = Object.keys(timePeriods);
+
+const generateTimeSlots = (period, date) => {
+    const { start, end } = timePeriods[period];
+    const slots = [];
+    const [startHour, startMinute] = start.split(':').map(Number);
+    const [endHour, endMinute] = end.split(':').map(Number);
+    let currentHour = startHour;
+    let currentMinute = startMinute;
+
+    while (currentHour < endHour || (currentHour === endHour && currentMinute < endMinute)) {
+        const startTime = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}`;
+        let nextHour = currentHour;
+        let nextMinute = currentMinute + 30;
+
+        if (nextMinute >= 60) {
+            nextHour += 1;
+            nextMinute -= 60;
+        }
+
+        slots.push({
+            date,
+            start: startTime,
+            end: `${nextHour.toString().padStart(2, '0')}:${nextMinute.toString().padStart(2, '0')}`,
+            period,
+        });
+
+        currentHour = nextHour;
+        currentMinute = nextMinute;
+    }
+
+    return slots;
+};
 
 const TimeSlots = ({
     handleTimeSlotsChange,
@@ -27,14 +67,6 @@ const TimeSlots = ({
     const endDate = new Date();
     endDate.setDate(today.getDate() + 6);
 
-    // Time period definitions
-    const timePeriods = {
-        Morning: { start: '08:00', end: '11:30' },
-        Afternoon: { start: '13:00', end: '16:00' },
-        Evening: { start: '18:00', end: '21:00' },
-    };
-
-    const availableTime = Object.keys(timePeriods);
     const [selectedDays, setSelectedDays] = useState([]);
     const [selectedTimes, setSelectedTimes] = useState({});
 
@@ -122,51 +154,7 @@ const TimeSlots = ({
         };
     };
 
-    // Generate 30-minute time slots for a given time period
-    const generateTimeSlots = (period, date) => {
-        const { start, end } = timePeriods[period];
-        const slots = [];
-
-        // Parse start and end times
-        const [startHour, startMinute] = start.split(':').map(Number);
-        const [endHour, endMinute] = end.split(':').map(Number);
-
-        let currentHour = startHour;
-        let currentMinute = startMinute;
-
-        while (currentHour < endHour || (currentHour === endHour && currentMinute < endMinute)) {
-            // Format start time
-            const startTime = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}`;
-
-            // Calculate end time
-            let nextHour = currentHour;
-            let nextMinute = currentMinute + 30;
-
-            if (nextMinute >= 60) {
-                nextHour += 1;
-                nextMinute -= 60;
-            }
-
-            const endTime = `${nextHour.toString().padStart(2, '0')}:${nextMinute.toString().padStart(2, '0')}`;
-
-            // Add to slots
-            slots.push({
-                date: date,
-                start: startTime,
-                end: endTime,
-                period: period,
-            });
-
-            // Move to next slot
-            currentHour = nextHour;
-            currentMinute = nextMinute;
-        }
-
-        return slots;
-    };
-
-    // Generate all selected time slots for display
-    const generateAllTimeSlots = () => {
+    const allTimeSlots = useMemo(() => {
         const allSlots = [];
 
         selectedDays.forEach((day) => {
@@ -179,9 +167,7 @@ const TimeSlots = ({
         });
 
         return allSlots.sort((a, b) => new Date(a.date) - new Date(b.date));
-    };
-
-    const allTimeSlots = generateAllTimeSlots();
+    }, [selectedDays, selectedTimes]);
 
     useEffect(() => {
         if (allTimeSlots.length > 0) {
@@ -192,7 +178,7 @@ const TimeSlots = ({
             }));
             handleTimeSlotsChange(formattedSlots);
         }
-    }, [allTimeSlots]);
+    }, [allTimeSlots, handleTimeSlotsChange]);
 
     // Group time slots by date for display in table
     const groupSlotsByDate = () => {
@@ -246,7 +232,7 @@ const TimeSlots = ({
                                             maxWidth: '100%',
                                         }}
                                     >
-                                        {`${tSchedule(`weekdays.${value}`)} (${formatDate(dayInfo?.date)})`}
+                                        {`${tSchedule(`weekdays.${value}`)} (${formatDateForDisplay(dayInfo?.date)})`}
                                     </Box>
                                 );
                             })}
@@ -283,7 +269,7 @@ const TimeSlots = ({
                                 '&:hover': { backgroundColor: 'var(--lightGreenColor) !important' },
                             }}
                         >
-                            {`${tSchedule(`weekdays.${day.name}`)} (${formatDate(day.date)})`}
+                            {`${tSchedule(`weekdays.${day.name}`)} (${formatDateForDisplay(day.date)})`}
                         </MenuItem>
                     ))}
                 </Select>
@@ -299,7 +285,7 @@ const TimeSlots = ({
                         const dayInfo = daysOfWeekWithDates.find((d) => d.name === day);
                         return (
                             <div key={day} className={cx('day-section')}>
-                                <h4>{`${tSchedule(`weekdays.${day}`)} (${formatDate(dayInfo?.date)})`}</h4>
+                                <h4>{`${tSchedule(`weekdays.${day}`)} (${formatDateForDisplay(dayInfo?.date)})`}</h4>
                                 <Select
                                     multiple
                                     value={selectedTimes[day] || []}
@@ -373,8 +359,8 @@ const TimeSlots = ({
                     <h3
                         dangerouslySetInnerHTML={{
                             __html: tProfileDoctor('timeSlots.generatedSlotsTitle', {
-                                start: formatDate(today),
-                                end: formatDate(endDate),
+                                start: formatDateForDisplay(today),
+                                end: formatDateForDisplay(endDate),
                             }),
                         }}
                     />
@@ -396,7 +382,7 @@ const TimeSlots = ({
                                                     rowSpan={slots.length}
                                                     className={cx(groupIndex % 2 === 0 ? 'odd-date' : 'even-date')}
                                                 >
-                                                    {formatDate(date)}
+                                                    {formatDateForDisplay(date)}
                                                 </td>
                                             )}
                                             <td>{`${convertTime(slot.start)} - ${convertTime(slot.end)}`}</td>

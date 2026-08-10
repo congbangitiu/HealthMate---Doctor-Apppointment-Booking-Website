@@ -1,4 +1,4 @@
-import formatDate from '../date-time/formatDate';
+import formatDateForDisplay from '../date-time/formatDateForDisplay';
 import convertTime from '../date-time/convertTime';
 import { BASE_URL } from '../../../config';
 
@@ -51,7 +51,7 @@ export const handleDoctorAppointments = async ({
         const prompt =
             appointments.length === 0
                 ? `
-                    A doctor asked about their schedule for ${label} (${formatDate(
+                    A doctor asked about their schedule for ${label} (${formatDateForDisplay(
                       dateStr,
                   )}), but there are no appointments recorded.
 
@@ -60,7 +60,7 @@ export const handleDoctorAppointments = async ({
                     - Optionally wish them a productive day
                 `
                 : `
-                    A doctor wants to know what appointments they have scheduled for ${label} (${formatDate(
+                    A doctor wants to know what appointments they have scheduled for ${label} (${formatDateForDisplay(
                       dateStr,
                   )}). Make sure the format of appointment list has bullet points and line breaks like when I passed it in.
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import formatDate from '../../utils/date-time/formatDate';
+import formatDateForDisplay from '../../utils/date-time/formatDateForDisplay';
 import { BASE_URL, token } from '../../../config';
 import classNames from 'classnames/bind';
 import styles from './FeedbackDoctor.module.scss';
@@ -90,7 +90,7 @@ const FeedbackDoctor = ({ reviews, role }) => {
                                     <p className={cx('name')}>
                                         {usersInfo[review.user._id]?.data.fullname || t('feedbackDoctor.loading')}
                                     </p>
-                                    <p className={cx('time')}>{formatDate(review?.createdAt)}</p>
+                                    <p className={cx('time')}>{formatDateForDisplay(review?.createdAt)}</p>
                                 </div>
                                 <div className={cx('rating')}>
                                     {[...Array(review?.rating).keys()].map((_, index) => (

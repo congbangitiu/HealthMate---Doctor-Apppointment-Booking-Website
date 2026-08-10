@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './Notifications.module.scss';
 import formatTimeAgo from '../../utils/date-time/formatTimeAgo';
-import formatDate from '../../utils/date-time/formatDate';
+import formatDateForDisplay from '../../utils/date-time/formatDateForDisplay';
 import convertTime from '../../utils/date-time/convertTime';
 import { IoIosNotifications, IoIosArrowBack } from 'react-icons/io';
 import useResponsive from '../../hooks/useResponsive';
@@ -71,7 +71,7 @@ const Notifications = ({ notifications, role, handleCloseNotifications }) => {
         return (
             <p>
                 {t(`${key}.prefix`)} {name} <b>{t(`${key}.action`)}</b>
-                {t(`${key}.suffix`) && <> {t(`${key}.suffix`)}</>} <b>{formatDate(date)}</b> {t('at')}{' '}
+                {t(`${key}.suffix`) && <> {t(`${key}.suffix`)}</>} <b>{formatDateForDisplay(date)}</b> {t('at')}{' '}
                 <b>{convertTime(time)}</b>
             </p>
         );

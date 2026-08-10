@@ -4,7 +4,7 @@ import styles from './PatientAppointment.module.scss';
 import { MdEmail, MdOutlineDone, MdOutlinePendingActions } from 'react-icons/md';
 import { FaPhoneAlt } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io';
-import formatDate from '../../utils/date-time/formatDate';
+import formatDateForDisplay from '../../utils/date-time/formatDateForDisplay';
 import convertTime from './../../utils/date-time/convertTime';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import useResponsive from '../../hooks/useResponsive';
@@ -72,7 +72,7 @@ const PatientAppointment = ({ appointment, handleDelete }) => {
                         </span>
                     </div>
                     <div>
-                        <h4>{formatDate(appointment.timeSlot.day)}</h4>
+                        <h4>{formatDateForDisplay(appointment.timeSlot.day)}</h4>
                         <h4>
                             {convertTime(appointment.timeSlot.startingTime)} -{' '}
                             {convertTime(appointment.timeSlot.endingTime)}

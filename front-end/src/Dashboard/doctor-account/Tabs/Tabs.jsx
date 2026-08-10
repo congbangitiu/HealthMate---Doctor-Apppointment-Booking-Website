@@ -41,7 +41,7 @@ const Tabs = ({ tab, setTab, doctorData, setShowProfileMobile }) => {
                     className={cx('mode', tab === 'overview' && 'active')}
                     onClick={() => {
                         setTab('overview');
-                        setShowProfileMobile(false);
+                        setShowProfileMobile?.(false);
                     }}
                 >
                     {t('overview')}
@@ -52,7 +52,7 @@ const Tabs = ({ tab, setTab, doctorData, setShowProfileMobile }) => {
                         className={cx('mode', tab === 'appointments' && 'active')}
                         onClick={() => {
                             setTab('appointments');
-                            setShowProfileMobile(false);
+                            setShowProfileMobile?.(false);
                         }}
                     >
                         {t('appointments')}
@@ -63,7 +63,7 @@ const Tabs = ({ tab, setTab, doctorData, setShowProfileMobile }) => {
                     className={cx('mode', tab === 'setting' && 'active')}
                     onClick={() => {
                         setTab('setting');
-                        setShowProfileMobile(false);
+                        setShowProfileMobile?.(false);
                     }}
                 >
                     {t('profileSetting')}
@@ -118,7 +118,7 @@ Tabs.propTypes = {
     tab: PropTypes.string.isRequired,
     setTab: PropTypes.func.isRequired,
     doctorData: PropTypes.object.isRequired,
-    setShowProfileMobile: PropTypes.object.isRequired,
+    setShowProfileMobile: PropTypes.func,
 };
 
 export default Tabs;

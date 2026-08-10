@@ -6,7 +6,7 @@ import convertTime from '../../utils/date-time/convertTime';
 import ConfirmBooking from '../../Dashboard/user-account/ConfirmBooking/ConfirmBooking';
 import { Dialog, Slide } from '@mui/material';
 import useResponsive from '../../hooks/useResponsive';
-import formatDate from '../../utils/date-time/formatDate';
+import formatDateForDisplay from '../../utils/date-time/formatDateForDisplay';
 import { BiExpandAlt, BiCollapseAlt } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 
@@ -89,7 +89,7 @@ const SidePanel = ({
                             )}
 
                             <div>
-                                <p>{formatDate(timeSlot.day)}</p>
+                                <p>{formatDateForDisplay(timeSlot.day)}</p>
                                 <p>
                                     {convertTime(timeSlot.startingTime)} - {convertTime(timeSlot.endingTime)}
                                 </p>

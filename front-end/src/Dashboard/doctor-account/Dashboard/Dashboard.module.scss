@@ -42,16 +42,16 @@
     }
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1024px) {
     .container-parent {
-        padding: 60px 20px 50px 20px;
+        padding: 90px 40px 50px 40px;
 
         & .container {
             flex-direction: column;
 
             & .profile-tablet-mobile-btn {
                 position: fixed;
-                top: 70px;
+                top: 105px;
                 left: 0;
                 background-color: var(--primaryColor);
                 padding: 5px 10px;
@@ -73,6 +73,18 @@
                 & .overview {
                     margin-top: 30px;
                 }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .container-parent {
+        padding: 60px 20px 50px 20px;
+
+        & .container {
+            & .profile-tablet-mobile-btn {
+                top: 70px;
             }
         }
     }

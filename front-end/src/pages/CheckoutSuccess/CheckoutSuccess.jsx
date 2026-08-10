@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import { BASE_URL, token } from '../../../config';
 import convertTime from '../../utils/date-time/convertTime';
-import formatDate from '../../utils/date-time/formatDate';
+import formatDateForDisplay from '../../utils/date-time/formatDateForDisplay';
 import useResponsive from '../../hooks/useResponsive';
 import { useTranslation } from 'react-i18next';
 
@@ -129,7 +129,7 @@ const CheckoutSuccess = () => {
                             </span>
                             <span>
                                 <p>{t('date')}</p>
-                                <p>{formatDate(appointment?.timeSlot?.day) || 'N/A'}</p>
+                                <p>{formatDateForDisplay(appointment?.timeSlot?.day) || 'N/A'}</p>
                             </span>
                             <span>
                                 <p>{t('time')}</p>
@@ -188,7 +188,7 @@ const CheckoutSuccess = () => {
                             </span>
                             <span>
                                 <p>{t('date')}</p>
-                                <p>{formatDate(appointment?.timeSlot?.day) || 'N/A'}</p>
+                                <p>{formatDateForDisplay(appointment?.timeSlot?.day) || 'N/A'}</p>
                             </span>
                             <span>
                                 <p>{t('time')}</p>

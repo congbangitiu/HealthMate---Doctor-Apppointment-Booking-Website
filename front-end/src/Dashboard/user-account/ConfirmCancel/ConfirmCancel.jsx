@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import styles from './ConfirmCancel.module.scss';
 import { FaCircleExclamation } from 'react-icons/fa6';
 import PropTypes from 'prop-types';
-import formatDate from '../../../utils/date-time/formatDate';
+import formatDateForDisplay from '../../../utils/date-time/formatDateForDisplay';
 import convertTime from '../../../utils/date-time/convertTime';
 import { BASE_URL, token } from '../../../../config';
 import { toast } from 'react-toastify';
@@ -45,7 +45,7 @@ const ConfirmCancel = ({ setShowConfirmCancel, appointment }) => {
         }
     };
 
-    const appointmentDate = appointment?.timeSlot?.day ? formatDate(appointment.timeSlot.day) : t('confirmCancel.date');
+    const appointmentDate = appointment?.timeSlot?.day ? formatDateForDisplay(appointment.timeSlot.day) : t('confirmCancel.date');
     const startTime = appointment?.timeSlot?.startingTime
         ? convertTime(appointment.timeSlot.startingTime)
         : t('confirmCancel.time');

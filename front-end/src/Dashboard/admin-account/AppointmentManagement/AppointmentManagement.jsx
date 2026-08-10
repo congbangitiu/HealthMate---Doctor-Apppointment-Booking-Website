@@ -5,7 +5,7 @@ import styles from './AppointmentManagement.module.scss';
 import Selections from '../../../components/Selections/Selections';
 import { PropTypes } from 'prop-types';
 import convertTime from './../../../utils/date-time/convertTime';
-import formatDate from '../../../utils/date-time/formatDate';
+import formatDateForDisplay from '../../../utils/date-time/formatDateForDisplay';
 import Pagination from '../../../components/Pagination/Pagination';
 import { useTranslation } from 'react-i18next';
 import translateAppointmentStatus from './../../../utils/translation/translateAppointmentStatus';
@@ -276,11 +276,11 @@ const AppointmentManagement = ({ users, doctors, appointments }) => {
                                         {appointment.timeSlot ? (
                                             appointment.status === 'cancelled' ? (
                                                 <Link className={cx('cancelledStatus')}>
-                                                    {formatDate(appointment.timeSlot.day) || t('noDate')}
+                                                    {formatDateForDisplay(appointment.timeSlot.day) || t('noDate')}
                                                 </Link>
                                             ) : (
                                                 <Link to={`/users/appointments/my-appointments/${appointment._id}`}>
-                                                    {formatDate(appointment.timeSlot.day) || t('noDate')}
+                                                    {formatDateForDisplay(appointment.timeSlot.day) || t('noDate')}
                                                 </Link>
                                             )
                                         ) : (

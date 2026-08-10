@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Watermark from '../../assets/images/watermark30.png';
 import classNames from 'classnames/bind';
 import styles from './SignatureConfirmation.module.scss';
-import formatDate from '../../utils/date-time/formatDate';
+import formatDateForDisplay from '../../utils/date-time/formatDateForDisplay';
 import { toast } from 'react-toastify';
 import { BASE_URL, token } from '../../../config';
 import SyncLoader from 'react-spinners/SyncLoader';
@@ -61,7 +61,7 @@ const SignatureConfirmation = ({ createdTime, isSigned, setIsSigned, appointment
     return (
         <div className={cx('container')}>
             <div className={cx('confirmation')}>
-                <h4>HealthMate{createdTime && ', ' + formatDate(createdTime)}</h4>
+                <h4>HealthMate{createdTime && ', ' + formatDateForDisplay(createdTime)}</h4>
                 <div>
                     <img src={Watermark} alt="" />
                     {isSigned ? (
