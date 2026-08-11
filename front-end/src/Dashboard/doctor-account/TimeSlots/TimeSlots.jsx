@@ -54,7 +54,6 @@ const generateTimeSlots = (period, date) => {
 const TimeSlots = ({
     handleTimeSlotsChange,
     daysOfWeekWithDates,
-    currentTimeSlots,
     availableSchedules,
     onAvailableScheduleChange,
 }) => {
@@ -192,17 +191,6 @@ const TimeSlots = ({
         });
 
         return Object.entries(grouped);
-    };
-
-    // Check if the given slot exists in the currentTimeSlots from database
-    const isSlotBooked = (slot) => {
-        return !currentTimeSlots.some((currentSlot) => {
-            return (
-                currentSlot.day === slot.date &&
-                currentSlot.startingTime === slot.start &&
-                currentSlot.endingTime === slot.end
-            );
-        });
     };
 
     return (
@@ -402,7 +390,6 @@ const TimeSlots = ({
 TimeSlots.propTypes = {
     handleTimeSlotsChange: PropTypes.func.isRequired,
     daysOfWeekWithDates: PropTypes.array.isRequired,
-    currentTimeSlots: PropTypes.array.isRequired,
     availableSchedules: PropTypes.array.isRequired,
     onAvailableScheduleChange: PropTypes.func.isRequired,
 };

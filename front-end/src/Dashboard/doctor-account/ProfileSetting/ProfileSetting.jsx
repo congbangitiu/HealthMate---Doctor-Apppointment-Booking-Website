@@ -19,6 +19,8 @@ const cx = classNames.bind(styles);
 
 const ProfileSetting = ({ doctorData, isMobile }) => {
     const { t, i18n } = useTranslation(['profileSettingDoctor', 'specialties']);
+    // Browsers may report regional tags such as "vi-VN" or "en-US", while specialty resources are registered under the base "vi" and "en" keys.
+    const currentLanguage = (i18n.resolvedLanguage || i18n.language || 'en').split('-')[0];
 
     useEffect(() => {
         window.scrollTo({
@@ -78,7 +80,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
     );
 
     const subspecialtyOptions = useMemo(() => {
-        const currentLangData = i18n.getResource(i18n.language, 'specialties');
+        const currentLangData = i18n.getResource(currentLanguage, 'specialties');
         const englishData = i18n.getResource('en', 'specialties');
 
         if (!currentLangData || !englishData) return [];
@@ -92,9 +94,12 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                 parentKey: specialtyKey,
             })),
         );
-    }, [i18n.language]);
+    }, [currentLanguage, i18n]);
 
-    const initialSubspecialty = subspecialtyOptions.find((item) => item.rawName === doctorData.subspecialty);
+    const initialSubspecialty = useMemo(
+        () => subspecialtyOptions.find((item) => item.rawName === doctorData.subspecialty),
+        [doctorData.subspecialty, subspecialtyOptions],
+    );
 
     useEffect(() => {
         setFormData({
@@ -106,19 +111,19 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
             specialty: initialSubspecialty?.parentSpecialty || doctorData.specialty || '',
             subspecialty: initialSubspecialty || null,
             ticketPrice: doctorData.ticketPrice || 0,
-            qualifications: doctorData.qualifications.map((qualification) => ({
+            qualifications: (doctorData.qualifications || []).map((qualification) => ({
                 startingDate: qualification.startingDate,
                 endingDate: qualification.endingDate,
                 degree: qualification.degree,
                 university: qualification.university,
             })),
-            experiences: doctorData.experiences.map((experience) => ({
+            experiences: (doctorData.experiences || []).map((experience) => ({
                 startingDate: experience.startingDate,
                 endingDate: experience.endingDate,
                 position: experience.position,
                 hospital: experience.hospital,
             })),
-            timeSlots: doctorData.timeSlots.map((timeSlot) => ({
+            timeSlots: (doctorData.timeSlots || []).map((timeSlot) => ({
                 day: timeSlot.day,
                 startingTime: timeSlot.startingTime,
                 endingTime: timeSlot.endingTime,
@@ -128,7 +133,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
             photo: doctorData.photo || '',
             signature: doctorData.signature || '',
         });
-    }, [doctorData]);
+    }, [doctorData, initialSubspecialty]);
 
     useEffect(() => {
         setFormData((prev) => {
@@ -136,11 +141,11 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
             const matched = subspecialtyOptions.find((opt) => opt.rawName === prev.subspecialty.rawName);
             return matched ? { ...prev, subspecialty: matched } : prev;
         });
-    }, [i18n.language, subspecialtyOptions]);
+    }, [currentLanguage, subspecialtyOptions]);
 
     useEffect(() => {
         setFormData((prev) => {
-            if (i18n.language === 'en' && prev.specialty) {
+            if (currentLanguage === 'en' && prev.specialty) {
                 const translatedSpecialty = translateToEnglishSpecialty(prev.specialty);
                 return {
                     ...prev,
@@ -153,7 +158,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                 specialty: translatedName,
             };
         });
-    }, [i18n.language, translateToVietnameseSpecialty, translateToEnglishSpecialty]);
+    }, [currentLanguage, translateToVietnameseSpecialty, translateToEnglishSpecialty]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -487,7 +492,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                         name="specialty"
                         id="specialty"
                         value={
-                            i18n.language === 'vi'
+                            currentLanguage === 'vi'
                                 ? translateToVietnameseSpecialty(formData.specialty)
                                 : formData.specialty
                         }
@@ -498,10 +503,10 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                 <div className={cx('field')}>
                     <label htmlFor="subspecialty">{t('fields.subspecialty')}</label>
                     <Autocomplete
-                        disablePortal
                         options={subspecialtyOptions}
-                        value={formData.subspecialty}
-                        getOptionLabel={(option) => option.label}
+                        value={formData.subspecialty || null}
+                        getOptionLabel={(option) => (typeof option === 'object' && option?.label ? option.label : '')}
+                        isOptionEqualToValue={(option, value) => option.value === value?.value}
                         onChange={(event, newValue) => handleSubspecialtyChange(newValue)}
                         renderInput={(params) => (
                             <TextField
@@ -528,17 +533,23 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                                 }}
                             />
                         )}
-                        renderOption={(props, option, { selected }) => (
-                            <li
-                                {...props}
-                                style={{
-                                    fontWeight: selected ? '500' : 'normal',
-                                    backgroundColor: selected ? 'var(--lightGreenColor)' : 'inherit',
-                                }}
-                            >
-                                {option.label}
-                            </li>
-                        )}
+                        renderOption={(optionProps, option, { selected }) => {
+                            const { key, ...liProps } = optionProps;
+                            delete liProps.div;
+
+                            return (
+                                <li
+                                    key={key}
+                                    {...liProps}
+                                    style={{
+                                        fontWeight: selected ? '500' : 'normal',
+                                        backgroundColor: selected ? 'var(--lightGreenColor)' : 'inherit',
+                                    }}
+                                >
+                                    {option.label}
+                                </li>
+                            );
+                        }}
                         slotProps={{
                             paper: {
                                 sx: {
@@ -720,7 +731,6 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
             <TimeSlots
                 handleTimeSlotsChange={handleTimeSlotsChange}
                 daysOfWeekWithDates={daysOfWeekWithDates}
-                currentTimeSlots={doctorData.timeSlots}
                 availableSchedules={formData.availableSchedules}
                 onAvailableScheduleChange={handleAvailableScheduleChange}
             />

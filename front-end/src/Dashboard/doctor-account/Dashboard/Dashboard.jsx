@@ -23,6 +23,8 @@ const Dashboard = () => {
     const { t } = useTranslation('dashboardDoctor');
     const { isMobile, isTabletOrMobile } = useResponsive();
     const { data: doctorData, loading, error } = useGetProfile(`${BASE_URL}/doctors/profile/me`);
+    // useGetProfile starts with an empty array. Do not pass that placeholder to components that consume a doctor profile object.
+    const doctor = Array.isArray(doctorData) ? null : doctorData;
     const [searchParams, setSearchParams] = useSearchParams();
     const [showProfileMobile, setShowProfileMobile] = useState(false);
     const requestedTab = searchParams.get('tab');
@@ -38,7 +40,7 @@ const Dashboard = () => {
 
     return (
         <div className={cx('container-parent')}>
-            {loading ? (
+            {loading || !doctor ? (
                 <Loader />
             ) : error ? (
                 <Error errorMessage={error} />
@@ -50,16 +52,16 @@ const Dashboard = () => {
                         </div>
                     )}
                     <div className={cx('tabs')}>
-                        <Tabs className={cx('tabs')} tab={tab} setTab={setTab} doctorData={doctorData} />
+                        <Tabs className={cx('tabs')} tab={tab} setTab={setTab} doctorData={doctor} />
                     </div>
                     <div className={cx('information')}>
-                        {doctorData.isApproved === 'pending' && (
+                        {doctor.isApproved === 'pending' && (
                             <div className={cx('noti', 'pending')}>
                                 <FaCircleExclamation className={cx('icon')} />
                                 {t('approvalPending')}
                             </div>
                         )}
-                        {doctorData.isApproved === 'rejected' && (
+                        {doctor.isApproved === 'rejected' && (
                             <div className={cx('noti', 'rejected')}>
                                 <FaCircleExclamation className={cx('icon')} />
                                 {t('approvalRejected')}
@@ -69,25 +71,25 @@ const Dashboard = () => {
                             <div className={cx('overview')}>
                                 <Doctor
                                     smallMode={true}
-                                    fullname={doctorData.fullname}
-                                    gender={doctorData.gender}
-                                    photo={doctorData.photo}
-                                    subspecialty={doctorData.subspecialty}
-                                    averageRating={doctorData.averageRating}
-                                    totalRating={doctorData.totalRating}
-                                    bio={doctorData.bio}
+                                    fullname={doctor.fullname || ''}
+                                    gender={doctor.gender || ''}
+                                    photo={doctor.photo || ''}
+                                    subspecialty={doctor.subspecialty || ''}
+                                    averageRating={Number.isFinite(doctor.averageRating) ? doctor.averageRating : 0}
+                                    totalRating={Number.isFinite(doctor.totalRating) ? doctor.totalRating : 0}
+                                    bio={doctor.bio || ''}
                                 />
                                 <AboutDoctor
-                                    fullname={doctorData.fullname}
-                                    about={doctorData.about}
-                                    qualifications={doctorData.qualifications}
-                                    experiences={doctorData.experiences}
+                                    fullname={doctor.fullname || ''}
+                                    about={doctor.about || ''}
+                                    qualifications={doctor.qualifications || []}
+                                    experiences={doctor.experiences || []}
                                     hidden={true}
                                 />
                             </div>
                         )}
                         {tab === 'appointments' && <Appointments />}
-                        {tab === 'setting' && <ProfileSetting doctorData={doctorData} isMobile={isMobile} />}
+                        {tab === 'setting' && <ProfileSetting doctorData={doctor} isMobile={isMobile} />}
                     </div>
 
                     <Drawer
@@ -105,7 +107,7 @@ const Dashboard = () => {
                             className={cx('tabs')}
                             tab={tab}
                             setTab={setTab}
-                            doctorData={doctorData}
+                            doctorData={doctor}
                             setShowProfileMobile={setShowProfileMobile}
                         />
                     </Drawer>

@@ -47,16 +47,10 @@ Doctor.propTypes = {
     smallMode: PropTypes.bool.isRequired,
     fullname: PropTypes.string.isRequired,
     gender: PropTypes.string.isRequired,
-    qualifications: PropTypes.array.isRequired,
-    experiences: PropTypes.array.isRequired,
-    timeSlots: PropTypes.array.isRequired,
-    reviews: PropTypes.array.isRequired,
     bio: PropTypes.string.isRequired,
-    about: PropTypes.string.isRequired,
     averageRating: PropTypes.number.isRequired,
     totalRating: PropTypes.number.isRequired,
     subspecialty: PropTypes.string.isRequired,
-    ticketPrice: PropTypes.number.isRequired,
     photo: PropTypes.string.isRequired,
 };
 
