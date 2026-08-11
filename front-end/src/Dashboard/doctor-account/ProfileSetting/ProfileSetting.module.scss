@@ -27,7 +27,7 @@
                     color: var(--primaryColor);
                 }
 
-                & input {
+                & .native-input {
                     border: 2px solid var(--darkGrayColor);
                     border-radius: 5px;
                     padding: 10px;
@@ -41,6 +41,11 @@
 
                     &.disabled {
                         color: var(--darkGrayColor);
+                    }
+
+                    &:disabled {
+                        border-color: var(--darkGrayColor);
+                        opacity: 1;
                     }
                 }
 
@@ -167,7 +172,7 @@
 
             &:not(:last-child) {
                 & select,
-                & input {
+                & .native-input {
                     width: 100%;
                     padding: 10px;
                     border-radius: 5px;
@@ -176,7 +181,7 @@
             }
 
             &:nth-child(3) {
-                & input {
+                & .native-input {
                     outline: none;
                     cursor: not-allowed;
                 }
@@ -206,7 +211,7 @@
                     color: var(--primaryColor);
                 }
 
-                & input {
+                & .native-input {
                     display: flex;
                     flex-direction: column;
                     width: 100%;
@@ -217,6 +222,11 @@
 
                     &.disabled {
                         color: var(--darkGrayColor);
+                    }
+
+                    &:disabled {
+                        border-color: var(--darkGrayColor);
+                        opacity: 1;
                     }
                 }
             }

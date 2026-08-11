@@ -11,6 +11,9 @@ import { BASE_URL, token } from '../../../../config';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
 import { TextField, Autocomplete } from '@mui/material';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 import TimeSlots from '../TimeSlots/TimeSlots';
 import { useTranslation } from 'react-i18next';
 import formatDateToYYYYMMDD from '../../../utils/date-time/formatDateToYYYYMMDD';
@@ -253,6 +256,49 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
         });
     };
 
+    const handleDateChange = (key, field, value, index) => {
+        setFormData((prevFormData) => {
+            const updatedItems = [...prevFormData[key]];
+            updatedItems[index] = {
+                ...updatedItems[index],
+                [field]: value?.isValid() ? value.format('YYYY-MM-DD') : '',
+            };
+
+            return { ...prevFormData, [key]: updatedItems };
+        });
+    };
+
+    const getDatePickerTextFieldProps = (id) => ({
+        id,
+        fullWidth: true,
+        sx: {
+            '& .MuiOutlinedInput-root': {
+                borderRadius: '5px',
+                padding: '10px',
+                marginTop: '2px',
+                '& fieldset': {
+                    border: '2px solid var(--darkGrayColor)',
+                },
+                '&:hover fieldset': {
+                    borderColor: 'var(--darkGrayColor)',
+                },
+                '&.Mui-focused fieldset': {
+                    borderColor: 'var(--primaryColor)',
+                },
+                '&.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--darkGrayColor) !important',
+                },
+            },
+            '& .MuiOutlinedInput-input': {
+                padding: 0,
+                fontSize: '16px',
+            },
+            '& .MuiInputAdornment-root': {
+                display: 'none',
+            },
+        },
+    });
+
     const handleSubspecialtyChange = (selectedOption) => {
         if (!selectedOption) return;
 
@@ -363,7 +409,8 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
     };
 
     return (
-        <div className={cx('container')}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <div className={cx('container')}>
             {/* PERSONAL INFORMATION  */}
             <h3 className={cx('title')}>{t('titles.personalInfo')}</h3>
             <div className={cx('upperPart')}>
@@ -371,6 +418,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                     <div className={cx('info')}>
                         <label htmlFor="fullname">{t('fields.fullname')}</label>
                         <input
+                            className={cx('native-input')}
                             type="text"
                             id="fullname"
                             placeholder={t('fields.fullname')}
@@ -383,6 +431,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                     <div className={cx('info')}>
                         <label htmlFor="email">{t('fields.email')}</label>
                         <input
+                            className={cx('native-input')}
                             type="email"
                             id="email"
                             placeholder={t('fields.email')}
@@ -395,6 +444,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                     <div className={cx('info')}>
                         <label htmlFor="phone">{t('fields.phone')}</label>
                         <input
+                            className={cx('native-input')}
                             type="tel"
                             id="phone"
                             placeholder={t('fields.phone')}
@@ -478,6 +528,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                 <div className={cx('field')}>
                     <label htmlFor="ticketPrice">{t('fields.ticketPrice')}</label>
                     <input
+                        className={cx('native-input')}
                         type="number"
                         name="ticketPrice"
                         id="ticketPrice"
@@ -489,6 +540,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                 <div className={cx('field')}>
                     <label htmlFor="specialty">{t('fields.specialty')}</label>
                     <input
+                        className={cx('native-input')}
                         name="specialty"
                         id="specialty"
                         value={
@@ -573,32 +625,32 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                     <div key={index} className={cx('credentials')}>
                         <div className={cx('credential')}>
                             <label htmlFor="startingDate">{t('qualifications.startingDate')}</label>
-                            <input
-                                className={cx(!qualification.isEditable && 'disabled')}
-                                type="date"
-                                id="startingDate"
-                                value={qualification.startingDate}
-                                name="startingDate"
-                                onChange={(e) => handleQuanlificationChange(e, index)}
+                            <DatePicker
+                                value={qualification.startingDate ? dayjs(qualification.startingDate) : null}
+                                onChange={(value) => handleDateChange('qualifications', 'startingDate', value, index)}
+                                format="DD/MM/YYYY"
                                 disabled={!qualification.isEditable}
+                                slotProps={{
+                                    textField: getDatePickerTextFieldProps(`qualification-${index}-starting-date`),
+                                }}
                             />
                         </div>
                         <div className={cx('credential')}>
                             <label htmlFor="endingDate">{t('qualifications.endingDate')}</label>
-                            <input
-                                className={cx(!qualification.isEditable && 'disabled')}
-                                type="date"
-                                id="endingDate"
-                                value={qualification.endingDate}
-                                name="endingDate"
-                                onChange={(e) => handleQuanlificationChange(e, index)}
+                            <DatePicker
+                                value={qualification.endingDate ? dayjs(qualification.endingDate) : null}
+                                onChange={(value) => handleDateChange('qualifications', 'endingDate', value, index)}
+                                format="DD/MM/YYYY"
                                 disabled={!qualification.isEditable}
+                                slotProps={{
+                                    textField: getDatePickerTextFieldProps(`qualification-${index}-ending-date`),
+                                }}
                             />
                         </div>
                         <div className={cx('credential')}>
                             <label htmlFor="degree">{t('qualifications.degree')}</label>
                             <input
-                                className={cx(!qualification.isEditable && 'disabled')}
+                                className={cx('native-input', !qualification.isEditable && 'disabled')}
                                 type="text"
                                 id="degree"
                                 value={qualification.degree}
@@ -610,7 +662,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                         <div className={cx('credential')}>
                             <label htmlFor="university">{t('qualifications.university')}</label>
                             <input
-                                className={cx(!qualification.isEditable && 'disabled')}
+                                className={cx('native-input', !qualification.isEditable && 'disabled')}
                                 type="text"
                                 id="university"
                                 value={qualification.university}
@@ -653,32 +705,32 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                     <div key={index} className={cx('credentials')}>
                         <div className={cx('credential')}>
                             <label htmlFor="startingDate">{t('experiences.startingDate')}</label>
-                            <input
-                                className={cx(!experience.isEditable && 'disabled')}
-                                type="date"
-                                id="startingDate"
-                                value={experience.startingDate}
-                                name="startingDate"
-                                onChange={(e) => handleExperienceChange(e, index)}
+                            <DatePicker
+                                value={experience.startingDate ? dayjs(experience.startingDate) : null}
+                                onChange={(value) => handleDateChange('experiences', 'startingDate', value, index)}
+                                format="DD/MM/YYYY"
                                 disabled={!experience.isEditable}
+                                slotProps={{
+                                    textField: getDatePickerTextFieldProps(`experience-${index}-starting-date`),
+                                }}
                             />
                         </div>
                         <div className={cx('credential')}>
                             <label htmlFor="endingDate">{t('experiences.endingDate')}</label>
-                            <input
-                                className={cx(!experience.isEditable && 'disabled')}
-                                type="date"
-                                id="endingDate"
-                                value={experience.endingDate}
-                                name="endingDate"
-                                onChange={(e) => handleExperienceChange(e, index)}
+                            <DatePicker
+                                value={experience.endingDate ? dayjs(experience.endingDate) : null}
+                                onChange={(value) => handleDateChange('experiences', 'endingDate', value, index)}
+                                format="DD/MM/YYYY"
                                 disabled={!experience.isEditable}
+                                slotProps={{
+                                    textField: getDatePickerTextFieldProps(`experience-${index}-ending-date`),
+                                }}
                             />
                         </div>
                         <div className={cx('credential')}>
                             <label htmlFor="position">{t('experiences.position')}</label>
                             <input
-                                className={cx(!experience.isEditable && 'disabled')}
+                                className={cx('native-input', !experience.isEditable && 'disabled')}
                                 type="text"
                                 id="position"
                                 value={experience.position}
@@ -690,7 +742,7 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
                         <div className={cx('credential')}>
                             <label htmlFor="hospital">{t('experiences.hospital')}</label>
                             <input
-                                className={cx(!experience.isEditable && 'disabled')}
+                                className={cx('native-input', !experience.isEditable && 'disabled')}
                                 type="text"
                                 id="hospital"
                                 value={experience.hospital}
@@ -750,7 +802,8 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
             <button onClick={updateProfileHandler} className={cx('submit-btn')}>
                 {loading ? <SyncLoader size={10} color="#ffffff" /> : t('actions.update')}
             </button>
-        </div>
+            </div>
+        </LocalizationProvider>
     );
 };
 
