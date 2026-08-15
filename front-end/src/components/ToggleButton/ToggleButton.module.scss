@@ -86,3 +86,16 @@
         }
     }
 }
+
+// Responsive design
+@media only screen and (max-width: 1024px) {
+    .container {
+        & h4 {
+            font-size: 18px;
+        }
+
+        & .switch {
+            font-size: 15px;
+        }
+    }
+}

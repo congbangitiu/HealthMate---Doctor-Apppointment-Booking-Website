@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useParams, useSearchParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './MedicalRecords.module.scss';
 import { BASE_URL } from '../../../../config';
@@ -19,11 +19,18 @@ const cx = classNames.bind(styles);
 const MedicalRecords = () => {
     const { t } = useTranslation('medicalRecords');
     const { id } = useParams();
-    const [activeTab, setActiveTab] = useState('examination-form');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const currentTab = searchParams.get('tab');
+    const validTabs = ['examination-form', 'prescription', 're-examination-appointment'];
+    const activeTab = validTabs.includes(currentTab) ? currentTab : 'examination-form';
     const { data: appointment, loading, error } = useFetchData(`${BASE_URL}/users/appointments/my-appointments/${id}`);
 
-    const handleChangeTab = (event, newValue) => {
-        setActiveTab(newValue);
+    const handleChangeTab = (_, newValue) => {
+        setSearchParams((prev) => {
+            const next = new URLSearchParams(prev);
+            next.set('tab', newValue);
+            return next;
+        });
     };
 
     useEffect(() => {

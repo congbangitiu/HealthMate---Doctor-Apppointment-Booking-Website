@@ -10,7 +10,7 @@ import { BASE_URL, token } from '../../../../config';
 import useFetchData from '../../../hooks/useFetchData';
 import Loader from '../../../components/Loader/Loader';
 import Error from '../../../components/Error/Error';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { authContext } from '../../../context/AuthContext';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader';
@@ -22,8 +22,19 @@ const cx = classNames.bind(styles);
 
 const DoctorDetails = () => {
     const { t } = useTranslation('doctorDetails');
-    const [activeTab, setActiveTab] = useState('about');
     const { id } = useParams();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const currentTab = searchParams.get('tab');
+    const validTabs = ['about', 'feedback'];
+    const activeTab = validTabs.includes(currentTab) ? currentTab : 'about';
+
+    const setActiveTab = (nextTab) => {
+        setSearchParams((prev) => {
+            const next = new URLSearchParams(prev);
+            next.set('tab', nextTab);
+            return next;
+        });
+    };
     const { isMobile, isTabletOrMobile: isTablet } = useResponsive();
     const { data: doctor, loading, error } = useFetchData(`${BASE_URL}/doctors/${id}`);
     const { role } = useContext(authContext);
