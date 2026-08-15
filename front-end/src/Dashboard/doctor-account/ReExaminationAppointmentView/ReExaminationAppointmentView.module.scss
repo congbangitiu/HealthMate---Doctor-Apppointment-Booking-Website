@@ -225,6 +225,68 @@
 }
 
 // Responsive design
+@media only screen and (max-width: 1024px) {
+    .container {
+        & .re-examination {
+            & div:first-child {
+                & .brand {
+                    & img {
+                        width: 80px;
+                        height: 80px;
+                    }
+                }
+            }
+
+            & h1 {
+                font-size: 26px;
+            }
+
+            & .patient-info p,
+            & .patient-info span p {
+                font-size: 18px;
+            }
+
+            & .confirmation {
+                & > div {
+                    & h4 {
+                        font-size: 18px;
+                    }
+
+                    & span {
+                        align-items: center;
+
+                        & img:first-child {
+                            width: 120px;
+                            height: 120px;
+                        }
+
+                        & img:last-child {
+                            width: 150px;
+                            top: 40px;
+                            left: 75px;
+                        }
+                    }
+
+                    & p {
+                        font-size: 18px;
+                    }
+                }
+            }
+        }
+
+        & .notice {
+            & div:first-child,
+            & div:last-child {
+                font-size: 18px;
+            }
+        }
+
+        & button {
+            margin-top: 40px;
+        }
+    }
+}
+
 @media only screen and (max-width: 768px) {
     .container {
         width: 100%;
@@ -261,32 +323,36 @@
             }
 
             & h1 {
-                font-size: 25px;
+                font-size: 22px;
             }
 
             & .patient-info {
                 gap: 0;
 
                 & p {
-                    font-size: 18px;
+                    font-size: 17px;
                 }
 
                 & span {
                     flex-direction: column;
 
                     & p {
-                        font-size: 18px;
+                        font-size: 17px;
                     }
                 }
             }
 
             & .notice {
                 & div:first-child {
-                    font-size: 18px;
+                    font-size: 17px;
                 }
-                
+
                 & div:last-child {
-                    font-size: 18px;
+                    font-size: 17px;
+                }
+
+                & table {
+                    font-size: 17px;
                 }
             }
 
@@ -296,13 +362,7 @@
                 & > div {
                     transform: translateX(12.5%);
 
-                    & h4 {
-                        font-size: 18px;
-                    }
-
                     & span {
-                        align-items: center;
-
                         & img:first-child {
                             width: 90px;
                             height: 90px;
@@ -313,11 +373,6 @@
                             top: 20px;
                             left: 90px;
                         }
-                    }
-
-                    & p {
-                        font-size: 18px;
-                        font-weight: 500;
                     }
                 }
             }

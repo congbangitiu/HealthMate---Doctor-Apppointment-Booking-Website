@@ -82,7 +82,12 @@ const Header = () => {
         }
 
         // Special case for doctors: avoid marking "Doctors" as active when on the profile page
-        if (role === 'doctor' && path === '/doctors' && location.pathname === '/doctors/profile/me') {
+        if (
+            role === 'doctor' &&
+            path === '/doctors' &&
+            (location.pathname === '/doctors/profile/me' ||
+                location.pathname.startsWith('/doctors/appointments/my-appointments'))
+        ) {
             return false;
         }
 

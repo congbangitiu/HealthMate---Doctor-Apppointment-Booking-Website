@@ -75,6 +75,7 @@
                     padding: 5px 10px;
                     font-size: 20px;
                     width: 400px;
+                    min-height: 50px;
                 }
             }
         }
@@ -238,17 +239,13 @@
 }
 
 // Responsive design
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1024px) {
     .container {
         & .prescription {
-            width: 100%;
-
             & .brand {
-                gap: 10px;
-
                 & img {
-                    width: 70px;
-                    height: 70px;
+                    width: 80px;
+                    height: 80px;
                 }
 
                 & div {
@@ -274,8 +271,6 @@
                 }
 
                 & span {
-                    flex-direction: column;
-
                     & p {
                         font-size: 18px;
                     }
@@ -288,48 +283,27 @@
 
                     & input {
                         font-size: 18px;
-                        height: 35px;
                     }
                 }
             }
 
             & .medications {
-                gap: 30px;
-
                 & .medication {
-                    flex-direction: column;
-                    gap: 10px;
-
                     & div:first-child {
-                        width: 100%;
-                        margin-right: auto;
-
                         & .upper-part {
                             & b {
-                                font-size: 18px;
-                            }
-
-                            & input {
                                 font-size: 18px;
                             }
                         }
 
                         & .lower-part {
-                            grid-template-columns: 1fr;
+                            & div {
+                                & input {
+                                    font-size: 18px;
+                                }
+                            }
                         }
                     }
-
-                    & .delete {
-                        margin: 0;
-                        margin-left: auto;
-                    }
-                }
-
-                & .add-button {
-                    margin-top: 0;
-                    font-size: 16px;
-                    width: 150px;
-                    height: 45px;
                 }
 
                 & h4 {
@@ -358,36 +332,57 @@
                     }
                 }
             }
+        }
+    }
+}
 
-            & .confirmation {
-                margin-top: 25px;
+@media only screen and (max-width: 768px) {
+    .container {
+        & .prescription {
+            width: 100%;
 
-                & > div {
-                    transform: translateX(12.5%);
+            & .brand {
+                gap: 10px;
 
-                    & h4 {
-                        font-size: 18px;
-                    }
+                & img {
+                    width: 70px;
+                    height: 70px;
+                }
+            }
 
-                    & span {
-                        align-items: center;
+            & .patient-info {
+                & span {
+                    flex-direction: column;
+                }
+            }
 
-                        & img:first-child {
-                            width: 90px;
-                            height: 90px;
+            & .medications {
+                gap: 30px;
+
+                & .medication {
+                    flex-direction: column;
+                    gap: 10px;
+
+                    & div:first-child {
+                        width: 100%;
+                        margin-right: auto;
+
+                        & .lower-part {
+                            grid-template-columns: 1fr;
                         }
-
-                        & img:last-child {
-                            width: 120px;
-                            top: 20px;
-                            left: 90px;
-                        }
                     }
 
-                    & p {
-                        font-size: 18px;
-                        font-weight: 500;
+                    & .delete {
+                        margin: 0;
+                        margin-left: auto;
                     }
+                }
+
+                & .add-button {
+                    margin-top: 0;
+                    font-size: 16px;
+                    width: 150px;
+                    height: 45px;
                 }
             }
         }

@@ -61,3 +61,24 @@
         }
     }
 }
+
+@media only screen and (max-width: 1024px) {
+    .container {
+        & .confirmation {
+            & div {
+                & img:first-child {
+                    width: 120px;
+                    height: 120px;
+                }
+
+                & img:last-child {
+                    width: 150px;
+                }
+
+                & button {
+                    transform: translateY(60%);
+                }
+            }
+        }
+    }
+}

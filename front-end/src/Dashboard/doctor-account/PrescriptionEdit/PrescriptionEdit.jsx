@@ -11,6 +11,7 @@ import { useTheme, Select, MenuItem, TextField, Autocomplete } from '@mui/materi
 import Papa from 'papaparse';
 import SignatureConfirmation from '../../../components/SignatureConfirmation/SignatureConfirmation';
 import { useTranslation } from 'react-i18next';
+import useResponsive from '../../../hooks/useResponsive';
 import capitalizeFirstLetter from '../../../utils/text/capitalizeFirstLetter';
 import translateGender from '../../../utils/translation/translateGender';
 import translateDosageForm from '../../../utils/translation/translateDosageForm';
@@ -39,6 +40,7 @@ const PrescriptionEdit = ({
     const [loadingBtnSavePres, setLoadingBtnSavePres] = useState(false);
     const [medicineOptions, setMedicineOptions] = useState([]);
     const [customMedications, setCustomMedications] = useState([]);
+    const { isTabletOrMobile } = useResponsive();
 
     useEffect(() => {
         const loadMedicineData = async () => {
@@ -213,7 +215,7 @@ const PrescriptionEdit = ({
     const customStyles = {
         '& .MuiSelect-select': {
             padding: '8px 10px',
-            fontSize: '20px',
+            fontSize: isTabletOrMobile ? '18px' : '20px',
         },
         '& .MuiOutlinedInput-notchedOutline': {
             border: '2px solid var(--primaryColor)',
@@ -359,7 +361,7 @@ const PrescriptionEdit = ({
                                                         },
                                                         '& .MuiInputBase-input': {
                                                             padding: '15px',
-                                                            fontSize: '20px',
+                                                            fontSize: isTabletOrMobile ? '18px' : '20px',
                                                         },
                                                     }}
                                                 />

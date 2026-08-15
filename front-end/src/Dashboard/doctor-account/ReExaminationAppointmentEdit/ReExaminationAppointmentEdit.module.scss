@@ -110,80 +110,6 @@
         }
     }
 
-    & .confirmation {
-        width: 100%;
-        display: flex;
-        margin-top: 50px;
-        justify-content: flex-end;
-
-        & > div {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-
-            & h4 {
-                font-size: 20px;
-                font-weight: 500;
-                color: var(--irisBlueColor);
-            }
-
-            & span {
-                position: relative;
-                margin: 5px 0;
-                width: 300px;
-                display: flex;
-                flex-direction: column;
-
-                & img + img {
-                    position: absolute;
-                    z-index: 1;
-                }
-
-                & img:first-child {
-                    width: 150px;
-                    height: 150px;
-                }
-
-                & img:last-child {
-                    width: 200px;
-                    top: 30px;
-                    left: 40px;
-                }
-            }
-
-            & p {
-                font-size: 20px;
-                font-weight: 500;
-            }
-
-            & div {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-top: 10px;
-                background: var(--buttonBgColor);
-                border-radius: 5px;
-                width: 180px;
-                height: 45px;
-
-                &:hover {
-                    cursor: pointer;
-                    opacity: 0.8;
-                }
-
-                & input {
-                    display: none;
-                }
-
-                & label {
-                    color: var(--whiteColor);
-                    font-size: 16px;
-                    font-weight: 500;
-                }
-            }
-        }
-    }
-
     & .submit-btn {
         background: var(--buttonBgColor);
         color: var(--whiteColor);
@@ -200,17 +126,13 @@
     }
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1024px) {
     .container {
         & .re-examination {
-            width: 100%;
-
             & .brand {
-                gap: 10px;
-
                 & img {
-                    width: 70px;
-                    height: 70px;
+                    width: 80px;
+                    height: 80px;
                 }
 
                 & div {
@@ -236,21 +158,8 @@
                 }
 
                 & span {
-                    flex-direction: column;
-
                     & p {
                         font-size: 18px;
-                    }
-                }
-
-                & .disease {
-                    & b {
-                        font-size: 18px;
-                    }
-
-                    & input {
-                        font-size: 18px;
-                        height: 35px;
                     }
                 }
             }
@@ -264,46 +173,41 @@
                     & b {
                         font-size: 18px;
                     }
-
-                    & .schedule {
-                        grid-template-columns: 1fr;
-                        gap: 10px;
-                    }
                 }
 
                 & div:last-child {
                     font-size: 18px;
                 }
             }
+        }
+    }
+}
 
-            & .confirmation {
-                margin-top: 25px;
+@media only screen and (max-width: 768px) {
+    .container {
+        & .re-examination {
+            width: 100%;
 
-                & > div {
-                    transform: translateX(12.5%);
+            & .brand {
+                gap: 10px;
 
-                    & h4 {
-                        font-size: 18px;
-                    }
+                & img {
+                    width: 70px;
+                    height: 70px;
+                }
+            }
 
-                    & span {
-                        align-items: center;
+            & .patient-info {
+                & span {
+                    flex-direction: column;
+                }
+            }
 
-                        & img:first-child {
-                            width: 90px;
-                            height: 90px;
-                        }
-
-                        & img:last-child {
-                            width: 120px;
-                            top: 20px;
-                            left: 90px;
-                        }
-                    }
-
-                    & p {
-                        font-size: 18px;
-                        font-weight: 500;
+            & .notice {
+                & div:nth-child(2) {
+                    & .schedule {
+                        grid-template-columns: 1fr;
+                        gap: 10px;
                     }
                 }
             }
