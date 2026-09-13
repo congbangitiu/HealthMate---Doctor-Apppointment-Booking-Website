@@ -33,7 +33,7 @@ const FAQ = () => {
                     {faqs.map((faq, index) => (
                         <div
                             key={index}
-                            className={`${cx('faq')} ${openIndexes.includes(index) ? cx('open') : cx('close')}`}
+                            className={cx('faq')}
                             onClick={() => toggleAccordion(index)}
                         >
                             <div className={cx('question')}>
@@ -44,7 +44,14 @@ const FAQ = () => {
                                     <AiOutlinePlus className={cx('icon')} />
                                 )}
                             </div>
-                            {openIndexes.includes(index) && <p className={cx('answer')}>{faq.answer}</p>}
+                            <div
+                                className={cx('answer-wrapper', { open: openIndexes.includes(index) })}
+                                aria-hidden={!openIndexes.includes(index)}
+                            >
+                                <div className={cx('answer-content')}>
+                                    <p className={cx('answer')}>{faq.answer}</p>
+                                </div>
+                            </div>
                         </div>
                     ))}
                 </div>

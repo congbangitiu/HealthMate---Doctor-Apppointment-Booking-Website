@@ -9,7 +9,8 @@ import { useTranslation } from 'react-i18next';
 const cx = classNames.bind(styles);
 
 const ConfirmLogout = ({ setShowConfirmLogout }) => {
-    const { t } = useTranslation('logout');
+    const { t, i18n } = useTranslation('logout');
+    const isVietnamese = (i18n.resolvedLanguage || i18n.language || 'en').split('-')[0] === 'vi';
     const { dispatch } = useContext(authContext);
 
     const handleLogout = () => {
@@ -21,7 +22,7 @@ const ConfirmLogout = ({ setShowConfirmLogout }) => {
         <div className={cx('container')}>
             <IoIosLogOut className={cx('icon')} />
             <h1>{t('title')}</h1>
-            <div>
+            <div className={cx({ 'vietnamese-actions': isVietnamese })}>
                 <button onClick={() => setShowConfirmLogout(false)}>{t('cancel')}</button>
                 <button onClick={handleLogout}>{t('logout')}</button>
             </div>

@@ -85,5 +85,16 @@
                 padding: 10px 35px;
             }
         }
+
+        & .vietnamese-actions {
+            flex-direction: column-reverse;
+            gap: 12px;
+
+            & button {
+                width: 100%;
+                padding: 10px 12px;
+                white-space: nowrap;
+            }
+        }
     }
 }

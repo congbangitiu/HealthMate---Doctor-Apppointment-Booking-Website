@@ -17,7 +17,7 @@ const DoctorDetails = lazy(() => import('./../pages/Doctors/DoctorDetails/Doctor
 const ServiceDetails = lazy(() => import('../pages/ServiceDetails/ServiceDetails'));
 const MyAccount = lazy(() => import('../Dashboard/user-account/MyAccount/MyAccount'));
 const Dashboard = lazy(() => import('../Dashboard/doctor-account/Dashboard/Dashboard'));
-const CheckoutSucess = lazy(() => import('../pages/CheckoutSuccess/CheckoutSuccess'));
+const CheckoutSuccess = lazy(() => import('../pages/CheckoutSuccess/CheckoutSuccess'));
 const CompleteSignUp = lazy(() => import('../pages/CompleteSignUp/CompleteSignUp'));
 const MedicalRecordsPatient = lazy(() => import('../Dashboard/user-account/MedicalRecords/MedicalRecords'));
 const MedicalRecordsDoctor = lazy(() => import('../Dashboard/doctor-account/MedicalRecords/MedicalRecords'));
@@ -40,7 +40,7 @@ const Routers = () => {
                 <Route path="/specialties" element={<Specialties />} />
                 <Route path="/specialties/:id" element={<SpecialtyDetails />} />
                 <Route path="/services/:id" element={<ServiceDetails />} />
-                <Route path="/checkout-success" element={<CheckoutSucess />} />
+                <Route path="/checkout-success" element={<CheckoutSuccess />} />
                 <Route path="/chats" element={<Chat />} />
                 <Route path="/chats/:id" element={<Chat />} />
                 <Route
