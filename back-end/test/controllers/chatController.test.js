@@ -126,7 +126,7 @@ describe('handleMessageAction', () => {
         // Reload failure happens after a successful save; a 500 response does not prove rollback.
     });
 
-    it.fails.each(['edit', 'removeForEveryone'])('BE-CH07 [KNOWN BUG]: rejects forged sender identity for action %s', async (actionType) => {
+    it.each(['edit', 'removeForEveryone'])('BE-CH07 [KNOWN BUG]: rejects forged sender identity for action %s', async (actionType) => {
         const req = request({ actionType, userId: senderId });
         req.userId = 'authenticated-other-user';
         const res = response();

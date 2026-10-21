@@ -16,8 +16,6 @@ const makeDoctor = (overrides = {}) => ({
 const generatedSlots = () => mocks.Doctor.findByIdAndUpdate.mock.calls[0]?.[1].$set.timeSlots;
 const runningInUtc = process.env.SLOT_TEST_TZ === 'UTC';
 // These timezone-specific failures were reproduced in separate Node processes.
-const vietnamEveningCase = runningInUtc ? it : it.fails;
-const utcCalendarCase = runningInUtc ? it.fails : it;
 const minuteOfDay = (time) => {
     const [hours, minutes] = time.split(':').map(Number);
     return hours * 60 + minutes;
@@ -123,7 +121,7 @@ describe('generateWeeklySlotsForAllDoctors', () => {
         expect(doctor.timeSlots).toHaveLength(7);
     });
 
-    it.fails.each(['duplicate shift', 'duplicate schedule'])('BE-T10 [KNOWN BUG]: removes duplicates from a new batch with %s', async (kind) => {
+    it.each(['duplicate shift', 'duplicate schedule'])('BE-T10 [KNOWN BUG]: removes duplicates from a new batch with %s', async (kind) => {
         const entry = { day: 'Thursday', shifts: ['Morning'] };
         const availableSchedules = kind === 'duplicate shift' ? [{ ...entry, shifts: ['Morning', 'Morning'] }] : [entry, entry];
         mocks.Doctor.find.mockResolvedValue([makeDoctor({ availableSchedules })]);
@@ -143,7 +141,7 @@ describe('generateWeeklySlotsForAllDoctors', () => {
         expect(generatedSlots().every((item) => item.day === expected)).toBe(true);
     });
 
-    vietnamEveningCase('BE-T11 [KNOWN BUG in Vietnam TZ]: keeps the next Vietnamese day available at 23:30', async () => {
+    it('BE-T11 [KNOWN BUG in Vietnam TZ]: keeps the next Vietnamese day available at 23:30', async () => {
         vi.setSystemTime(new Date('2026-10-21T23:30:00+07:00'));
         mocks.Doctor.find.mockResolvedValue([makeDoctor()]);
         await generateWeeklySlotsForAllDoctors();
@@ -151,7 +149,7 @@ describe('generateWeeklySlotsForAllDoctors', () => {
         expect(generatedSlots().every((item) => item.day === '2026-10-22')).toBe(true);
     });
 
-    utcCalendarCase('BE-T11 [KNOWN BUG in UTC]: handles Vietnamese month rollover at 00:30 on January first', async () => {
+    it('BE-T11 [KNOWN BUG in UTC]: handles Vietnamese month rollover at 00:30 on January first', async () => {
         vi.setSystemTime(new Date('2027-01-01T00:30:00+07:00'));
         mocks.Doctor.find.mockResolvedValue([makeDoctor({ availableSchedules: [{ day: 'Saturday', shifts: ['Morning'] }] })]);
         await generateWeeklySlotsForAllDoctors();
@@ -179,7 +177,7 @@ describe('removeExpiredSlotsForAllDoctors', () => {
         expect(doctor.save).toHaveBeenCalledTimes(1);
     });
 
-    utcCalendarCase('BE-T12 [KNOWN BUG in UTC]: removes the previous Vietnamese day at 00:30 regardless of server timezone', async () => {
+    it('BE-T12 [KNOWN BUG in UTC]: removes the previous Vietnamese day at 00:30 regardless of server timezone', async () => {
         vi.setSystemTime(new Date('2026-10-21T00:30:00+07:00'));
         const today = { day: '2026-10-21', startingTime: '08:00', endingTime: '08:30' };
         const doctor = makeDoctor({ timeSlots: [{ ...today, day: '2026-10-20' }, today] });

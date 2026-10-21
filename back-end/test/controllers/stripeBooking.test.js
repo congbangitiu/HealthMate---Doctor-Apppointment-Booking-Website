@@ -170,8 +170,8 @@ describe('getCheckoutSession', () => {
         },
     );
 
-    // Confirmed as ordinary failing tests before being marked as expected failures.
-    it.fails.each(['unavailable', 'past', 'missing'])(
+    // Known regressions are ordinary tests and report FAILED until the source is fixed.
+    it.each(['unavailable', 'past', 'missing'])(
         'BE-S05 [KNOWN BUG]: rejects slot state "%s" before creating a Stripe session', async (kind) => {
             const req = checkoutRequest();
             if (kind === 'unavailable') doctor.timeSlots = [];
@@ -285,7 +285,7 @@ describe('stripeWebhook', () => {
         },
     );
 
-    it.fails('BE-W07 [KNOWN BUG]: does not process the same completed session twice', async () => {
+    it('BE-W07 [KNOWN BUG]: does not process the same completed session twice', async () => {
         const req = webhookRequest();
         await stripeWebhook(req, createResponse());
         await stripeWebhook(req, createResponse());
@@ -295,7 +295,7 @@ describe('stripeWebhook', () => {
         expect(mocks.emit).toHaveBeenCalledTimes(1);
     });
 
-    it.fails('BE-W08 [KNOWN BUG]: does not create a paid booking for an unpaid completed session', async () => {
+    it('BE-W08 [KNOWN BUG]: does not create a paid booking for an unpaid completed session', async () => {
         event.data.object.payment_status = 'unpaid';
         const res = createResponse();
         await stripeWebhook(webhookRequest(), res);
@@ -313,7 +313,7 @@ describe('stripeWebhook', () => {
 
     it.todo('BE-W09: preserves raw bytes through the actual Express app and validates a real Stripe signature (integration)');
 
-    it.fails.each(['amount mismatch', 'unavailable slot'])(
+    it.each(['amount mismatch', 'unavailable slot'])(
         'BE-W10 [KNOWN BUG]: prevents a paid booking with %s', async (kind) => {
             if (kind === 'amount mismatch') {
                 // A complete, otherwise valid event isolates the missing amount check.

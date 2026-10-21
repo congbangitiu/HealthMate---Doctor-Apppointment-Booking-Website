@@ -25,7 +25,7 @@ describe('Review.calcAverageRatings', () => {
         },
     );
 
-    it.fails('BE-RV02 [KNOWN BUG]: handles an empty aggregation result without throwing', async () => {
+    it('BE-RV02 [KNOWN BUG]: handles an empty aggregation result without throwing', async () => {
         vi.spyOn(Review, 'aggregate').mockResolvedValue([]);
         await expect(Review.calcAverageRatings(doctorId)).resolves.toBeUndefined();
         // Do not assume a zero/null fallback policy until it has been confirmed.

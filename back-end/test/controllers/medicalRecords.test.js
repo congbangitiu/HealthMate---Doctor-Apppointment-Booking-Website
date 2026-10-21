@@ -112,8 +112,7 @@ for (const config of cases) {
             }
         });
 
-        const missingAppointmentTest = config.key === 'prescription' ? it.fails : it;
-        missingAppointmentTest(`${config.key === 'prescription' ? 'BE-M02 [KNOWN BUG]' : 'BE-M03'}: does not save a record when the appointment does not exist`, async () => {
+        it(`${config.key === 'prescription' ? 'BE-M02 [KNOWN BUG]' : 'BE-M03'}: does not save a record when the appointment does not exist`, async () => {
             booking = null;
             const res = response();
             await config.create(request(config.body), res);
@@ -186,7 +185,7 @@ for (const config of cases) {
             expect(mocks.emit).not.toHaveBeenCalled();
         });
 
-        it.fails('BE-M10 [KNOWN BUG]: rejects a conflicting body appointment before updating the record', async () => {
+        it('BE-M10 [KNOWN BUG]: rejects a conflicting body appointment before updating the record', async () => {
             Model.findOneAndUpdate.mockResolvedValue({ _id: 'record-id', appointment: otherId });
             const res = response();
             await config.update(request({ ...config.body, appointment: otherId }), res);
@@ -209,7 +208,7 @@ for (const config of cases) {
             expect(mocks.emit).not.toHaveBeenCalled();
         });
 
-        it.fails.each(['create', 'update'])('BE-M11 [KNOWN BUG]: rejects an unrelated doctor attempting to %s another doctor record', async (operation) => {
+        it.each(['create', 'update'])('BE-M11 [KNOWN BUG]: rejects an unrelated doctor attempting to %s another doctor record', async (operation) => {
             Model.findOneAndUpdate.mockResolvedValue({ _id: 'record-id', ...config.body });
             const req = request(config.body);
             req.userId = 'unrelated-doctor-id';
@@ -239,7 +238,7 @@ for (const config of cases) {
 }
 
 describe('Examination schema history', () => {
-    it.fails('BE-M13 [KNOWN BUG]: defines actionHistory so update history can be persisted', () => {
+    it('BE-M13 [KNOWN BUG]: defines actionHistory so update history can be persisted', () => {
         const Examination = actualSchemas.examination;
         expect(Examination.schema.path('actionHistory')).toBeDefined();
     });

@@ -12,7 +12,7 @@ export default defineConfig({
             jsdom: { url: 'http://localhost:5173' },
         },
         include: ['src/**/*.test.{js,jsx}'],
-        setupFiles: ['./src/test/setup.js'],
+        setupFiles: ['./test/setup.js'],
         clearMocks: true,
         restoreMocks: true,
         coverage: {

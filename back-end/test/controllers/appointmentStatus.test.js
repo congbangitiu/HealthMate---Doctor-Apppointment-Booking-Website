@@ -129,13 +129,13 @@ describe('updateAppointmentStatus', () => {
         },
     );
 
-    it.fails('BE-C06 [KNOWN BUG]: does not restore a duplicate slot when cancellation is repeated', async () => {
+    it('BE-C06 [KNOWN BUG]: does not restore a duplicate slot when cancellation is repeated', async () => {
         await updateAppointmentStatus(request(), response());
         await updateAppointmentStatus(request(), response());
         expect(doctor.timeSlots.filter((item) => item.day === slot.day && item.startingTime === slot.startingTime && item.endingTime === slot.endingTime)).toHaveLength(1);
     });
 
-    it.fails('BE-C07 [KNOWN BUG]: returns a client error for an invalid status rejected by the real schema', async () => {
+    it('BE-C07 [KNOWN BUG]: returns a client error for an invalid status rejected by the real schema', async () => {
         const { default: Booking } = await vi.importActual('../../Models/BookingSchema.js');
         const invalid = new Booking({
             doctor: '507f1f77bcf86cd799439011', user: '507f1f77bcf86cd799439012',
@@ -153,7 +153,7 @@ describe('updateAppointmentStatus', () => {
 
     it.todo('BE-C07: enforce agreed transitions such as done to pending after the transition policy is confirmed');
 
-    it.fails('BE-C08 [KNOWN BUG]: prevents an unrelated patient from changing another patient booking', async () => {
+    it('BE-C08 [KNOWN BUG]: prevents an unrelated patient from changing another patient booking', async () => {
         const req = request('done');
         req.userId = 'unrelated-patient-id';
         const res = response();

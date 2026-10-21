@@ -192,8 +192,8 @@ describe('createBooking', () => {
     });
 
     // These expectations describe the guide's desired safeguards, not the current implementation.
-    // Each is confirmed as an ordinary failing test before being marked as an expected failure.
-    it.fails.each([
+    // Known regressions remain ordinary tests so assertion failures are reported as FAILED.
+    it.each([
         ['missing body', undefined],
         ['null body', null],
         ['missing timeSlot', { doctorId: 'doctor-id', userId: 'patient-id', ticketPrice: 25, paymentMethod: 'cash' }],
@@ -207,7 +207,7 @@ describe('createBooking', () => {
         expectNoBookingEffects();
     });
 
-    it.fails('BE-B09 [KNOWN BUG]: rejects a manipulated price or uses the server-side doctor price', async () => {
+    it('BE-B09 [KNOWN BUG]: rejects a manipulated price or uses the server-side doctor price', async () => {
         const res = createResponse();
         await createBooking(createRequest({ ticketPrice: 1 }), res);
         const status = res.status.mock.calls[0][0];
@@ -219,7 +219,7 @@ describe('createBooking', () => {
         }
     });
 
-    it.fails('BE-B10 [KNOWN BUG]: rejects booking for a different patient than the authenticated caller', async () => {
+    it('BE-B10 [KNOWN BUG]: rejects booking for a different patient than the authenticated caller', async () => {
         user._id = 'other-patient-id';
         const req = createRequest({ userId: 'other-patient-id' });
         const res = createResponse();
@@ -229,7 +229,7 @@ describe('createBooking', () => {
         expectNoBookingEffects();
     });
 
-    it.fails('BE-B11 [KNOWN BUG]: rejects a past slot even if it remains in the availability list', async () => {
+    it('BE-B11 [KNOWN BUG]: rejects a past slot even if it remains in the availability list', async () => {
         const pastSlot = { ...slot, day: '2026-10-20' };
         doctor.timeSlots = [pastSlot];
         const res = createResponse();

@@ -128,7 +128,7 @@ for (const config of [
         );
 
         if (config.model === mocks.User) {
-            it.fails('BE-D08 [KNOWN BUG]: keeps confirmedPassword consistent with the saved password hash', async () => {
+            it('BE-D08 [KNOWN BUG]: keeps confirmedPassword consistent with the saved password hash', async () => {
                 expect(actualUser.schema.path('confirmedPassword')).toBeDefined();
                 const res = response();
                 await config.handler(request(), res);
@@ -167,7 +167,7 @@ for (const config of [
                 expect(res.status).toHaveBeenCalledWith(200);
             });
 
-            it.fails('BE-D08 [KNOWN BUG]: synchronizes confirmedPassword when the Doctor controller uses a User record', async () => {
+            it('BE-D08 [KNOWN BUG]: synchronizes confirmedPassword when the Doctor controller uses a User record', async () => {
                 const patient = makeAccount();
                 mocks.User.findById.mockResolvedValue(patient);
                 await config.handler(request(), response());

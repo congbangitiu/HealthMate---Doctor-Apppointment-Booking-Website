@@ -125,7 +125,7 @@ describe('createReExaminationBooking', () => {
         });
     });
 
-    it.fails.each(['doctor', 'patient'])('BE-N04 [KNOWN BUG]: rejects a parent belonging to a different %s', async (field) => {
+    it.each(['doctor', 'patient'])('BE-N04 [KNOWN BUG]: rejects a parent belonging to a different %s', async (field) => {
         parent[field === 'patient' ? 'user' : 'doctor'] = 'unrelated-id';
         const res = response();
         await createReExaminationBooking(createRequest(), res);
@@ -200,7 +200,7 @@ describe('updateNextAppointmentTimeSlot', () => {
         expect(child.save).not.toHaveBeenCalled();
     });
 
-    it.fails('BE-N06 [KNOWN BUG]: classifies an invalid time range as a client error', async () => {
+    it('BE-N06 [KNOWN BUG]: classifies an invalid time range as a client error', async () => {
         const res = response();
         await updateNextAppointmentTimeSlot(updateRequest({ ...slot, endingTime: slot.startingTime }), res);
         expect(res.status.mock.calls[0][0]).toBeGreaterThanOrEqual(400);

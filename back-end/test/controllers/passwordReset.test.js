@@ -247,7 +247,7 @@ describe('verifyForgotPasswordOTP', () => {
     });
 
     // Confirmed regression: the controller relies on TTL cleanup instead of checking age.
-    it.fails('BE-V05 [KNOWN BUG]: rejects an expired OTP even while its record remains in MongoDB', async () => {
+    it('BE-V05 [KNOWN BUG]: rejects an expired OTP even while its record remains in MongoDB', async () => {
         mocks.PasswordReset.findOne.mockResolvedValue(createResetRequest({ createdAt: new Date(now.getTime() - 601000) }));
         mocks.bcrypt.compare.mockResolvedValue(true);
         const res = createResponse();
