@@ -10,8 +10,9 @@ let fetchMock;
 
 const deferred = () => {
     let resolve;
-    const promise = new Promise((finish) => { resolve = finish; });
-    return { promise, resolve };
+    let reject;
+    const promise = new Promise((finish, fail) => { resolve = finish; reject = fail; });
+    return { promise, resolve, reject };
 };
 const jsonResponse = (body, ok = true) => ({ ok, json: vi.fn().mockResolvedValue(body) });
 
@@ -72,7 +73,7 @@ describe('useFetchData', () => {
         }
     });
 
-    it('FE-H06 [KNOWN BUG]: clears an earlier error after a successful refetch', async () => {
+    it('FE-H06 [REGRESSION]: clears an earlier error after a successful refetch', async () => {
         fetchMock.mockResolvedValueOnce(jsonResponse({ message: 'First request failed' }, false))
             .mockResolvedValueOnce(jsonResponse({ data: ['B'] }));
         const { result, rerender } = renderHook(({ url }) => useFetchData(url), { initialProps: { url: urlA } });
@@ -83,7 +84,7 @@ describe('useFetchData', () => {
         expect(result.current.error).toBeNull();
     });
 
-    it('FE-H07 [KNOWN BUG]: keeps the latest URL data when an older request finishes last', async () => {
+    it('FE-H07 [REGRESSION]: keeps the latest URL data when an older request finishes last', async () => {
         const first = deferred();
         const second = deferred();
         fetchMock.mockReturnValueOnce(first.promise).mockReturnValueOnce(second.promise);
@@ -95,5 +96,53 @@ describe('useFetchData', () => {
         expect(result.current.data).toEqual(['B']);
     });
 
-    it.todo('FE-H08: verifies abort or ignored completion after unmount with an explicit observable cleanup contract');
+    it('FE-H08: aborts the pending fetch on unmount and ignores its late response', async () => {
+        const pending = deferred();
+        fetchMock.mockReturnValue(pending.promise);
+        const { unmount } = renderHook(() => useFetchData(urlA));
+        const options = fetchMock.mock.calls[0][1];
+        unmount();
+        expect(options.signal?.aborted).toBe(true);
+        const lateResponse = jsonResponse({ data: ['Late result'] });
+        await act(async () => { pending.resolve(lateResponse); await pending.promise; });
+        expect(lateResponse.json).not.toHaveBeenCalled();
+    });
+
+    it('FE-H09: ignores an old request error while the latest request is still loading', async () => {
+        const first = deferred();
+        const second = deferred();
+        fetchMock.mockReturnValueOnce(first.promise).mockReturnValueOnce(second.promise);
+        const { result, rerender } = renderHook(({ url }) => useFetchData(url), { initialProps: { url: urlA } });
+        rerender({ url: urlB });
+        await act(async () => {
+            first.reject(new Error('Old request failed'));
+            await first.promise.catch(() => {});
+        });
+        expect(result.current).toEqual({ data: [], loading: true, error: null });
+        await act(async () => { second.resolve(jsonResponse({ data: ['B'] })); await second.promise; });
+        expect(result.current).toEqual({ data: ['B'], loading: false, error: null });
+    });
+
+    it('FE-H10: ignores old response JSON that finishes parsing after the latest request succeeds', async () => {
+        const oldJson = deferred();
+        const oldResponse = { ok: true, json: vi.fn(() => oldJson.promise) };
+        fetchMock.mockResolvedValueOnce(oldResponse).mockResolvedValueOnce(jsonResponse({ data: ['B'] }));
+        const { result, rerender } = renderHook(({ url }) => useFetchData(url), { initialProps: { url: urlA } });
+        await waitFor(() => expect(oldResponse.json).toHaveBeenCalledTimes(1));
+        rerender({ url: urlB });
+        await waitFor(() => expect(result.current.data).toEqual(['B']));
+        await act(async () => { oldJson.resolve({ data: ['A'] }); await oldJson.promise; });
+        expect(result.current).toEqual({ data: ['B'], loading: false, error: null });
+    });
+
+    it('FE-H11: preserves previously loaded data while a new URL is pending', async () => {
+        const next = deferred();
+        fetchMock.mockResolvedValueOnce(jsonResponse({ data: ['A'] })).mockReturnValueOnce(next.promise);
+        const { result, rerender } = renderHook(({ url }) => useFetchData(url), { initialProps: { url: urlA } });
+        await waitFor(() => expect(result.current.data).toEqual(['A']));
+        rerender({ url: urlB });
+        expect(result.current).toEqual({ data: ['A'], loading: true, error: null });
+        await act(async () => { next.resolve(jsonResponse({ data: ['B'] })); await next.promise; });
+        expect(result.current).toEqual({ data: ['B'], loading: false, error: null });
+    });
 });

@@ -57,7 +57,7 @@ describe('ProtectedRoute', () => {
     });
 
     it.each(['null', 'undefined'])(
-        'FE-A09 [KNOWN BUG]: treats stored sentinel token "%s" as logged out', async (token) => {
+        'FE-A09 [REGRESSION]: treats stored sentinel token "%s" as logged out', async (token) => {
             renderRoute({ role: 'patient', token });
             expect(screen.queryByText('Private content')).not.toBeInTheDocument();
             expect(await screen.findByText('Login page')).toBeInTheDocument();

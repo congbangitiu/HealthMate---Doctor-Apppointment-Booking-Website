@@ -61,15 +61,14 @@ describe('AuthContextProvider', () => {
         expect(localStorage.getItem('token')).toBe('test-access-token');
     });
 
-    it('FE-A04: clears the active session on logout without requiring storage keys to stay absent', async () => {
+    it('FE-A04: clears the active session and removes persisted credentials on logout', async () => {
         seedSession();
         renderSession(await loadAuth());
         await userEvent.click(screen.getByRole('button', { name: 'Log out' }));
         expect(readSession()).toEqual(emptySession);
-        expect(JSON.parse(localStorage.getItem('user'))).toBeNull();
-        expect(localStorage.getItem('role')).not.toBe(session.role);
-        expect(localStorage.getItem('token')).not.toBe(session.token);
-        // The current effect writes string "null" after the reducer removes the keys.
+        expect(localStorage.getItem('user')).toBeNull();
+        expect(localStorage.getItem('role')).toBeNull();
+        expect(localStorage.getItem('token')).toBeNull();
     });
 
     it('FE-A05: preserves the session for an unknown action', async () => {
@@ -80,20 +79,21 @@ describe('AuthContextProvider', () => {
     });
 
     it.each(['{invalid-json', 'undefined'])(
-        'FE-A06 [KNOWN BUG]: tolerates corrupted stored user value %s', async (storedUser) => {
+        'FE-A06 [REGRESSION]: tolerates corrupted stored user value %s', async (storedUser) => {
             localStorage.setItem('user', storedUser);
             renderSession(await loadAuth());
             expect(readSession()).toEqual(emptySession);
         },
     );
 
-    it('FE-A10: restores a valid stored session on a fresh module import', async () => {
+    it.each(['patient', 'doctor', 'admin'])('FE-A10: restores a valid stored %s session on a fresh import', async (role) => {
         seedSession();
+        localStorage.setItem('role', role);
         renderSession(await loadAuth());
-        expect(readSession()).toEqual(session);
+        expect(readSession()).toEqual({ ...session, role });
     });
 
-    it('FE-A11 [KNOWN BUG]: restores null session values after logout and a fresh module import', async () => {
+    it('FE-A11 [REGRESSION]: restores null session values after logout and a fresh module import', async () => {
         seedSession();
         const firstView = renderSession(await loadAuth());
         await userEvent.click(screen.getByRole('button', { name: 'Log out' }));
@@ -101,5 +101,25 @@ describe('AuthContextProvider', () => {
         firstView.unmount();
         renderSession(await loadAuth());
         expect(readSession()).toEqual(emptySession);
+    });
+
+    it.each(['null', 'undefined'])('FE-A12: migrates stored sentinel values "%s" to an empty session', async (value) => {
+        localStorage.setItem('user', 'null');
+        localStorage.setItem('role', value);
+        localStorage.setItem('token', value);
+        renderSession(await loadAuth());
+        expect(readSession()).toEqual(emptySession);
+        expect(localStorage.getItem('role')).toBeNull();
+        expect(localStorage.getItem('token')).toBeNull();
+    });
+
+    it('FE-A13: discards stale credentials when the stored user cannot be parsed', async () => {
+        seedSession();
+        localStorage.setItem('user', '{broken-json');
+        renderSession(await loadAuth());
+        expect(readSession()).toEqual(emptySession);
+        expect(localStorage.getItem('user')).toBeNull();
+        expect(localStorage.getItem('role')).toBeNull();
+        expect(localStorage.getItem('token')).toBeNull();
     });
 });

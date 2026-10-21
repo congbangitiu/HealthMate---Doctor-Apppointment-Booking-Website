@@ -1,11 +1,24 @@
 import { createContext, useEffect, useReducer } from 'react';
 import { PropTypes } from 'prop-types';
 
-const initialState = {
-    user: localStorage.getItem('user') !== undefined ? JSON.parse(localStorage.getItem('user')) : null,
-    role: localStorage.getItem('role') || null,
-    token: localStorage.getItem('token') || null,
+const readStoredValue = (key) => {
+    const value = localStorage.getItem(key);
+    return !value || value === 'null' || value === 'undefined' ? null : value;
 };
+
+const readInitialState = () => {
+    try {
+        return {
+            user: JSON.parse(localStorage.getItem('user')),
+            role: readStoredValue('role'),
+            token: readStoredValue('token'),
+        };
+    } catch {
+        return { user: null, role: null, token: null };
+    }
+};
+
+const initialState = readInitialState();
 
 export const authContext = createContext(initialState);
 
@@ -44,9 +57,13 @@ export const AuthContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(authReducer, initialState);
 
     useEffect(() => {
-        localStorage.setItem('user', JSON.stringify(state.user));
-        localStorage.setItem('role', state.role);
-        localStorage.setItem('token', state.token);
+        for (const [key, value] of Object.entries(state)) {
+            if (value === null || value === undefined) {
+                localStorage.removeItem(key);
+            } else {
+                localStorage.setItem(key, key === 'user' ? JSON.stringify(value) : value);
+            }
+        }
     }, [state]);
 
     return (
