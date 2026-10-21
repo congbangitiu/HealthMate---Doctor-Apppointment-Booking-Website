@@ -22,6 +22,7 @@ const RESET_TOKEN_SECRET = `${process.env.JWT_SECRET_KEY}-reset-password`;
 const RESET_TOKEN_EXPIRES_IN = '10m';
 const RESEND_COOLDOWN_MS = 60 * 1000;
 const MAX_OTP_ATTEMPTS = 5;
+const REGISTRATION_OTP_EXPIRES_IN_MS = 2 * 60 * 1000;
 
 // Tài khoản nằm ở 2 collection khác nhau (giống login) nên phải tìm ở cả hai
 const findAccountByEmail = async (email) => {
@@ -47,6 +48,12 @@ export const registerAndVerifyOTP = async (req, res) => {
         });
     }
 
+    if (!['patient', 'doctor'].includes(role)) {
+        return res.status(400).json({
+            error: 'Invalid account role',
+        });
+    }
+
     try {
         let user = null;
 
@@ -64,6 +71,14 @@ export const registerAndVerifyOTP = async (req, res) => {
         // Check OTP
         const otpRecord = await Otp.findOne({ email: email });
         if (!otpRecord) {
+            return res.status(400).json({ error: 'OTP expired or not found for this email!' });
+        }
+
+        if (
+            otpRecord.createdAt &&
+            Date.now() - new Date(otpRecord.createdAt).getTime() >= REGISTRATION_OTP_EXPIRES_IN_MS
+        ) {
+            await Otp.deleteOne({ email });
             return res.status(400).json({ error: 'OTP expired or not found for this email!' });
         }
 
@@ -156,7 +171,7 @@ export const login = async (req, res) => {
 
         // Get token
         const token = generateToken(user);
-        const { password, role, appointment, ...rest } = user._doc;
+        const { password, confirmedPassword, role, appointment, ...rest } = user._doc;
         res.status(200).json({
             status: true,
             message: 'Login successfully',
