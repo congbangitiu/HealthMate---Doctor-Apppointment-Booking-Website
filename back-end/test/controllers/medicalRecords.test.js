@@ -258,8 +258,49 @@ for (const config of cases) {
 }
 
 describe('Examination schema history', () => {
-    it('BE-M13 [KNOWN BUG]: defines actionHistory so update history can be persisted', () => {
+    it('BE-M13: defines actionHistory so update history can be persisted', () => {
         const Examination = actualSchemas.examination;
         expect(Examination.schema.path('actionHistory')).toBeDefined();
+    });
+
+    const examinationBody = cases.find(({ key }) => key === 'examination').body;
+
+    it('BE-M13: accepts an existing examination without history and defaults to an empty array', () => {
+        const record = new actualSchemas.examination(examinationBody);
+        expect(record.validateSync()).toBeUndefined();
+        expect(record.toObject().actionHistory).toEqual([]);
+    });
+
+    it('BE-M13: serializes appended history without dropping earlier entries or adding subdocument ids', () => {
+        const createdAt = new Date(now.getTime() - 60000);
+        const record = new actualSchemas.examination({
+            ...examinationBody, actionHistory: [{ action: 'create', timestamp: createdAt }],
+        });
+        record.actionHistory.push({ action: 'update', timestamp: now });
+        expect(record.validateSync()).toBeUndefined();
+        expect(record.toObject().actionHistory).toEqual([
+            { action: 'create', timestamp: createdAt },
+            { action: 'update', timestamp: now },
+        ]);
+    });
+
+    it('BE-M13: defaults a new history timestamp to the current time', () => {
+        // The schema captures Date.now during import, before fake timers are installed.
+        vi.useRealTimers();
+        const before = Date.now();
+        const record = new actualSchemas.examination({ ...examinationBody, actionHistory: [{ action: 'update' }] });
+        const after = Date.now();
+        expect(record.validateSync()).toBeUndefined();
+        expect(record.actionHistory[0].timestamp).toBeInstanceOf(Date);
+        expect(record.actionHistory[0].timestamp.getTime()).toBeGreaterThanOrEqual(before);
+        expect(record.actionHistory[0].timestamp.getTime()).toBeLessThanOrEqual(after);
+    });
+
+    it.each([
+        [{ action: 'delete', timestamp: now }, 'actionHistory.0.action'],
+        [{ action: 'update', timestamp: 'invalid-date' }, 'actionHistory.0.timestamp'],
+    ])('BE-M13: rejects invalid history entry %j at %s', (entry, errorPath) => {
+        const record = new actualSchemas.examination({ ...examinationBody, actionHistory: [entry] });
+        expect(record.validateSync().errors[errorPath]).toBeDefined();
     });
 });

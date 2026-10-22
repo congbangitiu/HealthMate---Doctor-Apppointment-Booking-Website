@@ -25,10 +25,32 @@ describe('Review.calcAverageRatings', () => {
         },
     );
 
-    it('BE-RV02 [KNOWN BUG]: handles an empty aggregation result without throwing', async () => {
+    it('BE-RV02: resets count and average to zero when no reviews remain', async () => {
         vi.spyOn(Review, 'aggregate').mockResolvedValue([]);
         await expect(Review.calcAverageRatings(doctorId)).resolves.toBeUndefined();
-        // Do not assume a zero/null fallback policy until it has been confirmed.
+        expect(mocks.updateDoctor).toHaveBeenCalledExactlyOnceWith(doctorId, { totalRating: 0, averageRating: 0 });
+    });
+
+    it('BE-RV02: propagates doctor update errors when resetting an empty result', async () => {
+        const error = new Error('doctor update unavailable');
+        vi.spyOn(Review, 'aggregate').mockResolvedValue([]);
+        mocks.updateDoctor.mockRejectedValue(error);
+        await expect(Review.calcAverageRatings(doctorId)).rejects.toBe(error);
+        expect(mocks.updateDoctor).toHaveBeenCalledExactlyOnceWith(doctorId, { totalRating: 0, averageRating: 0 });
+    });
+
+    it('BE-RV02: replaces stale ratings with the next aggregation result', async () => {
+        vi.spyOn(Review, 'aggregate')
+            .mockResolvedValueOnce([{ numOfRating: 3, avgRating: 4 }])
+            .mockResolvedValueOnce([])
+            .mockResolvedValueOnce([{ numOfRating: 1, avgRating: 5 }]);
+        await Review.calcAverageRatings(doctorId);
+        await Review.calcAverageRatings(doctorId);
+        await Review.calcAverageRatings(doctorId);
+        expect(mocks.updateDoctor).toHaveBeenCalledTimes(3);
+        expect(mocks.updateDoctor).toHaveBeenNthCalledWith(1, doctorId, { totalRating: 3, averageRating: 4 });
+        expect(mocks.updateDoctor).toHaveBeenNthCalledWith(2, doctorId, { totalRating: 0, averageRating: 0 });
+        expect(mocks.updateDoctor).toHaveBeenNthCalledWith(3, doctorId, { totalRating: 1, averageRating: 5 });
     });
 
     it('BE-RV04: propagates aggregation errors without updating doctor ratings', async () => {
