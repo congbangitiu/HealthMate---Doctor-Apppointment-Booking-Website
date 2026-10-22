@@ -97,9 +97,11 @@ const VerifyOTP = ({
         setIsResending(true);
 
         try {
-            await onResend();
+            const result = await onResend();
             setOTP('');
-            setSecondsLeft(resendCooldown);
+            const cooldown = Number.isFinite(result?.retryAfter) && result.retryAfter >= 0
+                ? Math.ceil(result.retryAfter) : resendCooldown;
+            setSecondsLeft(cooldown);
         } catch (error) {
             toast.error(error.message);
         } finally {
