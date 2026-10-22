@@ -23,12 +23,16 @@ const SidePanel = ({
     doctorPhoto,
     doctorName,
     role,
-    expandeSidePanel,
-    setExpandeSidePanel,
+    expandedSidePanel,
+    setExpandedSidePanel,
+    selectedSlot: controlledSelectedSlot,
+    setSelectedSlot: setControlledSelectedSlot,
 }) => {
     const { t } = useTranslation('doctorDetails');
     const { isMobile } = useResponsive();
-    const [selectedSlot, setSelectedSlot] = useState(null);
+    const [internalSelectedSlot, setInternalSelectedSlot] = useState(null);
+    const selectedSlot = controlledSelectedSlot === undefined ? internalSelectedSlot : controlledSelectedSlot;
+    const setSelectedSlot = setControlledSelectedSlot || setInternalSelectedSlot;
     const [timeSlots, setTimeSlots] = useState(initialTimeSlots);
     const [openDialog, setOpenDialog] = useState(false);
 
@@ -43,7 +47,7 @@ const SidePanel = ({
             slot.endingTime === selectedSlot.endingTime);
         if (currentSlot !== selectedSlot) setSelectedSlot(currentSlot || null);
         if (!currentSlot) setOpenDialog(false);
-    }, [timeSlots, selectedSlot]);
+    }, [timeSlots, selectedSlot, setSelectedSlot]);
 
     const handleClickOpenDialog = () => {
         setOpenDialog(true);
@@ -78,13 +82,13 @@ const SidePanel = ({
             <div>
                 <h4>{t('sidePanel.availableSlots')}</h4>
                 {timeSlots.length > 0 &&
-                    (expandeSidePanel ? (
-                        <BiCollapseAlt className={cx('icon')} onClick={() => setExpandeSidePanel(false)} />
+                    (expandedSidePanel ? (
+                        <BiCollapseAlt className={cx('icon')} onClick={() => setExpandedSidePanel(false)} />
                     ) : (
-                        <BiExpandAlt className={cx('icon')} onClick={() => setExpandeSidePanel(true)} />
+                        <BiExpandAlt className={cx('icon')} onClick={() => setExpandedSidePanel(true)} />
                     ))}
             </div>
-            <div className={cx(expandeSidePanel ? 'slots-expanded' : 'slots-collapsed')}>
+            <div className={cx(expandedSidePanel ? 'slots-expanded' : 'slots-collapsed')}>
                 {filteredTimeSlots.length > 0 ? (
                     filteredTimeSlots?.map((timeSlot, index) => (
                         <div
@@ -159,8 +163,10 @@ SidePanel.propTypes = {
     doctorPhoto: PropTypes.string.isRequired,
     doctorName: PropTypes.string.isRequired,
     role: PropTypes.string.isRequired,
-    expandeSidePanel: PropTypes.bool.isRequired,
-    setExpandeSidePanel: PropTypes.func.isRequired,
+    expandedSidePanel: PropTypes.bool.isRequired,
+    setExpandedSidePanel: PropTypes.func.isRequired,
+    selectedSlot: PropTypes.object,
+    setSelectedSlot: PropTypes.func,
 };
 
 export default SidePanel;

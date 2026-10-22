@@ -40,7 +40,13 @@ const DoctorDetails = () => {
     const { role } = useContext(authContext);
     const [loadingApprove, setLoadingApprove] = useState(false);
     const [loadingReject, setLoadingReject] = useState(false);
-    const [expandeSidePanel, setExpandeSidePanel] = useState(false);
+    const [expandedSidePanel, setExpandedSidePanel] = useState(false);
+    const [selectedSlot, setSelectedSlot] = useState(null);
+
+    useEffect(() => {
+        setSelectedSlot(null);
+        setExpandedSidePanel(false);
+    }, [id]);
 
     useEffect(() => {
         window.scrollTo({
@@ -142,11 +148,11 @@ const DoctorDetails = () => {
                             <Doctor {...doctor} />
                         </span>
 
-                        {expandeSidePanel ? (
+                        {expandedSidePanel ? (
                             <Dialog
-                                open={expandeSidePanel}
+                                open={expandedSidePanel}
                                 keepMounted
-                                onClose={() => setExpandeSidePanel(false)}
+                                onClose={() => setExpandedSidePanel(false)}
                                 fullWidth
                                 maxWidth={false}
                                 sx={{
@@ -168,8 +174,10 @@ const DoctorDetails = () => {
                                     doctorPhoto={doctor.photo}
                                     doctorName={doctor.fullname}
                                     role={role}
-                                    expandeSidePanel={expandeSidePanel}
-                                    setExpandeSidePanel={setExpandeSidePanel}
+                                    expandedSidePanel={expandedSidePanel}
+                                    setExpandedSidePanel={setExpandedSidePanel}
+                                    selectedSlot={selectedSlot}
+                                    setSelectedSlot={setSelectedSlot}
                                 />
                             </Dialog>
                         ) : (
@@ -192,8 +200,10 @@ const DoctorDetails = () => {
                                     doctorPhoto={doctor.photo}
                                     doctorName={doctor.fullname}
                                     role={role}
-                                    expandeSidePanel={expandeSidePanel}
-                                    setExpandeSidePanel={setExpandeSidePanel}
+                                    expandedSidePanel={expandedSidePanel}
+                                    setExpandedSidePanel={setExpandedSidePanel}
+                                    selectedSlot={selectedSlot}
+                                    setSelectedSlot={setSelectedSlot}
                                 />
                             </div>
                         )}

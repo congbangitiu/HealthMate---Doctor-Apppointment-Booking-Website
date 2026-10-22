@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -21,7 +22,7 @@ import SidePanel from './SidePanel';
 const at = (startingTime, endingTime = '11:30') => ({ day: '2026-10-21', startingTime, endingTime });
 const props = (overrides = {}) => ({
     doctorId: 'doctor-id', doctorName: 'Test Doctor', doctorPhoto: 'doctor.jpg', ticketPrice: 25,
-    timeSlots: [at('11:00')], role: 'patient', expandeSidePanel: true, setExpandeSidePanel: vi.fn(),
+    timeSlots: [at('11:00')], role: 'patient', expandedSidePanel: true, setExpandedSidePanel: vi.fn(),
     ...overrides,
 });
 
@@ -31,6 +32,38 @@ beforeEach(() => {
 });
 
 describe('SidePanel', () => {
+    it('preserves the selected slot when the panel is remounted in expanded mode', async () => {
+        const slot = at('11:00');
+        const ControlledPanel = () => {
+            const [expanded, setExpanded] = useState(false);
+            const [selectedSlot, setSelectedSlot] = useState(null);
+
+            return (
+                <>
+                    <button onClick={() => setExpanded((value) => !value)}>Toggle panel</button>
+                    <SidePanel
+                        key={expanded ? 'expanded' : 'collapsed'}
+                        {...props({
+                            timeSlots: [slot],
+                            expandedSidePanel: expanded,
+                            setExpandedSidePanel: setExpanded,
+                            selectedSlot,
+                            setSelectedSlot,
+                        })}
+                    />
+                </>
+            );
+        };
+
+        render(<ControlledPanel />);
+        await userEvent.click(screen.getByRole('radio'));
+        expect(screen.getByRole('radio')).toBeChecked();
+
+        await userEvent.click(screen.getByRole('button', { name: 'Toggle panel' }));
+        expect(screen.getByRole('radio')).toBeChecked();
+        expect(screen.getByRole('button', { name: 'Book appointment' })).toBeEnabled();
+    });
+
     it('FE-S01: hides past slots and keeps slots starting now or in the future', () => {
         render(<SidePanel {...props({ timeSlots: [at('09:00', '09:30'), at('10:00', '10:30'), at('11:00')] })} />);
         expect(screen.queryByText('09:00 - 09:30')).not.toBeInTheDocument();
