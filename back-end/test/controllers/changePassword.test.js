@@ -68,6 +68,7 @@ for (const config of [
             expect(res.status).toHaveBeenCalledWith(400);
             expect(res.json).toHaveBeenCalledWith({ success: false, message: 'The old password is incorrect !!!' });
             expect(account.password).toBe('old-password-hash');
+            expect(account.confirmedPassword).toBe('old-password-hash');
             expect(mocks.bcrypt.hash).not.toHaveBeenCalled();
             expect(account.save).not.toHaveBeenCalled();
         });
@@ -78,6 +79,7 @@ for (const config of [
             expect(res.status).toHaveBeenCalledWith(400);
             expect(res.json).toHaveBeenCalledWith({ success: false, message: 'The new password and confirm new password do not match !!!' });
             expect(account.password).toBe('old-password-hash');
+            expect(account.confirmedPassword).toBe('old-password-hash');
             expect(mocks.bcrypt.hash).not.toHaveBeenCalled();
             expect(account.save).not.toHaveBeenCalled();
         });
@@ -108,6 +110,10 @@ for (const config of [
             expect(account.password).not.toBe('NewPass123');
             expect(await actualBcrypt.compare('NewPass123', account.password)).toBe(true);
             expect(await actualBcrypt.compare('OldPass123', account.password)).toBe(false);
+            if (config.model === mocks.User) {
+                expect(account.confirmedPassword).toBe(account.password);
+                expect(await actualBcrypt.compare('NewPass123', account.confirmedPassword)).toBe(true);
+            }
         });
 
         it.each(['User lookup', 'compare', 'salt', 'hash', 'save'])(
@@ -128,12 +134,15 @@ for (const config of [
         );
 
         if (config.model === mocks.User) {
-            it('BE-D08 [KNOWN BUG]: keeps confirmedPassword consistent with the saved password hash', async () => {
+            it('BE-D08: keeps confirmedPassword consistent with the saved password hash', async () => {
                 expect(actualUser.schema.path('confirmedPassword')).toBeDefined();
+                let saved;
+                account.save.mockImplementation(async () => { saved = { password: account.password, confirmedPassword: account.confirmedPassword }; });
                 const res = response();
                 await config.handler(request(), res);
                 expect(res.status).toHaveBeenCalledWith(200);
                 expect(account.confirmedPassword).toBe(account.password);
+                expect(saved).toEqual({ password: 'new-password-hash', confirmedPassword: 'new-password-hash' });
             });
         } else {
             it('BE-D05: returns 500 when the fallback Doctor lookup fails', async () => {
@@ -167,11 +176,14 @@ for (const config of [
                 expect(res.status).toHaveBeenCalledWith(200);
             });
 
-            it('BE-D08 [KNOWN BUG]: synchronizes confirmedPassword when the Doctor controller uses a User record', async () => {
+            it('BE-D08: synchronizes confirmedPassword when the Doctor controller uses a User record', async () => {
                 const patient = makeAccount();
+                let saved;
+                patient.save.mockImplementation(async () => { saved = { password: patient.password, confirmedPassword: patient.confirmedPassword }; });
                 mocks.User.findById.mockResolvedValue(patient);
                 await config.handler(request(), response());
                 expect(patient.confirmedPassword).toBe(patient.password);
+                expect(saved).toEqual({ password: 'new-password-hash', confirmedPassword: 'new-password-hash' });
             });
         }
 

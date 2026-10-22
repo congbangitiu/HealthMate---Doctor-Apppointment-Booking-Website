@@ -221,6 +221,7 @@ export const changePassword = async (req, res) => {
 
         // Update the user's password
         user.password = hashedPassword;
+        user.confirmedPassword = hashedPassword;
         await user.save();
 
         res.status(200).json({

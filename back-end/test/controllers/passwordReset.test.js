@@ -246,8 +246,7 @@ describe('verifyForgotPasswordOTP', () => {
         expect(mocks.PasswordReset.deleteOne).not.toHaveBeenCalled();
     });
 
-    // Confirmed regression: the controller relies on TTL cleanup instead of checking age.
-    it('BE-V05 [KNOWN BUG]: rejects an expired OTP even while its record remains in MongoDB', async () => {
+    it('BE-V05: rejects an expired OTP even while its record remains in MongoDB', async () => {
         mocks.PasswordReset.findOne.mockResolvedValue(createResetRequest({ createdAt: new Date(now.getTime() - 601000) }));
         mocks.bcrypt.compare.mockResolvedValue(true);
         const res = createResponse();
@@ -255,6 +254,45 @@ describe('verifyForgotPasswordOTP', () => {
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json.mock.calls[0][0]).not.toHaveProperty('resetToken');
     });
+
+    describe.each(['User', 'Doctor'])('%s OTP lifetime boundaries', (model) => {
+        it.each([599999, 600000, 600001])('BE-V05: enforces the ten-minute boundary at age %ims', async (age) => {
+            const record = createResetRequest({ model, createdAt: new Date(now.getTime() - age) });
+            mocks.PasswordReset.findOne.mockResolvedValue(record);
+            mocks.bcrypt.compare.mockResolvedValue(true);
+            const res = createResponse();
+            await verifyForgotPasswordOTP({ body: { email, otp: '123456' } }, res);
+            if (age < 600000) {
+                expect(res.status).toHaveBeenCalledWith(200);
+                const payload = jwt.verify(res.json.mock.calls[0][0].resetToken, resetSecret);
+                expect(payload).toMatchObject({ email, model, resetId });
+                expect(payload.exp - payload.iat).toBe(600);
+                expect(mocks.bcrypt.compare).toHaveBeenCalledTimes(1);
+            } else {
+                expect(res.status).toHaveBeenCalledWith(400);
+                expect(res.json.mock.calls[0][0]).not.toHaveProperty('resetToken');
+                expect(mocks.bcrypt.compare).not.toHaveBeenCalled();
+            }
+            expect(record.attempts).toBe(0);
+            expect(record.save).not.toHaveBeenCalled();
+            expect(mocks.PasswordReset.deleteOne).not.toHaveBeenCalled();
+        });
+    });
+
+    it.each([undefined, null, 'invalid-date', new Date(now.getTime() + 1)])(
+        'BE-V07: rejects a missing, invalid or future OTP creation timestamp: %j', async (createdAt) => {
+            const record = createResetRequest({ createdAt });
+            mocks.PasswordReset.findOne.mockResolvedValue(record);
+            mocks.bcrypt.compare.mockResolvedValue(true);
+            const res = createResponse();
+            await verifyForgotPasswordOTP({ body: { email, otp: '123456' } }, res);
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.json.mock.calls[0][0]).not.toHaveProperty('resetToken');
+            expect(mocks.bcrypt.compare).not.toHaveBeenCalled();
+            expect(record.save).not.toHaveBeenCalled();
+            expect(mocks.PasswordReset.deleteOne).not.toHaveBeenCalled();
+        },
+    );
 
     it.each(['lookup', 'compare', 'attempt save', 'attempt deletion'])(
         'BE-V06: returns 500 without a token when %s fails', async (stage) => {

@@ -21,6 +21,7 @@ const generateToken = (user) => {
 // được middleware authenticate. Derive từ secret gốc để không phải thêm biến môi trường.
 const RESET_TOKEN_SECRET = `${process.env.JWT_SECRET_KEY}-reset-password`;
 const RESET_TOKEN_EXPIRES_IN = '10m';
+const RESET_OTP_EXPIRES_IN_MS = 10 * 60 * 1000;
 const RESEND_COOLDOWN_MS = 60 * 1000;
 const MAX_OTP_ATTEMPTS = 5;
 const REGISTRATION_OTP_EXPIRES_IN_MS = 2 * 60 * 1000;
@@ -436,6 +437,16 @@ export const verifyForgotPasswordOTP = async (req, res) => {
     try {
         const resetRequest = await PasswordReset.findOne({ email });
         if (!resetRequest) {
+            return res.status(400).json({
+                success: false,
+                message: 'OTP expired or not found. Please request a new one!',
+            });
+        }
+
+        // MongoDB TTL cleanup is asynchronous; enforce the OTP lifetime before verification.
+        const createdAt = resetRequest.createdAt ? new Date(resetRequest.createdAt).getTime() : NaN;
+        const otpAge = Date.now() - createdAt;
+        if (!Number.isFinite(otpAge) || otpAge < 0 || otpAge >= RESET_OTP_EXPIRES_IN_MS) {
             return res.status(400).json({
                 success: false,
                 message: 'OTP expired or not found. Please request a new one!',
