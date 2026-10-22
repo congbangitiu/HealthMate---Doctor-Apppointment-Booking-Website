@@ -1,6 +1,7 @@
 import symptomToSpecialty from '../../assets/data/chatbot/symptomToSpecialty.js';
 
 const determineSpecialty = (text) => {
+    if (typeof text !== 'string') return null;
     const input = text.toLowerCase();
     let bestMatch = null;
 

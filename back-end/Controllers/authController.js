@@ -7,6 +7,7 @@ import bcrypt from 'bcryptjs';
 import twilio from 'twilio';
 import dotenv from 'dotenv';
 import mailTransporter from '../utils/mailTransporter.js';
+import validator from 'validator';
 
 dotenv.config();
 
@@ -20,8 +21,12 @@ const generateToken = (user) => {
 // được middleware authenticate. Derive từ secret gốc để không phải thêm biến môi trường.
 const RESET_TOKEN_SECRET = `${process.env.JWT_SECRET_KEY}-reset-password`;
 const RESET_TOKEN_EXPIRES_IN = '10m';
+const RESET_OTP_EXPIRES_IN_MS = 10 * 60 * 1000;
 const RESEND_COOLDOWN_MS = 60 * 1000;
 const MAX_OTP_ATTEMPTS = 5;
+const REGISTRATION_OTP_EXPIRES_IN_MS = 2 * 60 * 1000;
+const isNonEmptyString = (value) => typeof value === 'string' && value.trim().length > 0;
+const isValidEmail = (value) => typeof value === 'string' && validator.isEmail(value);
 
 // Tài khoản nằm ở 2 collection khác nhau (giống login) nên phải tìm ở cả hai
 const findAccountByEmail = async (email) => {
@@ -39,7 +44,7 @@ const findAccountByEmail = async (email) => {
 };
 
 export const registerAndVerifyOTP = async (req, res) => {
-    const { fullname, username, phone, email, password, confirmedPassword, role, photo, gender, otp } = req.body;
+    const { fullname, username, phone, email, password, confirmedPassword, role, photo, gender, otp } = req.body || {};
 
     if (!email || !otp) {
         return res.status(400).json({
@@ -47,15 +52,28 @@ export const registerAndVerifyOTP = async (req, res) => {
         });
     }
 
+    if (!['patient', 'doctor'].includes(role)) {
+        return res.status(400).json({
+            error: 'Invalid account role',
+        });
+    }
+
+    if (
+        !isValidEmail(email) ||
+        ![fullname, username, password, confirmedPassword].every(isNonEmptyString) ||
+        typeof otp !== 'string' ||
+        !/^\d{6}$/.test(otp)
+    ) {
+        return res.status(400).json({ error: 'Invalid registration details' });
+    }
+
     try {
         let user = null;
 
-        // Check if user already exists
-        if (role === 'patient') {
-            user = await User.findOne({ email });
-        } else if (role === 'doctor') {
-            user = await Doctor.findOne({ email });
-        }
+        // Login identifies accounts by email across both collections.
+        const patient = await User.findOne({ email });
+        const doctor = await Doctor.findOne({ email });
+        user = patient || doctor;
 
         if (user) {
             return res.status(400).json({ message: 'User already exists' });
@@ -64,6 +82,14 @@ export const registerAndVerifyOTP = async (req, res) => {
         // Check OTP
         const otpRecord = await Otp.findOne({ email: email });
         if (!otpRecord) {
+            return res.status(400).json({ error: 'OTP expired or not found for this email!' });
+        }
+
+        const otpAge = Date.now() - new Date(otpRecord.createdAt).getTime();
+        if (!Number.isFinite(otpAge) || otpAge < 0 || otpAge >= REGISTRATION_OTP_EXPIRES_IN_MS) {
+            if (otpAge >= REGISTRATION_OTP_EXPIRES_IN_MS) {
+                await Otp.deleteOne({ email });
+            }
             return res.status(400).json({ error: 'OTP expired or not found for this email!' });
         }
 
@@ -118,6 +144,12 @@ export const registerAndVerifyOTP = async (req, res) => {
         });
     } catch (error) {
         console.error('Error in register and verify OTP:', error);
+        if (error.code === 11000) {
+            return res.status(409).json({ success: false, message: 'Email or username already exists' });
+        }
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({ success: false, message: 'Invalid registration details' });
+        }
         res.status(500).json({
             success: false,
             message: 'Internal server error. Try again!',
@@ -126,11 +158,18 @@ export const registerAndVerifyOTP = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-    const { email } = req.body;
+    const { email, password: submittedPassword } = req.body || {};
+    if (!isValidEmail(email) || !isNonEmptyString(submittedPassword)) {
+        return res.status(400).json({ status: false, message: 'Please provide a valid email and password' });
+    }
     try {
         let user = null;
         const patient = await User.findOne({ email });
         const doctor = await Doctor.findOne({ email });
+
+        if (patient && doctor) {
+            return res.status(409).json({ status: false, message: 'Conflicting accounts for this email' });
+        }
 
         if (patient) {
             user = patient;
@@ -146,7 +185,7 @@ export const login = async (req, res) => {
         }
 
         // Check if password is correct or not
-        const isPasswordMatch = await bcrypt.compare(req.body.password, user.password);
+        const isPasswordMatch = await bcrypt.compare(submittedPassword, user.password);
         if (!isPasswordMatch) {
             return res.status(400).json({
                 status: false,
@@ -156,7 +195,7 @@ export const login = async (req, res) => {
 
         // Get token
         const token = generateToken(user);
-        const { password, role, appointment, ...rest } = user._doc;
+        const { password, confirmedPassword, role, appointment, ...rest } = user._doc;
         res.status(200).json({
             status: true,
             message: 'Login successfully',
@@ -398,6 +437,16 @@ export const verifyForgotPasswordOTP = async (req, res) => {
     try {
         const resetRequest = await PasswordReset.findOne({ email });
         if (!resetRequest) {
+            return res.status(400).json({
+                success: false,
+                message: 'OTP expired or not found. Please request a new one!',
+            });
+        }
+
+        // MongoDB TTL cleanup is asynchronous; enforce the OTP lifetime before verification.
+        const createdAt = resetRequest.createdAt ? new Date(resetRequest.createdAt).getTime() : NaN;
+        const otpAge = Date.now() - createdAt;
+        if (!Number.isFinite(otpAge) || otpAge < 0 || otpAge >= RESET_OTP_EXPIRES_IN_MS) {
             return res.status(400).json({
                 success: false,
                 message: 'OTP expired or not found. Please request a new one!',

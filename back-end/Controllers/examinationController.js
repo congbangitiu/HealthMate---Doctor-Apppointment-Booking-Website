@@ -1,11 +1,16 @@
 import Booking from '../Models/BookingSchema.js';
 import Examination from '../Models/ExaminationSchema.js';
+import { sameId } from '../auth/sameId.js';
 
 export const createExamination = async (req, res) => {
+    if (!req.userId) return res.status(401).json({ success: false, message: 'Authentication required' });
     try {
         const booking = await Booking.findById(req.body.appointment);
         if (!booking) {
             return res.status(404).json({ success: false, message: 'Appointment not found' });
+        }
+        if (req.userRole !== 'doctor' || !sameId(booking.doctor, req.userId)) {
+            return res.status(403).json({ success: false, message: 'Permission denied' });
         }
 
         const newExamination = new Examination({
@@ -41,8 +46,19 @@ export const getExaminationByAppointmentId = async (req, res) => {
 };
 
 export const updateExaminationByAppointmentId = async (req, res) => {
+    if (!req.userId) return res.status(401).json({ success: false, message: 'Authentication required' });
     const { appointmentId } = req.params;
     try {
+        if (req.body?.appointment !== undefined && !sameId(req.body.appointment, appointmentId)) {
+            return res.status(400).json({ success: false, message: 'Conflicting appointment id' });
+        }
+        const booking = await Booking.findById(appointmentId).populate('user doctor');
+        if (!booking) {
+            return res.status(404).json({ success: false, message: 'Appointment not found' });
+        }
+        if (req.userRole !== 'doctor' || !sameId(booking.doctor, req.userId)) {
+            return res.status(403).json({ success: false, message: 'Permission denied' });
+        }
         const updatedExamination = await Examination.findOneAndUpdate(
             { appointment: appointmentId },
             {
@@ -54,12 +70,6 @@ export const updateExaminationByAppointmentId = async (req, res) => {
 
         if (!updatedExamination) {
             return res.status(404).json({ success: false, message: 'Examination not found' });
-        }
-
-        // Get the booking details
-        const booking = await Booking.findById(req.body.appointment).populate('user doctor');
-        if (!booking) {
-            return res.status(404).json({ success: false, message: 'Appointment not found' });
         }
 
         res.status(200).json({

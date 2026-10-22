@@ -80,26 +80,26 @@ const PrescriptionEdit = ({
     }, []);
 
     const handleMedicationChange = (index, field, value, selectedOption) => {
-        const newMedications = [...medications];
-        const newCustomMedications = [...customMedications];
+        setMedications((previous) => {
+            const newMedications = [...previous];
+            newMedications[index] = { ...previous[index], dosage: { ...previous[index].dosage } };
+
+            if (field === 'name') {
+                newMedications[index].name = selectedOption ? selectedOption.fullName : value;
+                if (selectedOption) newMedications[index].dosage.dosageForm = selectedOption.dosageForm;
+            } else {
+                newMedications[index].dosage[field] = value;
+            }
+            return newMedications;
+        });
 
         if (field === 'name') {
-            if (selectedOption) {
-                // Choose from options
-                newMedications[index].name = selectedOption.fullName;
-                newMedications[index].dosage.dosageForm = selectedOption.dosageForm;
-                newCustomMedications[index] = false;
-            } else {
-                // Input manually
-                newMedications[index].name = value;
-                newCustomMedications[index] = true;
-            }
-        } else {
-            newMedications[index].dosage[field] = value;
+            setCustomMedications((previous) => {
+                const next = [...previous];
+                next[index] = !selectedOption;
+                return next;
+            });
         }
-
-        setMedications(newMedications);
-        setCustomMedications(newCustomMedications);
     };
 
     const addMedication = () => {
@@ -189,15 +189,16 @@ const PrescriptionEdit = ({
             }
         } catch (error) {
             toast.error(error.message || 'An error occurred');
+            return;
         } finally {
             setLoadingBtnSavePres(false);
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth',
             });
-            await delay(2000);
-            window.location.reload();
         }
+        await delay(2000);
+        window.location.reload();
     };
 
     const ITEM_HEIGHT = 48;

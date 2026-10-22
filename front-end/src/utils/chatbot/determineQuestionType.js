@@ -1,4 +1,5 @@
 export const isGeneralWebsiteQuestion = (text) => {
+    if (typeof text !== 'string') return false;
     const lower = text.toLowerCase();
 
     const keywordGroups = [
@@ -55,6 +56,7 @@ export const isGeneralWebsiteQuestion = (text) => {
 };
 
 export const isGeneralMedicalQuestion = (text) => {
+    if (typeof text !== 'string') return false;
     const lower = text.toLowerCase();
     const vietnamesePattern =
         /là thuốc gì|có tác dụng gì|triệu chứng|bệnh gì|uống mấy viên|tác dụng phụ|chống chỉ định/;
@@ -65,11 +67,13 @@ export const isGeneralMedicalQuestion = (text) => {
 };
 
 export const isAskingAboutAppointments = (text) => {
+    if (typeof text !== 'string') return false;
     const lower = text.toLowerCase();
     return lower.includes('appointment') && (lower.includes('today') || lower.includes('tomorrow'));
 };
 
 export const isAskingAboutSymptoms = (text) => {
+    if (typeof text !== 'string') return false;
     const lower = text.toLowerCase();
     return lower.includes('symptom') || lower.includes('doctor');
 };

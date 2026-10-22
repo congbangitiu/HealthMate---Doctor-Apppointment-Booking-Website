@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './ConfirmBooking.module.scss';
@@ -15,8 +15,10 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
     const { t } = useTranslation('doctorDetails');
     const [loading, setLoading] = useState(false);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
+    const submitting = useRef(false);
 
     const bookingHandler = async () => {
+        if (submitting.current) return;
         if (!selectedSlot) {
             toast.error(t('confirmBooking.toast.noSlot'));
             return;
@@ -27,10 +29,18 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
             return;
         }
 
+        submitting.current = true;
         setLoading(true);
-
         try {
-            const user = JSON.parse(localStorage.getItem('user'));
+            let user;
+            try {
+                user = JSON.parse(localStorage.getItem('user'));
+            } catch {
+                throw new Error(t('confirmBooking.toast.invalidSession'));
+            }
+            if (!user || typeof user._id !== 'string' || !user._id.trim()) {
+                throw new Error(t('confirmBooking.toast.invalidSession'));
+            }
 
             if (selectedPaymentMethod === 'Cash') {
                 // 💡 If payment method is Cash, create booking directly without Stripe
@@ -78,6 +88,9 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
                     throw new Error(appointmentData.message || t('confirmBooking.toast.checkoutFail'));
                 }
 
+                if (typeof appointmentData.session?.url !== 'string' || !appointmentData.session.url.trim()) {
+                    throw new Error(t('confirmBooking.toast.checkoutFail'));
+                }
                 if (appointmentData.session.url) {
                     // Remove booked time slot from available slots
                     setTimeSlots((prevSlots) => prevSlots.filter((slot) => slot !== selectedSlot));
@@ -102,9 +115,10 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
                 throw new Error(chatData.message || t('confirmBooking.toast.chatFail'));
             }
 
-            setLoading(false);
         } catch (error) {
             toast.error(error.message);
+        } finally {
+            submitting.current = false;
             setLoading(false);
         }
     };
@@ -160,9 +174,9 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
             </div>
 
             <button
-                className={cx({ disabled: !selectedPaymentMethod })}
+                className={cx({ disabled: !selectedPaymentMethod || loading })}
                 onClick={bookingHandler}
-                disabled={!selectedPaymentMethod}
+                disabled={!selectedPaymentMethod || loading}
             >
                 {loading ? <SyncLoader size={8} color="#ffffff" /> : t('confirmBooking.confirmButton')}
             </button>

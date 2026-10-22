@@ -1,15 +1,15 @@
 import cron from 'node-cron';
 import Doctor from '../Models/DoctorSchema.js';
-import { addDays, parseISO, isBefore, startOfToday } from 'date-fns';
+import { parseISO, isBefore } from 'date-fns';
+
+const getVietnamCalendarDay = () =>
+    new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 
 // Generate weekly time slots for all approved doctors
-const getNextDateForDayName = (dayName) => {
+const getNextDateForDayName = (dayName, today) => {
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const today = new Date();
-    const utcOffsetInHours = 7; // GMT+7
-    today.setHours(today.getHours() + utcOffsetInHours);
-
-    const todayIndex = today.getDay();
+    // UTC fields represent a calendar date here, not the server's local midnight.
+    const todayIndex = today.getUTCDay();
     const targetIndex = daysOfWeek.indexOf(dayName);
 
     if (targetIndex === -1) return null;
@@ -17,9 +17,8 @@ const getNextDateForDayName = (dayName) => {
     let diff = targetIndex - todayIndex;
     if (diff < 0 || diff === 0) diff += 7;
 
-    const result = new Date();
-    result.setDate(today.getDate() + diff);
-    result.setHours(0, 0, 0, 0);
+    const result = new Date(today);
+    result.setUTCDate(today.getUTCDate() + diff);
 
     return result;
 };
@@ -59,8 +58,9 @@ export const generateWeeklySlotsForAllDoctors = async () => {
 
     try {
         const doctors = await Doctor.find({ isApproved: 'approved' });
-        const now = new Date();
-        const nextWeek = addDays(now, 7);
+        const today = new Date(`${getVietnamCalendarDay()}T00:00:00.000Z`);
+        const nextWeek = new Date(today);
+        nextWeek.setUTCDate(today.getUTCDate() + 7);
 
         for (const doctor of doctors) {
             if (!doctor.availableSchedules || doctor.availableSchedules.length === 0) continue;
@@ -68,17 +68,17 @@ export const generateWeeklySlotsForAllDoctors = async () => {
             const newSlots = [];
 
             for (const schedule of doctor.availableSchedules) {
-                const slotDate = getNextDateForDayName(schedule.day);
+                const slotDate = getNextDateForDayName(schedule.day, today);
                 if (!slotDate) continue;
 
-                if (slotDate >= now && slotDate <= nextWeek) {
+                if (slotDate >= today && slotDate <= nextWeek) {
                     for (const shift of schedule.shifts) {
                         const normalizedShift = shift.toLowerCase().trim();
                         const timeRanges = getTimeRangesForShift(normalizedShift);
 
                         timeRanges.forEach((range) => {
                             newSlots.push({
-                                day: slotDate.toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }),
+                                day: slotDate.toISOString().slice(0, 10),
                                 startingTime: range.start,
                                 endingTime: range.end,
                             });
@@ -88,13 +88,13 @@ export const generateWeeklySlotsForAllDoctors = async () => {
             }
 
             const existingSlots = doctor.timeSlots || [];
+            const slotKey = (slot) => `${slot.day}|${slot.startingTime}|${slot.endingTime}`;
+            const seenSlots = new Set(existingSlots.map(slotKey));
             const newUniqueSlots = newSlots.filter((slot) => {
-                return !existingSlots.some(
-                    (existing) =>
-                        existing.day === slot.day &&
-                        existing.startingTime === slot.startingTime &&
-                        existing.endingTime === slot.endingTime,
-                );
+                const key = slotKey(slot);
+                if (seenSlots.has(key)) return false;
+                seenSlots.add(key);
+                return true;
             });
 
             // Gộp slot cũ + mới rồi sắp xếp theo ngày -> giờ bắt đầu.
@@ -140,14 +140,14 @@ export const removeExpiredSlotsForAllDoctors = async () => {
     console.log('Starting to remove expired slots...');
     try {
         const doctors = await Doctor.find({ isApproved: 'approved' });
-        const today = startOfToday();
+        const today = parseISO(`${getVietnamCalendarDay()}T00:00:00+07:00`);
 
         for (const doctor of doctors) {
             if (!doctor.timeSlots || doctor.timeSlots.length === 0) continue;
 
             const originalCount = doctor.timeSlots.length;
             doctor.timeSlots = doctor.timeSlots.filter((slot) => {
-                const slotDate = parseISO(slot.day);
+                const slotDate = parseISO(`${slot.day}T00:00:00+07:00`);
                 return !isBefore(slotDate, today);
             });
 

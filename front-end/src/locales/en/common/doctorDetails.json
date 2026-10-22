@@ -34,6 +34,7 @@
         "toast": {
             "noSlot": "Please select a time slot",
             "noPayment": "Please select a payment method",
+            "invalidSession": "Your session is invalid. Please sign in again.",
             "bookingSuccess": "Booking successful!",
             "createBookingFail": "Failed to create booking.",
             "checkoutFail": "Failed to create checkout session.",

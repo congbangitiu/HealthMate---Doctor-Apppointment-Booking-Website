@@ -1,9 +1,11 @@
 import i18n from 'i18next';
 
 const convertTime = (time) => {
-    const [hour, minute] = time.split(':');
+    if (typeof time !== 'string' || !/^\d{1,2}:\d{1,2}$/.test(time)) return null;
+    const [hour, minute] = time.split(':').map(Number);
+    if (hour > 23 || minute > 59) return null;
     const date = new Date();
-    date.setHours(parseInt(hour), parseInt(minute));
+    date.setHours(hour, minute);
 
     const locale = i18n.language === 'vi' ? 'vi-VN' : 'en-US';
     const options = {

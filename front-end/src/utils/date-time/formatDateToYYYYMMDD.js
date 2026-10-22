@@ -1,5 +1,6 @@
 const formatDateToYYYYMMDD = (date) => {
     const normalizedDate = new Date(date);
+    if (Number.isNaN(normalizedDate.getTime())) return null;
     const year = normalizedDate.getFullYear();
     const month = String(normalizedDate.getMonth() + 1).padStart(2, '0');
     const day = String(normalizedDate.getDate()).padStart(2, '0');

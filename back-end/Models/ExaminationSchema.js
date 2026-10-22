@@ -1,5 +1,13 @@
 import mongoose from 'mongoose';
 
+const historySchema = new mongoose.Schema(
+    {
+        action: { type: String, enum: ['create', 'update'] },
+        timestamp: { type: Date, default: Date.now },
+    },
+    { _id: false },
+);
+
 const ExaminationSchema = new mongoose.Schema(
     {
         appointment: {
@@ -51,6 +59,8 @@ const ExaminationSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+
+        actionHistory: [historySchema],
 
         isSigned: {
             type: Boolean,

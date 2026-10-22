@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 import mailTransporter from '../utils/mailTransporter.js';
 import formatDate from '../utils/date-time/formatDate.js';
 import convertTime from '../utils/date-time/convertTime.js';
+import { sameId } from '../auth/sameId.js';
+import { getBookingTimeSlotError, isSameBookingTimeSlot } from '../utils/date-time/validateBookingTimeSlot.js';
 
 dotenv.config();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -62,14 +64,24 @@ const sendBookingConfirmationEmail = async (userEmail, bookingInfo) => {
 
 // Create checkout session when user chooses cash payment
 export const createBooking = async (req, res) => {
+    if (!req.userId) return res.status(401).json({ success: false, message: 'Authentication required' });
     try {
-        const { doctorId, userId, timeSlot, ticketPrice, paymentMethod } = req.body;
+        const { doctorId, userId, timeSlot, paymentMethod } = req.body ?? {};
+        const slotError = getBookingTimeSlotError(timeSlot);
+        if (!doctorId || !userId || slotError || paymentMethod !== 'cash') {
+            return res.status(400).json({ success: false, message: slotError || 'Doctor, patient and cash payment are required' });
+        }
+        if (!sameId(userId, req.userId)) {
+            return res.status(403).json({ success: false, message: 'Cannot book for another patient' });
+        }
 
         // Check if doctor exists
         const doctor = await Doctor.findById(doctorId);
         if (!doctor) {
             return res.status(404).json({ success: false, message: 'Doctor not found' });
         }
+
+        const ticketPrice = doctor.ticketPrice;
 
         // Check if user exists
         const user = await User.findById(userId);
@@ -188,8 +200,12 @@ const sendReExaminationConfirmationEmail = async (userEmail, bookingInfo) => {
 };
 
 export const createReExaminationBooking = async (req, res) => {
+    if (!req.userId) return res.status(401).json({ success: false, message: 'Authentication required' });
     try {
         const { doctorId, userId, timeSlot, currentBookingId } = req.body;
+        if (req.userRole !== 'doctor' || !sameId(doctorId, req.userId)) {
+            return res.status(403).json({ success: false, message: 'Permission denied' });
+        }
 
         // Check if doctor exists
         const doctor = await Doctor.findById(doctorId);
@@ -207,6 +223,10 @@ export const createReExaminationBooking = async (req, res) => {
         const currentBooking = await Booking.findById(currentBookingId);
         if (!currentBooking) {
             return res.status(404).json({ success: false, message: 'Current booking not found' });
+        }
+
+        if (!sameId(currentBooking.doctor, req.userId) || !sameId(currentBooking.user, userId)) {
+            return res.status(403).json({ success: false, message: 'Permission denied' });
         }
 
         // Update nextAppointmentTimeSlot of the current booking
@@ -289,6 +309,16 @@ export const stripeWebhook = async (req, res) => {
         if (event.type === 'checkout.session.completed') {
             const session = event.data.object;
 
+            // Checkout currently supports card payments; completion alone is not proof of payment.
+            if (session.payment_status !== 'paid') {
+                return res.status(200).json({ received: true });
+            }
+            if (typeof session.id !== 'string' || !session.id.trim()) {
+                throw new Error('Stripe session ID is missing');
+            }
+            const existingBooking = await Booking.findOne({ session: session.id });
+            if (existingBooking) return res.status(200).json({ received: true });
+
             // Check if metadata exists
             if (!session.metadata) {
                 throw new Error('Metadata is missing from the Stripe session');
@@ -299,6 +329,29 @@ export const stripeWebhook = async (req, res) => {
 
             // Parse timeSlot (because it was stored as a string in metadata)
             const parsedTimeSlot = JSON.parse(timeSlot);
+
+            if (typeof userId !== 'string' || !userId.trim() ||
+                typeof doctorId !== 'string' || !doctorId.trim() || paymentMethod !== 'e-wallet' ||
+                !parsedTimeSlot || typeof parsedTimeSlot !== 'object' || Array.isArray(parsedTimeSlot) ||
+                !['day', 'startingTime', 'endingTime'].every((field) => typeof parsedTimeSlot[field] === 'string' && parsedTimeSlot[field])) {
+                throw new Error('Invalid booking metadata in the Stripe session');
+            }
+
+            // Honor the price captured at checkout, even if the doctor changes their fee later.
+            const price = typeof ticketPrice === 'string' && ticketPrice.trim() ? Number(ticketPrice) : NaN;
+            const expectedAmount = Math.round(price * 100);
+            if (!Number.isFinite(price) || price < 0 || !Number.isSafeInteger(expectedAmount) ||
+                !Number.isSafeInteger(session.amount_total) || session.amount_total !== expectedAmount ||
+                session.currency !== 'usd') {
+                throw new Error('Stripe payment amount or currency does not match the booking');
+            }
+
+            const user = await User.findById(userId);
+            const doctor = await Doctor.findById(doctorId);
+            if (!user || !doctor) throw new Error('User or Doctor not found');
+            if (!doctor.timeSlots.some((slot) => isSameBookingTimeSlot(slot, parsedTimeSlot))) {
+                throw new Error('Selected time slot is no longer available');
+            }
 
             // Create new booking in database
             const newBooking = new Booking({
@@ -319,14 +372,6 @@ export const stripeWebhook = async (req, res) => {
 
             // Increment the total number of patients for the doctor
             await Doctor.updateOne({ _id: doctorId }, { $inc: { totalPatients: 1 } });
-
-            // Fetch user and doctor info for sending email
-            const user = await User.findById(userId);
-            const doctor = await Doctor.findById(doctorId);
-
-            if (!user || !doctor) {
-                throw new Error('User or Doctor not found');
-            }
 
             // Send confirmation email
             await sendBookingConfirmationEmail(user.email, {
@@ -363,7 +408,13 @@ export const stripeWebhook = async (req, res) => {
 };
 
 export const getCheckoutSession = async (req, res) => {
+    if (!req.userId) return res.status(401).json({ success: false, message: 'Authentication required' });
     try {
+        const { timeSlot, paymentMethod } = req.body ?? {};
+        const slotError = getBookingTimeSlotError(timeSlot);
+        if (slotError || paymentMethod !== 'e-wallet') {
+            return res.status(400).json({ success: false, message: slotError || 'E-wallet payment is required' });
+        }
         // Get currently booked doctor
         const doctor = await Doctor.findById(req.params.doctorId).populate('appointments');
         if (!doctor) {
@@ -375,7 +426,9 @@ export const getCheckoutSession = async (req, res) => {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
 
-        const { timeSlot, paymentMethod } = req.body;
+        if (!doctor.timeSlots.some((slot) => isSameBookingTimeSlot(slot, timeSlot))) {
+            return res.status(400).json({ success: false, message: 'Selected time slot is no longer available' });
+        }
 
         const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -419,8 +472,12 @@ export const getCheckoutSession = async (req, res) => {
 
 // Update appointment status (e.g. cancelled, pending, done)
 export const updateAppointmentStatus = async (req, res) => {
+    if (!req.userId) return res.status(401).json({ success: false, message: 'Authentication required' });
     const { id } = req.params;
-    const { status } = req.body;
+    const { status } = req.body ?? {};
+    if (!['pending', 'done', 'cancelled'].includes(status)) {
+        return res.status(400).json({ success: false, message: 'Invalid appointment status' });
+    }
 
     try {
         const appointment = await Booking.findById(id).populate('doctor').populate('user');
@@ -432,12 +489,20 @@ export const updateAppointmentStatus = async (req, res) => {
             });
         }
 
+        const canUpdate = req.userRole === 'admin' ||
+            (req.userRole === 'patient' && sameId(appointment.user, req.userId)) ||
+            (req.userRole === 'doctor' && sameId(appointment.doctor, req.userId));
+        if (!canUpdate) {
+            return res.status(403).json({ success: false, message: 'Permission denied' });
+        }
+
         // Update new state and save change history
+        const previousStatus = appointment.status;
         appointment.status = status;
         appointment.statusHistory.push({ status, timestamp: new Date() });
 
         // Only add the time slot back to the doctor's available slots if the appointment is cancelled
-        if (status === 'cancelled') {
+        if (status === 'cancelled' && previousStatus !== 'cancelled') {
             const doctor = await Doctor.findById(appointment.doctor._id);
 
             if (!doctor) {
@@ -448,9 +513,10 @@ export const updateAppointmentStatus = async (req, res) => {
             }
 
             const { timeSlot } = appointment;
-            doctor.timeSlots.push(timeSlot);
-
-            await doctor.save();
+            if (!doctor.timeSlots.some((slot) => isSameBookingTimeSlot(slot, timeSlot))) {
+                doctor.timeSlots.push(timeSlot);
+                await doctor.save();
+            }
 
             // Send real-time notifications to your doctor
             req.io.to(doctor._id.toString()).emit('cancelled-notification', {
@@ -486,29 +552,19 @@ export const updateAppointmentStatus = async (req, res) => {
 export const updateNextAppointmentTimeSlot = async (req, res) => {
     try {
         const { id } = req.params;
-        const { nextAppointmentTimeSlot } = req.body;
+        const { nextAppointmentTimeSlot } = req.body ?? {};
 
         const booking = await Booking.findById(id);
         if (!booking) {
             return res.status(404).json({ success: false, message: 'Booking not found' });
         }
 
-        const validateTimeSlot = (slot) => {
-            if (!slot.day || !slot.startingTime || !slot.endingTime) {
-                throw new Error('Invalid time slot: day, startingTime, and endingTime are required');
-            }
-            if (slot.startingTime >= slot.endingTime) {
-                throw new Error('Starting time must be earlier than ending time');
-            }
-            const today = new Date().toISOString().split('T')[0];
-            if (slot.day < today) {
-                throw new Error('Date must be in the future');
-            }
-        };
-
         // Update next Appointment Time Slot and follow-up appointment if any
         if (booking.nextAppointment) {
-            validateTimeSlot(nextAppointmentTimeSlot);
+            const slotError = getBookingTimeSlotError(nextAppointmentTimeSlot);
+            if (slotError) {
+                return res.status(400).json({ success: false, message: 'Error updating booking', error: slotError });
+            }
 
             booking.nextAppointment = {
                 timeSlot: nextAppointmentTimeSlot,

@@ -1,4 +1,5 @@
 import express from 'express';
+import { authenticate } from '../auth/verifyToken.js';
 import {
     createNewChat,
     getUserChats,
@@ -18,6 +19,6 @@ router.get('/user-chats/:userId', getUserChats);
 router.post('/update-unread-messages', updateUnreadMessages);
 
 // Handle actions in a message
-router.post('/handle-message-action', handleMessageAction);
+router.post('/handle-message-action', authenticate, handleMessageAction);
 
 export default router;

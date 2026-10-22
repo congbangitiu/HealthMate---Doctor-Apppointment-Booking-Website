@@ -60,10 +60,12 @@ const ForgotPassword = () => {
         if (!res.ok) {
             // 429: OTP trước đó vẫn còn hiệu lực nên cho đi tiếp thay vì chặn người dùng
             if (res.status === 429) {
-                setInitialCooldown(data.retryAfter || RESEND_COOLDOWN);
+                const cooldown = Number.isFinite(data.retryAfter) && data.retryAfter >= 0
+                    ? Math.ceil(data.retryAfter) : RESEND_COOLDOWN;
+                setInitialCooldown(cooldown);
                 toast.info(data.message);
                 setStep('otp');
-                return;
+                return { retryAfter: cooldown };
             }
             throw new Error(data.message || 'Failed to send OTP');
         }
@@ -71,6 +73,7 @@ const ForgotPassword = () => {
         setInitialCooldown(RESEND_COOLDOWN);
         toast.success(data.message);
         setStep('otp');
+        return { retryAfter: RESEND_COOLDOWN };
     };
 
     const submitEmailHandler = async (e) => {
@@ -87,6 +90,9 @@ const ForgotPassword = () => {
     };
 
     const handleOtpVerified = (data) => {
+        if (typeof data?.resetToken !== 'string' || !data.resetToken.trim()) {
+            throw new Error(t('invalidVerification'));
+        }
         setResetToken(data.resetToken);
         setStep('reset');
         toast.success(t('otpVerified'));
