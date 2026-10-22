@@ -309,6 +309,16 @@ export const stripeWebhook = async (req, res) => {
         if (event.type === 'checkout.session.completed') {
             const session = event.data.object;
 
+            // Checkout currently supports card payments; completion alone is not proof of payment.
+            if (session.payment_status !== 'paid') {
+                return res.status(200).json({ received: true });
+            }
+            if (typeof session.id !== 'string' || !session.id.trim()) {
+                throw new Error('Stripe session ID is missing');
+            }
+            const existingBooking = await Booking.findOne({ session: session.id });
+            if (existingBooking) return res.status(200).json({ received: true });
+
             // Check if metadata exists
             if (!session.metadata) {
                 throw new Error('Metadata is missing from the Stripe session');
@@ -319,6 +329,29 @@ export const stripeWebhook = async (req, res) => {
 
             // Parse timeSlot (because it was stored as a string in metadata)
             const parsedTimeSlot = JSON.parse(timeSlot);
+
+            if (typeof userId !== 'string' || !userId.trim() ||
+                typeof doctorId !== 'string' || !doctorId.trim() || paymentMethod !== 'e-wallet' ||
+                !parsedTimeSlot || typeof parsedTimeSlot !== 'object' || Array.isArray(parsedTimeSlot) ||
+                !['day', 'startingTime', 'endingTime'].every((field) => typeof parsedTimeSlot[field] === 'string' && parsedTimeSlot[field])) {
+                throw new Error('Invalid booking metadata in the Stripe session');
+            }
+
+            // Honor the price captured at checkout, even if the doctor changes their fee later.
+            const price = typeof ticketPrice === 'string' && ticketPrice.trim() ? Number(ticketPrice) : NaN;
+            const expectedAmount = Math.round(price * 100);
+            if (!Number.isFinite(price) || price < 0 || !Number.isSafeInteger(expectedAmount) ||
+                !Number.isSafeInteger(session.amount_total) || session.amount_total !== expectedAmount ||
+                session.currency !== 'usd') {
+                throw new Error('Stripe payment amount or currency does not match the booking');
+            }
+
+            const user = await User.findById(userId);
+            const doctor = await Doctor.findById(doctorId);
+            if (!user || !doctor) throw new Error('User or Doctor not found');
+            if (!doctor.timeSlots.some((slot) => isSameBookingTimeSlot(slot, parsedTimeSlot))) {
+                throw new Error('Selected time slot is no longer available');
+            }
 
             // Create new booking in database
             const newBooking = new Booking({
@@ -339,14 +372,6 @@ export const stripeWebhook = async (req, res) => {
 
             // Increment the total number of patients for the doctor
             await Doctor.updateOne({ _id: doctorId }, { $inc: { totalPatients: 1 } });
-
-            // Fetch user and doctor info for sending email
-            const user = await User.findById(userId);
-            const doctor = await Doctor.findById(doctorId);
-
-            if (!user || !doctor) {
-                throw new Error('User or Doctor not found');
-            }
 
             // Send confirmation email
             await sendBookingConfirmationEmail(user.email, {

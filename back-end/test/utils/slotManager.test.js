@@ -15,7 +15,7 @@ const makeDoctor = (overrides = {}) => ({
 });
 const generatedSlots = () => mocks.Doctor.findByIdAndUpdate.mock.calls[0]?.[1].$set.timeSlots;
 const runningInUtc = process.env.SLOT_TEST_TZ === 'UTC';
-// These timezone-specific failures were reproduced in separate Node processes.
+// Run the same assertions in separate Node processes for Vietnam and UTC.
 const minuteOfDay = (time) => {
     const [hours, minutes] = time.split(':').map(Number);
     return hours * 60 + minutes;
@@ -121,7 +121,7 @@ describe('generateWeeklySlotsForAllDoctors', () => {
         expect(doctor.timeSlots).toHaveLength(7);
     });
 
-    it.each(['duplicate shift', 'duplicate schedule'])('BE-T10 [KNOWN BUG]: removes duplicates from a new batch with %s', async (kind) => {
+    it.each(['duplicate shift', 'duplicate schedule'])('BE-T10: removes duplicates from a new batch with %s', async (kind) => {
         const entry = { day: 'Thursday', shifts: ['Morning'] };
         const availableSchedules = kind === 'duplicate shift' ? [{ ...entry, shifts: ['Morning', 'Morning'] }] : [entry, entry];
         mocks.Doctor.find.mockResolvedValue([makeDoctor({ availableSchedules })]);
@@ -141,7 +141,7 @@ describe('generateWeeklySlotsForAllDoctors', () => {
         expect(generatedSlots().every((item) => item.day === expected)).toBe(true);
     });
 
-    it('BE-T11 [KNOWN BUG in Vietnam TZ]: keeps the next Vietnamese day available at 23:30', async () => {
+    it('BE-T11: keeps the next Vietnamese day available at 23:30', async () => {
         vi.setSystemTime(new Date('2026-10-21T23:30:00+07:00'));
         mocks.Doctor.find.mockResolvedValue([makeDoctor()]);
         await generateWeeklySlotsForAllDoctors();
@@ -149,12 +149,64 @@ describe('generateWeeklySlotsForAllDoctors', () => {
         expect(generatedSlots().every((item) => item.day === '2026-10-22')).toBe(true);
     });
 
-    it('BE-T11 [KNOWN BUG in UTC]: handles Vietnamese month rollover at 00:30 on January first', async () => {
+    it('BE-T11: handles Vietnamese month rollover at 00:30 on January first', async () => {
         vi.setSystemTime(new Date('2027-01-01T00:30:00+07:00'));
         mocks.Doctor.find.mockResolvedValue([makeDoctor({ availableSchedules: [{ day: 'Saturday', shifts: ['Morning'] }] })]);
         await generateWeeklySlotsForAllDoctors();
         expect(generatedSlots()).toHaveLength(7);
         expect(generatedSlots().every((item) => item.day === '2027-01-02')).toBe(true);
+    });
+
+    it.each([
+        ['Wednesday', '2026-10-28'], ['Thursday', '2026-10-22'], ['Friday', '2026-10-23'],
+        ['Saturday', '2026-10-24'], ['Sunday', '2026-10-25'], ['Monday', '2026-10-26'],
+        ['Tuesday', '2026-10-27'],
+    ])('BE-T11: maps %s to %s late at night without leaving the seven-day window', async (day, expected) => {
+        vi.setSystemTime(new Date('2026-10-21T23:59:59.999+07:00'));
+        mocks.Doctor.find.mockResolvedValue([makeDoctor({ availableSchedules: [{ day, shifts: ['Morning'] }] })]);
+        await generateWeeklySlotsForAllDoctors();
+        expect(generatedSlots()).toHaveLength(7);
+        expect(new Set(generatedSlots().map((item) => item.day))).toEqual(new Set([expected]));
+    });
+
+    it.each([
+        ['2026-12-31T23:59:59.999+07:00', 'Friday', '2027-01-01'],
+        ['2027-01-01T00:00:00+07:00', 'Friday', '2027-01-08'],
+        ['2028-02-29T23:59:59.999+07:00', 'Wednesday', '2028-03-01'],
+        ['2027-02-28T23:30:00+07:00', 'Monday', '2027-03-01'],
+    ])('BE-T11: handles the Vietnam calendar boundary at %s for %s', async (clock, day, expected) => {
+        vi.setSystemTime(new Date(clock));
+        mocks.Doctor.find.mockResolvedValue([makeDoctor({ availableSchedules: [{ day, shifts: ['Morning'] }] })]);
+        await generateWeeklySlotsForAllDoctors();
+        expect(generatedSlots()).toHaveLength(7);
+        expect(generatedSlots().every((item) => item.day === expected)).toBe(true);
+    });
+
+    it('BE-T10: deduplicates normalized shifts against existing and newly generated slots on reruns', async () => {
+        const existing = { day: '2026-10-22', startingTime: '08:00', endingTime: '08:30' };
+        const unrelated = { day: '2026-10-23', startingTime: '08:00', endingTime: '08:30' };
+        const entry = { day: 'Thursday', shifts: ['Morning', ' morning ', 'Afternoon', 'AFTERNOON'] };
+        const doctor = makeDoctor({ timeSlots: [existing, unrelated], availableSchedules: [entry, entry] });
+        mocks.Doctor.find.mockResolvedValue([doctor]);
+        mocks.Doctor.findByIdAndUpdate.mockImplementation(async (_id, update) => {
+            doctor.timeSlots = update.$set.timeSlots;
+            return doctor;
+        });
+        await generateWeeklySlotsForAllDoctors();
+        await generateWeeklySlotsForAllDoctors();
+        expect(mocks.Doctor.findByIdAndUpdate).toHaveBeenCalledTimes(1);
+        expect(doctor.timeSlots).toHaveLength(14);
+        expect(doctor.timeSlots).toContainEqual(existing);
+        expect(doctor.timeSlots).toContainEqual(unrelated);
+        expect(new Set(doctor.timeSlots.map((item) => `${item.day}|${item.startingTime}|${item.endingTime}`)).size).toBe(14);
+    });
+
+    it('BE-T11: generates several schedule days from the same unmodified calendar anchor', async () => {
+        const availableSchedules = ['Wednesday', 'Thursday', 'Friday'].map((day) => ({ day, shifts: ['Morning'] }));
+        mocks.Doctor.find.mockResolvedValue([makeDoctor({ availableSchedules })]);
+        await generateWeeklySlotsForAllDoctors();
+        expect(generatedSlots()).toHaveLength(21);
+        expect([...new Set(generatedSlots().map((item) => item.day))]).toEqual(['2026-10-22', '2026-10-23', '2026-10-28']);
     });
 
     it.each(['find', 'update'])('BE-T14 [LIMITATION]: logs and swallows the generation %s error', async (stage) => {
@@ -177,7 +229,7 @@ describe('removeExpiredSlotsForAllDoctors', () => {
         expect(doctor.save).toHaveBeenCalledTimes(1);
     });
 
-    it('BE-T12 [KNOWN BUG in UTC]: removes the previous Vietnamese day at 00:30 regardless of server timezone', async () => {
+    it('BE-T12: removes the previous Vietnamese day at 00:30 regardless of server timezone', async () => {
         vi.setSystemTime(new Date('2026-10-21T00:30:00+07:00'));
         const today = { day: '2026-10-21', startingTime: '08:00', endingTime: '08:30' };
         const doctor = makeDoctor({ timeSlots: [{ ...today, day: '2026-10-20' }, today] });
@@ -185,6 +237,35 @@ describe('removeExpiredSlotsForAllDoctors', () => {
         await removeExpiredSlotsForAllDoctors();
         expect(doctor.timeSlots).toEqual([today]);
         expect(doctor.save).toHaveBeenCalledTimes(1);
+    });
+
+    it.each([
+        ['2026-10-20T16:59:59.999Z', '2026-10-20'],
+        ['2026-10-20T17:00:00.000Z', '2026-10-21'],
+        ['2026-12-31T17:00:00.000Z', '2027-01-01'],
+        ['2028-02-29T17:00:00.000Z', '2028-03-01'],
+    ])('BE-T12: cleans up by Vietnam date %s while preserving %s and later dates', async (clock, today) => {
+        vi.setSystemTime(new Date(clock));
+        const date = new Date(`${today}T00:00:00.000Z`);
+        const slots = [-1, 0, 1].map((offset) => {
+            const day = new Date(date);
+            day.setUTCDate(day.getUTCDate() + offset);
+            return { day: day.toISOString().slice(0, 10), startingTime: '08:00', endingTime: '08:30' };
+        });
+        const doctor = makeDoctor({ timeSlots: slots });
+        mocks.Doctor.find.mockResolvedValue([doctor]);
+        await removeExpiredSlotsForAllDoctors();
+        expect(doctor.timeSlots).toEqual(slots.slice(1));
+        expect(doctor.save).toHaveBeenCalledTimes(1);
+    });
+
+    it('BE-T12: preserves unparseable legacy dates instead of silently deleting them', async () => {
+        const slots = ['invalid-date', '2026-02-30', '2026-10-22'].map((day) => ({ day, startingTime: '08:00', endingTime: '08:30' }));
+        const doctor = makeDoctor({ timeSlots: slots });
+        mocks.Doctor.find.mockResolvedValue([doctor]);
+        await removeExpiredSlotsForAllDoctors();
+        expect(doctor.timeSlots).toEqual(slots);
+        expect(doctor.save).not.toHaveBeenCalled();
     });
 
     it.each([
