@@ -3,6 +3,8 @@
         "start": "concurrently --names frontend,backend \"npm --prefix front-end run dev\" \"npm --prefix back-end start\"",
         "start:all": "concurrently --names frontend,backend,stripe \"npm --prefix front-end run dev\" \"npm --prefix back-end start\" \"npm run stripe:listen\"",
         "stripe:listen": "stripe listen --forward-to http://localhost:5000/api/v1/bookings/webhook/stripe"
+        "start": "concurrently \"cd front-end && npm run dev\" \"cd back-end && npm start\" \"cd back-end && stripe listen --forward-to http://localhost:5000/api/v1/bookings/webhook/stripe\"",
+        "build": "npm --prefix front-end run build && npm --prefix back-end run build"
     },
     "devDependencies": {
         "autoprefixer": "^10.4.18",
