@@ -20,6 +20,7 @@ const timePeriods = {
 const availableTime = Object.keys(timePeriods);
 
 const generateTimeSlots = (period, date) => {
+    if (!availableTime.includes(period)) return [];
     const { start, end } = timePeriods[period];
     const slots = [];
     const [startHour, startMinute] = start.split(':').map(Number);
@@ -51,6 +52,18 @@ const generateTimeSlots = (period, date) => {
     return slots;
 };
 
+const readSchedules = (schedules, calendar) => {
+    const selectedDays = [];
+    const selectedTimes = {};
+    schedules?.forEach(({ day, shifts }) => {
+        if (calendar.some((entry) => entry.name === day)) {
+            selectedDays.push(day);
+            selectedTimes[day] = Array.isArray(shifts) ? shifts.filter((shift) => availableTime.includes(shift)) : [];
+        }
+    });
+    return { selectedDays, selectedTimes, initialized: Boolean(schedules?.length) };
+};
+
 const TimeSlots = ({
     handleTimeSlotsChange,
     daysOfWeekWithDates,
@@ -66,32 +79,25 @@ const TimeSlots = ({
     const endDate = new Date();
     endDate.setDate(today.getDate() + 6);
 
-    const [selectedDays, setSelectedDays] = useState([]);
-    const [selectedTimes, setSelectedTimes] = useState({});
+    const [selection, setSelection] = useState(() => readSchedules(availableSchedules, daysOfWeekWithDates));
+    const { selectedDays, selectedTimes, initialized } = selection;
+    const awaitingInitialSchedules = !initialized && availableSchedules?.length > 0;
 
     useEffect(() => {
-        if (availableSchedules?.length > 0 && selectedDays.length === 0) {
-            const days = [];
-            const times = {};
-            availableSchedules.forEach(({ day, shifts }) => {
-                const match = daysOfWeekWithDates.find((d) => d.name === day);
-                if (match) {
-                    days.push(match.name);
-                    times[match.name] = shifts;
-                }
-            });
-            setSelectedDays(days);
-            setSelectedTimes(times);
+        if (awaitingInitialSchedules) {
+            setSelection(readSchedules(availableSchedules, daysOfWeekWithDates));
         }
-    }, [availableSchedules, daysOfWeekWithDates, selectedDays.length]);
+    }, [availableSchedules, daysOfWeekWithDates, awaitingInitialSchedules]);
 
     useEffect(() => {
+        // Do not publish the empty state while server schedules are being loaded.
+        if (awaitingInitialSchedules) return;
         const updatedSchedules = selectedDays.map((dayName) => ({
             day: dayName,
             shifts: selectedTimes[dayName] || [],
         }));
         onAvailableScheduleChange(updatedSchedules);
-    }, [selectedDays, selectedTimes, onAvailableScheduleChange]);
+    }, [selectedDays, selectedTimes, onAvailableScheduleChange, awaitingInitialSchedules]);
 
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
@@ -105,7 +111,6 @@ const TimeSlots = ({
     };
 
     const handleDayChange = (event) => {
-        // Only run when initialTimeSlots changes and no date has been selected
         const newSelectedDays =
             typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value;
 
@@ -130,17 +135,17 @@ const TimeSlots = ({
             }
         });
 
-        setSelectedDays(sortedSelectedDays);
-        setSelectedTimes(newSelectedTimes);
+        setSelection({ selectedDays: sortedSelectedDays, selectedTimes: newSelectedTimes, initialized: true });
     };
 
     const handleTimeChange = (day) => (event) => {
         const {
             target: { value },
         } = event;
-        setSelectedTimes((prev) => ({
+        setSelection((prev) => ({
             ...prev,
-            [day]: typeof value === 'string' ? value.split(',') : value,
+            initialized: true,
+            selectedTimes: { ...prev.selectedTimes, [day]: typeof value === 'string' ? value.split(',') : value },
         }));
     };
 
@@ -169,15 +174,14 @@ const TimeSlots = ({
     }, [selectedDays, selectedTimes]);
 
     useEffect(() => {
-        if (allTimeSlots.length > 0) {
-            const formattedSlots = allTimeSlots.map((slot) => ({
-                day: slot.date,
-                startingTime: slot.start,
-                endingTime: slot.end,
-            }));
-            handleTimeSlotsChange(formattedSlots);
-        }
-    }, [allTimeSlots, handleTimeSlotsChange]);
+        if (awaitingInitialSchedules) return;
+        const formattedSlots = allTimeSlots.map((slot) => ({
+            day: slot.date,
+            startingTime: slot.start,
+            endingTime: slot.end,
+        }));
+        handleTimeSlotsChange(formattedSlots);
+    }, [allTimeSlots, handleTimeSlotsChange, awaitingInitialSchedules]);
 
     // Group time slots by date for display in table
     const groupSlotsByDate = () => {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './SidePanel.module.scss';
@@ -11,6 +11,7 @@ import { BiExpandAlt, BiCollapseAlt } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
+const emptySlots = [];
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -18,7 +19,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const SidePanel = ({
     doctorId,
     ticketPrice,
-    timeSlots: initialTimeSlots = [],
+    timeSlots: initialTimeSlots = emptySlots,
     doctorPhoto,
     doctorName,
     role,
@@ -30,6 +31,19 @@ const SidePanel = ({
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [timeSlots, setTimeSlots] = useState(initialTimeSlots);
     const [openDialog, setOpenDialog] = useState(false);
+
+    useEffect(() => {
+        setTimeSlots(initialTimeSlots);
+    }, [initialTimeSlots]);
+
+    useEffect(() => {
+        if (!selectedSlot) return;
+        const currentSlot = timeSlots.find((slot) =>
+            slot.day === selectedSlot.day && slot.startingTime === selectedSlot.startingTime &&
+            slot.endingTime === selectedSlot.endingTime);
+        if (currentSlot !== selectedSlot) setSelectedSlot(currentSlot || null);
+        if (!currentSlot) setOpenDialog(false);
+    }, [timeSlots, selectedSlot]);
 
     const handleClickOpenDialog = () => {
         setOpenDialog(true);

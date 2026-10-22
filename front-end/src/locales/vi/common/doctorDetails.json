@@ -34,6 +34,7 @@
         "toast": {
             "noSlot": "Vui lòng chọn khung giờ khám",
             "noPayment": "Vui lòng chọn phương thức thanh toán",
+            "invalidSession": "Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.",
             "bookingSuccess": "Đặt lịch thành công!",
             "createBookingFail": "Tạo lịch hẹn thất bại.",
             "checkoutFail": "Tạo phiên thanh toán thất bại.",
