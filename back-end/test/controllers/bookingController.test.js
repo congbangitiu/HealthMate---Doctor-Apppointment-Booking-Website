@@ -80,6 +80,15 @@ beforeEach(() => {
 });
 
 describe('createBooking', () => {
+    it('BE-B10: requires authentication before querying or creating a booking', async () => {
+        const req = createRequest();
+        delete req.userId;
+        const res = createResponse();
+        await createBooking(req, res);
+        expect(res.status).toHaveBeenCalledWith(401);
+        expect(mocks.Doctor.findById).not.toHaveBeenCalled();
+        expectNoBookingEffects();
+    });
     it('BE-B01: returns 404 without side effects when the doctor does not exist', async () => {
         mocks.Doctor.findById.mockResolvedValue(null);
         const res = createResponse();
@@ -219,7 +228,7 @@ describe('createBooking', () => {
         }
     });
 
-    it('BE-B10 [KNOWN BUG]: rejects booking for a different patient than the authenticated caller', async () => {
+    it('BE-B10: rejects booking for a different patient than the authenticated caller', async () => {
         user._id = 'other-patient-id';
         const req = createRequest({ userId: 'other-patient-id' });
         const res = createResponse();

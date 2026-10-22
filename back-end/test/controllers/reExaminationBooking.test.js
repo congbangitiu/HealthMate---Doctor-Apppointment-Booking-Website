@@ -125,13 +125,33 @@ describe('createReExaminationBooking', () => {
         });
     });
 
-    it.each(['doctor', 'patient'])('BE-N04 [KNOWN BUG]: rejects a parent belonging to a different %s', async (field) => {
+    it.each(['doctor', 'patient'])('BE-N04: rejects a parent belonging to a different %s', async (field) => {
         parent[field === 'patient' ? 'user' : 'doctor'] = 'unrelated-id';
         const res = response();
         await createReExaminationBooking(createRequest(), res);
         expect(res.status.mock.calls[0][0]).toBeGreaterThanOrEqual(400);
         expect(res.status.mock.calls[0][0]).toBeLessThan(500);
         expect(parent.save).not.toHaveBeenCalled();
+        expectNoCreation();
+    });
+
+    it('BE-N04: rejects a forged body doctorId even when the parent belongs to that doctor', async () => {
+        const req = createRequest();
+        req.userId = 'another-doctor-id';
+        const res = response();
+        await createReExaminationBooking(req, res);
+        expect(res.status).toHaveBeenCalledWith(403);
+        expect(parent.save).not.toHaveBeenCalled();
+        expectNoCreation();
+    });
+
+    it('BE-N04: rejects unauthenticated creation before querying the parent', async () => {
+        const req = createRequest();
+        delete req.userId;
+        const res = response();
+        await createReExaminationBooking(req, res);
+        expect(res.status).toHaveBeenCalledWith(401);
+        expect(mocks.Booking.findById).not.toHaveBeenCalled();
         expectNoCreation();
     });
 

@@ -1,4 +1,5 @@
 import Chat from '../Models/ChatSchema.js';
+import { sameId } from '../auth/sameId.js';
 
 // Create new chat
 export const createNewChat = async (req, res) => {
@@ -73,7 +74,11 @@ export const updateUnreadMessages = async (req, res) => {
 
 // Handle actions in a message
 export const handleMessageAction = async (req, res) => {
+    if (!req.userId) return res.status(401).json({ error: 'Authentication required' });
     const { chatId, messageId, actionType, newContent, userId } = req.body;
+    if (userId !== undefined && !sameId(userId, req.userId)) {
+        return res.status(403).json({ error: 'Permission denied' });
+    }
 
     try {
         // Find the chat and populate doctor and user
@@ -93,7 +98,7 @@ export const handleMessageAction = async (req, res) => {
         const message = chat.messages[messageIndex];
 
         // Check user permissions (only the sender can edit or delete messages)
-        if (message.sender.toString() !== userId) {
+        if (!sameId(message.sender, req.userId)) {
             return res.status(403).json({ error: 'Permission denied' });
         }
 

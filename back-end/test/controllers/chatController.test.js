@@ -1,10 +1,15 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import mongoose from 'mongoose';
+import express from 'express';
+import { createServer } from 'node:http';
+import jwt from 'jsonwebtoken';
+import process from 'node:process';
 
 const mocks = vi.hoisted(() => ({ Chat: { findById: vi.fn() }, populate: vi.fn() }));
 vi.mock('../../Models/ChatSchema.js', () => ({ default: mocks.Chat }));
 
 import { handleMessageAction } from '../../Controllers/chatController.js';
+import chatRouter from '../../Routes/chat.js';
 
 const senderId = '507f1f77bcf86cd799439011';
 const messageIds = ['507f1f77bcf86cd799439012', '507f1f77bcf86cd799439013', '507f1f77bcf86cd799439014'];
@@ -126,7 +131,7 @@ describe('handleMessageAction', () => {
         // Reload failure happens after a successful save; a 500 response does not prove rollback.
     });
 
-    it.each(['edit', 'removeForEveryone'])('BE-CH07 [KNOWN BUG]: rejects forged sender identity for action %s', async (actionType) => {
+    it.each(['edit', 'removeForEveryone'])('BE-CH07: rejects forged sender identity for action %s', async (actionType) => {
         const req = request({ actionType, userId: senderId });
         req.userId = 'authenticated-other-user';
         const res = response();
@@ -135,5 +140,61 @@ describe('handleMessageAction', () => {
         expect(chat.save).not.toHaveBeenCalled();
     });
 
-    it.todo('BE-CH07: rejects unauthenticated or forged requests through the actual Express chat route (HTTP integration)');
+});
+
+describe('authenticated message action HTTP route (mocked database)', () => {
+    let server;
+    let url;
+    beforeAll(async () => {
+        const app = express();
+        app.use(express.json());
+        app.use('/chats', chatRouter);
+        server = createServer(app);
+        await new Promise((resolve, reject) => {
+            server.once('error', reject);
+            server.listen(0, '127.0.0.1', resolve);
+        });
+        url = `http://127.0.0.1:${server.address().port}/chats/handle-message-action`;
+    });
+    afterAll(async () => {
+        if (server) await new Promise((resolve) => { server.close(resolve); server.closeAllConnections(); });
+    });
+    const post = (token, body = request().body) => fetch(url, {
+        method: 'POST', headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+        body: JSON.stringify(body),
+    });
+    const tokenFor = (id) => jwt.sign({ id, role: 'patient' }, process.env.JWT_SECRET_KEY, { expiresIn: '5m' });
+
+    it.each([undefined, 'invalid-token'])('BE-CH07 HTTP: denies missing or invalid authentication: %s', async (token) => {
+        const res = await post(token);
+        expect(res.status).toBe(401);
+        expect(mocks.Chat.findById).not.toHaveBeenCalled();
+    });
+    it.each(['edit', 'removeForEveryone'])('BE-CH07 HTTP: prevents a valid token from impersonating the sender for %s', async (actionType) => {
+        const res = await post(tokenFor('another-user-id'), request({ actionType }).body);
+        expect(res.status).toBe(403);
+        expect(chat.save).not.toHaveBeenCalled();
+        expect(chat.messages[1].content).toBe('Original 1');
+    });
+    it.each(['edit', 'removeForEveryone'])('BE-CH07 HTTP: permits the authenticated sender to perform %s', async (actionType) => {
+        const res = await post(tokenFor(senderId), request({ actionType }).body);
+        expect(res.status).toBe(200);
+        expect(chat.save).toHaveBeenCalledTimes(1);
+        if (actionType === 'edit') expect(chat.messages[1].content).toBe('Updated content');
+        else expect(chat.messages).toHaveLength(2);
+    });
+    it('BE-CH07 HTTP: uses authenticated identity when body userId is omitted', async () => {
+        const body = request().body;
+        delete body.userId;
+        const res = await post(tokenFor(senderId), body);
+        expect(res.status).toBe(200);
+        expect(chat.messages[1].content).toBe('Updated content');
+    });
+    it('BE-CH07 HTTP: rejects an unrelated authenticated sender even without a claimed body identity', async () => {
+        const body = request().body;
+        delete body.userId;
+        const res = await post(tokenFor('another-user-id'), body);
+        expect(res.status).toBe(403);
+        expect(chat.save).not.toHaveBeenCalled();
+    });
 });

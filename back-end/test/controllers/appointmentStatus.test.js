@@ -153,7 +153,7 @@ describe('updateAppointmentStatus', () => {
 
     it.todo('BE-C07: enforce agreed transitions such as done to pending after the transition policy is confirmed');
 
-    it('BE-C08 [KNOWN BUG]: prevents an unrelated patient from changing another patient booking', async () => {
+    it('BE-C08: prevents an unrelated patient from changing another patient booking', async () => {
         const req = request('done');
         req.userId = 'unrelated-patient-id';
         const res = response();
@@ -164,6 +164,49 @@ describe('updateAppointmentStatus', () => {
     });
 
     it.todo('BE-C08: enforce ownership through the actual authenticated Express route (HTTP integration)');
+
+    it.each(['doctor', 'admin'])('BE-C08: preserves status updates by the authorized %s', async (role) => {
+        const req = request('done');
+        req.userRole = role;
+        req.userId = role === 'doctor' ? 'doctor-id' : 'admin-id';
+        const res = response();
+        await updateAppointmentStatus(req, res);
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(appointment.save).toHaveBeenCalledTimes(1);
+    });
+
+    it('BE-C08: denies an unrelated doctor without changing status or history', async () => {
+        const req = request('done');
+        req.userRole = 'doctor';
+        req.userId = 'unrelated-doctor-id';
+        const res = response();
+        await updateAppointmentStatus(req, res);
+        expect(res.status).toHaveBeenCalledWith(403);
+        expect(appointment.status).toBe('pending');
+        expect(appointment.statusHistory).toEqual([]);
+        expect(appointment.save).not.toHaveBeenCalled();
+        expect(mocks.emit).not.toHaveBeenCalled();
+    });
+
+    it('BE-C08: requires authentication before looking up the booking', async () => {
+        const req = request();
+        delete req.userId;
+        const res = response();
+        await updateAppointmentStatus(req, res);
+        expect(res.status).toHaveBeenCalledWith(401);
+        expect(mocks.Booking.findById).not.toHaveBeenCalled();
+    });
+
+    it('BE-C08: checks the matching actor role rather than accepting an id from the other reference', async () => {
+        const req = request('done');
+        req.userId = 'doctor-id';
+        req.userRole = 'patient';
+        const res = response();
+        await updateAppointmentStatus(req, res);
+        expect(res.status).toHaveBeenCalledWith(403);
+        expect(appointment.save).not.toHaveBeenCalled();
+        expect(appointment.status).toBe('pending');
+    });
 
     it('BE-C09 [LIMITATION]: returns 500 after restoring the slot if socket emission fails', async () => {
         mocks.emit.mockImplementation(() => { throw new Error('socket unavailable'); });

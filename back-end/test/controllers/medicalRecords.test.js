@@ -112,7 +112,7 @@ for (const config of cases) {
             }
         });
 
-        it(`${config.key === 'prescription' ? 'BE-M02 [KNOWN BUG]' : 'BE-M03'}: does not save a record when the appointment does not exist`, async () => {
+        it(`${config.key === 'prescription' ? 'BE-M02' : 'BE-M03'}: does not save a record when the appointment does not exist`, async () => {
             booking = null;
             const res = response();
             await config.create(request(config.body), res);
@@ -168,11 +168,11 @@ for (const config of cases) {
             } else expect(mocks.emit).not.toHaveBeenCalled();
         });
 
-        it('BE-M08: returns 404 without a booking lookup when the record does not exist', async () => {
+        it('BE-M08: checks appointment ownership before returning 404 for a missing record', async () => {
             const res = response();
             await config.update(request(config.body), res);
             expect(res.status).toHaveBeenCalledWith(404);
-            expect(mocks.Booking.findById).not.toHaveBeenCalled();
+            expect(mocks.Booking.findById).toHaveBeenCalledWith(appointmentId);
             expect(mocks.emit).not.toHaveBeenCalled();
         });
 
@@ -181,11 +181,11 @@ for (const config of cases) {
             const res = response();
             await config.update(request(config.body), res);
             expect(res.status).toHaveBeenCalledWith(500);
-            expect(mocks.Booking.findById).not.toHaveBeenCalled();
+            expect(mocks.Booking.findById).toHaveBeenCalledWith(appointmentId);
             expect(mocks.emit).not.toHaveBeenCalled();
         });
 
-        it('BE-M10 [KNOWN BUG]: rejects a conflicting body appointment before updating the record', async () => {
+        it('BE-M10: rejects a conflicting body appointment before updating the record', async () => {
             Model.findOneAndUpdate.mockResolvedValue({ _id: 'record-id', appointment: otherId });
             const res = response();
             await config.update(request({ ...config.body, appointment: otherId }), res);
@@ -195,20 +195,18 @@ for (const config of cases) {
             expect(mocks.emit).not.toHaveBeenCalled();
         });
 
-        it('BE-M10 [LIMITATION]: updates first then returns 404 if body appointment is absent', async () => {
+        it('BE-M10: uses the authorized params appointment when body appointment is absent', async () => {
             Model.findOneAndUpdate.mockResolvedValue({ _id: 'record-id', appointment: appointmentId });
             const body = { ...config.body };
             delete body.appointment;
-            mocks.populate.mockResolvedValue(null);
             const res = response();
             await config.update(request(body), res);
             expect(Model.findOneAndUpdate).toHaveBeenCalledWith({ appointment: appointmentId }, expect.any(Object), expect.any(Object));
-            expect(mocks.Booking.findById).toHaveBeenCalledWith(undefined);
-            expect(res.status).toHaveBeenCalledWith(404);
-            expect(mocks.emit).not.toHaveBeenCalled();
+            expect(mocks.Booking.findById).toHaveBeenCalledWith(appointmentId);
+            expect(res.status).toHaveBeenCalledWith(200);
         });
 
-        it.each(['create', 'update'])('BE-M11 [KNOWN BUG]: rejects an unrelated doctor attempting to %s another doctor record', async (operation) => {
+        it.each(['create', 'update'])('BE-M11: rejects an unrelated doctor attempting to %s another doctor record', async (operation) => {
             Model.findOneAndUpdate.mockResolvedValue({ _id: 'record-id', ...config.body });
             const req = request(config.body);
             req.userId = 'unrelated-doctor-id';
@@ -221,15 +219,37 @@ for (const config of cases) {
             expect(mocks.emit).not.toHaveBeenCalled();
         });
 
-        it.each(['missing booking', 'populate error'])('BE-M12 [LIMITATION]: does not prove rollback after update when there is a %s', async (outcome) => {
+        it.each(['missing booking', 'populate error'])('BE-M12: prevents writes when checking ownership encounters a %s', async (outcome) => {
             Model.findOneAndUpdate.mockResolvedValue({ _id: 'record-id', ...config.body });
             if (outcome === 'missing booking') booking = null;
             else mocks.populate.mockRejectedValue(new Error('populate unavailable'));
             const res = response();
             await config.update(request(config.body), res);
-            expect(Model.findOneAndUpdate).toHaveBeenCalledTimes(1);
+            expect(Model.findOneAndUpdate).not.toHaveBeenCalled();
             expect(res.status).toHaveBeenCalledWith(outcome === 'missing booking' ? 404 : 500);
             expect(mocks.emit).not.toHaveBeenCalled();
+        });
+
+        it.each(['create', 'update'])('BE-M11: rejects unauthenticated %s before querying or writing', async (operation) => {
+            const req = request(config.body);
+            delete req.userId;
+            const res = response();
+            await config[operation](req, res);
+            expect(res.status).toHaveBeenCalledWith(401);
+            expect(mocks.Booking.findById).not.toHaveBeenCalled();
+            expect(Model).not.toHaveBeenCalled();
+            expect(save).not.toHaveBeenCalled();
+            expect(Model.findOneAndUpdate).not.toHaveBeenCalled();
+        });
+
+        it.each(['patient', 'admin'])('BE-M11: rejects record writes by role %s even with a matching id', async (role) => {
+            const req = request(config.body);
+            req.userRole = role;
+            const res = response();
+            await config.create(req, res);
+            expect(res.status).toHaveBeenCalledWith(403);
+            expect(Model).not.toHaveBeenCalled();
+            expect(save).not.toHaveBeenCalled();
         });
 
         it.todo('BE-M11: enforces roles and appointment ownership through the actual Express routes (integration)');

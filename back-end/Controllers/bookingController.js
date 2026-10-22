@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import mailTransporter from '../utils/mailTransporter.js';
 import formatDate from '../utils/date-time/formatDate.js';
 import convertTime from '../utils/date-time/convertTime.js';
+import { sameId } from '../auth/sameId.js';
 
 dotenv.config();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -62,8 +63,12 @@ const sendBookingConfirmationEmail = async (userEmail, bookingInfo) => {
 
 // Create checkout session when user chooses cash payment
 export const createBooking = async (req, res) => {
+    if (!req.userId) return res.status(401).json({ success: false, message: 'Authentication required' });
     try {
         const { doctorId, userId, timeSlot, ticketPrice, paymentMethod } = req.body;
+        if (!sameId(userId, req.userId)) {
+            return res.status(403).json({ success: false, message: 'Cannot book for another patient' });
+        }
 
         // Check if doctor exists
         const doctor = await Doctor.findById(doctorId);
@@ -188,8 +193,12 @@ const sendReExaminationConfirmationEmail = async (userEmail, bookingInfo) => {
 };
 
 export const createReExaminationBooking = async (req, res) => {
+    if (!req.userId) return res.status(401).json({ success: false, message: 'Authentication required' });
     try {
         const { doctorId, userId, timeSlot, currentBookingId } = req.body;
+        if (req.userRole !== 'doctor' || !sameId(doctorId, req.userId)) {
+            return res.status(403).json({ success: false, message: 'Permission denied' });
+        }
 
         // Check if doctor exists
         const doctor = await Doctor.findById(doctorId);
@@ -207,6 +216,10 @@ export const createReExaminationBooking = async (req, res) => {
         const currentBooking = await Booking.findById(currentBookingId);
         if (!currentBooking) {
             return res.status(404).json({ success: false, message: 'Current booking not found' });
+        }
+
+        if (!sameId(currentBooking.doctor, req.userId) || !sameId(currentBooking.user, userId)) {
+            return res.status(403).json({ success: false, message: 'Permission denied' });
         }
 
         // Update nextAppointmentTimeSlot of the current booking
@@ -419,6 +432,7 @@ export const getCheckoutSession = async (req, res) => {
 
 // Update appointment status (e.g. cancelled, pending, done)
 export const updateAppointmentStatus = async (req, res) => {
+    if (!req.userId) return res.status(401).json({ success: false, message: 'Authentication required' });
     const { id } = req.params;
     const { status } = req.body;
 
@@ -430,6 +444,13 @@ export const updateAppointmentStatus = async (req, res) => {
                 success: false,
                 message: 'Appointment not found',
             });
+        }
+
+        const canUpdate = req.userRole === 'admin' ||
+            (req.userRole === 'patient' && sameId(appointment.user, req.userId)) ||
+            (req.userRole === 'doctor' && sameId(appointment.doctor, req.userId));
+        if (!canUpdate) {
+            return res.status(403).json({ success: false, message: 'Permission denied' });
         }
 
         // Update new state and save change history

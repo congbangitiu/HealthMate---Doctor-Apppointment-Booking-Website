@@ -1,19 +1,22 @@
 import Booking from '../Models/BookingSchema.js';
 import Prescription from '../Models/PrescriptionSchema.js';
+import { sameId } from '../auth/sameId.js';
 
 export const createPrescription = async (req, res) => {
+    if (!req.userId) return res.status(401).json({ success: false, message: 'Authentication required' });
     try {
+        const booking = await Booking.findById(req.body.appointment).populate('user doctor');
+        if (!booking) {
+            return res.status(404).json({ success: false, message: 'Appointment not found' });
+        }
+        if (req.userRole !== 'doctor' || !sameId(booking.doctor, req.userId)) {
+            return res.status(403).json({ success: false, message: 'Permission denied' });
+        }
         const newPrescription = new Prescription({
             ...req.body,
             actionHistory: [{ action: 'create', timestamp: new Date() }],
         });
         await newPrescription.save();
-
-        // Get the booking details
-        const booking = await Booking.findById(req.body.appointment).populate('user doctor');
-        if (!booking) {
-            return res.status(404).json({ success: false, message: 'Appointment not found' });
-        }
 
         // Notify the patient
         req.io.to(booking.user._id.toString()).emit('prescription-notification', {
@@ -56,8 +59,19 @@ export const getPrescriptionByAppointmentId = async (req, res) => {
 };
 
 export const updatePrescriptionByAppointmentId = async (req, res) => {
+    if (!req.userId) return res.status(401).json({ success: false, message: 'Authentication required' });
     const { appointmentId } = req.params;
     try {
+        if (req.body?.appointment !== undefined && !sameId(req.body.appointment, appointmentId)) {
+            return res.status(400).json({ success: false, message: 'Conflicting appointment id' });
+        }
+        const booking = await Booking.findById(appointmentId).populate('user doctor');
+        if (!booking) {
+            return res.status(404).json({ success: false, message: 'Appointment not found' });
+        }
+        if (req.userRole !== 'doctor' || !sameId(booking.doctor, req.userId)) {
+            return res.status(403).json({ success: false, message: 'Permission denied' });
+        }
         const updatedPrescription = await Prescription.findOneAndUpdate(
             { appointment: appointmentId },
             {
@@ -69,12 +83,6 @@ export const updatePrescriptionByAppointmentId = async (req, res) => {
 
         if (!updatedPrescription) {
             return res.status(404).json({ success: false, message: 'Prescription not found' });
-        }
-
-        // Get the booking details
-        const booking = await Booking.findById(req.body.appointment).populate('user doctor');
-        if (!booking) {
-            return res.status(404).json({ success: false, message: 'Appointment not found' });
         }
 
         // Notify the patient
