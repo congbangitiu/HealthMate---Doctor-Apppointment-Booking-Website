@@ -7,6 +7,7 @@ import mailTransporter from '../utils/mailTransporter.js';
 import formatDate from '../utils/date-time/formatDate.js';
 import convertTime from '../utils/date-time/convertTime.js';
 import { sameId } from '../auth/sameId.js';
+import { getBookingTimeSlotError, isSameBookingTimeSlot } from '../utils/date-time/validateBookingTimeSlot.js';
 
 dotenv.config();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -65,7 +66,11 @@ const sendBookingConfirmationEmail = async (userEmail, bookingInfo) => {
 export const createBooking = async (req, res) => {
     if (!req.userId) return res.status(401).json({ success: false, message: 'Authentication required' });
     try {
-        const { doctorId, userId, timeSlot, ticketPrice, paymentMethod } = req.body;
+        const { doctorId, userId, timeSlot, paymentMethod } = req.body ?? {};
+        const slotError = getBookingTimeSlotError(timeSlot);
+        if (!doctorId || !userId || slotError || paymentMethod !== 'cash') {
+            return res.status(400).json({ success: false, message: slotError || 'Doctor, patient and cash payment are required' });
+        }
         if (!sameId(userId, req.userId)) {
             return res.status(403).json({ success: false, message: 'Cannot book for another patient' });
         }
@@ -75,6 +80,8 @@ export const createBooking = async (req, res) => {
         if (!doctor) {
             return res.status(404).json({ success: false, message: 'Doctor not found' });
         }
+
+        const ticketPrice = doctor.ticketPrice;
 
         // Check if user exists
         const user = await User.findById(userId);
@@ -376,7 +383,13 @@ export const stripeWebhook = async (req, res) => {
 };
 
 export const getCheckoutSession = async (req, res) => {
+    if (!req.userId) return res.status(401).json({ success: false, message: 'Authentication required' });
     try {
+        const { timeSlot, paymentMethod } = req.body ?? {};
+        const slotError = getBookingTimeSlotError(timeSlot);
+        if (slotError || paymentMethod !== 'e-wallet') {
+            return res.status(400).json({ success: false, message: slotError || 'E-wallet payment is required' });
+        }
         // Get currently booked doctor
         const doctor = await Doctor.findById(req.params.doctorId).populate('appointments');
         if (!doctor) {
@@ -388,7 +401,9 @@ export const getCheckoutSession = async (req, res) => {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
 
-        const { timeSlot, paymentMethod } = req.body;
+        if (!doctor.timeSlots.some((slot) => isSameBookingTimeSlot(slot, timeSlot))) {
+            return res.status(400).json({ success: false, message: 'Selected time slot is no longer available' });
+        }
 
         const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -434,7 +449,10 @@ export const getCheckoutSession = async (req, res) => {
 export const updateAppointmentStatus = async (req, res) => {
     if (!req.userId) return res.status(401).json({ success: false, message: 'Authentication required' });
     const { id } = req.params;
-    const { status } = req.body;
+    const { status } = req.body ?? {};
+    if (!['pending', 'done', 'cancelled'].includes(status)) {
+        return res.status(400).json({ success: false, message: 'Invalid appointment status' });
+    }
 
     try {
         const appointment = await Booking.findById(id).populate('doctor').populate('user');
@@ -454,11 +472,12 @@ export const updateAppointmentStatus = async (req, res) => {
         }
 
         // Update new state and save change history
+        const previousStatus = appointment.status;
         appointment.status = status;
         appointment.statusHistory.push({ status, timestamp: new Date() });
 
         // Only add the time slot back to the doctor's available slots if the appointment is cancelled
-        if (status === 'cancelled') {
+        if (status === 'cancelled' && previousStatus !== 'cancelled') {
             const doctor = await Doctor.findById(appointment.doctor._id);
 
             if (!doctor) {
@@ -469,9 +488,10 @@ export const updateAppointmentStatus = async (req, res) => {
             }
 
             const { timeSlot } = appointment;
-            doctor.timeSlots.push(timeSlot);
-
-            await doctor.save();
+            if (!doctor.timeSlots.some((slot) => isSameBookingTimeSlot(slot, timeSlot))) {
+                doctor.timeSlots.push(timeSlot);
+                await doctor.save();
+            }
 
             // Send real-time notifications to your doctor
             req.io.to(doctor._id.toString()).emit('cancelled-notification', {
@@ -507,29 +527,19 @@ export const updateAppointmentStatus = async (req, res) => {
 export const updateNextAppointmentTimeSlot = async (req, res) => {
     try {
         const { id } = req.params;
-        const { nextAppointmentTimeSlot } = req.body;
+        const { nextAppointmentTimeSlot } = req.body ?? {};
 
         const booking = await Booking.findById(id);
         if (!booking) {
             return res.status(404).json({ success: false, message: 'Booking not found' });
         }
 
-        const validateTimeSlot = (slot) => {
-            if (!slot.day || !slot.startingTime || !slot.endingTime) {
-                throw new Error('Invalid time slot: day, startingTime, and endingTime are required');
-            }
-            if (slot.startingTime >= slot.endingTime) {
-                throw new Error('Starting time must be earlier than ending time');
-            }
-            const today = new Date().toISOString().split('T')[0];
-            if (slot.day < today) {
-                throw new Error('Date must be in the future');
-            }
-        };
-
         // Update next Appointment Time Slot and follow-up appointment if any
         if (booking.nextAppointment) {
-            validateTimeSlot(nextAppointmentTimeSlot);
+            const slotError = getBookingTimeSlotError(nextAppointmentTimeSlot);
+            if (slotError) {
+                return res.status(400).json({ success: false, message: 'Error updating booking', error: slotError });
+            }
 
             booking.nextAppointment = {
                 timeSlot: nextAppointmentTimeSlot,

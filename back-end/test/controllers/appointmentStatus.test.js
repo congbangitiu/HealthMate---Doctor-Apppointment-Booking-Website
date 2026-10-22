@@ -129,13 +129,18 @@ describe('updateAppointmentStatus', () => {
         },
     );
 
-    it('BE-C06 [KNOWN BUG]: does not restore a duplicate slot when cancellation is repeated', async () => {
+    it('BE-C06: does not restore a duplicate slot when cancellation is repeated', async () => {
         await updateAppointmentStatus(request(), response());
         await updateAppointmentStatus(request(), response());
         expect(doctor.timeSlots.filter((item) => item.day === slot.day && item.startingTime === slot.startingTime && item.endingTime === slot.endingTime)).toHaveLength(1);
+        expect(doctor.save).toHaveBeenCalledTimes(1);
+        expect(mocks.emit).toHaveBeenCalledTimes(1);
+        // Repeated requests still record history, but do not restore or notify again.
+        expect(appointment.statusHistory).toHaveLength(2);
+        expect(appointment.save).toHaveBeenCalledTimes(2);
     });
 
-    it('BE-C07 [KNOWN BUG]: returns a client error for an invalid status rejected by the real schema', async () => {
+    it('BE-C07: returns a client error for an invalid status rejected by the real schema', async () => {
         const { default: Booking } = await vi.importActual('../../Models/BookingSchema.js');
         const invalid = new Booking({
             doctor: '507f1f77bcf86cd799439011', user: '507f1f77bcf86cd799439012',
@@ -149,6 +154,44 @@ describe('updateAppointmentStatus', () => {
         expect(res.status.mock.calls[0][0]).toBeGreaterThanOrEqual(400);
         expect(res.status.mock.calls[0][0]).toBeLessThan(500);
         expect(doctor.save).not.toHaveBeenCalled();
+        expect(appointment.save).not.toHaveBeenCalled();
+        expect(appointment.status).toBe('pending');
+        expect(appointment.statusHistory).toEqual([]);
+    });
+
+    it.each([undefined, null, {}, { status: null }, { status: ['done'] }, { status: 1 }])(
+        'BE-C07: rejects malformed status body %j before changing or saving data', async (body) => {
+            const req = request();
+            req.body = body;
+            const res = response();
+            await updateAppointmentStatus(req, res);
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(appointment.status).toBe('pending');
+            expect(appointment.statusHistory).toEqual([]);
+            expect(appointment.save).not.toHaveBeenCalled();
+            expect(doctor.save).not.toHaveBeenCalled();
+            expect(mocks.emit).not.toHaveBeenCalled();
+        },
+    );
+
+    it('BE-C06: does not append a slot already present on the first cancellation', async () => {
+        doctor.timeSlots = [{ ...slot }];
+        const res = response();
+        await updateAppointmentStatus(request(), res);
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(doctor.timeSlots).toEqual([slot]);
+        expect(doctor.save).not.toHaveBeenCalled();
+        expect(appointment.save).toHaveBeenCalledTimes(1);
+    });
+
+    it('BE-C06: does not restore an already cancelled slot that was subsequently booked again', async () => {
+        appointment.status = 'cancelled';
+        const res = response();
+        await updateAppointmentStatus(request(), res);
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(doctor.timeSlots).toEqual([]);
+        expect(mocks.Doctor.findById).not.toHaveBeenCalled();
+        expect(mocks.emit).not.toHaveBeenCalled();
     });
 
     it.todo('BE-C07: enforce agreed transitions such as done to pending after the transition policy is confirmed');

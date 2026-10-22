@@ -112,7 +112,7 @@ describe('createBooking', () => {
 
     it.each([
         ['day', '2026-10-23'],
-        ['startingTime', '09:00'],
+        ['startingTime', '08:15'],
         ['endingTime', '09:30'],
     ])('BE-B03: rejects a slot whose %s does not match availability', async (field, value) => {
         const res = createResponse();
@@ -200,13 +200,11 @@ describe('createBooking', () => {
         expect(console.error).toHaveBeenCalledWith('Error sending email:', expect.any(Error));
     });
 
-    // These expectations describe the guide's desired safeguards, not the current implementation.
-    // Known regressions remain ordinary tests so assertion failures are reported as FAILED.
     it.each([
         ['missing body', undefined],
         ['null body', null],
         ['missing timeSlot', { doctorId: 'doctor-id', userId: 'patient-id', ticketPrice: 25, paymentMethod: 'cash' }],
-    ])('BE-B08 [KNOWN BUG]: rejects %s with a client error and no writes', async (_label, body) => {
+    ])('BE-B08: rejects %s with a client error and no writes', async (_label, body) => {
         const req = createRequest();
         req.body = body;
         const res = createResponse();
@@ -216,7 +214,7 @@ describe('createBooking', () => {
         expectNoBookingEffects();
     });
 
-    it('BE-B09 [KNOWN BUG]: rejects a manipulated price or uses the server-side doctor price', async () => {
+    it('BE-B09: rejects a manipulated price or uses the server-side doctor price', async () => {
         const res = createResponse();
         await createBooking(createRequest({ ticketPrice: 1 }), res);
         const status = res.status.mock.calls[0][0];
@@ -238,13 +236,38 @@ describe('createBooking', () => {
         expectNoBookingEffects();
     });
 
-    it('BE-B11 [KNOWN BUG]: rejects a past slot even if it remains in the availability list', async () => {
+    it('BE-B11: rejects a past slot even if it remains in the availability list', async () => {
         const pastSlot = { ...slot, day: '2026-10-20' };
         doctor.timeSlots = [pastSlot];
         const res = createResponse();
         await createBooking(createRequest({ timeSlot: pastSlot }), res);
         expect(res.status.mock.calls[0][0]).toBeGreaterThanOrEqual(400);
         expect(res.status.mock.calls[0][0]).toBeLessThan(500);
+        expectNoBookingEffects();
+    });
+
+    it.each([1, 0, -1, '0', null, undefined])('BE-B09: uses the server price for storage, email and notification when client price is %s', async (ticketPrice) => {
+        const res = createResponse();
+        await createBooking(createRequest({ ticketPrice }), res);
+        expect(res.status).toHaveBeenCalledWith(201);
+        expect(mocks.Booking).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ ticketPrice: 25 }));
+        expect(mocks.sendMail.mock.calls[0][0].html).toContain('$25');
+        expect(mocks.emit).toHaveBeenCalledWith('booking-notification', expect.objectContaining({ ticketPrice: 25 }));
+    });
+
+    it.each([undefined, 'e-wallet', 'free', 'invalid'])('BE-B08: rejects payment method %s on the cash endpoint', async (paymentMethod) => {
+        const res = createResponse();
+        await createBooking(createRequest({ paymentMethod }), res);
+        expect(res.status).toHaveBeenCalledWith(400);
+        expectNoBookingEffects();
+    });
+
+    it('BE-B08: rejects an impossible date even when it appears in doctor availability', async () => {
+        const invalidSlot = { ...slot, day: '2026-02-30' };
+        doctor.timeSlots = [invalidSlot];
+        const res = createResponse();
+        await createBooking(createRequest({ timeSlot: invalidSlot }), res);
+        expect(res.status).toHaveBeenCalledWith(400);
         expectNoBookingEffects();
     });
 

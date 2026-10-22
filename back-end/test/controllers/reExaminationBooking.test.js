@@ -209,23 +209,40 @@ describe('updateNextAppointmentTimeSlot', () => {
         ['equal times', { ...slot, endingTime: '08:00' }, 'Starting time must be earlier than ending time'],
         ['reversed times', { ...slot, endingTime: '07:30' }, 'Starting time must be earlier than ending time'],
         ['past date', { ...slot, day: '2026-10-20' }, 'Date must be in the future'],
-    ])('BE-N06 [CURRENT BEHAVIOR]: rejects %s with 500 and no saves', async (_label, invalidSlot, message) => {
+    ])('BE-N06: rejects %s with 400 and no saves', async (_label, invalidSlot, message) => {
         const previous = parent.nextAppointment;
         const res = response();
         await updateNextAppointmentTimeSlot(updateRequest(invalidSlot), res);
-        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith({ success: false, message: 'Error updating booking', error: message });
         expect(parent.nextAppointment).toBe(previous);
         expect(parent.save).not.toHaveBeenCalled();
         expect(child.save).not.toHaveBeenCalled();
     });
 
-    it('BE-N06 [KNOWN BUG]: classifies an invalid time range as a client error', async () => {
+    it('BE-N06: classifies an invalid time range as a client error', async () => {
         const res = response();
         await updateNextAppointmentTimeSlot(updateRequest({ ...slot, endingTime: slot.startingTime }), res);
         expect(res.status.mock.calls[0][0]).toBeGreaterThanOrEqual(400);
         expect(res.status.mock.calls[0][0]).toBeLessThan(500);
     });
+
+    it.each([undefined, null, {}, { nextAppointmentTimeSlot: { ...slot, day: '2026-02-30' } }])(
+        'BE-N06: rejects malformed update body %j without changing parent or child', async (body) => {
+            const req = updateRequest();
+            req.body = body;
+            const previousParent = structuredClone(parent.nextAppointment);
+            const previousChild = { ...child.timeSlot };
+            const res = response();
+            await updateNextAppointmentTimeSlot(req, res);
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(parent.nextAppointment).toEqual(previousParent);
+            expect(child.timeSlot).toEqual(previousChild);
+            expect(parent.save).not.toHaveBeenCalled();
+            expect(child.save).not.toHaveBeenCalled();
+            expect(mocks.Booking.findOne).not.toHaveBeenCalled();
+        },
+    );
 
     it('BE-N07: updates both slots while preserving the parent PDF metadata', async () => {
         const res = response();

@@ -170,9 +170,8 @@ describe('getCheckoutSession', () => {
         },
     );
 
-    // Known regressions are ordinary tests and report FAILED until the source is fixed.
     it.each(['unavailable', 'past', 'missing'])(
-        'BE-S05 [KNOWN BUG]: rejects slot state "%s" before creating a Stripe session', async (kind) => {
+        'BE-S05: rejects slot state "%s" before creating a Stripe session', async (kind) => {
             const req = checkoutRequest();
             if (kind === 'unavailable') doctor.timeSlots = [];
             if (kind === 'past') {
@@ -187,6 +186,45 @@ describe('getCheckoutSession', () => {
             expect(mocks.createSession).not.toHaveBeenCalled();
         },
     );
+
+    it('BE-S05: requires authentication before querying or creating a Stripe session', async () => {
+        const req = checkoutRequest();
+        delete req.userId;
+        const res = createResponse();
+        await getCheckoutSession(req, res);
+        expect(res.status).toHaveBeenCalledWith(401);
+        expect(mocks.Doctor.findById).not.toHaveBeenCalled();
+        expect(mocks.createSession).not.toHaveBeenCalled();
+        expectNoBookingEffects();
+    });
+
+    it.each([undefined, null, [], 'invalid'])('BE-S05: rejects malformed body %j without calling Stripe', async (body) => {
+        const req = checkoutRequest();
+        req.body = body;
+        const res = createResponse();
+        await getCheckoutSession(req, res);
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(mocks.createSession).not.toHaveBeenCalled();
+        expectNoBookingEffects();
+    });
+
+    it.each([undefined, 'cash', 'free', 'invalid'])('BE-S05: rejects payment method %s on the checkout endpoint', async (paymentMethod) => {
+        const res = createResponse();
+        await getCheckoutSession(checkoutRequest({ paymentMethod }), res);
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(mocks.createSession).not.toHaveBeenCalled();
+        expectNoBookingEffects();
+    });
+
+    it('BE-S05: rejects a reversed range even when it appears in doctor availability', async () => {
+        const invalidSlot = { ...slot, endingTime: '07:30' };
+        doctor.timeSlots = [invalidSlot];
+        const res = createResponse();
+        await getCheckoutSession(checkoutRequest({ timeSlot: invalidSlot }), res);
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(mocks.createSession).not.toHaveBeenCalled();
+        expectNoBookingEffects();
+    });
 });
 
 describe('stripeWebhook', () => {
