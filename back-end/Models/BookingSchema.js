@@ -1,6 +1,9 @@
 import mongoose from 'mongoose';
 
 const statusHistorySchema = new mongoose.Schema({
+    actorId: mongoose.Schema.Types.ObjectId,
+    actorName: String,
+    actorRole: String,
     status: {
         type: String,
         enum: ['pending', 'done', 'cancelled'],
@@ -69,6 +72,19 @@ const bookingSchema = new mongoose.Schema(
             enum: ['e-wallet', 'cash', 'free'],
         },
         timeSlot: timeSlotSchema,
+        scheduleVersion: { type: Number, default: 0 },
+        scheduleHistory: [
+            {
+                from: timeSlotSchema,
+                to: timeSlotSchema,
+                actorId: mongoose.Schema.Types.ObjectId,
+                actorName: String,
+                actorRole: { type: String, enum: ['doctor'] },
+                reason: { type: String, maxlength: 500 },
+                patientUnread: { type: Boolean, default: false },
+                timestamp: { type: Date, default: Date.now },
+            },
+        ],
         nextAppointment: nextAppointmentSchema,
         session: { type: String },
         unread: {

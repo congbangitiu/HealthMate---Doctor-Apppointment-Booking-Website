@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const mocks = vi.hoisted(() => ({
     Booking: { findById: vi.fn() },
     Doctor: { findById: vi.fn() },
+    User: { findById: vi.fn() },
     populate: vi.fn(),
     to: vi.fn(),
     emit: vi.fn(),
@@ -10,7 +11,7 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock('../../Models/BookingSchema.js', () => ({ default: mocks.Booking }));
 vi.mock('../../Models/DoctorSchema.js', () => ({ default: mocks.Doctor }));
-vi.mock('../../Models/UserSchema.js', () => ({ default: {} }));
+vi.mock('../../Models/UserSchema.js', () => ({ default: mocks.User }));
 vi.mock('../../utils/mailTransporter.js', () => ({ default: { sendMail: vi.fn() } }));
 vi.mock('stripe', () => ({ default: vi.fn(function StripeMock() {}) }));
 
@@ -28,8 +29,11 @@ const response = () => {
     return res;
 };
 const request = (status = 'cancelled') => ({
-    params: { id: 'booking-id' }, body: { status },
-    userId: 'patient-id', userRole: 'patient', io: { to: mocks.to },
+    params: { id: 'booking-id' },
+    body: { status },
+    userId: 'patient-id',
+    userRole: 'patient',
+    io: { to: mocks.to },
 });
 
 beforeEach(() => {
@@ -38,15 +42,21 @@ beforeEach(() => {
     vi.setSystemTime(now);
     doctor = { _id: 'doctor-id', timeSlots: [], save: vi.fn().mockResolvedValue(undefined) };
     appointment = {
-        _id: 'booking-id', doctor: { _id: 'doctor-id' },
+        _id: 'booking-id',
+        doctor: { _id: 'doctor-id' },
         user: { _id: 'patient-id', fullname: 'Test Patient', photo: 'patient.jpg' },
-        timeSlot: { ...slot }, status: 'pending', statusHistory: [],
+        timeSlot: { ...slot },
+        status: 'pending',
+        statusHistory: [],
         save: vi.fn().mockResolvedValue(undefined),
     };
     mocks.Booking.findById.mockReturnValue({ populate: mocks.populate });
-    mocks.populate.mockImplementation((path) => path === 'doctor' ? { populate: mocks.populate } : Promise.resolve(appointment));
+    mocks.populate.mockImplementation((path) =>
+        path === 'doctor' ? { populate: mocks.populate } : Promise.resolve(appointment),
+    );
     mocks.Doctor.findById.mockImplementation(async () => doctor);
     mocks.to.mockReturnValue({ emit: mocks.emit });
+    mocks.User.findById.mockResolvedValue({ fullname: 'Test Admin' });
 });
 
 describe('updateAppointmentStatus', () => {
@@ -63,20 +73,33 @@ describe('updateAppointmentStatus', () => {
         expect(mocks.emit).not.toHaveBeenCalled();
     });
 
-    it.each(['done', 'pending'])('BE-C02: records status %s and its timestamp without restoring a slot', async (status) => {
-        appointment.statusHistory.push({ status: 'pending', timestamp: new Date(now.getTime() - 1000) });
-        const res = response();
-        await updateAppointmentStatus(request(status), res);
-        expect(appointment.status).toBe(status);
-        expect(appointment.statusHistory).toHaveLength(2);
-        expect(appointment.statusHistory[1]).toEqual({ status, timestamp: now });
-        expect(appointment.save).toHaveBeenCalledTimes(1);
-        expect(mocks.Doctor.findById).not.toHaveBeenCalled();
-        expect(doctor.timeSlots).toEqual([]);
-        expect(mocks.emit).not.toHaveBeenCalled();
-        expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith({ success: true, message: 'Appointment status updated successfully', data: appointment });
-    });
+    it.each(['done', 'pending'])(
+        'BE-C02: records status %s and its timestamp without restoring a slot',
+        async (status) => {
+            appointment.statusHistory.push({ status: 'pending', timestamp: new Date(now.getTime() - 1000) });
+            const res = response();
+            await updateAppointmentStatus(request(status), res);
+            expect(appointment.status).toBe(status);
+            expect(appointment.statusHistory).toHaveLength(2);
+            expect(appointment.statusHistory[1]).toEqual({
+                status,
+                timestamp: now,
+                actorId: 'patient-id',
+                actorName: 'Test Patient',
+                actorRole: 'patient',
+            });
+            expect(appointment.save).toHaveBeenCalledTimes(1);
+            expect(mocks.Doctor.findById).not.toHaveBeenCalled();
+            expect(doctor.timeSlots).toEqual([]);
+            expect(mocks.emit).not.toHaveBeenCalled();
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith({
+                success: true,
+                message: 'Appointment status updated successfully',
+                data: appointment,
+            });
+        },
+    );
 
     it('BE-C03: restores the selected slot and notifies the doctor when cancelling', async () => {
         const otherSlot = { ...slot, startingTime: '09:00', endingTime: '09:30' };
@@ -88,11 +111,22 @@ describe('updateAppointmentStatus', () => {
         expect(doctor.save).toHaveBeenCalledTimes(1);
         expect(appointment.save).toHaveBeenCalledTimes(1);
         expect(appointment.status).toBe('cancelled');
-        expect(appointment.statusHistory).toEqual([{ status: 'cancelled', timestamp: now }]);
+        expect(appointment.statusHistory).toEqual([
+            {
+                status: 'cancelled',
+                timestamp: now,
+                actorId: 'patient-id',
+                actorName: 'Test Patient',
+                actorRole: 'patient',
+            },
+        ]);
         expect(mocks.to).toHaveBeenCalledExactlyOnceWith('doctor-id');
         expect(mocks.emit).toHaveBeenCalledExactlyOnceWith('cancelled-notification', {
-            appointmentId: 'booking-id', user: { id: 'patient-id', fullname: 'Test Patient', photo: 'patient.jpg' },
-            timeSlot: slot, status: 'cancelled', createdAt: now.toISOString(),
+            appointmentId: 'booking-id',
+            user: { id: 'patient-id', fullname: 'Test Patient', photo: 'patient.jpg' },
+            timeSlot: slot,
+            status: 'cancelled',
+            createdAt: now.toISOString(),
         });
         expect(res.status).toHaveBeenCalledWith(200);
     });
@@ -108,16 +142,24 @@ describe('updateAppointmentStatus', () => {
     });
 
     it.each(['booking lookup', 'doctor lookup', 'doctor save', 'appointment save'])(
-        'BE-C05: returns 500 when %s fails', async (stage) => {
+        'BE-C05: returns 500 when %s fails',
+        async (stage) => {
             const error = new Error('database unavailable');
-            if (stage === 'booking lookup') mocks.populate.mockImplementation(() => { throw error; });
+            if (stage === 'booking lookup')
+                mocks.populate.mockImplementation(() => {
+                    throw error;
+                });
             if (stage === 'doctor lookup') mocks.Doctor.findById.mockRejectedValue(error);
             if (stage === 'doctor save') doctor.save.mockRejectedValue(error);
             if (stage === 'appointment save') appointment.save.mockRejectedValue(error);
             const res = response();
             await updateAppointmentStatus(request(), res);
             expect(res.status).toHaveBeenCalledWith(500);
-            expect(res.json).toHaveBeenCalledWith({ success: false, message: 'Server error', error: 'database unavailable' });
+            expect(res.json).toHaveBeenCalledWith({
+                success: false,
+                message: 'Server error',
+                error: 'database unavailable',
+            });
             if (stage !== 'appointment save') {
                 expect(mocks.emit).not.toHaveBeenCalled();
                 expect(appointment.save).not.toHaveBeenCalled();
@@ -132,7 +174,14 @@ describe('updateAppointmentStatus', () => {
     it('BE-C06: does not restore a duplicate slot when cancellation is repeated', async () => {
         await updateAppointmentStatus(request(), response());
         await updateAppointmentStatus(request(), response());
-        expect(doctor.timeSlots.filter((item) => item.day === slot.day && item.startingTime === slot.startingTime && item.endingTime === slot.endingTime)).toHaveLength(1);
+        expect(
+            doctor.timeSlots.filter(
+                (item) =>
+                    item.day === slot.day &&
+                    item.startingTime === slot.startingTime &&
+                    item.endingTime === slot.endingTime,
+            ),
+        ).toHaveLength(1);
         expect(doctor.save).toHaveBeenCalledTimes(1);
         expect(mocks.emit).toHaveBeenCalledTimes(1);
         // Repeated requests still record history, but do not restore or notify again.
@@ -143,8 +192,11 @@ describe('updateAppointmentStatus', () => {
     it('BE-C07: returns a client error for an invalid status rejected by the real schema', async () => {
         const { default: Booking } = await vi.importActual('../../Models/BookingSchema.js');
         const invalid = new Booking({
-            doctor: '507f1f77bcf86cd799439011', user: '507f1f77bcf86cd799439012',
-            ticketPrice: '25', status: 'unknown', timeSlot: slot,
+            doctor: '507f1f77bcf86cd799439011',
+            user: '507f1f77bcf86cd799439012',
+            ticketPrice: '25',
+            status: 'unknown',
+            timeSlot: slot,
         });
         const validationError = invalid.validateSync();
         expect(validationError.errors.status).toBeDefined();
@@ -160,7 +212,8 @@ describe('updateAppointmentStatus', () => {
     });
 
     it.each([undefined, null, {}, { status: null }, { status: ['done'] }, { status: 1 }])(
-        'BE-C07: rejects malformed status body %j before changing or saving data', async (body) => {
+        'BE-C07: rejects malformed status body %j before changing or saving data',
+        async (body) => {
             const req = request();
             req.body = body;
             const res = response();
@@ -252,7 +305,9 @@ describe('updateAppointmentStatus', () => {
     });
 
     it('BE-C09 [LIMITATION]: returns 500 after restoring the slot if socket emission fails', async () => {
-        mocks.emit.mockImplementation(() => { throw new Error('socket unavailable'); });
+        mocks.emit.mockImplementation(() => {
+            throw new Error('socket unavailable');
+        });
         const res = response();
         await updateAppointmentStatus(request(), res);
         expect(doctor.save).toHaveBeenCalledTimes(1);

@@ -1,4 +1,5 @@
 {
+    "rescheduled": "Dr. {{name}} <bold>rescheduled</bold> your appointment from <bold>{{oldDate}}</bold> at <bold>{{oldTime}}</bold> to <bold>{{newDate}}</bold> at <bold>{{newTime}}</bold>.",
     "title": "Notifications",
     "emptyTitle": "No new notifications for now.",
     "emptyDescriptionDoctor": "You'll receive updates here when a patient books or cancels an appointment.",

@@ -1,6 +1,7 @@
 import User from '../Models/UserSchema.js';
 import Doctor from '../Models/DoctorSchema.js';
 import Booking from '../Models/BookingSchema.js';
+import { invalidateAppointments } from './scheduleController.js';
 import Stripe from 'stripe';
 import dotenv from 'dotenv';
 import mailTransporter from '../utils/mailTransporter.js';
@@ -69,7 +70,9 @@ export const createBooking = async (req, res) => {
         const { doctorId, userId, timeSlot, paymentMethod } = req.body ?? {};
         const slotError = getBookingTimeSlotError(timeSlot);
         if (!doctorId || !userId || slotError || paymentMethod !== 'cash') {
-            return res.status(400).json({ success: false, message: slotError || 'Doctor, patient and cash payment are required' });
+            return res
+                .status(400)
+                .json({ success: false, message: slotError || 'Doctor, patient and cash payment are required' });
         }
         if (!sameId(userId, req.userId)) {
             return res.status(403).json({ success: false, message: 'Cannot book for another patient' });
@@ -148,6 +151,7 @@ export const createBooking = async (req, res) => {
             createdAt: savedBooking.createdAt,
         });
 
+        invalidateAppointments(req.io, savedBooking);
         res.status(201).json({ success: true, message: 'Booking created successfully', booking: savedBooking });
     } catch (error) {
         console.error('Error creating booking:', error);
@@ -277,6 +281,7 @@ export const createReExaminationBooking = async (req, res) => {
             isReExamination: true,
         });
 
+        invalidateAppointments(req.io, savedBooking);
         res.status(201).json({
             success: true,
             message: 'Re-examination booking created successfully',
@@ -330,19 +335,33 @@ export const stripeWebhook = async (req, res) => {
             // Parse timeSlot (because it was stored as a string in metadata)
             const parsedTimeSlot = JSON.parse(timeSlot);
 
-            if (typeof userId !== 'string' || !userId.trim() ||
-                typeof doctorId !== 'string' || !doctorId.trim() || paymentMethod !== 'e-wallet' ||
-                !parsedTimeSlot || typeof parsedTimeSlot !== 'object' || Array.isArray(parsedTimeSlot) ||
-                !['day', 'startingTime', 'endingTime'].every((field) => typeof parsedTimeSlot[field] === 'string' && parsedTimeSlot[field])) {
+            if (
+                typeof userId !== 'string' ||
+                !userId.trim() ||
+                typeof doctorId !== 'string' ||
+                !doctorId.trim() ||
+                paymentMethod !== 'e-wallet' ||
+                !parsedTimeSlot ||
+                typeof parsedTimeSlot !== 'object' ||
+                Array.isArray(parsedTimeSlot) ||
+                !['day', 'startingTime', 'endingTime'].every(
+                    (field) => typeof parsedTimeSlot[field] === 'string' && parsedTimeSlot[field],
+                )
+            ) {
                 throw new Error('Invalid booking metadata in the Stripe session');
             }
 
             // Honor the price captured at checkout, even if the doctor changes their fee later.
             const price = typeof ticketPrice === 'string' && ticketPrice.trim() ? Number(ticketPrice) : NaN;
             const expectedAmount = Math.round(price * 100);
-            if (!Number.isFinite(price) || price < 0 || !Number.isSafeInteger(expectedAmount) ||
-                !Number.isSafeInteger(session.amount_total) || session.amount_total !== expectedAmount ||
-                session.currency !== 'usd') {
+            if (
+                !Number.isFinite(price) ||
+                price < 0 ||
+                !Number.isSafeInteger(expectedAmount) ||
+                !Number.isSafeInteger(session.amount_total) ||
+                session.amount_total !== expectedAmount ||
+                session.currency !== 'usd'
+            ) {
                 throw new Error('Stripe payment amount or currency does not match the booking');
             }
 
@@ -373,6 +392,7 @@ export const stripeWebhook = async (req, res) => {
             // Increment the total number of patients for the doctor
             await Doctor.updateOne({ _id: doctorId }, { $inc: { totalPatients: 1 } });
 
+            invalidateAppointments(req.io, savedBooking);
             // Send confirmation email
             await sendBookingConfirmationEmail(user.email, {
                 userName: user.fullname,
@@ -489,7 +509,8 @@ export const updateAppointmentStatus = async (req, res) => {
             });
         }
 
-        const canUpdate = req.userRole === 'admin' ||
+        const canUpdate =
+            req.userRole === 'admin' ||
             (req.userRole === 'patient' && sameId(appointment.user, req.userId)) ||
             (req.userRole === 'doctor' && sameId(appointment.doctor, req.userId));
         if (!canUpdate) {
@@ -499,7 +520,19 @@ export const updateAppointmentStatus = async (req, res) => {
         // Update new state and save change history
         const previousStatus = appointment.status;
         appointment.status = status;
-        appointment.statusHistory.push({ status, timestamp: new Date() });
+        const actor =
+            req.userRole === 'doctor'
+                ? appointment.doctor
+                : req.userRole === 'patient'
+                  ? appointment.user
+                  : await User.findById(req.userId);
+        appointment.statusHistory.push({
+            status,
+            timestamp: new Date(),
+            actorId: req.userId,
+            actorName: actor?.fullname || '',
+            actorRole: req.userRole,
+        });
 
         // Only add the time slot back to the doctor's available slots if the appointment is cancelled
         if (status === 'cancelled' && previousStatus !== 'cancelled') {
@@ -534,6 +567,7 @@ export const updateAppointmentStatus = async (req, res) => {
 
         await appointment.save();
 
+        invalidateAppointments(req.io, appointment);
         res.status(200).json({
             success: true,
             message: 'Appointment status updated successfully',
