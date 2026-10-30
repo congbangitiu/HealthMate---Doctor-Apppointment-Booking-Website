@@ -1,4 +1,6 @@
 import i18n from 'i18next';
+import calendarEN from '../../locales/en/common/calendar.json';
+import calendarVI from '../../locales/vi/common/calendar.json';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
@@ -134,6 +136,7 @@ const resources = {
         doctorDetails: doctorDetailsEN,
         formFeedback: formFeedbackEN,
         checkoutSuccess: CheckoutSuccessEN,
+        calendar: calendarEN,
     },
     vi: {
         homepage: homepageVI,
@@ -179,6 +182,7 @@ const resources = {
         doctorDetails: doctorDetailsVI,
         formFeedback: formFeedbackVI,
         checkoutSuccess: CheckoutSuccessVI,
+        calendar: calendarVI,
     },
 };
 
@@ -195,6 +199,7 @@ i18n.use(LanguageDetector)
         nonExplicitSupportedLngs: true,
         defaultNS: 'homepage',
         ns: [
+            'calendar',
             'homepage',
             'navbar',
             'footer',

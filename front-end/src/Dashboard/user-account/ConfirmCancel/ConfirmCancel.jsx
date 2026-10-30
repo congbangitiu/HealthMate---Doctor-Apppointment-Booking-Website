@@ -12,30 +12,39 @@ import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
-const ConfirmCancel = ({ setShowConfirmCancel, appointment }) => {
+const ConfirmCancel = ({ setShowConfirmCancel, appointment, onConfirm }) => {
     const { t } = useTranslation('myBookings');
 
     const [loading, setLoading] = useState(false);
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     const handleConfirmCancel = async () => {
+        if (loading) return;
         setLoading(true);
         try {
-            const resUpdateBooking = await fetch(`${BASE_URL}/bookings/${appointment._id}/status`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({ status: 'cancelled' }),
-            });
+            if (onConfirm) {
+                await onConfirm(appointment);
+            } else {
+                const resUpdateBooking = await fetch(`${BASE_URL}/bookings/${appointment._id}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ status: 'cancelled' }),
+                });
 
-            const updateBookingData = await resUpdateBooking.json();
-            if (!resUpdateBooking.ok) {
-                throw new Error(updateBookingData.message || 'Error updating booking status');
+                const updateBookingData = await resUpdateBooking.json();
+                if (!resUpdateBooking.ok) {
+                    throw new Error(updateBookingData.message || 'Error updating booking status');
+                }
             }
 
             toast.success(t('confirmCancel.success'));
+            if (onConfirm) {
+                setShowConfirmCancel(false);
+                return;
+            }
             setLoading(false);
             await delay(2000);
             window.location.reload();
@@ -72,8 +81,8 @@ const ConfirmCancel = ({ setShowConfirmCancel, appointment }) => {
                 </div>
             </div>
             <div className={cx('buttons')}>
-                <button onClick={() => setShowConfirmCancel(false)}>{t('confirmCancel.quit')}</button>
-                <button onClick={handleConfirmCancel}>
+                <button disabled={loading} onClick={() => setShowConfirmCancel(false)}>{t('confirmCancel.quit')}</button>
+                <button disabled={loading} onClick={handleConfirmCancel}>
                     {loading ? <SyncLoader size={7} color="#ffffff" /> : t('confirmCancel.confirm')}
                 </button>
             </div>
@@ -84,6 +93,7 @@ const ConfirmCancel = ({ setShowConfirmCancel, appointment }) => {
 ConfirmCancel.propTypes = {
     setShowConfirmCancel: PropTypes.func.isRequired,
     appointment: PropTypes.object.isRequired,
+    onConfirm: PropTypes.func,
 };
 
 export default ConfirmCancel;

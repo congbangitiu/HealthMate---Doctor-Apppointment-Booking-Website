@@ -1,4 +1,5 @@
 {
+    "rescheduled": "BS. {{name}} <bold>đã đổi lịch</bold> khám của bạn từ <bold>{{oldDate}}</bold> lúc <bold>{{oldTime}}</bold> sang <bold>{{newDate}}</bold> lúc <bold>{{newTime}}</bold>.",
     "title": "Thông báo",
     "emptyTitle": "Hiện chưa có thông báo mới.",
     "emptyDescriptionDoctor": "Bạn sẽ nhận được thông báo tại đây khi bệnh nhân đặt hoặc huỷ cuộc hẹn.",

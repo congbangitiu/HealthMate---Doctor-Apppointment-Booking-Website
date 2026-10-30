@@ -8,7 +8,7 @@ import formatDateForDisplay from '../../utils/date-time/formatDateForDisplay';
 import convertTime from '../../utils/date-time/convertTime';
 import { IoIosNotifications, IoIosArrowBack } from 'react-icons/io';
 import useResponsive from '../../hooks/useResponsive';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
@@ -56,6 +56,23 @@ const Notifications = ({ notifications, role, handleCloseNotifications }) => {
             name = notification.user.fullname;
             date = notification.timeSlot?.day;
             time = notification.timeSlot?.startingTime;
+        } else if (role === 'patient' && notification.type === 'reschedule') {
+            return (
+                <p>
+                    <Trans
+                        i18nKey="rescheduled"
+                        t={t}
+                        components={{ bold: <b /> }}
+                        values={{
+                            name: notification.doctor?.fullname || '',
+                            oldDate: formatDateForDisplay(notification.from?.day),
+                            oldTime: `${notification.from?.startingTime}–${notification.from?.endingTime}`,
+                            newDate: formatDateForDisplay(notification.timeSlot?.day),
+                            newTime: `${notification.timeSlot?.startingTime}–${notification.timeSlot?.endingTime}`,
+                        }}
+                    />
+                </p>
+            );
         } else if (role === 'patient' && notification.type === 'prescription') {
             key = notification.action === 'create' ? 'prescriptionIssued' : 'prescriptionUpdated';
             name = notification.doctor.fullname;
