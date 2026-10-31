@@ -184,7 +184,7 @@ const DoctorDetails = () => {
                             <div
                                 style={{
                                     width: isMobile || isTablet ? '100%' : '450px',
-                                    padding: isMobile ? '10px 0' : isTablet ? '16px' : '20px',
+                                    padding: isMobile ? '15px 0' : isTablet ? '16px' : '20px',
                                     boxShadow: isMobile || isTablet ? 'none' : '0 10px 30px var(--black-08)',
                                     border: isMobile || isTablet ? 'none' : '1px solid var(--black-05)',
                                     borderTop: isMobile || isTablet ? '1px solid var(--darkGrayColor)' : 'none',
