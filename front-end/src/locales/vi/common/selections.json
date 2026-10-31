@@ -2,6 +2,7 @@
     "doctor": "Bác sĩ",
     "patient": "Bệnh nhân",
     "schedule": "Lịch khám",
+    "appointmentsPerPage": "Cuộc hẹn mỗi trang",
     "status": "Trạng thái",
     "placeholders": {
         "doctor": "Chọn bác sĩ",

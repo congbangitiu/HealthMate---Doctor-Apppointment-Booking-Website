@@ -2,6 +2,7 @@
     "doctor": "Doctor",
     "patient": "Patient",
     "schedule": "Schedule",
+    "appointmentsPerPage": "Appointments per page",
     "status": "Status",
     "placeholders": {
         "doctor": "Select a doctor",

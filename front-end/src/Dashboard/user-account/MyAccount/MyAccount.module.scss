@@ -367,3 +367,17 @@
         width: max-content;
     }
 }
+
+@media only screen and (min-width: 1025px) {
+    .container-parent .container .info {
+        position: sticky;
+        top: 120px;
+        align-self: flex-start;
+        max-height: calc(100dvh - 140px);
+        overflow-y: auto;
+
+        > * {
+            flex-shrink: 0;
+        }
+    }
+}

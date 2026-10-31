@@ -92,3 +92,36 @@ describe('original list and calendar toggle', () => {
         expect(AppointmentCalendar).not.toHaveBeenCalled();
     });
 });
+
+
+describe('appointment list page sizes', () => {
+    it.each(['doctor', 'patient'])('paginates the %s list with 5, 10 or 20 appointments and resets after filtering', async (role) => {
+        mocks.fetch.mockReturnValue({
+            data: Array.from({ length: 23 }, (_, index) => ({ ...appointment, _id: `booking-${index}` })),
+            loading: false,
+            error: null,
+        });
+        mount(role);
+        const visibleCount = () => role === 'doctor'
+            ? screen.getByRole('table').querySelectorAll('tbody tr').length
+            : screen.getAllByRole('heading', { name: /Doctor One/ }).length;
+        await waitFor(() => expect(visibleCount()).toBe(5));
+        fireEvent.click(screen.getByText('Next', { exact: true }));
+        const selectSize = (size) => {
+            fireEvent.keyDown(screen.getByRole('combobox', { name: 'Appointments per page' }), { key: 'ArrowDown' });
+            fireEvent.click(screen.getByRole('option', { name: String(size), exact: true }));
+        };
+        selectSize(10);
+        await waitFor(() => expect(visibleCount()).toBe(10));
+        fireEvent.click(screen.getByText('Next', { exact: true }));
+        selectSize(20);
+        await waitFor(() => expect(visibleCount()).toBe(20));
+        fireEvent.click(screen.getByText('Next', { exact: true }));
+        await waitFor(() => expect(visibleCount()).toBe(3));
+        fireEvent.keyDown(screen.getByRole('combobox', { name: 'Status', exact: true }), { key: 'ArrowDown' });
+        fireEvent.click(screen.getByRole('option', { name: 'Pending', exact: true }));
+        await waitFor(() => expect(visibleCount()).toBe(20));
+        selectSize(5);
+        await waitFor(() => expect(visibleCount()).toBe(5));
+    });
+});

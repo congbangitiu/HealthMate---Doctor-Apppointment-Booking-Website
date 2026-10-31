@@ -36,8 +36,13 @@ const Appointments = () => {
     const [filteredAppointments, setFilteredAppointments] = useState([]);
 
     const [currentPage, setCurrentPage] = useState(0);
-    const [currentItems, setCurrentItems] = useState([]);
-    const itemsPerPage = 5;
+    const [itemsPerPage, setItemsPerPage] = useState(5);
+    const currentItems = filteredAppointments.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+
+    const handleItemsPerPageChange = (value) => {
+        setItemsPerPage(value);
+        setCurrentPage(0);
+    };
 
     useEffect(() => {
         let updatedAppointments = appointments;
@@ -85,6 +90,7 @@ const Appointments = () => {
         }
 
         setFilteredAppointments(updatedAppointments);
+        setCurrentPage(0);
     }, [selectedPatient, selectedAppointmentStatus, selectedSchedule, appointments]);
 
     const patientsOptions = [
@@ -103,12 +109,6 @@ const Appointments = () => {
         { value: 'done', label: t('filters.done') },
         { value: 'cancelled', label: t('filters.cancelled') },
     ];
-
-    useEffect(() => {
-        const offset = currentPage * itemsPerPage;
-        const items = filteredAppointments.slice(offset, offset + itemsPerPage);
-        setCurrentItems(items);
-    }, [currentPage, filteredAppointments, itemsPerPage]);
 
     useEffect(() => {
         // Rebuild schedule option based on language
@@ -146,6 +146,9 @@ const Appointments = () => {
         <div className={cx('container-parent')}>
             <div className={cx('selection')}>
                 <Selections
+                    fitContainer
+                    itemsPerPage={itemsPerPage}
+                    setItemsPerPage={handleItemsPerPageChange}
                     selectedPatient={selectedPatient}
                     setSelectedPatient={setSelectedPatient}
                     patientsOptions={patientsOptions}

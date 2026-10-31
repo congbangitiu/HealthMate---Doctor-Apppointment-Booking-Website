@@ -25,6 +25,8 @@ const Selections = ({
     hideDoctor,
     hideSchedule = false,
     fitContainer = false,
+    itemsPerPage,
+    setItemsPerPage,
 }) => {
     const selectId = useId();
     const { isTablet, isMobile } = useResponsive();
@@ -96,6 +98,20 @@ const Selections = ({
                     onChange={setSelectedAppointmentStatus}
                 />
             </div>
+            {setItemsPerPage && (
+                <div className={cx('selection')}>
+                    <h4 id={`${selectId}-page-size-label`}>{t('appointmentsPerPage')}</h4>
+                    <Select
+                        instanceId={`${selectId}-page-size`}
+                        aria-labelledby={`${selectId}-page-size-label`}
+                        options={[5, 10, 20].map((value) => ({ value, label: String(value) }))}
+                        styles={customStyles}
+                        value={{ value: itemsPerPage, label: String(itemsPerPage) }}
+                        onChange={(option) => setItemsPerPage(option.value)}
+                        isSearchable={false}
+                    />
+                </div>
+            )}
         </div>
     );
 };
@@ -120,6 +136,8 @@ Selections.propTypes = {
     hideDoctor: PropTypes.bool,
     hideSchedule: PropTypes.bool,
     fitContainer: PropTypes.bool,
+    itemsPerPage: PropTypes.number,
+    setItemsPerPage: PropTypes.func,
 };
 
 Selections.defaultProps = {

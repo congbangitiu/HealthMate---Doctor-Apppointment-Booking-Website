@@ -36,8 +36,13 @@ const MyBookings = () => {
     const [filteredAppointments, setFilteredAppointments] = useState([]);
 
     const [currentPage, setCurrentPage] = useState(0);
-    const [currentItems, setCurrentItems] = useState([]);
-    const itemsPerPage = 5;
+    const [itemsPerPage, setItemsPerPage] = useState(5);
+    const currentItems = filteredAppointments.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+
+    const handleItemsPerPageChange = (value) => {
+        setItemsPerPage(value);
+        setCurrentPage(0);
+    };
 
     useEffect(() => {
         let updatedAppointments = [...appointments];
@@ -85,6 +90,7 @@ const MyBookings = () => {
         }
 
         setFilteredAppointments(updatedAppointments);
+        setCurrentPage(0);
     }, [selectedDoctor, selectedAppointmentStatus, selectedSchedule, appointments]);
 
     const handleDelete = (appointment) => {
@@ -141,16 +147,13 @@ const MyBookings = () => {
         }
     }, [i18n.language]);
 
-    useEffect(() => {
-        const offset = currentPage * itemsPerPage;
-        const items = filteredAppointments.slice(offset, offset + itemsPerPage);
-        setCurrentItems(items);
-    }, [currentPage, filteredAppointments, itemsPerPage]);
-
     return (
         <div className={cx('container')}>
             <div className={cx('selections')}>
                 <Selections
+                    fitContainer
+                    itemsPerPage={itemsPerPage}
+                    setItemsPerPage={handleItemsPerPageChange}
                     selectedDoctor={selectedDoctor}
                     setSelectedDoctor={setSelectedDoctor}
                     doctorsOptions={doctorsOptions}
