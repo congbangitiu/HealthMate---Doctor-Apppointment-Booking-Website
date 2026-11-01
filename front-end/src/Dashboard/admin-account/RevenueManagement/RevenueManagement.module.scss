@@ -19,7 +19,7 @@
 
 @media only screen and (max-width: 768px) {
     .container {
-        & h4 {
+        & > h4:first-child {
             font-size: 25px;
         }
         

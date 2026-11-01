@@ -6,9 +6,10 @@
     },
     "tabs": {
         "dashboard": "Dashboard",
-        "doctor": "Doctor",
-        "patient": "Patient",
-        "appointment": "Appointment",
-        "revenue": "Revenue"
+        "doctor": "Doctors",
+        "patient": "Patients",
+        "appointment": "Appointments",
+        "revenue": "Revenue",
+        "support": "Requests"
     }
 }

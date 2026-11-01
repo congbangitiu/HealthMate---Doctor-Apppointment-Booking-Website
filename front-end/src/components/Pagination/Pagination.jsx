@@ -7,10 +7,10 @@ import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
-const Pagination = ({ data, itemsPerPage, currentPage, setCurrentPage }) => {
+const Pagination = ({ data = [], totalItems, itemsPerPage, currentPage, setCurrentPage }) => {
     const { t } = useTranslation('pagination');
     const { isMobile } = useResponsive();
-    const pageCount = Math.ceil(data.length / itemsPerPage);
+    const pageCount = Math.ceil((totalItems ?? data.length) / itemsPerPage);
 
     const handlePageClick = (event) => {
         const selectedPage = event.selected;
@@ -44,11 +44,12 @@ const Pagination = ({ data, itemsPerPage, currentPage, setCurrentPage }) => {
 };
 
 Pagination.propTypes = {
-    data: PropTypes.array.isRequired,
+    data: PropTypes.array,
+    totalItems: PropTypes.number,
     itemsPerPage: PropTypes.number.isRequired,
     currentPage: PropTypes.number.isRequired,
     setCurrentPage: PropTypes.func.isRequired,
-    setCurrentItems: PropTypes.func.isRequired,
+    setCurrentItems: PropTypes.func,
 };
 
 export default Pagination;

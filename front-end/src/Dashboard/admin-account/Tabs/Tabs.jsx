@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import styles from './Tabs.module.scss';
 import { BiSolidDashboard } from 'react-icons/bi';
 import { FaUserDoctor, FaHospitalUser, FaMoneyBill1Wave } from 'react-icons/fa6';
-import { FaCalendarAlt } from 'react-icons/fa';
+import { FaCalendarAlt, FaHeadset } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
@@ -68,6 +68,16 @@ const Tabs = ({ activeTab, setActiveTab, doctors, setIsShowTab }) => {
             >
                 <FaMoneyBill1Wave className={cx('icon')} />
                 <h4>{t('tabs.revenue')}</h4>
+            </div>
+            <div
+                className={cx('tab', { active: activeTab === 'support' })}
+                onClick={() => {
+                    setActiveTab('support');
+                    setIsShowTab(false);
+                }}
+            >
+                <FaHeadset className={cx('icon')} />
+                <h4>{t('tabs.support')}</h4>
             </div>
         </div>
     );

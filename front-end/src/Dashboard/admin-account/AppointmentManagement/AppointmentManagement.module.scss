@@ -2,7 +2,7 @@
     width: 100%;
 
     & .upper-part {
-        & h4:first-child {
+        & > h4:first-child {
             font-size: 30px;
             font-weight: 600;
             background: linear-gradient(90deg, var(--primaryColor), var(--yellowColor));
@@ -136,12 +136,16 @@
 @media only screen and (max-width: 768px) {
     .container {
         & .upper-part {
-            & h4 {
+            & > h4:first-child {
                 font-size: 25px;
             }
 
             & .selections {
                 margin-top: 15px;
+
+                h4 {
+                    font-size: 18px !important;
+                }
             }
         }
 
