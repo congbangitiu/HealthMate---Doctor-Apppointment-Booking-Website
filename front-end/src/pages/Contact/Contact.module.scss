@@ -265,3 +265,21 @@
         }
     }
 }
+
+.container > .support-link {
+    margin-top: 12px;
+    color: #187d70;
+    font-size: 14px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.container form .success-notice .chat-link {
+    display: inline-flex;
+    margin-top: 14px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #187d70;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+}

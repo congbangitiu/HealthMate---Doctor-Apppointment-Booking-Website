@@ -1,3 +1,4 @@
+import { MemoryRouter } from 'react-router-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import Contact from './Contact';
@@ -18,9 +19,9 @@ vi.mock('../../components/Recaptcha/Recaptcha', () => ({
 vi.mock('../../../config', () => ({ BASE_URL: '/api/v1' }));
 const mount = (identity = {}) =>
     render(
-        <authContext.Provider value={identity}>
+        <MemoryRouter><authContext.Provider value={identity}>
             <Contact />
-        </authContext.Provider>,
+        </authContext.Provider></MemoryRouter>,
     );
 async function choose(label) {
     fireEvent.keyDown(screen.getByLabelText('subject'), { key: 'ArrowDown' });

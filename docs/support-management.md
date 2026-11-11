@@ -23,4 +23,4 @@ API (all routes below require authentication and a database-confirmed admin role
 Public Contact submission remains POST /api/v1/contacts, protected by reCAPTCHA.
 Existing support requests are compatible; the new fields receive defaults and need no data migration.
 
-This step provides admin management. Admin bell notifications, support chat and user notifications on status changes are the next steps.
+Admin bell notifications and support conversation are implemented; see support-realtime.md. User bell notifications on status changes remain a separate step.

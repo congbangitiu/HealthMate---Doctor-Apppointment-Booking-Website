@@ -1,3 +1,5 @@
+import supportRealtimeEN from '../../locales/en/common/supportRealtime.json';
+import supportRealtimeVI from '../../locales/vi/common/supportRealtime.json';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
@@ -131,6 +133,7 @@ const resources = {
         loader: loaderEN,
         management: managementEN,
         supportManagement: supportManagementEN,
+        supportRealtime: supportRealtimeEN,
         dashboardManagement: dashboardManagementEN,
         doctorManagement: doctorManagementEN,
         patientManagement: patientManagementEN,
@@ -178,6 +181,7 @@ const resources = {
         loader: loaderVI,
         management: managementVI,
         supportManagement: supportManagementVI,
+        supportRealtime: supportRealtimeVI,
         dashboardManagement: dashboardManagementVI,
         doctorManagement: doctorManagementVI,
         patientManagement: patientManagementVI,
@@ -203,6 +207,7 @@ i18n.use(LanguageDetector)
         nonExplicitSupportedLngs: true,
         defaultNS: 'homepage',
         ns: [
+            'supportRealtime',
             'supportManagement',
             'calendar',
             'homepage',

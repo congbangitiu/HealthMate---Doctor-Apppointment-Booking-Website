@@ -21,4 +21,4 @@ IP values are HMAC-hashed before storage. Deployments behind a proxy must config
 The limiter is a basic database count and may allow extra concurrent submissions; it complements CAPTCHA.
 Existing profile phone fields are numeric: leading zeroes already lost there cannot be restored reliably by the form.
 
-Admin request management is available at /admins/management/support; see support-management.md. Notification delivery and support chat are subsequent steps.
+Admin request management is available at /admins/management/support; see support-management.md. In-site admin notifications and support chat are available; see support-realtime.md.

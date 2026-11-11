@@ -1,4 +1,8 @@
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+vi.mock('../../../utils/services/socket', () => ({
+    default: { connected: false, on: vi.fn(), off: vi.fn(), emit: vi.fn() },
+}));
+import socket from '../../../utils/services/socket';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import SupportManagement from './SupportManagement';
@@ -47,6 +51,18 @@ beforeEach(() => {
     vi.stubGlobal(
         'fetch',
         vi.fn(async (url, options = {}) => {
+            if (url.includes('/conversation'))
+                return {
+                    ok: true,
+                    json: async () => ({
+                        data: {
+                            request,
+                            messages: [],
+                            hasMore: false,
+                            viewer: { id: 'admin-1', role: 'admin' },
+                        },
+                    }),
+                };
             if (options.method === 'PATCH') {
                 if (conflict) return { ok: false, status: 409, json: async () => ({ code: 'conflict' }) };
                 const body = JSON.parse(options.body);
@@ -78,6 +94,24 @@ const open = async () => {
     return within(dialog);
 };
 describe('SupportManagement', () => {
+    it('does not periodically reload the table but still refreshes on realtime events', async () => {
+        mount();
+        await screen.findByRole('row', { name: 'viewRequest ' + id });
+        const before = fetch.mock.calls.length;
+        vi.useFakeTimers();
+        try {
+            await act(async () => { await vi.advanceTimersByTimeAsync(90000); });
+            expect(fetch).toHaveBeenCalledTimes(before);
+            const onChange = socket.on.mock.calls.filter(([event]) => event === 'support-requests-changed').at(-1)[1];
+            await act(async () => {
+                onChange();
+                await vi.advanceTimersByTimeAsync(150);
+            });
+            expect(fetch).toHaveBeenCalledTimes(before + 1);
+        } finally {
+            vi.useRealTimers();
+        }
+    });
     it.each([false, true])('copies the full request ID and handles clipboard failure (%s)', async (fails) => {
         const originalClipboard = Object.getOwnPropertyDescriptor(navigator, 'clipboard');
         const writeText = fails ? vi.fn().mockRejectedValue(new Error('denied')) : vi.fn().mockResolvedValue();
@@ -89,10 +123,11 @@ describe('SupportManagement', () => {
             fireEvent.click(modal.getByRole('button', { name: 'copyId' }));
             expect(writeText).toHaveBeenCalledWith(id);
             if (fails) expect(await modal.findByRole('alert')).toHaveTextContent('copyFailed');
-            else await waitFor(() => {
-                expect(modal.getByRole('button', { name: 'copyId' })).toHaveTextContent('copied');
-                expect(modal.queryByRole('status')).not.toBeInTheDocument();
-            });
+            else
+                await waitFor(() => {
+                    expect(modal.getByRole('button', { name: 'copyId' })).toHaveTextContent('copied');
+                    expect(modal.queryByRole('status')).not.toBeInTheDocument();
+                });
         } finally {
             if (originalClipboard) Object.defineProperty(navigator, 'clipboard', originalClipboard);
             else delete navigator.clipboard;

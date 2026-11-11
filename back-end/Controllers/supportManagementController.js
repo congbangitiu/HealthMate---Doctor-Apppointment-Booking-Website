@@ -1,3 +1,4 @@
+import { emitSupport, SUPPORT_ADMIN_ROOM, supportRequestRoom } from '../utils/supportRealtime.js';
 import mongoose from 'mongoose';
 import SupportRequest, { supportStatuses } from '../Models/SupportRequestSchema.js';
 import User from '../Models/UserSchema.js';
@@ -5,7 +6,7 @@ import User from '../Models/UserSchema.js';
 const validId = (id) => typeof id === 'string' && mongoose.isObjectIdOrHexString(id);
 const fail = (res, status, code) => res.status(status).json({ success: false, code });
 const serialize = (doc, adminId) => {
-    const { readBy = [], submissionIp, ...data } = doc;
+    const { readBy = [], submissionIp, guestAccessHash, ...data } = doc;
     return { ...data, isRead: readBy.some((id) => String(id) === String(adminId)) };
 };
 const dateBoundary = (value) => {
@@ -66,6 +67,7 @@ export const readSupportRequest = async (req, res) => {
         const document = await SupportRequest.findByIdAndUpdate(req.params.id,
             { $addToSet: { readBy: req.userId } }, { new: true, timestamps: false }).lean();
         if (!document) return fail(res, 404, 'notFound');
+        emitSupport(req.io, SUPPORT_ADMIN_ROOM, 'support-requests-changed', { requestId: req.params.id, reason: 'read' });
         return res.json({ success: true, data: serialize(document, req.userId) });
     } catch {
         return fail(res, 500, 'loadFailed');
@@ -108,6 +110,8 @@ export const updateSupportRequest = async (req, res) => {
             $set: changes, $inc: { __v: 1 }, $push: { history: { $each: history } },
         }, { new: true, runValidators: true }).lean();
         if (!updated) return fail(res, 409, 'conflict');
+        emitSupport(req.io, SUPPORT_ADMIN_ROOM, 'support-requests-changed', { requestId: req.params.id, reason: 'updated' });
+        emitSupport(req.io, supportRequestRoom(req.params.id), 'support-chat-changed', { requestId: req.params.id });
         return res.json({ success: true, data: serialize(updated, actorId) });
     } catch {
         return fail(res, 500, 'saveFailed');

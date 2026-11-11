@@ -27,10 +27,12 @@ const notificationSocketHandler = (io) => {
         });
         // When a doctor connects, they join their respective room
         socket.on('doctor-join-room', ({ doctorId }) => {
+            if (typeof doctorId !== 'string' || !/^[a-f0-9]{24}$/i.test(doctorId)) return;
             socket.join(doctorId);
         });
 
         socket.on('user-join-room', ({ userId }) => {
+            if (typeof userId !== 'string' || !/^[a-f0-9]{24}$/i.test(userId)) return;
             socket.join(userId);
         });
 

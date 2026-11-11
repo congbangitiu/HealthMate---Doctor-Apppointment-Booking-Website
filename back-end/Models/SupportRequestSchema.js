@@ -40,6 +40,10 @@ const schema = new mongoose.Schema(
             to: { type: String, enum: supportStatuses },
             note: { type: String, maxlength: 2000 },
         }],
+        guestAccessHash: { type: String, select: false },
+        notificationAt: { type: Date, default: Date.now },
+        notificationId: { type: String },
+        notificationKind: { type: String, enum: ['request', 'message'], default: 'request' },
         submissionIp: { type: String, required: true, select: false },
     },
     { timestamps: true },
@@ -47,5 +51,6 @@ const schema = new mongoose.Schema(
 schema.index({ submissionIp: 1, createdAt: -1 });
 
 schema.index({ status: 1, createdAt: -1 });
+schema.index({ notificationAt: -1, createdAt: -1 });
 
 export default mongoose.model('SupportRequest', schema);

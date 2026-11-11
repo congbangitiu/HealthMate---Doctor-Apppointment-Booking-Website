@@ -120,6 +120,7 @@ const chatSocketHandler = (io) => {
         });
 
         socket.on('join-chat', async ({ chatId, userId, role }) => {
+            if (typeof chatId !== 'string' || !/^[a-f0-9]{24}$/i.test(chatId)) return;
             try {
                 if (socket.rooms.has(chatId)) {
                     return;

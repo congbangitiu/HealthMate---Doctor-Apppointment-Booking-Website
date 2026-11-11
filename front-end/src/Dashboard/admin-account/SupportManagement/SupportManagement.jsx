@@ -1,3 +1,5 @@
+import socket from '../../../utils/services/socket';
+import SupportChat from '../../../components/SupportChat/SupportChat';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { FiCheck, FiCopy, FiX } from 'react-icons/fi';
@@ -166,6 +168,28 @@ const SupportManagement = () => {
             if (activeRequest.current === id) setCopyStatus('copyFailed');
         }
     };
+
+    useEffect(() => {
+        let timer;
+        const refresh = () => {
+            clearTimeout(timer);
+            timer = setTimeout(() => setReload((n) => n + 1), 150);
+        };
+        const visible = () => {
+            if (!document.hidden) refresh();
+        };
+        socket.on('support-notification', refresh);
+        socket.on('support-requests-changed', refresh);
+        socket.on('connect', refresh);
+        window.addEventListener('focus', visible);
+        return () => {
+            clearTimeout(timer);
+            socket.off('support-notification', refresh);
+            socket.off('support-requests-changed', refresh);
+            socket.off('connect', refresh);
+            window.removeEventListener('focus', visible);
+        };
+    }, []);
 
     const selectRequest = (id) => {
         setNote('');
@@ -460,10 +484,7 @@ const SupportManagement = () => {
                                             </button>
                                         </div>
                                         {copyStatus === 'copyFailed' && (
-                                            <p
-                                                className={cx('copy-feedback')}
-                                                role="alert"
-                                            >
+                                            <p className={cx('copy-feedback')} role="alert">
                                                 {t(copyStatus)}
                                             </p>
                                         )}
@@ -605,6 +626,9 @@ const SupportManagement = () => {
                                     </section>
                                 </>
                             )
+                        )}
+                        {detail && !detailLoading && (
+                            <SupportChat key={detail._id} requestId={detail._id} token={token} />
                         )}
                         {detailError && (
                             <div role="alert" className={cx('error')}>

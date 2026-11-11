@@ -1,6 +1,8 @@
+import { hashGuestToken } from '../utils/supportAccess.js';
+import { emitSupportNotification } from '../utils/supportRealtime.js';
 import axios from 'axios';
 import validator from 'validator';
-import { createHmac } from 'node:crypto';
+import { createHmac, randomBytes } from 'node:crypto';
 import SupportRequest, { supportCategories } from '../Models/SupportRequestSchema.js';
 
 export const createContactRequest = async (req, res) => {
@@ -55,6 +57,7 @@ export const createContactRequest = async (req, res) => {
             .filter(Boolean);
         if (allowedHosts.length && !allowedHosts.includes(verification.data.hostname))
             return fail(400, 'captchaInvalid');
+        const guestToken = req.userId ? null : randomBytes(32).toString('hex');
         const request = await SupportRequest.create({
             fullname,
             email,
@@ -63,10 +66,12 @@ export const createContactRequest = async (req, res) => {
             subject,
             message,
             submissionIp,
+            ...(guestToken ? { guestAccessHash: hashGuestToken(guestToken) } : {}),
             senderId: req.userId || null,
             senderRole: req.userRole || 'guest',
         });
-        return res.status(201).json({ success: true, data: { id: request._id.toString() } });
+        await emitSupportNotification(req.io, request);
+        return res.status(201).json({ success: true, data: { id: request._id.toString(), ...(guestToken ? { guestToken } : {}) } });
     } catch {
         return fail(500, 'sendFailed');
     }

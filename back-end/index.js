@@ -7,6 +7,7 @@ import http from 'http';
 import { Server } from 'socket.io';
 import chatSocketHandler from './WebSocket/chatSocket.js';
 import notificationSocketHandler from './WebSocket/notificationSocket.js';
+import supportSocketHandler from './WebSocket/supportSocket.js';
 import authRoute from './Routes/auth.js';
 import userRoute from './Routes/user.js';
 import doctorRoute from './Routes/doctor.js';
@@ -112,6 +113,7 @@ app.all('/api/v1/cron/slot-maintenance', (req, res) => {
 // Attach Socket.IO logic
 chatSocketHandler(io);
 notificationSocketHandler(io);
+supportSocketHandler(io);
 
 // Initialize slot generation cron job
 initSlotGenerationCron();

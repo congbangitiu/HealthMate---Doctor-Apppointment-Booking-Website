@@ -1,0 +1,132 @@
+.container {
+    min-width: 0;
+    padding: 20px;
+    margin-top: 16px;
+    border: 1px solid #e2e9e7;
+    border-radius: 12px;
+    background: white;
+    .heading {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 8px;
+        align-items: center;
+    }
+    .heading h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+    }
+    .heading > span {
+        font-size: 13px;
+        color: #61766e;
+    }
+    > button {
+        margin-top: 12px;
+    }
+    button {
+        padding: 8px 14px;
+        border-radius: 6px;
+        background: #187d70;
+        color: white;
+        font: inherit;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 16px;
+        min-width: 0;
+    }
+    form label {
+        font-size: 14px;
+        color: #61766e;
+    }
+    form textarea {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        resize: vertical;
+        padding: 12px;
+        border: 1px solid #b7c9c3;
+        border-radius: 7px;
+        font: inherit;
+        font-size: 16px;
+    }
+    form textarea:focus {
+        border-color: var(--primaryColor);
+        outline: none;
+    }
+    form button {
+        align-self: flex-end;
+    }
+}
+.messages {
+    max-height: 380px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-top: 16px;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    article {
+        max-width: 85%;
+        padding: 10px 14px;
+        border-radius: 10px;
+        overflow-wrap: anywhere;
+    }
+    article small {
+        display: block;
+        font-size: 12px;
+        color: #4e6c62;
+        margin-bottom: 4px;
+    }
+    article p {
+        font-size: 16px;
+        margin: 0;
+        white-space: pre-wrap;
+        line-height: 1.6;
+        color: #253b36;
+    }
+    article time {
+        display: block;
+        margin-top: 6px;
+        font-size: 11px;
+        color: #61766e;
+    }
+    .own {
+        align-self: flex-end;
+        background: #def5ee;
+    }
+    .received {
+        align-self: flex-start;
+        background: #f0f3f2;
+    }
+}
+.empty {
+    text-align: center;
+    font-size: 14px;
+    color: #61766e;
+    padding: 16px 0;
+}
+.error {
+    color: #b42318;
+    font-size: 14px;
+    margin-top: 12px;
+}
+@media (max-width: 768px) {
+    .container {
+        padding: 16px;
+    }
+    .messages article {
+        max-width: 95%;
+    }
+}

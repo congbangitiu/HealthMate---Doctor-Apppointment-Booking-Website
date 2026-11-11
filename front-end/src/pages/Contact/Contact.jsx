@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+import { rememberGuestRequest } from '../../utils/services/supportRequests';
 import { useContext, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames/bind';
 import Select from 'react-select';
@@ -126,6 +128,7 @@ export default function Contact() {
                 );
                 return;
             }
+            if (result.data.guestToken) rememberGuestRequest(result.data.id, result.data.guestToken);
             setRequestId(result.data.id);
             setCategory('');
             setSubject('');
@@ -145,6 +148,7 @@ export default function Contact() {
         <div className={cx('container')}>
             <h2>{t('title')}</h2>
             <p>{t('description')}</p>
+            <Link className={cx('support-link')} to="/support-requests">{t('supportRealtime:myRequests')}</Link>
             {profileLoading ? (
                 <Loader />
             ) : (
@@ -260,6 +264,7 @@ export default function Contact() {
                                     <span>{t('requestIdLabel')}</span>
                                     <code>{requestId}</code>
                                 </div>
+                                    <Link className={cx('chat-link')} to={'/support-requests?request=' + requestId}>{t('supportRealtime:openChat')}</Link>
                             </div>
                         </div>
                     )}

@@ -31,6 +31,20 @@ beforeEach(() => {
     axios.post.mockResolvedValue({ data: { success: true, hostname: 'localhost' } });
 });
 describe('contact request submission', () => {
+    it('returns success after persistence even when realtime delivery throws', async () => {
+        const io = {
+            to: vi.fn(() => {
+                throw new Error('transport down');
+            }),
+        };
+        const res = await run(valid, { io });
+        expect(SupportRequest.create).toHaveBeenCalledTimes(1);
+        expect(res.status).toHaveBeenCalledWith(201);
+        const body = res.json.mock.calls[0][0];
+        expect(body.data.guestToken).toMatch(/^[a-f0-9]{64}$/);
+        expect(SupportRequest.create.mock.calls[0][0].guestAccessHash).not.toBe(body.data.guestToken);
+    });
+
     it('saves guest contact information and drops unrelated subject and client identity', async () => {
         const res = await run({ ...valid, senderId: 'forged', senderRole: 'admin' });
         expect(res.status).toHaveBeenCalledWith(201);

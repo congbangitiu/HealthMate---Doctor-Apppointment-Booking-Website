@@ -1,3 +1,4 @@
+import useAdminSupportNotifications from '../../hooks/useAdminSupportNotifications';
 import React from 'react';
 import { useState, useContext, useEffect, useRef } from 'react';
 import logo from '../../assets/images/logo.png';
@@ -35,6 +36,10 @@ const Header = () => {
     const location = useLocation();
     const { isMobile } = useResponsive();
     const { user, role, token } = useContext(authContext);
+    const support = useAdminSupportNotifications(token, role === 'admin', () => {
+        triggerShake();
+        playNotificationSound();
+    });
     const [showConfirmLogout, setShowConfirmLogout] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const { data: appointmentData } = useFetchData(
@@ -196,6 +201,7 @@ const Header = () => {
     }, [token, user, role]);
 
     const markNotificationsAsRead = async () => {
+        if (role === 'admin') return;
         try {
             let response;
             if (role === 'doctor') {
@@ -526,6 +532,7 @@ const Header = () => {
                             onClick={handleOpenNotifications}
                         >
                             <IoIosNotifications className={cx('icon', { shake: isShaking })} />
+                            {role === 'admin' && support.unreadCount > 0 && <div>{support.unreadCount}</div>}
                             {role === 'doctor' && unreadAppointments > 0 && !isNotiOpen && (
                                 <div>{unreadAppointments}</div>
                             )}
@@ -582,8 +589,9 @@ const Header = () => {
                     }}
                 >
                     <Notifications
-                        notifications={visibleNotifications}
+                        notifications={role === 'admin' ? support.items : visibleNotifications}
                         role={role}
+                        loadError={role === 'admin' && support.error}
                         handleCloseNotifications={handleCloseNotifications}
                     />
                 </Popover>
@@ -603,8 +611,9 @@ const Header = () => {
                     }}
                 >
                     <Notifications
-                        notifications={visibleNotifications}
+                        notifications={role === 'admin' ? support.items : visibleNotifications}
                         role={role}
+                        loadError={role === 'admin' && support.error}
                         handleCloseNotifications={handleCloseNotifications}
                     />
                 </Drawer>
