@@ -1,3 +1,4 @@
+import { getOwnerSupportNotifications, readOwnerSupportNotification } from '../Controllers/ownerSupportNotificationsController.js';
 import { getSupportNotifications } from '../Controllers/supportNotificationsController.js';
 import { ownSupportRequests, getSupportConversation, sendSupportMessage } from '../Controllers/supportConversationController.js';
 import express from 'express';
@@ -18,6 +19,8 @@ router.post(
 router.get('/', authenticate, restrict(['admin']), listSupportRequests);
 router.get('/notifications', authenticate, restrict(['admin']), getSupportNotifications);
 router.get('/mine', ownSupportRequests);
+router.get('/my-notifications', getOwnerSupportNotifications);
+router.post('/my-notifications/read', readOwnerSupportNotification);
 router.get('/:id/conversation', getSupportConversation);
 router.post('/:id/messages', sendSupportMessage);
 router.get('/:id', authenticate, restrict(['admin']), getSupportRequest);

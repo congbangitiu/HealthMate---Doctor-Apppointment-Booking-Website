@@ -22,6 +22,25 @@ beforeEach(() => {
     supportSocketHandler({ on: (event, callback) => callback(socket) });
 });
 describe('authenticated support rooms', () => {
+    it.each(['patient', 'doctor'])('derives the %s owner room from verified identity, ignoring supplied IDs', async (role) => {
+        getSupportAccount.mockResolvedValue({ id: 'verified', role, expiresAt: Date.now() + 60000 });
+        const ack = vi.fn();
+        handlers.get('owner-support-subscribe')({ token: 'signed', id: 'victim', role: 'admin' }, ack);
+        await tick();
+        expect(socket.join).toHaveBeenCalledWith('support:owner:' + role + ':verified');
+        expect(ack).toHaveBeenCalledWith({ success: true });
+        handlers.get('owner-support-unsubscribe')();
+        await tick();
+        expect(socket.leave).toHaveBeenCalledWith('support:owner:' + role + ':verified');
+    });
+    it('rejects invalid owner credentials', async () => {
+        getSupportAccount.mockRejectedValue(new Error('invalid'));
+        const ack = vi.fn();
+        handlers.get('owner-support-subscribe')({ token: 'forged' }, ack);
+        await tick();
+        expect(socket.join).not.toHaveBeenCalled();
+        expect(ack).toHaveBeenCalledWith({ success: false });
+    });
     it('checks the account and acknowledges an admin subscription', async () => {
         const ack = vi.fn();
         handlers.get('admin-support-subscribe')({ token: 'signed-token', role: 'admin' }, ack);

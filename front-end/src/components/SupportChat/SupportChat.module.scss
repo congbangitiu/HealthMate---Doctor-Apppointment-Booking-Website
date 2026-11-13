@@ -1,130 +1,126 @@
+@use '../../styles/support' as support;
+
 .container {
     min-width: 0;
     padding: 20px;
     margin-top: 16px;
-    border: 1px solid #e2e9e7;
-    border-radius: 12px;
-    background: white;
+    border: 1px solid var(--lightGrayColor);
+    border-radius: 6px;
+    background: var(--whiteColor);
+    color: var(--textColor);
+    font-size: 16px;
+
     .heading {
         display: flex;
         flex-wrap: wrap;
+        align-items: center;
         justify-content: space-between;
         gap: 8px;
-        align-items: center;
     }
     .heading h3 {
         margin: 0;
+        color: var(--headingColor);
         font-size: 18px;
-        font-weight: 600;
+        font-weight: 500;
     }
     .heading > span {
-        font-size: 13px;
-        color: #61766e;
+        color: var(--darkGrayColor);
+        font-size: 14px;
     }
     > button {
-        margin-top: 12px;
+        margin-top: 16px;
     }
     button {
-        padding: 8px 14px;
-        border-radius: 6px;
-        background: #187d70;
-        color: white;
-        font: inherit;
-        font-size: 14px;
-        cursor: pointer;
-    }
-    button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
+        @include support.primary-action;
     }
     form {
         display: flex;
         flex-direction: column;
         gap: 8px;
-        margin-top: 16px;
         min-width: 0;
+        margin-top: 24px;
     }
     form label {
+        color: var(--darkGrayColor);
         font-size: 14px;
-        color: #61766e;
     }
     form textarea {
+        @include support.field;
         width: 100%;
-        max-width: 100%;
-        min-width: 0;
         box-sizing: border-box;
         resize: vertical;
-        padding: 12px;
-        border: 1px solid #b7c9c3;
-        border-radius: 7px;
-        font: inherit;
-        font-size: 16px;
-    }
-    form textarea:focus {
-        border-color: var(--primaryColor);
-        outline: none;
     }
     form button {
         align-self: flex-end;
     }
 }
+.embedded {
+    padding: 24px 0 0;
+    margin-top: 0;
+    border: 0;
+    border-radius: 0;
+}
 .messages {
-    max-height: 380px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    margin-top: 16px;
-    padding: 4px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
+    max-height: 380px;
+    margin-top: 20px;
+    padding: 4px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
     article {
         max-width: 85%;
-        padding: 10px 14px;
-        border-radius: 10px;
+        padding: 12px 16px;
+        border-radius: 6px;
         overflow-wrap: anywhere;
     }
     article small {
         display: block;
-        font-size: 12px;
-        color: #4e6c62;
         margin-bottom: 4px;
+        color: var(--textColor);
+        font-size: 14px;
     }
     article p {
-        font-size: 16px;
         margin: 0;
-        white-space: pre-wrap;
+        color: var(--headingColor);
+        font-size: 16px;
         line-height: 1.6;
-        color: #253b36;
+        white-space: pre-wrap;
     }
     article time {
         display: block;
-        margin-top: 6px;
-        font-size: 11px;
-        color: #61766e;
+        margin-top: 8px;
+        color: var(--darkGrayColor);
+        font-size: 14px;
     }
     .own {
         align-self: flex-end;
-        background: #def5ee;
+        background: var(--primary-10);
     }
     .received {
         align-self: flex-start;
-        background: #f0f3f2;
+        background: var(--extremeLightGrayColor);
     }
 }
 .empty {
-    text-align: center;
+    padding: 24px 0;
+    color: var(--darkGrayColor);
     font-size: 14px;
-    color: #61766e;
-    padding: 16px 0;
+    text-align: center;
 }
 .error {
-    color: #b42318;
+    margin-top: 16px;
+    color: var(--darkRedColor);
     font-size: 14px;
-    margin-top: 12px;
 }
 @media (max-width: 768px) {
     .container {
         padding: 16px;
+    }
+    .container.embedded {
+        padding: 24px 0 0;
     }
     .messages article {
         max-width: 95%;

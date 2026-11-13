@@ -31,5 +31,10 @@
     "forbidden": "Không thể truy cập cuộc trò chuyện. Hãy đăng nhập tài khoản đã gửi hoặc dùng trình duyệt nơi bạn gửi yêu cầu với tư cách khách.",
     "sendFailed": "Không thể gửi tin nhắn. Nội dung đã được giữ lại.",
     "rateLimited": "Bạn gửi tin nhắn quá nhanh. Vui lòng chờ một phút.",
-    "openChat": "Mở cuộc trò chuyện hỗ trợ"
+    "openChat": "Mở cuộc trò chuyện hỗ trợ",
+    "requestsDescription": "Theo dõi yêu cầu và trao đổi với đội ngũ hỗ trợ.",
+    "backToRequests": "Tất cả yêu cầu",
+    "requestDetails": "Chi tiết yêu cầu",
+    "supportRequest": "Yêu cầu hỗ trợ",
+    "emptyRequestsDescription": "Bạn cần giúp đỡ? Gửi yêu cầu và theo dõi tiến trình xử lý tại đây."
 }

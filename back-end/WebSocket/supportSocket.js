@@ -1,5 +1,5 @@
 import { getSupportAccount, getSupportAccess } from '../utils/supportAccess.js';
-import { SUPPORT_ADMIN_ROOM, supportRequestRoom } from '../utils/supportRealtime.js';
+import { SUPPORT_ADMIN_ROOM, supportRequestRoom, supportOwnerRoom } from '../utils/supportRealtime.js';
 
 const supportSocketHandler = (io) => {
     io.on('connection', (socket) => {
@@ -47,6 +47,20 @@ const supportSocketHandler = (io) => {
             }),
         );
         socket.on('admin-support-unsubscribe', () => enqueue(() => leave('admin')));
+        socket.on('owner-support-subscribe', (payload = {}, acknowledge = () => {}) =>
+            enqueue(async () => {
+                try {
+                    await leave('owner');
+                    const account = await getSupportAccount(payload.token);
+                    if (!['patient', 'doctor'].includes(account.role)) throw new Error('forbidden');
+                    await join('owner', supportOwnerRoom(account.role, account.id), account.expiresAt);
+                    if (typeof acknowledge === 'function') acknowledge({ success: true });
+                } catch {
+                    if (typeof acknowledge === 'function') acknowledge({ success: false });
+                }
+            }),
+        );
+        socket.on('owner-support-unsubscribe', () => enqueue(() => leave('owner')));
         socket.on('support-chat-subscribe', (payload = {}, acknowledge = () => {}) =>
             enqueue(async () => {
                 try {

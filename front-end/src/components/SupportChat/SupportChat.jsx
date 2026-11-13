@@ -5,7 +5,7 @@ import { BASE_URL } from '../../../config';
 import socket from '../../utils/services/socket';
 import styles from './SupportChat.module.scss';
 
-const SupportChat = ({ requestId, token, guestToken }) => {
+const SupportChat = ({ requestId, token, guestToken, onRequestChange, embedded = false }) => {
     const { t, i18n } = useTranslation('supportRealtime');
     const [messages, setMessages] = useState([]);
     const [viewer, setViewer] = useState(null);
@@ -56,12 +56,15 @@ const SupportChat = ({ requestId, token, guestToken }) => {
         setConnected(false);
         let initialized = false;
         let latestId = null;
+        let openedNotificationId;
         const load = async () => {
             controller?.abort();
             const current = new AbortController();
             controller = current;
             try {
                 let more;
+                let seenRequest;
+                let seenViewer;
                 do {
                     const fetchingNewer = Boolean(latestId);
                     const result = await fetchChat(null, current.signal, latestId);
@@ -72,6 +75,11 @@ const SupportChat = ({ requestId, token, guestToken }) => {
                         ),
                     );
                     setViewer(result.viewer);
+                    if (openedNotificationId === undefined)
+                        openedNotificationId = result.request.ownerNotificationId || null;
+                    seenRequest = result.request;
+                    seenViewer = result.viewer;
+                    onRequestChange?.(result.request);
                     if (!initialized) {
                         setHasMore(result.hasMore);
                         initialized = true;
@@ -80,6 +88,26 @@ const SupportChat = ({ requestId, token, guestToken }) => {
                     if (last) latestId = last._id;
                     more = fetchingNewer && result.hasMore && Boolean(last);
                 } while (more);
+                if (
+                    token &&
+                    !guestToken &&
+                    ['patient', 'doctor'].includes(seenViewer?.role) &&
+                    !document.hidden &&
+                    seenRequest?.ownerNotificationRead === false &&
+                    seenRequest.ownerNotificationId === openedNotificationId
+                ) {
+                    try {
+                        const response = await fetch(BASE_URL + '/contacts/my-notifications/read', {
+                            method: 'POST',
+                            headers: headers(),
+                            signal: current.signal,
+                            body: JSON.stringify({ requestId, notificationId: seenRequest.ownerNotificationId }),
+                        });
+                        if (response.ok) openedNotificationId = null;
+                    } catch {
+                        /* Keep the unread marker and retry on the next sync. */
+                    }
+                }
                 setError('');
             } catch (err) {
                 if (active && !current.signal.aborted) setError(err.message);
@@ -128,7 +156,7 @@ const SupportChat = ({ requestId, token, guestToken }) => {
             socket.emit('support-chat-unsubscribe');
             window.removeEventListener('focus', onFocus);
         };
-    }, [requestId, token, guestToken, fetchChat, headers, retry]);
+    }, [requestId, token, guestToken, fetchChat, headers, retry, onRequestChange]);
     useEffect(() => {
         setDraft('');
         nonce.current = null;
@@ -137,7 +165,8 @@ const SupportChat = ({ requestId, token, guestToken }) => {
     const viewerRole = useRef(null);
     viewerRole.current = viewer?.role;
     useEffect(() => {
-        bottom.current?.scrollIntoView?.({ block: 'nearest' });
+        const messageList = bottom.current?.parentElement;
+        if (messageList) messageList.scrollTop = messageList.scrollHeight;
     }, [requestId, lastMessageId]);
 
     const older = async () => {
@@ -191,7 +220,7 @@ const SupportChat = ({ requestId, token, guestToken }) => {
         }
     };
     return (
-        <section className={styles.container} aria-label={t('chat')}>
+        <section className={[styles.container, embedded ? styles.embedded : ''].join(' ')} aria-label={t('chat')}>
             <div className={styles.heading}>
                 <h3>{t('chat')}</h3>
                 <span>{t(connected ? 'connected' : 'reconnecting')}</span>
@@ -258,6 +287,8 @@ const SupportChat = ({ requestId, token, guestToken }) => {
     );
 };
 SupportChat.propTypes = {
+    embedded: PropTypes.bool,
+    onRequestChange: PropTypes.func,
     requestId: PropTypes.string.isRequired,
     token: PropTypes.string,
     guestToken: PropTypes.string,

@@ -31,5 +31,10 @@
     "forbidden": "This conversation is unavailable. Sign in to the sender's account or use the browser where the guest request was sent.",
     "sendFailed": "Could not send your message. Your draft has been kept.",
     "rateLimited": "You are sending too quickly. Please wait a minute.",
-    "openChat": "Open support conversation"
+    "openChat": "Open support conversation",
+    "requestsDescription": "Track your requests and continue the conversation with our support team.",
+    "backToRequests": "All requests",
+    "requestDetails": "Request details",
+    "supportRequest": "Support request",
+    "emptyRequestsDescription": "Need a hand? Send us a request and follow its progress here."
 }

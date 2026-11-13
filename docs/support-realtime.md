@@ -30,6 +30,7 @@ Realtime events are emitted after persistence; transport failures do not turn a 
 The original request description is displayed above the conversation.
 
 Room names:
+
 - support:admins: JWT verification plus database-confirmed admin role.
 - support:request:<id>: verified admin, owning signed-in account, or the matching guest capability.
 
@@ -39,6 +40,7 @@ Message authors are derived from verified credentials. Client-supplied sender ID
 Sender APIs omit internal notes, IP hashes and guest access hashes.
 
 Socket.IO events:
+
 - admin-support-subscribe / admin-support-unsubscribe
 - support-notification (new request or sender message)
 - support-requests-changed (read/processing changes)
@@ -55,3 +57,21 @@ No messages or notifications are delivered by this feature while the browser is 
 The previous doctor/patient chat routes and UI remain in use for appointment chat.
 
 The shared notification popup shows at most six items and a View all action. Admins open support management; doctors open the appointments tab; patients open their appointment list. Support notifications resolve the sender avatar from the account, use a default avatar for guests, and display the original submission time in Vietnam time. English relative times use the i18next singular/plural keys.
+
+## Signed-in sender notifications
+
+Patient and doctor accounts receive persisted support status/reply notifications. GET /contacts/my-notifications derives ownership from a verified account and returns the latest update per request, with a full unread-request count. POST /contacts/my-notifications/read matches both the owning account and the exact notification ID; viewing an older update cannot clear a newer one.
+
+Status changes save owner notification metadata atomically with the status. New admin replies save their notification metadata after the reply is persisted. Delivery failures never turn a saved status/reply into an error. Internal notes and assignment changes do not create sender notifications.
+
+owner-support-subscribe verifies the JWT and actual database role and joins support:owner:<role>:<id>; the client cannot choose the target identity. The shared Header merges support updates with appointment notifications, plays the bell once per new live event, and restores the feed on login/reconnect/focus/visibility without replaying historical sounds. No toast is used.
+
+Clicking a support notification opens /support-requests?request=<id>. Opening a conversation marks only the update present at that visit as read for its signed-in owner while visible. Later background sync does not clear new updates; clicking their notification or reopening the request acknowledges them. Other open tabs update their unread counts via owner-support-changed. The Contact link to My support requests is centered below Submit. Guest notification delivery is deferred; existing guest conversation access is unchanged.
+
+Support updates carry the acting admin name and current account avatar. Existing updates resolve the actor from processing history or the stored reply when actor metadata is absent. Avatar lookup failures use a neutral fallback and never undo a saved status/reply. Live socket IDs are deduplicated independently from HTTP feed restoration; the badge updates immediately before the confirming fetch. The shared audio element is unlocked on a pointer/keyboard interaction, and autoplay-blocked alerts retry on the next interaction.
+
+The sender request page starts with a responsive card grid (three columns on wide screens, two on tablets, one on phones). Selecting a card uses the existing request query parameter to reveal a vertical sidebar plus the request details and conversation. All requests clears only that query parameter and restores keyboard focus to the selected card. On phones the selected detail uses the full width; All requests returns to the overview. Background list refreshes keep existing cards visible.
+
+SupportRequests, SupportChat and Contact support actions share SCSS primitives in src/styles/_support.scss, based on the existing GlobalStyle.css palette. Request cards use plain borders and text statuses, selected requests use a vertical accent, and the sender conversation uses an embedded presentation to avoid nested panels. Shared SupportChat retains its default framed presentation inside admin details. Body text is 16px and secondary text is 14px.
+
+The signed-in request list includes a whitespace-normalized preview capped at 180 characters; the full issue is still loaded through the authorized conversation endpoint. Cards show a one-line preview in the overview and hide it in the compact sidebar. Hover/focus reveals the open arrow, while touch devices keep it visible. Reduced-motion preferences disable the transition.

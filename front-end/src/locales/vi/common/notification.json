@@ -46,5 +46,7 @@
     "viewAll": "Hiển thị tất cả",
     "supportRequest": "{{name}} đã gửi yêu cầu hỗ trợ <bold>{{subject}}</bold> vào ngày <bold>{{date}}</bold> lúc <bold>{{time}}</bold>",
     "supportMessage": "{{name}} gửi tin nhắn mới cho yêu cầu <bold>{{subject}}</bold> vào ngày <bold>{{date}}</bold> lúc <bold>{{time}}</bold>",
-    "unread": "Chưa đọc"
+    "unread": "Chưa đọc",
+    "supportStatusUpdated": "Yêu cầu hỗ trợ <bold>{{subject}}</bold> của bạn đã được cập nhật thành <bold>{{status}}</bold>.",
+    "supportReplyReceived": "Bạn có tin nhắn mới từ đội ngũ hỗ trợ về <bold>{{subject}}</bold>."
 }

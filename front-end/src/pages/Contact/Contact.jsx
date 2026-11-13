@@ -148,7 +148,7 @@ export default function Contact() {
         <div className={cx('container')}>
             <h2>{t('title')}</h2>
             <p>{t('description')}</p>
-            <Link className={cx('support-link')} to="/support-requests">{t('supportRealtime:myRequests')}</Link>
+
             {profileLoading ? (
                 <Loader />
             ) : (
@@ -277,6 +277,7 @@ export default function Contact() {
                             {submitting ? t('submitting') : t('submit')}
                         </button>
                     </div>
+                    <Link className={cx('support-link')} to="/support-requests">{t('supportRealtime:myRequests')}</Link>
                 </form>
             )}
         </div>

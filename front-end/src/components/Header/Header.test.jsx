@@ -118,3 +118,28 @@ describe('admin support bell', () => {
         expect(screen.getByTestId('path')).toHaveTextContent('/admins/management/support?request=request-1');
     });
 });
+
+describe('signed-in sender support bell', () => {
+    it.each(['patient', 'doctor'])('updates the %s bell with one sound and opens the exact support conversation', async (role) => {
+        fetchMock.mockImplementation(async (url) => ({ ok: true, json: async () => url.endsWith('/contacts/my-notifications')
+            ? { data: stored, unreadCount: stored.filter((item) => !item.isRead).length }
+            : { success: true, data: [], unreadCount: 0 },
+        }));
+        render(<authContext.Provider value={{ user: { _id: 'owner', fullname: 'Owner' }, role, token: 'owner-token' }}>
+            <MemoryRouter><Header /><Location /></MemoryRouter>
+        </authContext.Provider>);
+        await waitFor(() => expect(socket.handlers.get('owner-support-notification')?.size).toBe(1));
+        const event = { id: 'status:update-1', requestId: 'request-1', type: 'support-update', category: 'technical', kind: 'status', supportStatus: 'resolved', isRead: false, createdAt: '2099-11-01T00:00:00Z' };
+        stored = [event];
+        await act(async () => {
+            for (const handler of socket.handlers.get('owner-support-notification')) { handler(event); handler(event); }
+        });
+        expect(await screen.findByText('1')).toBeInTheDocument();
+        expect(play).toHaveBeenCalledTimes(1);
+        expect(supportToast).not.toHaveBeenCalled();
+        const user = userEvent.setup();
+        await user.click(screen.getByRole('button', { name: 'Notifications' }));
+        await user.click(await screen.findByRole('button', { name: /Your support request.*has been updated to Resolved/ }));
+        expect(screen.getByTestId('path')).toHaveTextContent('/support-requests?request=request-1');
+    });
+});

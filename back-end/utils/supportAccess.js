@@ -54,5 +54,7 @@ export const publicSupportRequest = (request) => ({
     message: request.message,
     fullname: request.fullname,
     status: request.status,
+    ownerNotificationId: request.ownerNotificationId,
+    ownerNotificationRead: request.ownerNotificationRead,
     createdAt: request.createdAt,
 });

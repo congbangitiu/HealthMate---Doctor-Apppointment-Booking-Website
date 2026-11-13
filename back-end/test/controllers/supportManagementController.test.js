@@ -28,6 +28,23 @@ beforeEach(() => {
     User.findById.mockReturnValue({ select: vi.fn().mockReturnValue({ lean: vi.fn().mockResolvedValue({ fullname: 'Admin One' }) }) });
 });
 describe('support management', () => {
+    it('saves an owner notification atomically with a status change and emits only to its owner room', async () => {
+        const owned = { ...document, senderRole: 'doctor', senderId: adminId, category: 'technical' };
+        SupportRequest.findById.mockReturnValue({ lean: vi.fn().mockResolvedValue(owned) });
+        SupportRequest.findOneAndUpdate.mockImplementation((filter, update) => ({ lean: vi.fn().mockResolvedValue({ ...owned, ...update.$set }) }));
+        const io = { to: vi.fn().mockReturnThis(), emit: vi.fn() };
+        await call(updateSupportRequest, { body: { version: 0, status: 'resolved' }, io });
+        const changes = SupportRequest.findOneAndUpdate.mock.calls[0][1].$set;
+        expect(changes).toMatchObject({ status: 'resolved', ownerNotificationRead: false, ownerNotificationKind: 'status', ownerNotificationStatus: 'resolved' });
+        expect(io.to).toHaveBeenCalledWith('support:owner:doctor:' + adminId);
+        expect(io.emit).toHaveBeenCalledWith('owner-support-notification', expect.objectContaining({ type: 'support-update', supportStatus: 'resolved' }));
+    });
+    it('does not notify the sender about an internal note', async () => {
+        const io = { to: vi.fn().mockReturnThis(), emit: vi.fn() };
+        await call(updateSupportRequest, { body: { version: 0, note: 'Internal only' }, io });
+        expect(SupportRequest.findOneAndUpdate.mock.calls[0][1].$set.ownerNotificationId).toBeUndefined();
+        expect(io.emit.mock.calls.some(([event]) => event === 'owner-support-notification')).toBe(false);
+    });
     it('paginates and combines status, escaped search and inclusive Vietnam date filters', async () => {
         const res = await call(listSupportRequests, { query: { q: 'a+b', status: 'new', from: '2026-10-01', to: '2026-10-31', page: '2', limit: '10' } });
         const filter = SupportRequest.find.mock.calls[0][0];

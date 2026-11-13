@@ -1,3 +1,5 @@
+@use '../../styles/support' as support;
+
 .container {
     padding: 120px 120px 60px 120px;
     display: flex;
@@ -84,18 +86,8 @@
             margin-top: 30px;
 
             & .submit-btn {
-                padding: 10px 0;
+                @include support.primary-action;
                 width: 300px;
-                background: var(--buttonBgColor);
-                border-radius: 10px;
-                color: var(--whiteColor);
-                font-size: 18px;
-                font-weight: 500;
-
-                &:hover {
-                    cursor: pointer;
-                    opacity: 0.8;
-                }
             }
         }
     }
@@ -266,20 +258,19 @@
     }
 }
 
-.container > .support-link {
+.container form > .support-link {
+    display: block;
+    width: fit-content;
+    margin-inline: auto;
+    text-align: center;
     margin-top: 12px;
-    color: #187d70;
-    font-size: 14px;
+    color: var(--primaryColor);
+    font-size: 16px;
     text-decoration: underline;
     text-underline-offset: 3px;
 }
 .container form .success-notice .chat-link {
-    display: inline-flex;
+    @include support.primary-action;
     margin-top: 14px;
-    padding: 8px 12px;
-    border-radius: 6px;
-    background: #187d70;
-    color: white;
     font-size: 14px;
-    font-weight: 600;
 }

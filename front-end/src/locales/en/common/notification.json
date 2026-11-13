@@ -46,5 +46,7 @@
     "viewAll": "View all",
     "supportRequest": "{{name}} submitted a support request <bold>{{subject}}</bold> from <bold>{{date}}</bold> at <bold>{{time}}</bold>",
     "supportMessage": "{{name}} sent a new message for request <bold>{{subject}}</bold> from <bold>{{date}}</bold> at <bold>{{time}}</bold>",
-    "unread": "Unread"
+    "unread": "Unread",
+    "supportStatusUpdated": "Your support request <bold>{{subject}}</bold> has been updated to <bold>{{status}}</bold>.",
+    "supportReplyReceived": "You have a new message from the support team about <bold>{{subject}}</bold>."
 }

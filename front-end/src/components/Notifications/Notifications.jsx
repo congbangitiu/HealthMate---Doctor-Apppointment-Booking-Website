@@ -13,15 +13,20 @@ import { Trans, useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
-const Notifications = ({ notifications, role, handleCloseNotifications, loadError = false }) => {
+const Notifications = ({ notifications, role, handleCloseNotifications, loadError = false, onSupportRead }) => {
     const { t, i18n } = useTranslation('notification');
     const navigate = useNavigate();
     const { isMobile } = useResponsive();
     const [timeAgoMap, setTimeAgoMap] = useState({});
     const visibleNotifications = notifications.filter((item) => item.status !== 'done').slice(0, 6);
     const handleViewAll = () => {
-        navigate(role === 'admin' ? '/admins/management/support'
-            : role === 'doctor' ? '/doctors/profile/me?tab=appointments' : '/users/profile/me');
+        navigate(
+            role === 'admin'
+                ? '/admins/management/support'
+                : role === 'doctor'
+                ? '/doctors/profile/me?tab=appointments'
+                : '/users/profile/me',
+        );
         handleCloseNotifications();
     };
 
@@ -41,6 +46,12 @@ const Notifications = ({ notifications, role, handleCloseNotifications, loadErro
     }, [notifications, i18n, i18n.resolvedLanguage]);
 
     const handleMoveToPrescription = (notification) => {
+        if (notification.type === 'support-update') {
+            void onSupportRead?.(notification);
+            navigate('/support-requests?request=' + notification.requestId);
+            handleCloseNotifications();
+            return;
+        }
         if (role === 'admin') {
             navigate('/admins/management/support?request=' + notification.requestId);
             handleCloseNotifications();
@@ -58,19 +69,43 @@ const Notifications = ({ notifications, role, handleCloseNotifications, loadErro
     };
 
     const getNotificationMessage = (notification) => {
+        if (notification.type === 'support-update') {
+            const subject =
+                notification.category === 'other'
+                    ? notification.subject
+                    : t('contact:categories.' + notification.category);
+            return (
+                <p>
+                    <Trans
+                        t={t}
+                        i18nKey={notification.kind === 'status' ? 'supportStatusUpdated' : 'supportReplyReceived'}
+                        components={{ bold: <b /> }}
+                        values={{ subject, status: t('supportManagement:statuses.' + notification.supportStatus) }}
+                    />
+                </p>
+            );
+        }
         if (role === 'admin') {
-            const subject = notification.category === 'other'
-                ? notification.subject
-                : t('contact:categories.' + notification.category);
+            const subject =
+                notification.category === 'other'
+                    ? notification.subject
+                    : t('contact:categories.' + notification.category);
             const isVietnamese = i18n.resolvedLanguage?.startsWith('vi');
-            const name = (notification.senderRole === 'doctor' ? (isVietnamese ? 'BS. ' : 'Dr. ') : '') + notification.fullname;
+            const name =
+                (notification.senderRole === 'doctor' ? (isVietnamese ? 'BS. ' : 'Dr. ') : '') + notification.fullname;
             const submittedAt = new Date(notification.requestCreatedAt || notification.createdAt);
             const locale = isVietnamese ? 'vi-VN' : 'en-US';
             const date = submittedAt.toLocaleDateString(locale, {
-                day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Ho_Chi_Minh',
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+                timeZone: 'Asia/Ho_Chi_Minh',
             });
             const time = submittedAt.toLocaleTimeString(locale, {
-                hour: '2-digit', minute: '2-digit', hour12: locale === 'en-US', timeZone: 'Asia/Ho_Chi_Minh',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: locale === 'en-US',
+                timeZone: 'Asia/Ho_Chi_Minh',
             });
             return (
                 <p>
@@ -138,15 +173,19 @@ const Notifications = ({ notifications, role, handleCloseNotifications, loadErro
                 {t('title')}
             </header>
 
-            {loadError && <p className={cx('load-error')} role="alert">{t('supportRealtime:loadFailed')}</p>}
+            {loadError && (
+                <p className={cx('load-error')} role="alert">
+                    {t('supportRealtime:loadFailed')}
+                </p>
+            )}
             {visibleNotifications.length > 0 ? (
                 <div className={cx('notifications')}>
                     {visibleNotifications.map((notification) => (
                         <div
                             key={notification.id}
                             className={cx('notification', {
-                                'support-notification': role === 'admin',
-                                unread: role === 'admin' && !notification.isRead,
+                                'support-notification': role === 'admin' || notification.type === 'support-update',
+                                unread: notification.isRead === false,
                                 cancelledStatus: notification.status === 'cancelled',
                                 doneStatus: notification.status === 'done',
                             })}
@@ -162,10 +201,26 @@ const Notifications = ({ notifications, role, handleCloseNotifications, loadErro
                             onClick={() => handleMoveToPrescription(notification)}
                         >
                             <img
-                                src={(role === 'admin' ? (notification.senderRole === 'guest' ? null : notification.photo)
-                                    : role === 'doctor' ? notification.user?.photo : notification.doctor?.photo) || defaultAvatar}
-                                alt={role === 'admin' ? notification.fullname
-                                    : role === 'doctor' ? notification.user?.fullname : notification.doctor?.fullname}
+                                src={
+                                    (notification.type === 'support-update'
+                                        ? notification.photo
+                                        : role === 'admin'
+                                        ? notification.senderRole === 'guest'
+                                            ? null
+                                            : notification.photo
+                                        : role === 'doctor'
+                                        ? notification.user?.photo
+                                        : notification.doctor?.photo) || defaultAvatar
+                                }
+                                alt={
+                                    notification.type === 'support-update'
+                                        ? notification.actorName || t('supportRealtime:supportTeam')
+                                        : role === 'admin'
+                                        ? notification.fullname
+                                        : role === 'doctor'
+                                        ? notification.user?.fullname
+                                        : notification.doctor?.fullname
+                                }
                                 onError={(event) => {
                                     event.currentTarget.onerror = null;
                                     if (event.currentTarget.getAttribute('src') !== defaultAvatar)
@@ -176,7 +231,12 @@ const Notifications = ({ notifications, role, handleCloseNotifications, loadErro
                                 {getNotificationMessage(notification)}
                                 <p>
                                     {timeAgoMap[notification.id]}
-                                    {notification.isRead === false && <span>{' \u00b7 '}{t('unread')}</span>}
+                                    {notification.isRead === false && (
+                                        <span>
+                                            {' \u00b7 '}
+                                            {t('unread')}
+                                        </span>
+                                    )}
                                 </p>
                             </div>
                         </div>
@@ -187,15 +247,24 @@ const Notifications = ({ notifications, role, handleCloseNotifications, loadErro
                     <div>
                         <IoIosNotifications className={cx('icon')} />
                     </div>
-                    <p>{role === 'admin' ? t('supportRealtime:noNotifications') : role === 'doctor' ? t('emptyDescriptionDoctor') : t('emptyDescriptionPatient')}</p>
+                    <p>
+                        {role === 'admin'
+                            ? t('supportRealtime:noNotifications')
+                            : role === 'doctor'
+                            ? t('emptyDescriptionDoctor')
+                            : t('emptyDescriptionPatient')}
+                    </p>
                 </div>
             )}
-            <button type="button" className={cx('view-all')} onClick={handleViewAll}>{t('viewAll')}</button>
+            <button type="button" className={cx('view-all')} onClick={handleViewAll}>
+                {t('viewAll')}
+            </button>
         </div>
     );
 };
 
 Notifications.propTypes = {
+    onSupportRead: PropTypes.func,
     notifications: PropTypes.array.isRequired,
     loadError: PropTypes.bool,
     role: PropTypes.string.isRequired,

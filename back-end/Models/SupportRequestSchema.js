@@ -25,21 +25,32 @@ const schema = new mongoose.Schema(
         status: { type: String, enum: supportStatuses, default: 'new' },
         readBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
         assignee: {
-            type: new mongoose.Schema({
-                id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-                fullname: { type: String, required: true },
-            }, { _id: false }),
+            type: new mongoose.Schema(
+                {
+                    id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+                    fullname: { type: String, required: true },
+                },
+                { _id: false },
+            ),
             default: null,
         },
-        history: [{
-            type: { type: String, enum: ['status', 'note', 'claim', 'release'], required: true },
-            actorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-            actorName: { type: String, required: true },
-            at: { type: Date, required: true },
-            from: { type: String, enum: supportStatuses },
-            to: { type: String, enum: supportStatuses },
-            note: { type: String, maxlength: 2000 },
-        }],
+        history: [
+            {
+                type: { type: String, enum: ['status', 'note', 'claim', 'release'], required: true },
+                actorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+                actorName: { type: String, required: true },
+                at: { type: Date, required: true },
+                from: { type: String, enum: supportStatuses },
+                to: { type: String, enum: supportStatuses },
+                note: { type: String, maxlength: 2000 },
+            },
+        ],
+        ownerNotificationId: String,
+        ownerNotificationActorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        ownerNotificationAt: Date,
+        ownerNotificationKind: { type: String, enum: ['status', 'message'] },
+        ownerNotificationStatus: String,
+        ownerNotificationRead: { type: Boolean, default: true },
         guestAccessHash: { type: String, select: false },
         notificationAt: { type: Date, default: Date.now },
         notificationId: { type: String },
@@ -52,5 +63,6 @@ schema.index({ submissionIp: 1, createdAt: -1 });
 
 schema.index({ status: 1, createdAt: -1 });
 schema.index({ notificationAt: -1, createdAt: -1 });
+schema.index({ senderId: 1, senderRole: 1, ownerNotificationAt: -1 });
 
 export default mongoose.model('SupportRequest', schema);

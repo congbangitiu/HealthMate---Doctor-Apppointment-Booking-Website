@@ -23,4 +23,4 @@ API (all routes below require authentication and a database-confirmed admin role
 Public Contact submission remains POST /api/v1/contacts, protected by reCAPTCHA.
 Existing support requests are compatible; the new fields receive defaults and need no data migration.
 
-Admin bell notifications and support conversation are implemented; see support-realtime.md. User bell notifications on status changes remain a separate step.
+Admin bell notifications and support conversation are implemented; see support-realtime.md. Signed-in patient and doctor senders also receive bell notifications for status changes and admin replies. Guest notifications remain a separate step.

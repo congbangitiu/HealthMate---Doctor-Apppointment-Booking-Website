@@ -1,7 +1,15 @@
+import SupportMessage from '../../Models/SupportMessageSchema.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import User from '../../Models/UserSchema.js';
 import Doctor from '../../Models/DoctorSchema.js';
-import { emitSupportNotification, supportNotification, withSupportSenderPhotos } from '../../utils/supportRealtime.js';
+import {
+    emitSupportNotification,
+    supportNotification,
+    withSupportSenderPhotos,
+    withOwnerSupportActors,
+    ownerSupportNotification,
+} from '../../utils/supportRealtime.js';
+vi.mock('../../Models/SupportMessageSchema.js', () => ({ default: { find: vi.fn() } }));
 vi.mock('../../Models/UserSchema.js', () => ({ default: { find: vi.fn() } }));
 vi.mock('../../Models/DoctorSchema.js', () => ({ default: { find: vi.fn() } }));
 const query = (rows) => ({ select: vi.fn().mockReturnValue({ lean: vi.fn().mockResolvedValue(rows) }) });
@@ -10,6 +18,25 @@ beforeEach(() => {
     Doctor.find.mockReturnValue(query([{ _id: 'd1', photo: '/doctor.png' }]));
 });
 describe('support notification sender presentation', () => {
+    it('uses the actual admin avatar for current and previously saved status/reply notifications', async () => {
+        User.find.mockReturnValue(query([{ _id: 'admin-1', fullname: 'Admin One', photo: '/admin.png' }]));
+        SupportMessage.find.mockReturnValue(query([{ _id: '507f1f77bcf86cd799439011', senderId: 'admin-1' }]));
+        const rows = await withOwnerSupportActors([
+            { _id: 'r1', ownerNotificationActorId: 'admin-1' },
+            {
+                _id: 'r2',
+                ownerNotificationKind: 'status',
+                history: [
+                    { type: 'note', actorId: 'someone' },
+                    { type: 'status', actorId: 'admin-1' },
+                ],
+            },
+            { _id: 'r3', ownerNotificationKind: 'message', ownerNotificationId: 'message:507f1f77bcf86cd799439011' },
+        ]);
+        for (const row of rows)
+            expect(ownerSupportNotification(row)).toMatchObject({ photo: '/admin.png', actorName: 'Admin One' });
+        expect(User.find).toHaveBeenCalledWith({ _id: { $in: ['admin-1'] }, role: 'admin' });
+    });
     it('resolves photos by account role in batches and excludes private account information', async () => {
         const rows = await withSupportSenderPhotos([
             { _id: 'r1', senderId: 'u1', senderRole: 'patient', fullname: 'Edited name' },
@@ -23,9 +50,14 @@ describe('support notification sender presentation', () => {
         expect(Doctor.find).toHaveBeenCalledTimes(1);
     });
     it('still emits after an avatar lookup fails', async () => {
-        Doctor.find.mockImplementation(() => { throw new Error('unavailable'); });
+        Doctor.find.mockImplementation(() => {
+            throw new Error('unavailable');
+        });
         const io = { to: vi.fn().mockReturnThis(), emit: vi.fn() };
         await emitSupportNotification(io, { _id: 'r1', senderId: 'd1', senderRole: 'doctor', createdAt: 'date' });
-        expect(io.emit).toHaveBeenCalledWith('support-notification', expect.objectContaining({ photo: '', senderRole: 'doctor', requestCreatedAt: 'date' }));
+        expect(io.emit).toHaveBeenCalledWith(
+            'support-notification',
+            expect.objectContaining({ photo: '', senderRole: 'doctor', requestCreatedAt: 'date' }),
+        );
     });
 });

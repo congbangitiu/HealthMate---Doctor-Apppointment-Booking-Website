@@ -1,0 +1,66 @@
+// Support views use the existing site palette and the same action/field treatment.
+@mixin primary-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 6px;
+    background: var(--buttonBgColor);
+    color: var(--whiteColor);
+    font: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover:not(:disabled) { opacity: 0.8; }
+    &:disabled { opacity: 0.5; cursor: not-allowed; }
+    &:focus-visible { outline: 2px solid var(--irisBlueColor); outline-offset: 3px; }
+}
+
+@mixin field {
+    min-width: 0;
+    max-width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--lightGrayColor);
+    border-radius: 5px;
+    background: var(--whiteColor);
+    color: var(--textColor);
+    font: inherit;
+    font-size: 16px;
+
+    &:focus { outline: none; border-color: var(--primaryColor); }
+    &:focus-visible { outline: 2px solid var(--irisBlueColor); outline-offset: 2px; }
+}
+
+// Match the status colors used in SupportManagement.
+@mixin status-text {
+    --support-status-color: #314663;
+    &[data-status='in-progress'] { --support-status-color: #795500; }
+    &[data-status='resolved'] { --support-status-color: #226642; }
+    &[data-status='spam'] { --support-status-color: #922c2c; }
+    color: var(--support-status-color);
+}
+
+@mixin status-badge {
+    @include status-text;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 4px 14px;
+    border-radius: 50px;
+    background: #e8eef5;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    white-space: nowrap;
+
+    &[data-status='in-progress'] { background: #fff1ce; }
+    &[data-status='resolved'] { background: #dbf4e7; }
+    &[data-status='spam'] { background: #fce4e4; }
+}

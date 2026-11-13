@@ -52,6 +52,67 @@ beforeEach(() => {
     );
 });
 describe('support chat', () => {
+    it('does not silently mark a new realtime update read during background conversation sync', async () => {
+        let notificationId = 'status:old';
+        fetch.mockImplementation(async (url) => ({
+            ok: true,
+            json: async () =>
+                url.endsWith('/read')
+                    ? { success: true }
+                    : {
+                          data: {
+                              request: {
+                                  _id: 'request-1',
+                                  ownerNotificationId: notificationId,
+                                  ownerNotificationRead: false,
+                              },
+                              messages: [],
+                              hasMore: false,
+                              viewer: { role: 'patient', id: 'owner' },
+                          },
+                      },
+        }));
+        render(<SupportChat requestId="request-1" token="owner-token" />);
+        await waitFor(() => expect(fetch.mock.calls.some(([url]) => url.endsWith('/read'))).toBe(true));
+        notificationId = 'status:new';
+        await act(async () => {
+            for (const handler of channel.handlers.get('support-chat-changed')) handler({ requestId: 'request-1' });
+        });
+        expect(fetch.mock.calls.filter(([url]) => url.endsWith('/read'))).toHaveLength(1);
+    });
+    it.each(['patient', 'doctor'])(
+        'marks the exact update read after its %s owner loads the conversation',
+        async (role) => {
+            fetch.mockImplementation(async (url) => ({
+                ok: true,
+                json: async () =>
+                    url.endsWith('/read')
+                        ? { success: true }
+                        : {
+                              data: {
+                                  request: {
+                                      _id: 'request-1',
+                                      ownerNotificationId: 'status:seen',
+                                      ownerNotificationRead: false,
+                                  },
+                                  messages: [],
+                                  hasMore: false,
+                                  viewer: { role, id: 'owner' },
+                              },
+                          },
+            }));
+            render(<SupportChat requestId="request-1" token="owner-token" />);
+            await waitFor(() =>
+                expect(fetch).toHaveBeenCalledWith(
+                    '/api/v1/contacts/my-notifications/read',
+                    expect.objectContaining({
+                        method: 'POST',
+                        body: JSON.stringify({ requestId: 'request-1', notificationId: 'status:seen' }),
+                    }),
+                ),
+            );
+        },
+    );
     it('loads every page of a missed-message backlog after reconnect', async () => {
         const make = (id, content) => ({
             _id: id,
