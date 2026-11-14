@@ -26,6 +26,7 @@ describe('sender support request entry point', () => {
         const card = await screen.findByRole('button', { name: /contact:categories.technical/ });
         expect(screen.queryByRole('region', { name: 'requestDetails' })).not.toBeInTheDocument();
         expect(card).toHaveTextContent('I need help with my appointment.');
+        expect(card).toHaveTextContent('#' + id);
         expect(fetch.mock.calls.some(([url]) => url.includes('/conversation'))).toBe(false);
         fireEvent.click(card);
         expect(window.scrollTo).toHaveBeenCalledWith(expect.objectContaining({ top: 0 }));
@@ -46,8 +47,14 @@ describe('sender support request entry point', () => {
         expect(screen.queryByText('chat:' + id)).not.toBeInTheDocument();
     });
     it('opens an owning account conversation with the bearer token', async () => {
+        const writeText = vi.fn().mockResolvedValue(undefined);
+        Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
         mount('owner-token');
         expect(await screen.findByText('chat:' + id)).toBeInTheDocument();
+        expect(screen.getAllByText('#' + id)).toHaveLength(2);
+        fireEvent.click(screen.getByRole('button', { name: 'supportManagement:copyId' }));
+        await waitFor(() => expect(screen.getByRole('button', { name: 'supportManagement:copied' })).toBeInTheDocument());
+        expect(writeText).toHaveBeenCalledWith(id);
         expect(fetch).toHaveBeenCalledWith('/api/v1/contacts/mine', expect.objectContaining({ headers: { Authorization: 'Bearer owner-token' } }));
     });
     it('sends guest access in a header and never in a URL', async () => {

@@ -46,12 +46,31 @@ describe('shared notification popup', () => {
             },
         ]);
         const notice = screen.getByRole('button', {
-            name: /Your support request Payment issue has been updated to Resolved/,
+            name: /Your support request #r1 has been updated to Resolved/,
         });
         expect(notice).toHaveTextContent('Unread');
         expect(screen.getByRole('img', { name: 'Admin One' })).toHaveAttribute('src', '/admin.png');
         await userEvent.click(notice);
         expect(screen.getByTestId('path')).toHaveTextContent('/support-requests?request=r1');
+    });
+    it.each([
+        ['en', 'admin', undefined, 'message'],
+        ['vi', 'admin', undefined, 'message'],
+        ['en', 'patient', 'support-update', 'status'],
+        ['vi', 'patient', 'support-update', 'status'],
+        ['en', 'doctor', 'support-update', 'status'],
+        ['vi', 'doctor', 'support-update', 'status'],
+        ['en', 'patient', 'support-update', 'message'],
+        ['vi', 'doctor', 'support-update', 'message'],
+    ])('shows the request ID instead of its subject for %s %s %s %s', async (language, role, type, kind) => {
+        await i18n.changeLanguage(language);
+        mount(role, [{ ...request, type, kind, supportStatus: 'resolved' }]);
+        expect(screen.getByText('#r1')).toBeInTheDocument();
+        expect(screen.queryByText('Payment issue')).not.toBeInTheDocument();
+        await userEvent.click(screen.getByText('#r1'));
+        expect(screen.getByTestId('path')).toHaveTextContent(
+            role === 'admin' ? '/admins/management/support?request=r1' : '/support-requests?request=r1',
+        );
     });
     it('shows the requester avatar, doctor prefix and original submission date in Vietnam time', () => {
         mount('admin');

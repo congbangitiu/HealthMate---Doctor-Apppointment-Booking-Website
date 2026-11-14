@@ -1,9 +1,15 @@
+import User from '../../Models/UserSchema.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import SupportRequest from '../../Models/SupportRequestSchema.js';
 import SupportMessage from '../../Models/SupportMessageSchema.js';
 import { getSupportAccess, getSupportAccount } from '../../utils/supportAccess.js';
-import { getSupportConversation, sendSupportMessage, ownSupportRequests } from '../../Controllers/supportConversationController.js';
+import {
+    getSupportConversation,
+    sendSupportMessage,
+    ownSupportRequests,
+} from '../../Controllers/supportConversationController.js';
 
+vi.mock('../../Models/UserSchema.js', () => ({ default: { findOne: vi.fn(), find: vi.fn() } }));
 vi.mock('../../Models/SupportRequestSchema.js', () => ({ default: { findByIdAndUpdate: vi.fn(), find: vi.fn() } }));
 vi.mock('../../Models/SupportMessageSchema.js', () => ({
     default: { find: vi.fn(), findOne: vi.fn(), create: vi.fn(), countDocuments: vi.fn() },
@@ -50,6 +56,13 @@ const call = async (handler, overrides = {}) => {
     return res;
 };
 beforeEach(() => {
+    User.findOne.mockReturnValue({ select: vi.fn().mockReturnValue({ lean: vi.fn().mockResolvedValue(null) }) });
+    User.find.mockReturnValue({ select: vi.fn().mockReturnValue({ lean: vi.fn().mockResolvedValue([]) }) });
+    SupportMessage.find.mockReturnValue({
+        sort: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockReturnThis(),
+        lean: vi.fn().mockResolvedValue([]),
+    });
     io = { to: vi.fn().mockReturnThis(), emit: vi.fn() };
     getSupportAccess.mockResolvedValue({
         request,
@@ -66,10 +79,71 @@ beforeEach(() => {
     });
 });
 describe('support conversations', () => {
+    it('returns the requester name and account avatar to admins without exposing private profile data', async () => {
+        getSupportAccess.mockResolvedValue({
+            request: { ...request, senderId: 'owner', senderRole: 'patient' },
+            account: { id: 'admin', role: 'admin' },
+        });
+        User.find.mockReturnValue({
+            select: vi
+                .fn()
+                .mockReturnValue({
+                    lean: vi.fn().mockResolvedValue([{ _id: 'owner', photo: '/owner.png', email: 'private' }]),
+                }),
+        });
+        const res = await call(getSupportConversation);
+        expect(res.json.mock.calls[0][0].data.request.requester).toEqual({ fullname: 'Patient', photo: '/owner.png' });
+    });
+    it('returns a guest requester name without borrowing another account avatar', async () => {
+        getSupportAccess.mockResolvedValue({
+            request: { ...request, senderRole: 'guest' },
+            account: { id: 'admin', role: 'admin' },
+        });
+        const res = await call(getSupportConversation);
+        expect(res.json.mock.calls[0][0].data.request.requester).toEqual({ fullname: 'Patient', photo: '' });
+        expect(User.find).not.toHaveBeenCalled();
+    });
+    it('returns only the assigned admin public name/photo, not the last sender or private profile fields', async () => {
+        getSupportAccess.mockResolvedValue({
+            request: { ...request, assignee: { id: 'assigned-admin', fullname: 'Old name' } },
+            account: { id: 'owner', role: 'patient' },
+        });
+        User.findOne.mockReturnValue({
+            select: vi
+                .fn()
+                .mockReturnValue({
+                    lean: vi
+                        .fn()
+                        .mockResolvedValue({
+                            _id: 'assigned-admin',
+                            fullname: 'Current admin',
+                            photo: '/admin.png',
+                            email: 'private',
+                            password: 'private',
+                        }),
+                }),
+        });
+        const res = await call(getSupportConversation);
+        expect(User.findOne).toHaveBeenCalledWith({ _id: 'assigned-admin', role: 'admin' });
+        expect(res.json.mock.calls[0][0].data.request.assignee).toEqual({
+            id: 'assigned-admin',
+            fullname: 'Current admin',
+            photo: '/admin.png',
+        });
+    });
+    it('returns an unassigned conversation without looking up an arbitrary admin', async () => {
+        const res = await call(getSupportConversation);
+        expect(User.findOne).not.toHaveBeenCalled();
+        expect(res.json.mock.calls[0][0].data.request.assignee).toBeNull();
+    });
     it('returns a bounded plain-text preview only for the authenticated account list', async () => {
         getSupportAccount.mockResolvedValue({ id: 'owner', role: 'patient' });
-        const chain = { select: vi.fn().mockReturnThis(), sort: vi.fn().mockReturnThis(), limit: vi.fn().mockReturnThis(),
-            lean: vi.fn().mockResolvedValue([{ _id: id, message: 'Help\n\n with   booking ' + 'x'.repeat(300) }]) };
+        const chain = {
+            select: vi.fn().mockReturnThis(),
+            sort: vi.fn().mockReturnThis(),
+            limit: vi.fn().mockReturnThis(),
+            lean: vi.fn().mockResolvedValue([{ _id: id, message: 'Help\n\n with   booking ' + 'x'.repeat(300) }]),
+        };
         SupportRequest.find.mockReturnValue(chain);
         const res = await call(ownSupportRequests);
         expect(SupportRequest.find).toHaveBeenCalledWith({ senderId: 'owner', senderRole: 'patient' });
@@ -80,12 +154,21 @@ describe('support conversations', () => {
     });
     it.each(['patient', 'doctor'])('notifies the %s request owner after persisting an admin reply', async (role) => {
         const owned = { ...request, senderId: 'owner', senderRole: role };
-        getSupportAccess.mockResolvedValue({ request: owned, account: { id: 'admin', role: 'admin', fullname: 'Admin' }, senderKey: 'admin:admin' });
-        SupportRequest.findByIdAndUpdate.mockImplementation((id, update) => ({ lean: vi.fn().mockResolvedValue({ ...owned, ...update.$set }) }));
+        getSupportAccess.mockResolvedValue({
+            request: owned,
+            account: { id: 'admin', role: 'admin', fullname: 'Admin' },
+            senderKey: 'admin:admin',
+        });
+        SupportRequest.findByIdAndUpdate.mockImplementation((id, update) => ({
+            lean: vi.fn().mockResolvedValue({ ...owned, ...update.$set }),
+        }));
         const res = await call(sendSupportMessage);
         expect(res.status).toHaveBeenCalledWith(201);
         expect(io.to).toHaveBeenCalledWith('support:owner:' + role + ':owner');
-        expect(io.emit).toHaveBeenCalledWith('owner-support-notification', expect.objectContaining({ kind: 'message', isRead: false }));
+        expect(io.emit).toHaveBeenCalledWith(
+            'owner-support-notification',
+            expect.objectContaining({ kind: 'message', isRead: false }),
+        );
         expect(io.to).not.toHaveBeenCalledWith('support:admins');
     });
     it('fetches missed messages after the last received ID in ascending order', async () => {

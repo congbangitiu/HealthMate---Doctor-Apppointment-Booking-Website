@@ -88,7 +88,7 @@ beforeEach(() => {
     );
 });
 const open = async () => {
-    fireEvent.click(await screen.findByRole('row', { name: 'viewRequest ' + id }));
+    fireEvent.click(await screen.findByRole('row', { name: 'viewRequest #' + id }));
     const dialog = await screen.findByRole('dialog');
     await within(dialog).findByText('My issue details');
     return within(dialog);
@@ -96,7 +96,7 @@ const open = async () => {
 describe('SupportManagement', () => {
     it('does not periodically reload the table but still refreshes on realtime events', async () => {
         mount();
-        await screen.findByRole('row', { name: 'viewRequest ' + id });
+        await screen.findByRole('row', { name: 'viewRequest #' + id });
         const before = fetch.mock.calls.length;
         vi.useFakeTimers();
         try {
@@ -119,7 +119,7 @@ describe('SupportManagement', () => {
         try {
             mount();
             const modal = await open();
-            expect(modal.getByText(id)).toBeInTheDocument();
+            expect(modal.getByText('#' + id)).toBeInTheDocument();
             fireEvent.click(modal.getByRole('button', { name: 'copyId' }));
             expect(writeText).toHaveBeenCalledWith(id);
             if (fails) expect(await modal.findByRole('alert')).toHaveTextContent('copyFailed');
@@ -137,7 +137,7 @@ describe('SupportManagement', () => {
     it.each([5, 10, 11])('only shows pagination when total %s exceeds the selected page size', async (count) => {
         total = count;
         mount();
-        await screen.findByRole('row', { name: 'viewRequest ' + id });
+        await screen.findByRole('row', { name: 'viewRequest #' + id });
         if (count > 10) expect(screen.getByText('next')).toBeInTheDocument();
         else expect(screen.queryByText('next')).not.toBeInTheDocument();
     });
@@ -146,7 +146,7 @@ describe('SupportManagement', () => {
         mount();
         fireEvent.click(await screen.findByText('next'));
         await waitFor(() => expect(fetch.mock.calls.some(([url]) => url.includes('page=2'))).toBe(true));
-        await screen.findByRole('row', { name: 'viewRequest ' + id });
+        await screen.findByRole('row', { name: 'viewRequest #' + id });
         fireEvent.keyDown(screen.getByLabelText('requestsPerPage'), { key: 'ArrowDown' });
         fireEvent.click(await screen.findByText('20'));
         await waitFor(() =>
@@ -157,7 +157,7 @@ describe('SupportManagement', () => {
                 }),
             ).toBe(true),
         );
-        await screen.findByRole('row', { name: 'viewRequest ' + id });
+        await screen.findByRole('row', { name: 'viewRequest #' + id });
         expect(screen.queryByText('next')).not.toBeInTheDocument();
         fireEvent.keyDown(screen.getByLabelText('requestsPerPage'), { key: 'ArrowDown' });
         fireEvent.click(await screen.findByText('5'));
@@ -174,16 +174,16 @@ describe('SupportManagement', () => {
         language.current = locale;
         request = { ...request, createdAt: '2026-11-03T02:00:00.000Z' };
         mount();
-        const row = await screen.findByRole('row', { name: 'viewRequest ' + id });
+        const row = await screen.findByRole('row', { name: 'viewRequest #' + id });
         expect(within(row).getByText(day)).toBeInTheDocument();
         expect(within(row).getByText(time)).toBeInTheDocument();
     });
 
     it.each(['Enter', ' '])('opens a request row using the %s key', async (key) => {
         mount();
-        const row = await screen.findByRole('row', { name: 'viewRequest ' + id });
+        const row = await screen.findByRole('row', { name: 'viewRequest #' + id });
         expect(screen.getAllByRole('columnheader')).toHaveLength(5);
-        expect(within(row).getByText('#' + id).parentElement).toHaveAttribute('title', id);
+        expect(within(row).getByText('#' + id).parentElement).toHaveAttribute('title', '#' + id);
         expect(within(row).getByText(initial.email)).toHaveAttribute('title', initial.email);
         row.focus();
         fireEvent.keyDown(row, { key });
@@ -238,7 +238,7 @@ describe('SupportManagement', () => {
     it('sends date filters and uses server pagination', async () => {
         total = 25;
         mount();
-        await screen.findByRole('row', { name: 'viewRequest ' + id });
+        await screen.findByRole('row', { name: 'viewRequest #' + id });
         fireEvent.change(screen.getByLabelText('from'), { target: { value: '2026-10-01' } });
         await waitFor(() => expect(fetch.mock.calls.some(([url]) => url.includes('from=2026-10-01'))).toBe(true));
         await screen.findByText('next');
@@ -250,6 +250,6 @@ describe('SupportManagement', () => {
         mount();
         expect(await screen.findByRole('alert')).toHaveTextContent('errors.loadFailed');
         fireEvent.click(screen.getByRole('button', { name: 'refresh' }));
-        expect(await screen.findByRole('row', { name: 'viewRequest ' + id })).toBeInTheDocument();
+        expect(await screen.findByRole('row', { name: 'viewRequest #' + id })).toBeInTheDocument();
     });
 });

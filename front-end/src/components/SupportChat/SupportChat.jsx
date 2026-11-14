@@ -1,14 +1,14 @@
+import ContentChat from '../ContentChat/ContentChat';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
 import { BASE_URL } from '../../../config';
 import socket from '../../utils/services/socket';
-import styles from './SupportChat.module.scss';
 
-const SupportChat = ({ requestId, token, guestToken, onRequestChange, embedded = false }) => {
-    const { t, i18n } = useTranslation('supportRealtime');
+const SupportChat = ({ requestId, token, guestToken, onRequestChange }) => {
     const [messages, setMessages] = useState([]);
     const [viewer, setViewer] = useState(null);
+    const [assignee, setAssignee] = useState(null);
+    const [requester, setRequester] = useState(null);
     const [loading, setLoading] = useState(true);
     const [hasMore, setHasMore] = useState(false);
     const [olderLoading, setOlderLoading] = useState(false);
@@ -22,6 +22,12 @@ const SupportChat = ({ requestId, token, guestToken, onRequestChange, embedded =
     const activeId = useRef(requestId);
     activeId.current = requestId;
     const bottom = useRef(null);
+    const composer = useRef(null);
+    useEffect(() => {
+        if (!composer.current) return;
+        composer.current.style.height = 'auto';
+        composer.current.style.height = Math.min(composer.current.scrollHeight, 144) + 'px';
+    }, [draft]);
     const headers = useCallback(
         () => ({
             'Content-Type': 'application/json',
@@ -51,6 +57,8 @@ const SupportChat = ({ requestId, token, guestToken, onRequestChange, embedded =
         let controller;
         setMessages([]);
         setViewer(null);
+        setAssignee(null);
+        setRequester(null);
         setError('');
         setLoading(true);
         setConnected(false);
@@ -75,6 +83,8 @@ const SupportChat = ({ requestId, token, guestToken, onRequestChange, embedded =
                         ),
                     );
                     setViewer(result.viewer);
+                    setAssignee(result.request.assignee || null);
+                    setRequester(result.request.requester || { fullname: result.request.fullname });
                     if (openedNotificationId === undefined)
                         openedNotificationId = result.request.ownerNotificationId || null;
                     seenRequest = result.request;
@@ -220,74 +230,31 @@ const SupportChat = ({ requestId, token, guestToken, onRequestChange, embedded =
         }
     };
     return (
-        <section className={[styles.container, embedded ? styles.embedded : ''].join(' ')} aria-label={t('chat')}>
-            <div className={styles.heading}>
-                <h3>{t('chat')}</h3>
-                <span>{t(connected ? 'connected' : 'reconnecting')}</span>
-            </div>
-            {loading && <p role="status">{t('loading')}</p>}
-            {hasMore && (
-                <button type="button" onClick={older} disabled={olderLoading}>
-                    {t('older')}
-                </button>
-            )}
-            <div className={styles.messages} role="log" aria-label={t('messages')} aria-live="polite">
-                {!loading && !messages.length && <p className={styles.empty}>{t('chatEmpty')}</p>}
-                {messages.map((item) => {
-                    const own = viewer?.role === 'admin' ? item.senderId === viewer.id : item.senderRole !== 'admin';
-                    return (
-                        <article key={item._id} className={own ? styles.own : styles.received}>
-                            <small>
-                                {item.senderRole === 'admin' ? t('supportTeam') + ' · ' : ''}
-                                {item.senderName}
-                            </small>
-                            <p>{item.content}</p>
-                            <time dateTime={item.createdAt}>
-                                {new Date(item.createdAt).toLocaleString(
-                                    i18n.language?.startsWith('vi') ? 'vi-VN' : 'en-US',
-                                    {
-                                        timeZone: 'Asia/Ho_Chi_Minh',
-                                        month: 'short',
-                                        day: 'numeric',
-                                        hour: '2-digit',
-                                        minute: '2-digit',
-                                    },
-                                )}
-                            </time>
-                        </article>
-                    );
-                })}
-                <div ref={bottom} />
-            </div>
-            {error && (
-                <p role="alert" className={styles.error}>
-                    {t(['forbidden', 'rateLimited', 'sendFailed'].includes(error) ? error : 'chatFailed')}{' '}
-                    <button type="button" onClick={() => setRetry((n) => n + 1)}>
-                        {t('retry')}
-                    </button>
-                </p>
-            )}
-            <form onSubmit={send}>
-                <label htmlFor={'support-chat-' + requestId}>{t('messageLabel')}</label>
-                <textarea
-                    id={'support-chat-' + requestId}
-                    value={draft}
-                    onChange={(event) => setDraft(event.target.value)}
-                    disabled={sending || !viewer}
-                    maxLength={3000}
-                    rows={3}
-                    required
-                    placeholder={t('messagePlaceholder')}
-                />
-                <button type="submit" disabled={sending || !viewer || !draft.trim()}>
-                    {t(sending ? 'sending' : 'send')}
-                </button>
-            </form>
-        </section>
+        <ContentChat
+            support={{
+                requestId,
+                messages,
+                viewer,
+                assignee,
+                requester,
+                loading,
+                connected,
+                hasMore,
+                olderLoading,
+                onLoadOlder: older,
+                draft,
+                onDraftChange: setDraft,
+                sending,
+                error,
+                onRetry: () => setRetry((n) => n + 1),
+                onSend: send,
+                bottomRef: bottom,
+                composerRef: composer,
+            }}
+        />
     );
 };
 SupportChat.propTypes = {
-    embedded: PropTypes.bool,
     onRequestChange: PropTypes.func,
     requestId: PropTypes.string.isRequired,
     token: PropTypes.string,

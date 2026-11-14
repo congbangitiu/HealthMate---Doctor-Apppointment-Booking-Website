@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { authContext } from '../../context/AuthContext';
 import { BASE_URL } from '../../../config';
 import { getGuestRequests, guestTokenFor } from '../../utils/services/supportRequests';
-import { FiArrowLeft, FiArrowUpRight, FiMessageSquare } from 'react-icons/fi';
+import { FiArrowLeft, FiArrowUpRight, FiCheck, FiClock, FiCopy, FiMessageSquare } from 'react-icons/fi';
 import { FaHeadset } from 'react-icons/fa';
 import Loader from '../../components/Loader/Loader';
 import SupportChat from '../../components/SupportChat/SupportChat';
@@ -24,6 +24,17 @@ const SupportRequests = () => {
     const [listLoading, setListLoading] = useState(Boolean(token));
     const [listError, setListError] = useState(false);
     const [detailError, setDetailError] = useState(false);
+    const [copyStatus, setCopyStatus] = useState('');
+    useEffect(() => { setCopyStatus(''); }, [selectedId]);
+    const copyRequestId = async () => {
+        const id = selectedId;
+        try {
+            await navigator.clipboard.writeText(id);
+            if (previousSelected.current === id) setCopyStatus('copied');
+        } catch {
+            if (previousSelected.current === id) setCopyStatus('copyFailed');
+        }
+    };
     const detailHeading = useRef(null);
     const requestButtons = useRef(new Map());
     const previousSelected = useRef('');
@@ -176,7 +187,7 @@ const SupportRequests = () => {
                                     </span>
                                     {item.ownerNotificationRead === false && <span className={styles.unread}>{t('unread')}</span>}
                                 </span>
-                                <span className={styles.requestId}>{item._id}</span>
+                                <span className={styles.requestId}>#{item._id}</span>
                                 {item.preview && <span className={styles.preview}>{item.preview}</span>}
                                 <span className={styles.cardFooter}>
                                     <span className={styles.cardDate}>
@@ -198,9 +209,17 @@ const SupportRequests = () => {
                                             {statusBadge(selectedDetail.status)}
                                         </div>
                                         <div className={styles.issueMeta}>
-                                            <span>{t('supportManagement:id')}: {selectedDetail._id}</span>
-                                            {selectedDetail.createdAt && <span><time dateTime={selectedDetail.createdAt}>{formatDate(selectedDetail.createdAt)}</time></span>}
+                                            <span className={styles.reference}>
+                                                <span>{t('supportManagement:id')}: <span className={styles.idValue}>#{selectedDetail._id}</span></span>
+                                                <button type="button" className={styles.copyButton} onClick={copyRequestId}
+                                                    aria-label={t('supportManagement:' + (copyStatus === 'copied' ? 'copied' : 'copyId'))}
+                                                    title={t('supportManagement:' + (copyStatus === 'copied' ? 'copied' : 'copyId'))}>
+                                                    {copyStatus === 'copied' ? <FiCheck aria-hidden="true" /> : <FiCopy aria-hidden="true" />}
+                                                </button>
+                                            </span>
+                                            {selectedDetail.createdAt && <span className={styles.detailDate}><FiClock aria-hidden="true" /><time dateTime={selectedDetail.createdAt}>{formatDate(selectedDetail.createdAt)}</time></span>}
                                         </div>
+                                        {copyStatus === 'copyFailed' && <p role="alert" className={styles.error}>{t('supportManagement:copyFailed')}</p>}
                                         <div className={styles.issueBody}>
                                             <h4>{t('supportManagement:message')}</h4>
                                             <p>{selectedDetail.message}</p>
@@ -208,7 +227,7 @@ const SupportRequests = () => {
                                     </div>
                                     <SupportChat
                                         key={selectedId + ':' + conversationVisit}
-                                        requestId={selectedId} token={token || undefined} guestToken={guestToken} embedded
+                                        requestId={selectedId} token={token || undefined} guestToken={guestToken}
                                         onRequestChange={setDetail}
                                     />
                                 </>

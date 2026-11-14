@@ -1,7 +1,7 @@
 import socket from '../../../utils/services/socket';
 import SupportChat from '../../../components/SupportChat/SupportChat';
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { forwardRef, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Slide, useMediaQuery } from '@mui/material';
 import { FiCheck, FiCopy, FiX } from 'react-icons/fi';
 import Select from 'react-select';
 import { useSearchParams } from 'react-router-dom';
@@ -15,6 +15,9 @@ import AdminSearch from '../AdminSearch/AdminSearch';
 import { getSelectionStyles } from '../../../components/Selections/selectStyles';
 import styles from './SupportManagement.module.scss';
 
+const MobileDialogTransition = forwardRef(function MobileDialogTransition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 const cx = classNames.bind(styles);
 const statuses = ['new', 'in-progress', 'resolved', 'spam'];
 const selectionStyles = getSelectionStyles('100%');
@@ -29,6 +32,8 @@ const detailSelectionStyles = {
 };
 
 const SupportManagement = () => {
+    const isMobileDialog = useMediaQuery('(max-width:768px)');
+    const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
     const { t, i18n } = useTranslation('supportManagement');
     const { token, user } = useContext(authContext);
     const [searchParams, setSearchParams] = useSearchParams();
@@ -359,7 +364,7 @@ const SupportManagement = () => {
                                             key={item._id}
                                             className={cx('request-row', { unread: !item.isRead })}
                                             tabIndex={0}
-                                            aria-label={t('viewRequest', { id: item._id })}
+                                            aria-label={t('viewRequest', { id: '#' + item._id })}
                                             onClick={() => selectRequest(item._id)}
                                             onKeyDown={(event) => {
                                                 if (event.key === 'Enter' || event.key === ' ') {
@@ -385,7 +390,7 @@ const SupportManagement = () => {
                                                         {subject}
                                                     </span>
                                                 </div>
-                                                <span className={cx('request-meta')} title={item._id}>
+                                                <span className={cx('request-meta')} title={'#' + item._id}>
                                                     <span>#{item._id}</span>
                                                     {!item.isRead && (
                                                         <>
@@ -438,6 +443,9 @@ const SupportManagement = () => {
                 open={Boolean(selectedId)}
                 onClose={() => !saving && selectRequest('')}
                 fullWidth
+                fullScreen={isMobileDialog}
+                TransitionComponent={isMobileDialog ? MobileDialogTransition : undefined}
+                transitionDuration={reduceMotion ? 0 : undefined}
                 maxWidth="md"
                 PaperProps={{ className: cx('dialog-paper') }}
                 aria-labelledby="support-dialog-title"
@@ -468,7 +476,7 @@ const SupportManagement = () => {
                                         </div>
                                         <div className={cx('summary-reference')}>
                                             <span>{t('id')}:</span>
-                                            <span className={cx('full-request-id')}>{detail._id}</span>
+                                            <span className={cx('full-request-id')}>#{detail._id}</span>
                                             <button
                                                 type="button"
                                                 className={cx('copy-id')}

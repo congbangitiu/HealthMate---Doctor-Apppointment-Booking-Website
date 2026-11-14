@@ -70,17 +70,16 @@ const Notifications = ({ notifications, role, handleCloseNotifications, loadErro
 
     const getNotificationMessage = (notification) => {
         if (notification.type === 'support-update') {
-            const subject =
-                notification.category === 'other'
-                    ? notification.subject
-                    : t('contact:categories.' + notification.category);
             return (
                 <p>
                     <Trans
                         t={t}
                         i18nKey={notification.kind === 'status' ? 'supportStatusUpdated' : 'supportReplyReceived'}
                         components={{ bold: <b /> }}
-                        values={{ subject, status: t('supportManagement:statuses.' + notification.supportStatus) }}
+                        values={{
+                            requestId: '#' + notification.requestId,
+                            status: t('supportManagement:statuses.' + notification.supportStatus),
+                        }}
                     />
                 </p>
             );
@@ -113,7 +112,7 @@ const Notifications = ({ notifications, role, handleCloseNotifications, loadErro
                         t={t}
                         i18nKey={notification.kind === 'message' ? 'supportMessage' : 'supportRequest'}
                         components={{ bold: <b /> }}
-                        values={{ name, subject, date, time }}
+                        values={{ name, subject, requestId: '#' + notification.requestId, date, time }}
                     />
                 </p>
             );

@@ -1,3 +1,4 @@
+import User from '../Models/UserSchema.js';
 import mongoose from 'mongoose';
 import SupportRequest from '../Models/SupportRequestSchema.js';
 import SupportMessage from '../Models/SupportMessageSchema.js';
@@ -9,6 +10,7 @@ import {
 } from '../utils/supportAccess.js';
 import {
     supportRequestRoom,
+    withSupportSenderPhotos,
     emitSupport,
     emitSupportNotification,
     hasSupportOwner,
@@ -51,10 +53,19 @@ export const getSupportConversation = async (req, res) => {
             .limit(51)
             .lean();
         const hasMore = messages.length > 50;
+        const admin = request.assignee?.id
+            ? await User.findOne({ _id: request.assignee.id, role: 'admin' }).select('fullname photo').lean()
+            : null;
+        const assignee = admin ? { id: String(admin._id), fullname: admin.fullname, photo: admin.photo || '' } : null;
+        let requester;
+        if (account.role === 'admin') {
+            const [sender] = await withSupportSenderPhotos([request]);
+            requester = { fullname: request.fullname, photo: sender.senderPhoto || '' };
+        }
         return res.json({
             success: true,
             data: {
-                request: publicSupportRequest(request),
+                request: { ...publicSupportRequest(request), assignee, ...(requester ? { requester } : {}) },
                 messages: after ? messages.slice(0, 50) : messages.slice(0, 50).reverse(),
                 hasMore,
                 viewer: { id: account.id, role: account.role },

@@ -483,6 +483,14 @@
     }
 }
 @media (max-width: 768px) {
+    .dialog-paper {
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        border-radius: 0 !important;
+    }
     .dialog-header {
         padding: 16px !important;
         h2 {
@@ -504,7 +512,7 @@
     }
     .dialog-footer {
         justify-content: center !important;
-        padding: 12px 16px !important;
+        padding: 12px 16px max(12px, env(safe-area-inset-bottom)) !important;
         flex-wrap: wrap;
     }
 }

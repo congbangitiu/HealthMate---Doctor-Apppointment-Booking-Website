@@ -52,6 +52,61 @@ beforeEach(() => {
     );
 });
 describe('support chat', () => {
+    it('shows the requester to admins, with a neutral fallback when their avatar fails', async () => {
+        fetch.mockImplementation(async () => ({
+            ok: true,
+            json: async () => ({
+                data: {
+                    request: {
+                        _id: 'request-1',
+                        requester: { fullname: 'Request Sender', photo: '/sender.png' },
+                        assignee: { fullname: 'Assigned Admin', photo: '/admin.png' },
+                    },
+                    messages: [],
+                    hasMore: false,
+                    viewer: { role: 'admin', id: 'admin-1' },
+                },
+            }),
+        }));
+        render(<SupportChat requestId="request-1" token="admin-token" />);
+        expect(await screen.findByRole('heading', { name: 'Request Sender' })).toBeInTheDocument();
+        const avatar = screen.getByRole('img', { name: 'Request Sender' });
+        expect(avatar).toHaveAttribute('src', '/sender.png');
+        expect(screen.queryByRole('heading', { name: 'Assigned Admin' })).not.toBeInTheDocument();
+        fireEvent.error(avatar);
+        expect(screen.getByRole('img', { name: 'Request Sender' }).getAttribute('src')).toContain(
+            'default-notification-avatar.svg',
+        );
+    });
+    it('updates the header when the assigned admin changes or releases the request', async () => {
+        let assignee = { id: 'admin-1', fullname: 'Admin One', photo: '/one.png' };
+        fetch.mockImplementation(async () => ({
+            ok: true,
+            json: async () => ({
+                data: {
+                    request: { _id: 'request-1', assignee },
+                    messages: [],
+                    hasMore: false,
+                    viewer: { role: 'patient', id: 'owner' },
+                },
+            }),
+        }));
+        render(<SupportChat requestId="request-1" token="owner-token" />);
+        expect(await screen.findByRole('heading', { name: 'Admin One' })).toBeInTheDocument();
+        expect(screen.getByRole('img', { name: 'Admin One' })).toHaveAttribute('src', '/one.png');
+        assignee = { id: 'admin-2', fullname: 'Admin Two', photo: '/two.png' };
+        await act(async () => {
+            for (const handler of channel.handlers.get('support-chat-changed')) handler({ requestId: 'request-1' });
+        });
+        expect(await screen.findByRole('heading', { name: 'Admin Two' })).toBeInTheDocument();
+        expect(screen.getByRole('img', { name: 'Admin Two' })).toHaveAttribute('src', '/two.png');
+        assignee = null;
+        await act(async () => {
+            for (const handler of channel.handlers.get('support-chat-changed')) handler({ requestId: 'request-1' });
+        });
+        expect(await screen.findByRole('heading', { name: 'supportTeam' })).toBeInTheDocument();
+        expect(screen.queryByRole('img')).not.toBeInTheDocument();
+    });
     it('does not silently mark a new realtime update read during background conversation sync', async () => {
         let notificationId = 'status:old';
         fetch.mockImplementation(async (url) => ({
@@ -156,7 +211,7 @@ describe('support chat', () => {
         await waitFor(() => expect(screen.getByLabelText('messageLabel')).toBeEnabled());
         fireEvent.change(screen.getByLabelText('messageLabel'), { target: { value: 'Please help' } });
         failSend = true;
-        fireEvent.click(screen.getByRole('button', { name: 'send' }));
+        fireEvent.keyDown(screen.getByLabelText('messageLabel'), { key: 'Enter' });
         await screen.findByRole('alert');
         expect(screen.getByLabelText('messageLabel')).toHaveValue('Please help');
         failSend = false;
@@ -166,6 +221,11 @@ describe('support chat', () => {
         expect(sends).toHaveLength(2);
         expect(JSON.parse(sends[0][1].body).clientId).toBe(JSON.parse(sends[1][1].body).clientId);
         expect(sends[1][1].headers['X-Support-Token']).toBe('guest-secret');
+        expect(
+            channel.emit.mock.calls.some(([event]) =>
+                ['send-message', 'join-chat', 'edit-message', 'remove-message'].includes(event),
+            ),
+        ).toBe(false);
         expect(screen.getByLabelText('messageLabel')).toHaveValue('');
     });
     it('recovers missed messages on reconnect and removes socket handlers on unmount', async () => {

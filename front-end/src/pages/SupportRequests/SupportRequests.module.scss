@@ -201,10 +201,10 @@
 .conversation {
     min-width: 0;
     padding-top: 0;
+    padding-bottom: 0;
 }
 .issue {
-    padding-bottom: 24px;
-    border-bottom: 1px solid var(--lightGrayColor);
+    padding-bottom: 0;
 }
 .issueTop {
     display: flex;
@@ -237,7 +237,10 @@
     }
 }
 .issueBody {
-    margin-top: 24px;
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 6px;
+    background: var(--extremeLightGrayColor);
     h4 {
         color: var(--darkGrayColor);
         font-size: 14px;
@@ -384,5 +387,55 @@
         display: block;
         width: 25px;
         height: 25px;
+    }
+}
+
+.reference {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.idValue {
+    user-select: all;
+    overflow-wrap: anywhere;
+}
+.copyButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 30px;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid var(--black-08);
+    border-radius: 5px;
+    background: var(--whiteColor);
+    color: var(--textColor);
+    cursor: pointer;
+    svg {
+        width: 14px;
+        height: 14px;
+    }
+    &:hover {
+        border-color: var(--primaryColor);
+        color: var(--irisBlueColor);
+    }
+    &:focus-visible {
+        outline: 2px solid var(--irisBlueColor);
+        outline-offset: 2px;
+    }
+}
+.detailDate {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    svg {
+        flex-shrink: 0;
+    }
+}
+@media (max-width: 700px) {
+    .issueBody {
+        padding: 14px 16px;
     }
 }

@@ -262,7 +262,7 @@ export default function Contact() {
                                 <p>{t('successDescription')}</p>
                                 <div className={cx('request-reference')}>
                                     <span>{t('requestIdLabel')}</span>
-                                    <code>{requestId}</code>
+                                    <code>#{requestId}</code>
                                 </div>
                                     <Link className={cx('chat-link')} to={'/support-requests?request=' + requestId}>{t('supportRealtime:openChat')}</Link>
                             </div>
