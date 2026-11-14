@@ -82,15 +82,12 @@ export default function useAppointmentSchedule(role) {
         if (socket.connected) subscribe();
         window.addEventListener('focus', refresh);
         document.addEventListener('visibilitychange', onVisible);
-        // Recover missed events, including deployments where Socket.IO is unavailable.
-        const timer = setInterval(onVisible, 60000);
         return () => {
             socket.off('appointments-changed', refresh);
             socket.off('connect', subscribe);
             socket.emit('calendar-unsubscribe');
             window.removeEventListener('focus', refresh);
             document.removeEventListener('visibilitychange', onVisible);
-            clearInterval(timer);
         };
     }, [refresh, token]);
     return { ...state, refresh, request };

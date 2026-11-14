@@ -1,3 +1,6 @@
+import defaultAvatar from '../../assets/images/default-notification-avatar.svg';
+import { FaHeadset } from 'react-icons/fa';
+import { FiLoader, FiMessageCircle } from 'react-icons/fi';
 import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './ContentChat.module.scss';
@@ -28,9 +31,14 @@ import socket from './../../utils/services/socket';
 
 const cx = classNames.bind(styles);
 
-const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile, onBack }) => {
+const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile, onBack, support }) => {
     const { t } = useTranslation('chat');
+    const { t: supportText } = useTranslation('supportRealtime');
+    const isSupport = Boolean(support);
+    const supportIsAdmin = support?.viewer?.role === 'admin';
+    const supportContact = supportIsAdmin ? support.requester : support?.assignee;
     const [openPicker, setOpenPicker] = useState(false);
+    const [failedSupportPhoto, setFailedSupportPhoto] = useState(null);
     const [activeMenuIndex, setActiveMenuIndex] = useState(null);
     const [activeBubbleIndex, setActiveBubbleIndex] = useState(null);
     const [messageToEdit, setMessageToEdit] = useState(null);
@@ -44,25 +52,29 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile, on
 
     // Scroll down when chat changes
     useLayoutEffect(() => {
+        if (isSupport) return;
         if (contentPartRef.current) {
             // Delay the scroll action to ensure content is fully rendered
-            setTimeout(() => {
+            const timer = setTimeout(() => {
+                if (!contentPartRef.current) return;
                 contentPartRef.current.scrollTo({
                     top: contentPartRef.current.scrollHeight,
                 });
             }, 200); // Delay of 200ms to ensure the chat content is rendered
+            return () => clearTimeout(timer);
         }
-    }, [selectedChat?._id]);
+    }, [selectedChat?._id, isSupport]);
 
     // Smooth scroll when new messages appear
     useEffect(() => {
+        if (isSupport) return;
         if (contentPartRef.current) {
             contentPartRef.current.scrollTo({
                 top: contentPartRef.current.scrollHeight,
                 behavior: 'smooth',
             });
         }
-    }, [selectedChat?.messages]);
+    }, [selectedChat?.messages, isSupport]);
 
     const handleClickOutside = (event) => {
         if (targetRef.current && !targetRef.current.contains(event.target)) {
@@ -383,57 +395,154 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile, on
         document.body.removeChild(link);
     };
 
-    if (!selectedChat) {
+    if (!selectedChat && !isSupport) {
         return <div className={cx('not-selected-chat')}>{t('content.selectChatPrompt')}</div>;
     }
-
+    const renderedMessages = isSupport
+        ? support.messages.map((item) => ({ ...item, type: 'text', timestamp: item.createdAt }))
+        : selectedChat.messages;
+    const isOwn = (msg) =>
+        isSupport
+            ? support.viewer?.role === 'admin'
+                ? msg.senderId === support.viewer.id
+                : msg.senderRole !== 'admin'
+            : msg.sender?._id === userId;
+    const Root = isSupport ? 'section' : 'div';
+    const ComposerRoot = isSupport ? 'form' : 'div';
+    const MessageInput = isSupport ? 'textarea' : 'input';
+    const editorProps = isSupport
+        ? {
+              id: 'support-chat-' + support.requestId,
+              value: support.draft,
+              onChange: (event) => support.onDraftChange(event.target.value),
+              onKeyDown: (event) => {
+                  if (event.key !== 'Enter' || event.shiftKey || event.nativeEvent.isComposing || event.keyCode === 229)
+                      return;
+                  event.preventDefault();
+                  if (event.repeat || support.sending || !support.viewer || !support.draft.trim()) return;
+                  event.currentTarget.form?.requestSubmit();
+              },
+              disabled: support.sending || !support.viewer,
+              maxLength: 3000,
+              rows: 1,
+              required: true,
+              placeholder: t('content.writeMessage'),
+          }
+        : {
+              type: 'text',
+              placeholder: t('content.writeMessage'),
+              value: message,
+              onChange: (event) => setMessage(event.target.value),
+              onKeyDown: (event) => {
+                  if (event.key === 'Enter') handleSubmitMessage('edit', message);
+              },
+          };
     return (
-        <div className={cx('container')}>
+        <Root
+            className={cx('container', { support: isSupport })}
+            aria-label={isSupport ? supportText('chat') : undefined}
+        >
             <div className={cx('header-part')}>
-                <div className={cx('info')}>
-                    {isMobile && <IoIosArrowBack className={cx('icon')} onClick={onBack} />}
-                    <div className={cx('img-wrapper')}>
-                        <img src={role === 'doctor' ? selectedChat.user.photo : selectedChat.doctor.photo} alt="" />
-                        {role === 'doctor'
-                            ? selectedChat.user.status === 'online' && <div></div>
-                            : selectedChat.doctor.status === 'online' && <div></div>}
+                {isSupport ? (
+                    <div className={cx('info')}>
+                        <div className={cx('img-wrapper', 'support-avatar')}>
+                            {supportContact?.photo && supportContact.photo !== failedSupportPhoto ? (
+                                <img
+                                    src={supportContact.photo}
+                                    alt={supportContact.fullname || supportText(supportIsAdmin ? 'supportRequest' : 'supportTeam')}
+                                    onError={() => setFailedSupportPhoto(supportContact.photo)}
+                                />
+                            ) : supportIsAdmin ? (
+                                <img src={defaultAvatar} alt={supportContact?.fullname || supportText('supportRequest')} />
+                            ) : (
+                                <FaHeadset aria-hidden="true" />
+                            )}
+                        </div>
+                        <div>
+                            <h4>{supportContact?.fullname || supportText(supportIsAdmin ? 'supportRequest' : 'supportTeam')}</h4>
+                            <p>{supportText(support.connected ? 'connected' : 'reconnecting')}</p>
+                        </div>
                     </div>
-                    <div>
-                        <h4>
-                            {role === 'doctor'
-                                ? selectedChat.user.fullname
-                                : t('content.prefix') + ' ' + selectedChat.doctor.fullname}
-                        </h4>
-
-                        {role === 'doctor'
-                            ? selectedChat.user.status === 'online' && <p>{t('content.online')}</p>
-                            : selectedChat.doctor.status === 'online' && <p>{t('content.online')}</p>}
-                    </div>
-                </div>
-                <div className={cx('actions')}>
-                    <button>
-                        <IoCall className={cx('icon')} />
-                    </button>
-                    <button>
-                        <IoVideocam className={cx('icon')} />
-                    </button>
-                    <button>
-                        <IoSearchSharp className={cx('icon')} />
-                    </button>
-                </div>
-            </div>
-
-            <div className={cx('content-part')} ref={contentPartRef}>
-                {selectedChat.messages.length <= 0 ? (
-                    <div className={cx('no-message')}>{t('content.noMessageYet')}</div>
                 ) : (
-                    selectedChat.messages.map((msg, index) => (
-                        <div key={index}>
+                    <>
+                        <div className={cx('info')}>
+                            {isMobile && <IoIosArrowBack className={cx('icon')} onClick={onBack} />}
+                            <div className={cx('img-wrapper')}>
+                                <img
+                                    src={role === 'doctor' ? selectedChat.user.photo : selectedChat.doctor.photo}
+                                    alt=""
+                                />
+                                {role === 'doctor'
+                                    ? selectedChat.user.status === 'online' && <div></div>
+                                    : selectedChat.doctor.status === 'online' && <div></div>}
+                            </div>
+                            <div>
+                                <h4>
+                                    {role === 'doctor'
+                                        ? selectedChat.user.fullname
+                                        : t('content.prefix') + ' ' + selectedChat.doctor.fullname}
+                                </h4>
+
+                                {role === 'doctor'
+                                    ? selectedChat.user.status === 'online' && <p>{t('content.online')}</p>
+                                    : selectedChat.doctor.status === 'online' && <p>{t('content.online')}</p>}
+                            </div>
+                        </div>
+                        <div className={cx('actions')}>
+                            <button>
+                                <IoCall className={cx('icon')} />
+                            </button>
+                            <button>
+                                <IoVideocam className={cx('icon')} />
+                            </button>
+                            <button>
+                                <IoSearchSharp className={cx('icon')} />
+                            </button>
+                        </div>
+                    </>
+                )}
+            </div>
+            {isSupport && support.loading && (
+                <p className={cx('support-loading')} role="status">
+                    {supportText('loading')}
+                </p>
+            )}
+            {isSupport && support.hasMore && (
+                <button
+                    type="button"
+                    className={cx('older-button')}
+                    onClick={support.onLoadOlder}
+                    disabled={support.olderLoading}
+                >
+                    {supportText('older')}
+                </button>
+            )}
+            <div
+                className={cx('content-part')}
+                ref={contentPartRef}
+                role={isSupport ? 'log' : undefined}
+                aria-label={isSupport ? supportText('messages') : undefined}
+                aria-live={isSupport ? 'polite' : undefined}
+            >
+                {renderedMessages.length === 0 ? (
+                    isSupport ? (
+                        !support.loading && (
+                            <div className={cx('no-message')}>
+                                <FiMessageCircle aria-hidden="true" />
+                                <p>{supportText('chatEmpty')}</p>
+                            </div>
+                        )
+                    ) : (
+                        <div className={cx('no-message')}>{t('content.noMessageYet')}</div>
+                    )
+                ) : (
+                    renderedMessages.map((msg, index) => (
+                        <div key={isSupport ? msg._id : index}>
                             {index === 0 ||
-                            handleTimeCheck(msg.timestamp, selectedChat.messages[index - 1].timestamp, 10) ? (
+                            handleTimeCheck(msg.timestamp, renderedMessages[index - 1].timestamp, 10) ? (
                                 <p className={cx('timestamp')}>{formatTimestamp(msg.timestamp, 'datetime')}</p>
                             ) : null}
-                            <div className={cx('messages', msg.sender?._id === userId ? 'outgoing' : 'incoming')}>
+                            <div className={cx('messages', isOwn(msg) ? 'outgoing' : 'incoming')}>
                                 <div
                                     className={cx('bubble', msg.type, msg.mediaType, {
                                         active: activeBubbleIndex === index,
@@ -502,135 +611,220 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile, on
                                         </a>
                                     )}
                                 </div>
-
-                                <div className={cx('modes')}>
-                                    <IoMdMore className={cx('icon')} onClick={() => handleMoreClick(index)} />
-                                    {activeMenuIndex === index && (
-                                        <div
-                                            ref={targetRef}
-                                            className={cx(
-                                                'menu',
-                                                msg.sender?._id === userId ? 'outgoing' : 'incoming',
-                                                {
-                                                    active: activeMenuIndex === index,
-                                                },
-                                            )}
-                                        >
-                                            {msg.sender?._id === userId && (
-                                                <>
-                                                    {msg.type === 'text' && (
-                                                        <div onClick={() => handleShowEditMessage(msg)}>
-                                                            {t('content.editMessage')}
-                                                        </div>
+                                {!isSupport && (
+                                    <>
+                                        {' '}
+                                        <div className={cx('modes')}>
+                                            <IoMdMore className={cx('icon')} onClick={() => handleMoreClick(index)} />
+                                            {activeMenuIndex === index && (
+                                                <div
+                                                    ref={targetRef}
+                                                    className={cx(
+                                                        'menu',
+                                                        msg.sender?._id === userId ? 'outgoing' : 'incoming',
+                                                        {
+                                                            active: activeMenuIndex === index,
+                                                        },
                                                     )}
-                                                    <div
-                                                        onClick={() =>
-                                                            handleRemoveMessageForEveryone('removeForEveryone', msg._id)
-                                                        }
-                                                    >
-                                                        {t('content.removeForEveryone')}{' '}
+                                                >
+                                                    {msg.sender?._id === userId && (
+                                                        <>
+                                                            {msg.type === 'text' && (
+                                                                <div onClick={() => handleShowEditMessage(msg)}>
+                                                                    {t('content.editMessage')}
+                                                                </div>
+                                                            )}
+                                                            <div
+                                                                onClick={() =>
+                                                                    handleRemoveMessageForEveryone(
+                                                                        'removeForEveryone',
+                                                                        msg._id,
+                                                                    )
+                                                                }
+                                                            >
+                                                                {t('content.removeForEveryone')}{' '}
+                                                            </div>
+                                                        </>
+                                                    )}
+                                                    <div onClick={() => handleRemoveMessageForYou(msg._id)}>
+                                                        {t('content.removeForYou')}
                                                     </div>
-                                                </>
+                                                </div>
                                             )}
-                                            <div onClick={() => handleRemoveMessageForYou(msg._id)}>
-                                                {t('content.removeForYou')}
-                                            </div>
                                         </div>
-                                    )}
-                                </div>
+                                    </>
+                                )}
                             </div>
                         </div>
                     ))
                 )}
+                {isSupport && <div ref={support.bottomRef} />}
             </div>
-
-            <div className={cx('footer-part')}>
+            {isSupport && support.error && (
+                <p role="alert" className={cx('support-error')}>
+                    {supportText(
+                        ['forbidden', 'rateLimited', 'sendFailed'].includes(support.error)
+                            ? support.error
+                            : 'chatFailed',
+                    )}{' '}
+                    <button type="button" onClick={support.onRetry}>
+                        {supportText('retry')}
+                    </button>
+                </p>
+            )}
+            <ComposerRoot className={cx('footer-part')} onSubmit={isSupport ? support.onSend : undefined}>
+                {isSupport && (
+                    <label className={cx('sr-only')} htmlFor={editorProps.id}>
+                        {supportText('messageLabel')}
+                    </label>
+                )}
                 <div className={cx('edit-file-type')}>
-                    {messageToEdit && (
-                        <div className={cx('edit-part')}>
-                            <div>
-                                <h4>{t('content.editMessage')}</h4>
-                                <p>{messageToEdit.content}</p>
-                            </div>
-                            <IoIosCloseCircle className={cx('icon')} onClick={handleCancelEdit} />
-                        </div>
-                    )}
-                    {files.length > 0 && (
-                        <div className={cx('file-part')}>
-                            {files.map((file, index) => (
-                                <div key={index} className={cx('file-wrapper')}>
-                                    {file.fileType === 'image' && <img src={file.fileUrl} alt="" />}
-                                    {file.fileType === 'video' && (
-                                        <video controls>
-                                            <source src={file.fileUrl} type="video/mp4" />
-                                        </video>
-                                    )}
-                                    {['doc', 'docx', 'xlsx', 'csv', 'pdf'].includes(file.fileType) && (
-                                        <div className={cx('document')}>
-                                            <IoDocumentText className={cx('document-icon')} />
-                                            <h4>{file.fileType}</h4>
-                                        </div>
-                                    )}
-                                    <IoIosCloseCircle
-                                        className={cx('icon')}
-                                        onClick={() => setFiles(files.filter((_, fileIndex) => fileIndex !== index))}
-                                    />
+                    {!isSupport && (
+                        <>
+                            {messageToEdit && (
+                                <div className={cx('edit-part')}>
+                                    <div>
+                                        <h4>{t('content.editMessage')}</h4>
+                                        <p>{messageToEdit.content}</p>
+                                    </div>
+                                    <IoIosCloseCircle className={cx('icon')} onClick={handleCancelEdit} />
                                 </div>
-                            ))}
-                        </div>
+                            )}
+                            {files.length > 0 && (
+                                <div className={cx('file-part')}>
+                                    {files.map((file, index) => (
+                                        <div key={index} className={cx('file-wrapper')}>
+                                            {file.fileType === 'image' && <img src={file.fileUrl} alt="" />}
+                                            {file.fileType === 'video' && (
+                                                <video controls>
+                                                    <source src={file.fileUrl} type="video/mp4" />
+                                                </video>
+                                            )}
+                                            {['doc', 'docx', 'xlsx', 'csv', 'pdf'].includes(file.fileType) && (
+                                                <div className={cx('document')}>
+                                                    <IoDocumentText className={cx('document-icon')} />
+                                                    <h4>{file.fileType}</h4>
+                                                </div>
+                                            )}
+                                            <IoIosCloseCircle
+                                                className={cx('icon')}
+                                                onClick={() =>
+                                                    setFiles(files.filter((_, fileIndex) => fileIndex !== index))
+                                                }
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </>
                     )}
                     <div className={cx('type-part')}>
-                        <div>
-                            <label htmlFor="inputFile">
-                                {isUploadingFile ? (
-                                    <MoonLoader size={20} color="#000000" />
-                                ) : (
-                                    <ImAttachment className={cx('icon')} />
-                                )}
-                            </label>
-                            <input
-                                id="inputFile"
-                                type="file"
-                                multiple
-                                hidden
-                                onChange={handleFileUpload}
-                                accept=".png, .jpg, .jpeg, .gif, .mp4, .mov, .doc, .docx, .xlsx, .csv, .pdf"
-                            />
-                        </div>
-                        <input
-                            type="text"
-                            placeholder={t('content.writeMessage')}
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                    handleSubmitMessage('edit', message);
-                                }
-                            }}
-                        />
-                        <div ref={targetRef} onClick={() => setOpenPicker(!openPicker)}>
-                            <MdInsertEmoticon className={cx('icon')} />
-                        </div>
+                        {!isSupport && (
+                            <>
+                                <div>
+                                    <label htmlFor="inputFile">
+                                        {isUploadingFile ? (
+                                            <MoonLoader size={20} color="#000000" />
+                                        ) : (
+                                            <ImAttachment className={cx('icon')} />
+                                        )}
+                                    </label>
+                                    <input
+                                        id="inputFile"
+                                        type="file"
+                                        multiple
+                                        hidden
+                                        onChange={handleFileUpload}
+                                        accept=".png, .jpg, .jpeg, .gif, .mp4, .mov, .doc, .docx, .xlsx, .csv, .pdf"
+                                    />
+                                </div>
+                            </>
+                        )}
+                        <MessageInput {...editorProps} ref={isSupport ? support.composerRef : undefined} />
+                        <>
+                            <div
+                                ref={targetRef}
+                                aria-disabled={isSupport && (support.sending || !support.viewer)}
+                                onClick={() => {
+                                    if (!isSupport || (!support.sending && support.viewer)) setOpenPicker(!openPicker);
+                                }}
+                            >
+                                <MdInsertEmoticon className={cx('icon')} />
+                            </div>
+                        </>
                     </div>
                 </div>
-                <div
-                    className={cx('send-part', { disabled: message === '' && !message && files.length <= 0 })}
-                    onClick={() => handleSubmitMessage('edit', message)}
-                >
-                    {messageToEdit ? <FaCircleCheck className={cx('icon')} /> : <IoMdSend className={cx('icon')} />}
-                </div>
-
+                {isSupport ? (
+                    <button
+                        type="submit"
+                        className={cx('send-part')}
+                        disabled={support.sending || !support.viewer || !support.draft.trim()}
+                        aria-label={supportText(support.sending ? 'sending' : 'send')}
+                        title={supportText(support.sending ? 'sending' : 'send')}
+                    >
+                        {support.sending ? (
+                            <FiLoader className={cx('icon', 'sending-icon')} aria-hidden="true" />
+                        ) : (
+                            <IoMdSend className={cx('icon')} aria-hidden="true" />
+                        )}
+                    </button>
+                ) : (
+                    <>
+                        <div
+                            className={cx('send-part', {
+                                disabled: message === '' && !message && files.length <= 0,
+                            })}
+                            onClick={() => handleSubmitMessage('edit', message)}
+                        >
+                            {messageToEdit ? (
+                                <FaCircleCheck className={cx('icon')} />
+                            ) : (
+                                <IoMdSend className={cx('icon')} />
+                            )}
+                        </div>
+                    </>
+                )}
                 {openPicker && (
                     <div ref={targetRef} className={cx('picker')}>
-                        <Picker data={data} onEmojiSelect={(emoji) => setMessage((prev) => prev + emoji.native)} />
+                        <Picker
+                            data={data}
+                            onEmojiSelect={(emoji) =>
+                                isSupport
+                                    ? !support.sending &&
+                                      support.viewer &&
+                                      (support.draft + emoji.native).length <= 3000 &&
+                                      support.onDraftChange(support.draft + emoji.native)
+                                    : setMessage((prev) => prev + emoji.native)
+                            }
+                        />
                     </div>
                 )}
-            </div>
-        </div>
+            </ComposerRoot>
+        </Root>
     );
 };
 
 ContentChat.propTypes = {
+    support: PropTypes.shape({
+        requestId: PropTypes.string.isRequired,
+        messages: PropTypes.array.isRequired,
+        viewer: PropTypes.object,
+        requester: PropTypes.shape({ fullname: PropTypes.string, photo: PropTypes.string }),
+        assignee: PropTypes.shape({ id: PropTypes.string, fullname: PropTypes.string, photo: PropTypes.string }),
+        loading: PropTypes.bool,
+        connected: PropTypes.bool,
+        hasMore: PropTypes.bool,
+        olderLoading: PropTypes.bool,
+        onLoadOlder: PropTypes.func.isRequired,
+        draft: PropTypes.string.isRequired,
+        onDraftChange: PropTypes.func.isRequired,
+        sending: PropTypes.bool,
+        error: PropTypes.string,
+        onRetry: PropTypes.func.isRequired,
+        onSend: PropTypes.func.isRequired,
+        bottomRef: PropTypes.shape({ current: PropTypes.any }),
+        composerRef: PropTypes.shape({ current: PropTypes.any }),
+    }),
     selectedChat: PropTypes.object,
     userId: PropTypes.string,
     setSelectedChat: PropTypes.func,

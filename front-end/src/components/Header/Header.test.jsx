@@ -1,3 +1,5 @@
+const supportToast = vi.hoisted(() => vi.fn());
+vi.mock('react-toastify', () => ({ toast: { info: supportToast } }));
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, useLocation } from 'react-router-dom';
@@ -28,7 +30,7 @@ const notification = {
 let stored;
 let fetchMock;
 const play = vi.fn();
-const Location = () => <output data-testid="path">{useLocation().pathname}</output>;
+const Location = () => <output data-testid="path">{useLocation().pathname + useLocation().search}</output>;
 const mount = () => render(
     <authContext.Provider value={{ user: { _id: 'patient-1', fullname: 'Patient One' }, role: 'patient', token: 'test-token' }}>
         <MemoryRouter><Header /><Location /></MemoryRouter>
@@ -37,6 +39,7 @@ const mount = () => render(
 beforeEach(async () => {
     await i18n.changeLanguage('en');
     socket.handlers.clear();
+    supportToast.mockClear();
     stored = [];
     play.mockReset().mockResolvedValue(undefined);
     vi.stubGlobal('Audio', vi.fn(function () { return { play }; }));
@@ -85,5 +88,58 @@ describe('patient reschedule notifications', () => {
         expect(await screen.findByText('2')).toBeInTheDocument();
         await user.click(screen.getByRole('button', { name: 'Notifications' }));
         expect(await screen.findAllByText((_, element) => element.tagName === 'P' && element.textContent.includes('Doctor One rescheduled your appointment'))).toHaveLength(2);
+    });
+});
+
+describe('admin support bell', () => {
+    it('plays one bell sound per live event and opens the exact support request using the shared popup', async () => {
+        const user = userEvent.setup();
+        stored = [];
+        fetchMock.mockImplementation(async (url) => ({
+            ok: true, json: async () => url.endsWith('/contacts/notifications')
+                ? { data: stored, unreadCount: stored.filter((item) => !item.isRead).length }
+                : { success: true, data: [], unreadCount: 0 },
+        }));
+        render(<authContext.Provider value={{ user: { _id: 'admin-1', fullname: 'Admin' }, role: 'admin', token: 'admin-token' }}>
+            <MemoryRouter><Header /><Location /></MemoryRouter>
+        </authContext.Provider>);
+        await waitFor(() => expect(socket.handlers.get('support-notification')?.size).toBe(1));
+        const event = { id: 'created:request-1', requestId: 'request-1', fullname: 'Guest One', category: 'technical',
+            kind: 'request', createdAt: '2099-11-10T00:00:00Z', isRead: false };
+        stored = [event];
+        await act(async () => {
+            for (const handler of socket.handlers.get('support-notification')) { handler(event); handler(event); }
+        });
+        expect(await screen.findByText('1')).toBeInTheDocument();
+        expect(play).toHaveBeenCalledTimes(1);
+        expect(supportToast).not.toHaveBeenCalled();
+        await user.click(screen.getByRole('button', { name: 'Notifications' }));
+        await user.click(await screen.findByRole('button', { name: /Guest One submitted a support request/ }));
+        expect(screen.getByTestId('path')).toHaveTextContent('/admins/management/support?request=request-1');
+    });
+});
+
+describe('signed-in sender support bell', () => {
+    it.each(['patient', 'doctor'])('updates the %s bell with one sound and opens the exact support conversation', async (role) => {
+        fetchMock.mockImplementation(async (url) => ({ ok: true, json: async () => url.endsWith('/contacts/my-notifications')
+            ? { data: stored, unreadCount: stored.filter((item) => !item.isRead).length }
+            : { success: true, data: [], unreadCount: 0 },
+        }));
+        render(<authContext.Provider value={{ user: { _id: 'owner', fullname: 'Owner' }, role, token: 'owner-token' }}>
+            <MemoryRouter><Header /><Location /></MemoryRouter>
+        </authContext.Provider>);
+        await waitFor(() => expect(socket.handlers.get('owner-support-notification')?.size).toBe(1));
+        const event = { id: 'status:update-1', requestId: 'request-1', type: 'support-update', category: 'technical', kind: 'status', supportStatus: 'resolved', isRead: false, createdAt: '2099-11-01T00:00:00Z' };
+        stored = [event];
+        await act(async () => {
+            for (const handler of socket.handlers.get('owner-support-notification')) { handler(event); handler(event); }
+        });
+        expect(await screen.findByText('1')).toBeInTheDocument();
+        expect(play).toHaveBeenCalledTimes(1);
+        expect(supportToast).not.toHaveBeenCalled();
+        const user = userEvent.setup();
+        await user.click(screen.getByRole('button', { name: 'Notifications' }));
+        await user.click(await screen.findByRole('button', { name: /Your support request.*has been updated to Resolved/ }));
+        expect(screen.getByTestId('path')).toHaveTextContent('/support-requests?request=request-1');
     });
 });

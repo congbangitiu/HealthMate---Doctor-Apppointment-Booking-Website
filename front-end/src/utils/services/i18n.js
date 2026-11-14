@@ -1,6 +1,6 @@
+import supportRealtimeEN from '../../locales/en/common/supportRealtime.json';
+import supportRealtimeVI from '../../locales/vi/common/supportRealtime.json';
 import i18n from 'i18next';
-import calendarEN from '../../locales/en/common/calendar.json';
-import calendarVI from '../../locales/vi/common/calendar.json';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
@@ -58,6 +58,10 @@ import chatbotEN from '../../locales/en/common/chatbot.json';
 import chatbotVI from '../../locales/vi/common/chatbot.json';
 import myAccountEN from '../../locales/en/patient-profile/myAccount.json';
 import myAccountVI from '../../locales/vi/patient-profile/myAccount.json';
+import calendarEN from '../../locales/en/common/calendar.json';
+import calendarVI from '../../locales/vi/common/calendar.json';
+import supportManagementEN from '../../locales/en/admin-management/supportManagement.json';
+import supportManagementVI from '../../locales/vi/admin-management/supportManagement.json';
 import updateInfoEN from '../../locales/en/patient-profile/updateInfo.json';
 import updateInfoVI from '../../locales/vi/patient-profile/updateInfo.json';
 import myBookingsEN from '../../locales/en/patient-profile/myBookings.json';
@@ -128,6 +132,8 @@ const resources = {
         reExaminationForm: reExamiationFormEN,
         loader: loaderEN,
         management: managementEN,
+        supportManagement: supportManagementEN,
+        supportRealtime: supportRealtimeEN,
         dashboardManagement: dashboardManagementEN,
         doctorManagement: doctorManagementEN,
         patientManagement: patientManagementEN,
@@ -174,6 +180,8 @@ const resources = {
         reExaminationForm: reExamiationFormVI,
         loader: loaderVI,
         management: managementVI,
+        supportManagement: supportManagementVI,
+        supportRealtime: supportRealtimeVI,
         dashboardManagement: dashboardManagementVI,
         doctorManagement: doctorManagementVI,
         patientManagement: patientManagementVI,
@@ -199,6 +207,8 @@ i18n.use(LanguageDetector)
         nonExplicitSupportedLngs: true,
         defaultNS: 'homepage',
         ns: [
+            'supportRealtime',
+            'supportManagement',
             'calendar',
             'homepage',
             'navbar',

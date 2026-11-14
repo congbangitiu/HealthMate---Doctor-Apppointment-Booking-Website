@@ -1,0 +1,441 @@
+@use '../../styles/support' as support;
+
+.container {
+    padding: 135px 120px 60px;
+    color: var(--textColor);
+    font-size: 16px;
+}
+
+.pageHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 32px;
+    > div {
+        min-width: 0;
+    }
+}
+
+.titleRow h2 {
+    margin: 0;
+    color: var(--headingColor);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.count {
+    font-weight: 400;
+}
+.newRequest {
+    @include support.primary-action;
+    flex-shrink: 0;
+}
+.newRequestIcon {
+    display: none;
+}
+.layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+}
+.requestList {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+    min-width: 0;
+}
+
+.requestCard {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    min-width: 0;
+    width: 100%;
+    padding: 20px;
+    border: 1px solid var(--lightGrayColor);
+    border-radius: 6px;
+    background: var(--whiteColor);
+    color: var(--textColor);
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+    transition: border-color 150ms ease, background-color 150ms ease;
+
+    &:hover {
+        border-color: var(--primaryColor);
+        background: var(--primary-08);
+    }
+    &:hover .cardArrow,
+    &:focus-visible .cardArrow {
+        opacity: 1;
+        color: var(--irisBlueColor);
+    }
+    &.active {
+        background: var(--primary-08);
+    }
+}
+
+.cardTop {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.cardTitleGroup {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+}
+.cardArrow {
+    flex: 0 0 16px;
+    width: 16px;
+    height: 16px;
+    opacity: 0;
+    color: var(--darkGrayColor);
+    transition: opacity 150ms ease;
+}
+.cardTitle {
+    flex: 1;
+    min-width: 0;
+    color: var(--headingColor);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+.requestId {
+    color: var(--darkGrayColor);
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+.preview {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--textColor);
+    font-size: 14px;
+    line-height: 1.6;
+}
+.cardFooter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 16px;
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--black-08);
+}
+.cardDate {
+    color: var(--darkGrayColor);
+    font-size: 14px;
+}
+.unread {
+    color: var(--irisBlueColor);
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.status {
+    @include support.status-badge;
+}
+
+.backButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    margin-bottom: 24px;
+    border: 0;
+    background: transparent;
+    color: var(--irisBlueColor);
+    font: inherit;
+    font-size: 16px;
+    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+}
+
+.withDetail {
+    grid-template-columns: minmax(240px, 300px) minmax(0, 1fr);
+    .preview {
+        display: none;
+    }
+    .requestList {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+        max-height: calc(100dvh - 130px);
+        padding: 3px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        position: sticky;
+        top: 120px;
+    }
+    .requestCard {
+        padding: 16px;
+        border: 1px solid var(--lightGrayColor);
+        border-radius: 6px;
+        &:hover {
+            border-color: var(--primaryColor);
+            background: var(--primary-08);
+        }
+        &.active {
+            border-color: var(--primaryColor);
+            background: var(--primary-08);
+        }
+    }
+}
+
+.conversation {
+    min-width: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.issue {
+    padding-bottom: 0;
+}
+.issueTop {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    h3 {
+        margin: 0;
+        color: var(--headingColor);
+        font-size: 22px;
+        font-weight: 500;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+        &:focus {
+            outline: none;
+        }
+    }
+}
+.issueMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    margin-top: 12px;
+    color: var(--darkGrayColor);
+    font-size: 14px;
+    > span {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+}
+.issueBody {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 6px;
+    background: var(--extremeLightGrayColor);
+    h4 {
+        color: var(--darkGrayColor);
+        font-size: 14px;
+        font-weight: 400;
+    }
+    p {
+        margin-top: 8px;
+        color: var(--textColor);
+        font-size: 16px;
+        line-height: 1.7;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+    }
+}
+
+.empty {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 48px 20px;
+    text-align: center;
+    > svg {
+        width: 32px;
+        height: 32px;
+        color: var(--darkGrayColor);
+    }
+    h3 {
+        color: var(--headingColor);
+        font-size: 18px;
+        font-weight: 500;
+    }
+    p {
+        max-width: 420px;
+        color: var(--darkGrayColor);
+        font-size: 14px;
+        line-height: 1.6;
+    }
+    a {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 4px;
+        color: var(--irisBlueColor);
+        font-size: 14px;
+    }
+}
+.listLoading {
+    grid-column: 1 / -1;
+}
+.detailLoading {
+    padding: 32px 0;
+}
+.guestHint {
+    margin-bottom: 24px;
+    color: var(--darkGrayColor);
+    font-size: 14px;
+    line-height: 1.6;
+}
+.error {
+    margin-bottom: 24px;
+    color: var(--darkRedColor);
+    font-size: 14px;
+}
+.newRequest:focus-visible,
+.backButton:focus-visible,
+.requestCard:focus-visible,
+.empty a:focus-visible {
+    outline: 2px solid var(--irisBlueColor);
+    outline-offset: 3px;
+}
+
+@media (max-width: 1050px) {
+    .requestList {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .withDetail {
+        grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
+    }
+}
+@media (max-width: 700px) {
+    .container {
+        padding: 90px 20px 40px;
+    }
+    .pageHeader {
+        margin-bottom: 24px;
+    }
+    .titleRow h2 {
+        font-size: 25px;
+    }
+    .requestList {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+    }
+    .requestCard {
+        padding: 16px;
+    }
+    .withDetail {
+        grid-template-columns: minmax(0, 1fr);
+        .requestList {
+            display: none;
+        }
+    }
+    .issueTop h3 {
+        font-size: 20px;
+    }
+    .backButton {
+        margin-bottom: 20px;
+    }
+}
+@media (hover: none) {
+    .cardArrow {
+        opacity: 1;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .requestCard,
+    .cardArrow {
+        transition: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .pageHeader {
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+        > div {
+            flex: 1;
+        }
+    }
+    .newRequest {
+        width: 44px;
+        height: 44px;
+        min-height: 44px;
+        padding: 0;
+        flex: 0 0 44px;
+    }
+    .newRequestLabel {
+        display: none;
+    }
+    .newRequestIcon {
+        display: block;
+        width: 25px;
+        height: 25px;
+    }
+}
+
+.reference {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.idValue {
+    user-select: all;
+    overflow-wrap: anywhere;
+}
+.copyButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 30px;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid var(--black-08);
+    border-radius: 5px;
+    background: var(--whiteColor);
+    color: var(--textColor);
+    cursor: pointer;
+    svg {
+        width: 14px;
+        height: 14px;
+    }
+    &:hover {
+        border-color: var(--primaryColor);
+        color: var(--irisBlueColor);
+    }
+    &:focus-visible {
+        outline: 2px solid var(--irisBlueColor);
+        outline-offset: 2px;
+    }
+}
+.detailDate {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    svg {
+        flex-shrink: 0;
+    }
+}
+@media (max-width: 700px) {
+    .issueBody {
+        padding: 14px 16px;
+    }
+}

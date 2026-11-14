@@ -1,6 +1,6 @@
 {
     "title": "Liên hệ với chúng tôi",
-    "description": "Gặp sự cố kỹ thuật? Muốn gửi phản hồi về tính năng thử nghiệm? Hãy cho chúng tôi biết",
+    "description": "Bạn gặp vấn đề hoặc muốn góp ý? Hãy gửi yêu cầu hỗ trợ cho chúng tôi.",
     "fullname": "Họ và tên",
     "fullnamePlaceholder": "Nhập họ và tên của bạn",
     "email": "Email",
@@ -8,8 +8,37 @@
     "phone": "Số điện thoại",
     "phonePlaceholder": "Nhập số điện thoại của bạn",
     "subject": "Chủ đề",
-    "subjectPlaceholder": "Cho chúng tôi biết bạn cần hỗ trợ gì",
+    "subjectPlaceholder": "Chọn vấn đề cần hỗ trợ",
     "message": "Vấn đề của bạn",
     "messagePlaceholder": "Hãy mô tả chi tiết vấn đề bạn gặp phải ...",
-    "submit": "Gửi yêu cầu"
+    "submit": "Gửi yêu cầu",
+    "submitting": "Đang gửi...",
+    "profileLoading": "Đang tải thông tin liên hệ...",
+    "profileError": "Không thể tải thông tin liên hệ của bạn.",
+    "retry": "Thử lại",
+    "otherSubject": "Tiêu đề vấn đề",
+    "otherSubjectPlaceholder": "Nhập tiêu đề vấn đề của bạn",
+    "success": "Đã tiếp nhận yêu cầu của bạn. Mã yêu cầu: {{id}}",
+    "categories": {
+        "account": "Tài khoản / Đăng nhập",
+        "appointment": "Đặt lịch / Thay đổi lịch hẹn",
+        "payment": "Thanh toán / Hoàn tiền",
+        "medical-records": "Hồ sơ khám bệnh / Đơn thuốc",
+        "technical": "Lỗi kỹ thuật",
+        "feedback": "Góp ý dịch vụ",
+        "other": "Khác (Other)"
+    },
+    "errors": {
+        "invalidFields": "Vui lòng kiểm tra các trường bắt buộc và định dạng thông tin.",
+        "captchaRequired": "Vui lòng hoàn thành CAPTCHA.",
+        "captchaInvalid": "CAPTCHA đã hết hạn hoặc không hợp lệ. Vui lòng xác minh lại.",
+        "captchaUnavailable": "CAPTCHA chưa khả dụng. Vui lòng tải lại trang hoặc thử lại sau.",
+        "rateLimited": "Bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại sau 10 phút.",
+        "unavailable": "Dịch vụ hỗ trợ tạm thời chưa khả dụng. Vui lòng thử lại sau.",
+        "sessionExpired": "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.",
+        "sendFailed": "Không thể gửi yêu cầu. Nội dung đã được giữ lại, vui lòng thử lại."
+    },
+    "successTitle": "Gửi yêu cầu thành công",
+    "successDescription": "Bộ phận hỗ trợ sẽ xem xét vấn đề của bạn.",
+    "requestIdLabel": "Mã yêu cầu"
 }
