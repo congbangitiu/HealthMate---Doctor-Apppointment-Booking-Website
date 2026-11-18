@@ -1,3 +1,7 @@
+import useGuestSupportNotifications from '../../hooks/useGuestSupportNotifications';
+import { useGuestRequests } from '../../utils/services/supportRequests';
+import useOwnerSupportNotifications from '../../hooks/useOwnerSupportNotifications';
+import useAdminSupportNotifications from '../../hooks/useAdminSupportNotifications';
 import React from 'react';
 import { useState, useContext, useEffect, useRef } from 'react';
 import logo from '../../assets/images/logo.png';
@@ -18,7 +22,7 @@ import ConfirmLogout from '../ConfirmLogout/ConfirmLogout';
 import Notifications from '../Notifications/Notifications';
 import { BASE_URL } from '../../../config';
 import useFetchData from '../../hooks/useFetchData';
-import notificationSound from '../../assets/sounds/notificationSound.wav';
+import useNotificationSound from '../../hooks/useNotificationSound';
 import DefaultMaleDoctorAvatar from '../../assets/images/default-male-doctor.png';
 import DefaultFemaleDoctorAvatar from '../../assets/images/default-female-doctor.png';
 import { useTranslation } from 'react-i18next';
@@ -35,6 +39,21 @@ const Header = () => {
     const location = useLocation();
     const { isMobile } = useResponsive();
     const { user, role, token } = useContext(authContext);
+    const playNotificationSound = useNotificationSound();
+    const support = useAdminSupportNotifications(token, role === 'admin', () => {
+        triggerShake();
+        playNotificationSound();
+    });
+    const ownerSupport = useOwnerSupportNotifications(token, ['patient', 'doctor'].includes(role), () => {
+        triggerShake();
+        playNotificationSound();
+    });
+    const guestRequests = useGuestRequests();
+    const guestSupport = useGuestSupportNotifications(guestRequests, !token, () => {
+        triggerShake();
+        playNotificationSound();
+    });
+    const personalSupport = token ? ownerSupport : guestSupport;
     const [showConfirmLogout, setShowConfirmLogout] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const { data: appointmentData } = useFetchData(
@@ -49,8 +68,13 @@ const Header = () => {
     const [unreadScheduleChanges, setUnreadScheduleChanges] = useState(0);
     const scheduleRevision = useRef(0);
     const seenScheduleNotifications = useRef(new Set());
-    const visibleNotifications = [...new Map([...notifications, ...scheduleNotifications].map((item) => [item.id, item])).values()]
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 6);
+    const visibleNotifications = [
+        ...new Map(
+            [...(token ? notifications : []), ...(token ? scheduleNotifications : []), ...personalSupport.items].map((item) => [item.id, item]),
+        ).values(),
+    ]
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .slice(0, 6);
     const [isNotiOpen, setIsNotiOpen] = useState(false);
     const [isShaking, setIsShaking] = useState(false);
     const [isShowMenuMobile, setIsShowMenuMobile] = useState(false);
@@ -70,7 +94,8 @@ const Header = () => {
             const revision = scheduleRevision.current;
             try {
                 const response = await fetch(`${BASE_URL}/bookings/calendar/notifications`, {
-                    headers: { Authorization: `Bearer ${token}` }, signal: requestController.signal,
+                    headers: { Authorization: `Bearer ${token}` },
+                    signal: requestController.signal,
                 });
                 if (!response.ok) return;
                 const body = await response.json();
@@ -80,8 +105,11 @@ const Header = () => {
                     return;
                 }
                 for (const item of body.data || []) seenScheduleNotifications.current.add(item.id);
-                setScheduleNotifications((current) => [...new Map([...(body.data || []), ...current].map((item) => [item.id, item])).values()]
-                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 6));
+                setScheduleNotifications((current) =>
+                    [...new Map([...(body.data || []), ...current].map((item) => [item.id, item])).values()]
+                        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                        .slice(0, 6),
+                );
                 setUnreadScheduleChanges(body.unreadCount || 0);
             } catch (error) {
                 if (error.name !== 'AbortError') console.error('Error fetching schedule notifications:', error);
@@ -196,6 +224,7 @@ const Header = () => {
     }, [token, user, role]);
 
     const markNotificationsAsRead = async () => {
+        if (!token || role === 'admin') return;
         try {
             let response;
             if (role === 'doctor') {
@@ -245,12 +274,6 @@ const Header = () => {
         setAnchorEl(null);
         setIsNotiOpen(false);
         await markNotificationsAsRead();
-    };
-
-    // Play notification sound when a new booking arrives
-    const playNotificationSound = () => {
-        const audio = new Audio(notificationSound);
-        audio.play().catch((error) => console.error('Error playing sound:', error));
     };
 
     const triggerShake = () => {
@@ -428,8 +451,11 @@ const Header = () => {
                 if (seenScheduleNotifications.current.has(notification.id)) return;
                 seenScheduleNotifications.current.add(notification.id);
                 scheduleRevision.current += 1;
-                setScheduleNotifications((current) => [notification, ...current.filter((item) => item.id !== notification.id)]
-                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 6));
+                setScheduleNotifications((current) =>
+                    [notification, ...current.filter((item) => item.id !== notification.id)]
+                        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                        .slice(0, 6),
+                );
                 setUnreadScheduleChanges((count) => count + 1);
                 triggerShake();
                 playNotificationSound();
@@ -466,7 +492,7 @@ const Header = () => {
         }
 
         return subscribeNotifications(socket, role, user._id, handlers);
-    }, [user, role]);
+    }, [user, role, playNotificationSound]);
 
     return (
         <div className={cx('container')}>
@@ -526,12 +552,17 @@ const Header = () => {
                             onClick={handleOpenNotifications}
                         >
                             <IoIosNotifications className={cx('icon', { shake: isShaking })} />
-                            {role === 'doctor' && unreadAppointments > 0 && !isNotiOpen && (
-                                <div>{unreadAppointments}</div>
+                            {role === 'admin' && support.unreadCount > 0 && <div>{support.unreadCount}</div>}
+                            {role === 'doctor' && unreadAppointments + ownerSupport.unreadCount > 0 && (
+                                <div>{(isNotiOpen ? 0 : unreadAppointments) + ownerSupport.unreadCount}</div>
                             )}
-                            {role === 'patient' && unreadPrescriptions + unreadScheduleChanges > 0 && !isNotiOpen && (
-                                <div>{unreadPrescriptions + unreadScheduleChanges}</div>
-                            )}
+                            {role === 'patient' &&
+                                unreadPrescriptions + unreadScheduleChanges + ownerSupport.unreadCount > 0 && (
+                                    <div>
+                                        {(isNotiOpen ? 0 : unreadPrescriptions + unreadScheduleChanges) +
+                                            ownerSupport.unreadCount}
+                                    </div>
+                                )}
                         </div>
                     </>
                 ) : (
@@ -545,6 +576,16 @@ const Header = () => {
                     </>
                 )}
 
+                {!token && guestRequests.length > 0 && (
+                    <div className={cx('noti', { open })} role="button" tabIndex={0}
+                        aria-label={t('notification:title')} aria-haspopup="true" onClick={handleOpenNotifications}
+                        onKeyDown={(event) => {
+                            if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); handleOpenNotifications(event); }
+                        }}>
+                        <IoIosNotifications className={cx('icon', { shake: isShaking })} />
+                        {guestSupport.unreadCount > 0 && <div>{guestSupport.unreadCount}</div>}
+                    </div>
+                )}
                 <label htmlFor="nav-mobile-input">
                     <BiMenu className={cx('menu-icon')} />
                 </label>
@@ -582,8 +623,10 @@ const Header = () => {
                     }}
                 >
                     <Notifications
-                        notifications={visibleNotifications}
-                        role={role}
+                        notifications={token && role === 'admin' ? support.items : visibleNotifications}
+                        role={token ? role : 'guest'}
+                        onSupportRead={personalSupport.markRead}
+                        loadError={token && role === 'admin' ? support.error : personalSupport.error}
                         handleCloseNotifications={handleCloseNotifications}
                     />
                 </Popover>
@@ -603,8 +646,10 @@ const Header = () => {
                     }}
                 >
                     <Notifications
-                        notifications={visibleNotifications}
-                        role={role}
+                        notifications={token && role === 'admin' ? support.items : visibleNotifications}
+                        role={token ? role : 'guest'}
+                        onSupportRead={personalSupport.markRead}
+                        loadError={token && role === 'admin' ? support.error : personalSupport.error}
                         handleCloseNotifications={handleCloseNotifications}
                     />
                 </Drawer>

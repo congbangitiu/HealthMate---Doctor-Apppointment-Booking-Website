@@ -13,6 +13,7 @@
         background-color: var(--extremeLightGrayColor);
 
         & .content {
+            min-width: 0;
             padding: 30px;
             width: 100%;
         }
@@ -43,6 +44,7 @@
             background-color: transparent;
 
             & .content {
+            min-width: 0;
                 padding: 40px 20px 30px 20px;
             }
         }

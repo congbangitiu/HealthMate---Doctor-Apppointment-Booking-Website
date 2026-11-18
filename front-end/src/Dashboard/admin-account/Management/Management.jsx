@@ -7,6 +7,7 @@ import DoctorManagement from '../DoctorManagement/DoctorManagement';
 import PatientManagement from '../PatientManagement/PatientManagement';
 import AppointmentManagement from '../AppointmentManagement/AppointmentManagement';
 import RevenueManagement from '../RevenueManagement/RevenueManagement';
+import SupportManagement from '../SupportManagement/SupportManagement';
 import { BASE_URL } from '../../../../config';
 import useFetchData from '../../../hooks/useFetchData';
 import { Dialog, Slide, Drawer } from '@mui/material';
@@ -20,7 +21,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const TABS = ['dashboard', 'doctor', 'patient', 'appointment', 'revenue'];
+const TABS = ['dashboard', 'doctor', 'patient', 'appointment', 'revenue', 'support'];
 const DEFAULT_TAB = 'dashboard';
 
 const Management = () => {
@@ -125,6 +126,7 @@ const Management = () => {
                         <AppointmentManagement doctors={doctors} users={users} appointments={appointments} />
                     )}
                     {activeTab === 'revenue' && <RevenueManagement doctors={doctors} appointments={appointments} />}
+                    {activeTab === 'support' && <SupportManagement />}
                 </div>
             </div>
 

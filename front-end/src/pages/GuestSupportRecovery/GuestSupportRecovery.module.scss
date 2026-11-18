@@ -1,0 +1,45 @@
+@use '../../styles/support' as support;
+.container {
+    padding: 135px 24px 60px;
+    min-height: 60vh;
+    font-size: 16px;
+    color: var(--textColor);
+}
+.card {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 28px;
+    border: 1px solid var(--lightGrayColor);
+    border-radius: 8px;
+    h2 {
+        margin: 0 0 20px;
+        color: var(--headingColor);
+        font-size: 25px;
+        font-weight: 600;
+    }
+    > p {
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+}
+.confirm {
+    @include support.primary-action;
+}
+.back {
+    display: block;
+    margin-top: 24px;
+    color: var(--primaryColor);
+    font-size: 14px;
+}
+@media (max-width: 768px) {
+    .container {
+        padding: 110px 16px 40px;
+    }
+    .card {
+        padding: 20px;
+    }
+}
+
+.error {
+    color: var(--darkRedColor, #b42318);
+}

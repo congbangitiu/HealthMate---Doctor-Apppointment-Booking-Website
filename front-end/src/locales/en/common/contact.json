@@ -1,6 +1,6 @@
 {
     "title": "Contact Us",
-    "description": "Got a technical issue? Want to send feedback about a beta feature? Let us know",
+    "description": "Have an issue or feedback? Send us a support request.",
     "fullname": "Fullname",
     "fullnamePlaceholder": "Enter your fullname",
     "email": "Email",
@@ -8,8 +8,37 @@
     "phone": "Phone No.",
     "phonePlaceholder": "Enter your phone number",
     "subject": "Subject",
-    "subjectPlaceholder": "Let us know how we can help you",
+    "subjectPlaceholder": "Choose an issue to get help with",
     "message": "Your issue",
-    "messagePlaceholder": "Write your problem in detail here ...",
-    "submit": "Submit"
+    "messagePlaceholder": "Describe your issue in detail ...",
+    "submit": "Submit",
+    "submitting": "Sending...",
+    "profileLoading": "Loading your contact information...",
+    "profileError": "Could not load your contact information.",
+    "retry": "Try again",
+    "otherSubject": "Issue title",
+    "otherSubjectPlaceholder": "Enter the title of your issue",
+    "success": "Your request has been received. Request ID: {{id}}",
+    "categories": {
+        "account": "Account / Sign in",
+        "appointment": "Appointments / Rescheduling",
+        "payment": "Payments / Refunds",
+        "medical-records": "Medical records / Prescriptions",
+        "technical": "Technical issue",
+        "feedback": "Service feedback",
+        "other": "Other"
+    },
+    "errors": {
+        "invalidFields": "Please check all required fields and their format.",
+        "captchaRequired": "Please complete the CAPTCHA.",
+        "captchaInvalid": "CAPTCHA expired or invalid. Please verify again.",
+        "captchaUnavailable": "CAPTCHA is unavailable. Please reload the page or try again later.",
+        "rateLimited": "Too many requests. Please wait 10 minutes before trying again.",
+        "unavailable": "The support service is temporarily unavailable. Please try again later.",
+        "sessionExpired": "Your session has expired. Please sign in again.",
+        "sendFailed": "Could not send your request. Your content has been kept. Please try again."
+    },
+    "successTitle": "Request sent successfully",
+    "successDescription": "Our support team will review your request.",
+    "requestIdLabel": "Request ID"
 }

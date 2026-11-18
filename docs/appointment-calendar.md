@@ -47,7 +47,7 @@ Reschedule request:
 
 Existing bookings need no migration. Missing `scheduleVersion` is treated as zero and new history arrays default to empty. A stale version or unavailable destination returns HTTP 409. After any failed save, the client refetches and asks the user to review/reopen the edit instead of blindly retrying.
 
-Calendar socket subscriptions verify the JWT and derive their own `calendar:doctor:<id>` or `calendar:patient:<id>` room. The room cannot be chosen by supplying another person's ID. Invalidation targets both participants, carries no patient details, and triggers an authenticated refetch. Reconnect, visibility/focus and a 60-second visible-page refresh recover missed events. Unmount removes listeners and the subscription. Older notification/chat rooms retain their existing behavior.
+Calendar socket subscriptions verify the JWT and derive their own `calendar:doctor:<id>` or `calendar:patient:<id>` room. The room cannot be chosen by supplying another person's ID. Invalidation targets both participants, carries no patient details, and triggers an authenticated refetch. Reconnect and visibility/focus recover missed events. Calendar does not refetch on a periodic timer. Unmount removes listeners and the subscription. Older notification/chat rooms retain their existing behavior.
 
 ## Implementation and scope
 
