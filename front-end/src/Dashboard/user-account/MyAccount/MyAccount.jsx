@@ -1,3 +1,4 @@
+import InfoToolTip from '../../../components/InfoToolTip/InfoToolTip';
 import React, { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './MyAccount.module.scss';
@@ -52,9 +53,12 @@ const MyAccount = () => {
                                     <b>{t('dateOfBirth')}:</b> {userData.dateOfBirth}
                                 </p>
                             )}
-                            <p>
-                                <b>{t('email')}:</b> {userData.email}
-                            </p>
+                            <div className={cx('email-row')}>
+                                <b>{t('email')}:</b>
+                                <InfoToolTip text={userData.email || ''} maxLength={20} customStyle={{
+                                    minWidth: 0, flex: 1, textAlign: 'right', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                                }} />
+                            </div>
                             <p>
                                 <b>{t('phoneNumber')}:</b> (+84) {userData.phone}
                             </p>
@@ -95,7 +99,8 @@ const MyAccount = () => {
                         BackdropProps={{ style: { top: isMobile ? '60px' : '90px' } }}
                         sx={{
                             '& .MuiPaper-root': {
-                                width: 'max-content',
+                                width: 'min(350px, 100vw)',
+                                overflowX: 'hidden',
                                 top: isMobile ? '60px' : '90px',
                             },
                         }}
@@ -109,9 +114,12 @@ const MyAccount = () => {
                                     <b>{t('dateOfBirth')}:</b> {userData.dateOfBirth}
                                 </p>
                             )}
-                            <p>
-                                <b>{t('email')}:</b> {userData.email}
-                            </p>
+                            <div className={cx('email-row')}>
+                                <b>{t('email')}:</b>
+                                <InfoToolTip text={userData.email || ''} maxLength={20} customStyle={{
+                                    minWidth: 0, flex: 1, textAlign: 'right', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                                }} />
+                            </div>
                             <p>
                                 <b>{t('phoneNumber')}:</b> (+84) {userData.phone}
                             </p>
