@@ -575,7 +575,7 @@
         flex: 0 0 50px;
         border-radius: 50%;
         background: var(--primary-10);
-        color: var(--irisBlueColor);
+        color: var(--primaryColor);
         font-size: 24px;
     }
     .info {
@@ -602,7 +602,7 @@
         svg {
             width: 28px;
             height: 28px;
-            color: var(--irisBlueColor);
+            color: var(--primaryColor);
         }
         p {
             color: var(--darkGrayColor);
@@ -627,7 +627,7 @@
         button {
             border: 0;
             background: transparent;
-            color: var(--irisBlueColor);
+            color: var(--primaryColor);
             font: inherit;
             text-decoration: underline;
             cursor: pointer;
@@ -686,3 +686,5 @@
         animation: none;
     }
 }
+
+.container.support .new-messages { align-self: center; display: inline-flex; align-items: center; gap: 8px; margin: 8px 16px; padding: 8px 14px; border: 1px solid var(--primaryColor); border-radius: 20px; background: var(--whiteColor); color: var(--primaryColor); font: inherit; font-size: 14px; cursor: pointer; }

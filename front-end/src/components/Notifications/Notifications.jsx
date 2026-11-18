@@ -21,7 +21,9 @@ const Notifications = ({ notifications, role, handleCloseNotifications, loadErro
     const visibleNotifications = notifications.filter((item) => item.status !== 'done').slice(0, 6);
     const handleViewAll = () => {
         navigate(
-            role === 'admin'
+            role === 'guest'
+                ? '/support-requests'
+                : role === 'admin'
                 ? '/admins/management/support'
                 : role === 'doctor'
                 ? '/doctors/profile/me?tab=appointments'
@@ -247,7 +249,7 @@ const Notifications = ({ notifications, role, handleCloseNotifications, loadErro
                         <IoIosNotifications className={cx('icon')} />
                     </div>
                     <p>
-                        {role === 'admin'
+                        {['admin', 'guest'].includes(role)
                             ? t('supportRealtime:noNotifications')
                             : role === 'doctor'
                             ? t('emptyDescriptionDoctor')

@@ -60,9 +60,12 @@ export const emitSupportNotification = async (io, request) => {
     }
 };
 
+export const supportGuestRoom = (id) => 'support:guest:' + id;
+export const supportRecipientRoom = (request) => request.senderRole === 'guest'
+    ? supportGuestRoom(request._id) : supportOwnerRoom(request.senderRole, request.senderId);
 export const supportOwnerRoom = (role, id) => 'support:owner:' + role + ':' + id;
 export const hasSupportOwner = (request) =>
-    Boolean(request.senderId && ['patient', 'doctor'].includes(request.senderRole));
+    request.senderRole === 'guest' || Boolean(request.senderId && ['patient', 'doctor'].includes(request.senderRole));
 export const ownerSupportNotification = (request) => ({
     id: request.ownerNotificationId,
     requestId: String(request._id),
@@ -126,8 +129,8 @@ export const emitOwnerSupportNotification = async (io, request) => {
     }
     emitSupport(
         io,
-        supportOwnerRoom(request.senderRole, request.senderId),
-        'owner-support-notification',
+        supportRecipientRoom(request),
+        request.senderRole === 'guest' ? 'guest-support-notification' : 'owner-support-notification',
         ownerSupportNotification(enriched),
     );
 };

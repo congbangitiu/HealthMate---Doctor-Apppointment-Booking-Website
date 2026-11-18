@@ -1,6 +1,6 @@
 import defaultAvatar from '../../assets/images/default-notification-avatar.svg';
 import { FaHeadset } from 'react-icons/fa';
-import { FiLoader, FiMessageCircle } from 'react-icons/fi';
+import { FiArrowDown, FiLoader, FiMessageCircle } from 'react-icons/fi';
 import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './ContentChat.module.scss';
@@ -520,6 +520,7 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile, on
             <div
                 className={cx('content-part')}
                 ref={contentPartRef}
+                onScroll={isSupport ? support.onScroll : undefined}
                 role={isSupport ? 'log' : undefined}
                 aria-label={isSupport ? supportText('messages') : undefined}
                 aria-live={isSupport ? 'polite' : undefined}
@@ -660,6 +661,11 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile, on
                 )}
                 {isSupport && <div ref={support.bottomRef} />}
             </div>
+            {isSupport && support.hasNewMessages && (
+                <button type="button" className={cx('new-messages')} onClick={support.onJumpToLatest}>
+                    <FiArrowDown aria-hidden="true" />{supportText('newMessages')}
+                </button>
+            )}
             {isSupport && support.error && (
                 <p role="alert" className={cx('support-error')}>
                     {supportText(
@@ -816,6 +822,9 @@ ContentChat.propTypes = {
         hasMore: PropTypes.bool,
         olderLoading: PropTypes.bool,
         onLoadOlder: PropTypes.func.isRequired,
+        onScroll: PropTypes.func,
+        hasNewMessages: PropTypes.bool,
+        onJumpToLatest: PropTypes.func,
         draft: PropTypes.string.isRequired,
         onDraftChange: PropTypes.func.isRequired,
         sending: PropTypes.bool,

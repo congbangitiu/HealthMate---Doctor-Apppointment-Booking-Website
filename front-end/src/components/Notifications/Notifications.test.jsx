@@ -100,6 +100,7 @@ describe('shared notification popup', () => {
         expect(close).toHaveBeenCalledOnce();
     });
     it.each([
+        ['guest', '/support-requests'],
         ['doctor', '/doctors/profile/me?tab=appointments'],
         ['patient', '/users/profile/me'],
     ])('opens the appointment list for %s', async (role, path) => {

@@ -171,6 +171,17 @@ describe('support conversations', () => {
         );
         expect(io.to).not.toHaveBeenCalledWith('support:admins');
     });
+    it('persists an admin reply and notifies only the guest attached to the request', async () => {
+        const guestRequest = { ...request, senderRole: 'guest' };
+        getSupportAccess.mockResolvedValue({ request: guestRequest, account: { id: 'admin', role: 'admin', fullname: 'Admin' }, senderKey: 'admin:admin' });
+        SupportRequest.findByIdAndUpdate.mockImplementation((id, update) => ({ lean: vi.fn().mockResolvedValue({ ...guestRequest, ...update.$set }) }));
+        const res = await call(sendSupportMessage);
+        expect(res.status).toHaveBeenCalledWith(201);
+        expect(SupportRequest.findByIdAndUpdate.mock.calls[0][1].$set).toMatchObject({ ownerNotificationKind: 'message', ownerNotificationRead: false });
+        expect(io.to).toHaveBeenCalledWith('support:guest:' + id);
+        expect(io.emit).toHaveBeenCalledWith('guest-support-notification', expect.objectContaining({ requestId: id, kind: 'message', isRead: false }));
+        expect(io.to).not.toHaveBeenCalledWith('support:owner:guest:undefined');
+    });
     it('fetches missed messages after the last received ID in ascending order', async () => {
         const chain = {
             sort: vi.fn().mockReturnThis(),

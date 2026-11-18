@@ -52,6 +52,116 @@ beforeEach(() => {
     );
 });
 describe('support chat', () => {
+    it('preserves history position, jumps only on demand, and marks the visible latest notification read', async () => {
+        let notificationId = 'message:one';
+        let rows = [
+            { _id: '001', content: 'First admin reply', senderRole: 'admin', createdAt: '2026-11-10T01:00:00Z' },
+        ];
+        fetch.mockImplementation(async (url) => ({
+            ok: true,
+            json: async () =>
+                url.endsWith('/read')
+                    ? { success: true }
+                    : {
+                          data: {
+                              request: {
+                                  _id: 'request-1',
+                                  ownerNotificationId: notificationId,
+                                  ownerNotificationRead: false,
+                              },
+                              messages: rows,
+                              hasMore: false,
+                              viewer: { role: 'patient', id: 'owner' },
+                          },
+                      },
+        }));
+        render(<SupportChat requestId="request-1" token="owner-token" />);
+        await screen.findByText('First admin reply');
+        await waitFor(() => expect(fetch.mock.calls.filter(([url]) => url.endsWith('/read'))).toHaveLength(1));
+        const pane = screen.getByRole('log', { name: 'messages' });
+        let height = 1200;
+        Object.defineProperty(pane, 'scrollHeight', { configurable: true, get: () => height });
+        Object.defineProperty(pane, 'clientHeight', { configurable: true, value: 300 });
+        vi.spyOn(pane, 'getBoundingClientRect').mockReturnValue({ top: 100, bottom: 400 });
+        pane.scrollTop = 100;
+        fireEvent.scroll(pane);
+        notificationId = 'message:two';
+        rows = [
+            ...rows,
+            { _id: '002', content: 'New admin reply', senderRole: 'admin', createdAt: '2026-11-10T01:01:00Z' },
+        ];
+        height = 1500;
+        await act(async () => {
+            for (const handler of channel.handlers.get('support-chat-changed')) handler({ requestId: 'request-1' });
+        });
+        expect(await screen.findByText('New admin reply')).toBeInTheDocument();
+        expect(pane.scrollTop).toBe(100);
+        expect(fetch.mock.calls.filter(([url]) => url.endsWith('/read'))).toHaveLength(1);
+        fireEvent.click(screen.getByRole('button', { name: 'newMessages' }));
+        expect(pane.scrollTop).toBe(1500);
+        await waitFor(() =>
+            expect(fetch).toHaveBeenCalledWith(
+                '/api/v1/contacts/my-notifications/read',
+                expect.objectContaining({
+                    body: JSON.stringify({ requestId: 'request-1', notificationId: 'message:two' }),
+                }),
+            ),
+        );
+        expect(screen.queryByRole('button', { name: 'newMessages' })).not.toBeInTheDocument();
+        const hidden = vi.spyOn(document, 'hidden', 'get').mockReturnValue(true);
+        notificationId = 'message:three';
+        rows = [
+            ...rows,
+            { _id: '003', content: 'Reply while hidden', senderRole: 'admin', createdAt: '2026-11-10T01:02:00Z' },
+        ];
+        await act(async () => {
+            for (const handler of channel.handlers.get('support-chat-changed')) handler({ requestId: 'request-1' });
+        });
+        expect(fetch.mock.calls.filter(([url]) => url.endsWith('/read'))).toHaveLength(2);
+        hidden.mockReturnValue(false);
+        await act(async () => document.dispatchEvent(new Event('visibilitychange')));
+        await waitFor(() =>
+            expect(fetch).toHaveBeenCalledWith(
+                '/api/v1/contacts/my-notifications/read',
+                expect.objectContaining({
+                    body: JSON.stringify({ requestId: 'request-1', notificationId: 'message:three' }),
+                }),
+            ),
+        );
+        hidden.mockRestore();
+    });
+    it('marks only the guest notification visible when opening the conversation', async () => {
+        fetch.mockImplementation(async (url) => ({
+            ok: true,
+            json: async () =>
+                url.endsWith('/guest-notification/read')
+                    ? { success: true }
+                    : {
+                          data: {
+                              request: {
+                                  _id: 'request-1',
+                                  ownerNotificationId: 'status:guest',
+                                  ownerNotificationRead: false,
+                              },
+                              messages: [],
+                              hasMore: false,
+                              viewer: { role: 'guest', id: null },
+                          },
+                      },
+        }));
+        render(<SupportChat requestId="request-1" guestToken="guest-secret" />);
+        await waitFor(() =>
+            expect(fetch).toHaveBeenCalledWith(
+                '/api/v1/contacts/request-1/guest-notification/read',
+                expect.objectContaining({
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-Support-Token': 'guest-secret' },
+                    body: JSON.stringify({ requestId: 'request-1', notificationId: 'status:guest' }),
+                }),
+            ),
+        );
+        expect(fetch.mock.calls.some(([url]) => url.endsWith('/my-notifications/read'))).toBe(false);
+    });
     it('shows the requester to admins, with a neutral fallback when their avatar fails', async () => {
         fetch.mockImplementation(async () => ({
             ok: true,
@@ -107,7 +217,7 @@ describe('support chat', () => {
         expect(await screen.findByRole('heading', { name: 'supportTeam' })).toBeInTheDocument();
         expect(screen.queryByRole('img')).not.toBeInTheDocument();
     });
-    it('does not silently mark a new realtime update read during background conversation sync', async () => {
+    it('keeps a new update unread while the user is reading earlier messages', async () => {
         let notificationId = 'status:old';
         fetch.mockImplementation(async (url) => ({
             ok: true,
@@ -129,6 +239,11 @@ describe('support chat', () => {
         }));
         render(<SupportChat requestId="request-1" token="owner-token" />);
         await waitFor(() => expect(fetch.mock.calls.some(([url]) => url.endsWith('/read'))).toBe(true));
+        const pane = screen.getByRole('log', { name: 'messages' });
+        Object.defineProperty(pane, 'scrollHeight', { configurable: true, value: 1200 });
+        Object.defineProperty(pane, 'clientHeight', { configurable: true, value: 300 });
+        pane.scrollTop = 100;
+        fireEvent.scroll(pane);
         notificationId = 'status:new';
         await act(async () => {
             for (const handler of channel.handlers.get('support-chat-changed')) handler({ requestId: 'request-1' });

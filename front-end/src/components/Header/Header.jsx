@@ -1,3 +1,5 @@
+import useGuestSupportNotifications from '../../hooks/useGuestSupportNotifications';
+import { useGuestRequests } from '../../utils/services/supportRequests';
 import useOwnerSupportNotifications from '../../hooks/useOwnerSupportNotifications';
 import useAdminSupportNotifications from '../../hooks/useAdminSupportNotifications';
 import React from 'react';
@@ -46,6 +48,12 @@ const Header = () => {
         triggerShake();
         playNotificationSound();
     });
+    const guestRequests = useGuestRequests();
+    const guestSupport = useGuestSupportNotifications(guestRequests, !token, () => {
+        triggerShake();
+        playNotificationSound();
+    });
+    const personalSupport = token ? ownerSupport : guestSupport;
     const [showConfirmLogout, setShowConfirmLogout] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const { data: appointmentData } = useFetchData(
@@ -62,7 +70,7 @@ const Header = () => {
     const seenScheduleNotifications = useRef(new Set());
     const visibleNotifications = [
         ...new Map(
-            [...notifications, ...scheduleNotifications, ...ownerSupport.items].map((item) => [item.id, item]),
+            [...(token ? notifications : []), ...(token ? scheduleNotifications : []), ...personalSupport.items].map((item) => [item.id, item]),
         ).values(),
     ]
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -216,7 +224,7 @@ const Header = () => {
     }, [token, user, role]);
 
     const markNotificationsAsRead = async () => {
-        if (role === 'admin') return;
+        if (!token || role === 'admin') return;
         try {
             let response;
             if (role === 'doctor') {
@@ -568,6 +576,16 @@ const Header = () => {
                     </>
                 )}
 
+                {!token && guestRequests.length > 0 && (
+                    <div className={cx('noti', { open })} role="button" tabIndex={0}
+                        aria-label={t('notification:title')} aria-haspopup="true" onClick={handleOpenNotifications}
+                        onKeyDown={(event) => {
+                            if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); handleOpenNotifications(event); }
+                        }}>
+                        <IoIosNotifications className={cx('icon', { shake: isShaking })} />
+                        {guestSupport.unreadCount > 0 && <div>{guestSupport.unreadCount}</div>}
+                    </div>
+                )}
                 <label htmlFor="nav-mobile-input">
                     <BiMenu className={cx('menu-icon')} />
                 </label>
@@ -605,10 +623,10 @@ const Header = () => {
                     }}
                 >
                     <Notifications
-                        notifications={role === 'admin' ? support.items : visibleNotifications}
-                        role={role}
-                        onSupportRead={ownerSupport.markRead}
-                        loadError={role === 'admin' ? support.error : ownerSupport.error}
+                        notifications={token && role === 'admin' ? support.items : visibleNotifications}
+                        role={token ? role : 'guest'}
+                        onSupportRead={personalSupport.markRead}
+                        loadError={token && role === 'admin' ? support.error : personalSupport.error}
                         handleCloseNotifications={handleCloseNotifications}
                     />
                 </Popover>
@@ -628,10 +646,10 @@ const Header = () => {
                     }}
                 >
                     <Notifications
-                        notifications={role === 'admin' ? support.items : visibleNotifications}
-                        role={role}
-                        onSupportRead={ownerSupport.markRead}
-                        loadError={role === 'admin' ? support.error : ownerSupport.error}
+                        notifications={token && role === 'admin' ? support.items : visibleNotifications}
+                        role={token ? role : 'guest'}
+                        onSupportRead={personalSupport.markRead}
+                        loadError={token && role === 'admin' ? support.error : personalSupport.error}
                         handleCloseNotifications={handleCloseNotifications}
                     />
                 </Drawer>

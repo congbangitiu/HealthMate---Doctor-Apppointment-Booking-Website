@@ -19,7 +19,7 @@
 
     &:hover:not(:disabled) { opacity: 0.8; }
     &:disabled { opacity: 0.5; cursor: not-allowed; }
-    &:focus-visible { outline: 2px solid var(--irisBlueColor); outline-offset: 3px; }
+    &:focus-visible { outline: 2px solid var(--primaryColor); outline-offset: 3px; }
 }
 
 @mixin field {
@@ -34,7 +34,7 @@
     font-size: 16px;
 
     &:focus { outline: none; border-color: var(--primaryColor); }
-    &:focus-visible { outline: 2px solid var(--irisBlueColor); outline-offset: 2px; }
+    &:focus-visible { outline: 2px solid var(--primaryColor); outline-offset: 2px; }
 }
 
 // Match the status colors used in SupportManagement.

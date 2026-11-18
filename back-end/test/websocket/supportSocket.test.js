@@ -22,6 +22,51 @@ beforeEach(() => {
     supportSocketHandler({ on: (event, callback) => callback(socket) });
 });
 describe('authenticated support rooms', () => {
+    it('joins only guest notification rooms proven by a valid capability, ignoring forged identity fields', async () => {
+        getSupportAccess.mockImplementation(async (proof) => {
+            if (proof.requestId !== 'request-a' || proof.guestToken !== 'secret-a') throw Object.assign(new Error('forbidden'), { status: 403 });
+            return { request: { _id: 'request-a' }, account: { role: 'guest' } };
+        });
+        const ack = vi.fn();
+        handlers.get('guest-support-subscribe')({ requests: [
+            { requestId: 'request-a', guestToken: 'secret-a', role: 'admin' },
+            { requestId: 'request-b', guestToken: 'secret-a' },
+        ], room: 'support:admins' }, ack);
+        await tick();
+        expect(socket.join).toHaveBeenCalledTimes(1);
+        expect(socket.join).toHaveBeenCalledWith('support:guest:request-a');
+        expect(ack).toHaveBeenCalledWith({ success: true });
+        handlers.get('guest-support-unsubscribe')();
+        await tick();
+        expect(socket.leave).toHaveBeenCalledWith('support:guest:request-a');
+    });
+    it('expires notification rooms for a recovered guest session', async () => {
+        vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
+        getSupportAccess.mockResolvedValue({ request: { _id: 'recovered' }, account: { role: 'guest', expiresAt: Date.now() + 50 } });
+        handlers.get('guest-support-subscribe')({ requests: [{ requestId: 'recovered', guestToken: 'valid' }] }, vi.fn());
+        await tick();
+        expect(socket.join).toHaveBeenCalledWith('support:guest:recovered');
+        await vi.advanceTimersByTimeAsync(51);
+        expect(socket.leave).toHaveBeenCalledWith('support:guest:recovered');
+        vi.useRealTimers();
+    });
+    it('does not keep a guest subscription if the session ends while validation is pending', async () => {
+        let resolve;
+        getSupportAccess.mockReturnValue(new Promise((done) => { resolve = done; }));
+        handlers.get('guest-support-subscribe')({ requests: [{ requestId: 'request-a', guestToken: 'secret-a' }] }, vi.fn());
+        await tick();
+        handlers.get('guest-support-unsubscribe')();
+        resolve({ request: { _id: 'request-a' }, account: { role: 'guest' } });
+        await tick();
+        expect(socket.leave).toHaveBeenCalledWith('support:guest:request-a');
+    });
+    it('limits the number of guest subscriptions before querying access', async () => {
+        const ack = vi.fn();
+        handlers.get('guest-support-subscribe')({ requests: Array(101).fill({}) }, ack);
+        await tick();
+        expect(getSupportAccess).not.toHaveBeenCalled();
+        expect(ack).toHaveBeenCalledWith({ success: false });
+    });
     it.each(['patient', 'doctor'])('derives the %s owner room from verified identity, ignoring supplied IDs', async (role) => {
         getSupportAccount.mockResolvedValue({ id: 'verified', role, expiresAt: Date.now() + 60000 });
         const ack = vi.fn();

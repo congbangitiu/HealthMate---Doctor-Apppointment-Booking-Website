@@ -9,6 +9,7 @@ import i18n from '../../utils/services/i18n';
 import Header from './Header';
 
 const socket = vi.hoisted(() => ({ connected: true, handlers: new Map(), emit: vi.fn() }));
+const responsive = vi.hoisted(() => ({ mobile: false }));
 const emptyData = vi.hoisted(() => []);
 vi.mock('../../utils/services/socket', () => ({ default: {
     ...socket,
@@ -19,7 +20,7 @@ vi.mock('../../utils/services/socket', () => ({ default: {
     off: (event, handler) => socket.handlers.get(event)?.delete(handler),
 } }));
 vi.mock('../../hooks/useFetchData', () => ({ default: () => ({ data: emptyData }) }));
-vi.mock('../../hooks/useResponsive', () => ({ default: () => ({ isMobile: false, isTablet: false }) }));
+vi.mock('../../hooks/useResponsive', () => ({ default: () => ({ isMobile: responsive.mobile, isTablet: false }) }));
 const notification = {
     id: 'reschedule-booking-1-history-1', appointmentId: 'booking-1', type: 'reschedule',
     doctor: { _id: 'doctor-1', fullname: 'Doctor One', photo: '/doctor.png' },
@@ -37,6 +38,9 @@ const mount = () => render(
     </authContext.Provider>,
 );
 beforeEach(async () => {
+    responsive.mobile = false;
+    sessionStorage.removeItem('healthmate.support.guests');
+    localStorage.removeItem('healthmate.support.guests');
     await i18n.changeLanguage('en');
     socket.handlers.clear();
     supportToast.mockClear();
@@ -141,5 +145,39 @@ describe('signed-in sender support bell', () => {
         await user.click(screen.getByRole('button', { name: 'Notifications' }));
         await user.click(await screen.findByRole('button', { name: /Your support request.*has been updated to Resolved/ }));
         expect(screen.getByTestId('path')).toHaveTextContent('/support-requests?request=request-1');
+    });
+});
+
+
+describe('guest support bell', () => {
+    it.each([false, true])('plays one sound, opens the guest request and ends the session (mobile: %s)', async (mobile) => {
+        responsive.mobile = mobile;
+        sessionStorage.setItem('healthmate.support.guests', JSON.stringify([{ id: 'guest-request', guestToken: 'guest-secret' }]));
+        fetchMock.mockImplementation(async (url) => ({ ok: true, json: async () => url.endsWith('/contacts/guest-notifications')
+            ? { data: stored, unreadCount: stored.filter((item) => !item.isRead).length } : { success: true, unreadCount: 0 },
+        }));
+        render(<authContext.Provider value={{ user: null, role: null, token: null }}>
+            <MemoryRouter><Header /><Location /></MemoryRouter>
+        </authContext.Provider>);
+        await waitFor(() => expect(socket.handlers.get('guest-support-notification')?.size).toBe(1));
+        const event = { id: 'status:guest', requestId: 'guest-request', type: 'support-update', kind: 'status', supportStatus: 'resolved',
+            actorName: 'Admin One', photo: '/admin.png', isRead: false, createdAt: '2099-11-01T00:00:00Z' };
+        stored = [event];
+        await act(async () => { for (const handler of socket.handlers.get('guest-support-notification')) { handler(event); handler(event); } });
+        expect(await screen.findByText('1')).toBeInTheDocument();
+        expect(play).toHaveBeenCalledTimes(1);
+        const user = userEvent.setup();
+        await user.click(screen.getByRole('button', { name: 'Notifications' }));
+        expect(screen.getByRole('img', { name: 'Admin One' })).toHaveAttribute('src', '/admin.png');
+        expect(fetchMock.mock.calls.some(([url]) => url.endsWith('/guest-notification/read'))).toBe(false);
+        await user.click(await screen.findByRole('button', { name: /Your support request #guest-request has been updated to Resolved/ }));
+        expect(screen.getByTestId('path')).toHaveTextContent('/support-requests?request=guest-request');
+        expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/guest-request/guest-notification/read'), expect.objectContaining({
+            headers: { 'Content-Type': 'application/json', 'X-Support-Token': 'guest-secret' }, body: JSON.stringify({ notificationId: 'status:guest' }),
+        }));
+        const { endGuestSupportSession } = await import('../../utils/services/supportRequests');
+        await act(async () => endGuestSupportSession());
+        expect(screen.queryByRole('button', { name: 'Notifications' })).not.toBeInTheDocument();
+        expect(socket.emit).toHaveBeenCalledWith('guest-support-unsubscribe');
     });
 });

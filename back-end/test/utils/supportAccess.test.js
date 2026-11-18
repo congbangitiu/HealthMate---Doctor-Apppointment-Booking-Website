@@ -1,3 +1,4 @@
+import GuestSupportSession from '../../Models/GuestSupportSessionSchema.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import jwt from 'jsonwebtoken';
 import User from '../../Models/UserSchema.js';
@@ -10,6 +11,7 @@ import {
     publicSupportRequest,
 } from '../../utils/supportAccess.js';
 
+vi.mock('../../Models/GuestSupportSessionSchema.js', () => ({ default: { findOne: vi.fn() } }));
 vi.mock('../../Models/UserSchema.js', () => ({ default: { findById: vi.fn() } }));
 vi.mock('../../Models/DoctorSchema.js', () => ({ default: { findById: vi.fn() } }));
 vi.mock('../../Models/SupportRequestSchema.js', () => ({ default: { findById: vi.fn() } }));
@@ -19,6 +21,7 @@ const query = (value) => ({ select: vi.fn().mockReturnValue({ lean: vi.fn().mock
 const token = (role = 'patient', accountId = id) =>
     jwt.sign({ id: accountId, role }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
 beforeEach(() => {
+    GuestSupportSession.findOne.mockReturnValue(query(null));
     User.findById.mockReturnValue(query({ _id: id, fullname: 'Owner', role: 'patient' }));
     Doctor.findById.mockReturnValue(query({ _id: id, fullname: 'Doctor', role: 'doctor' }));
     SupportRequest.findById.mockReturnValue(query({ _id: other, senderId: id, senderRole: 'patient' }));
@@ -61,6 +64,24 @@ describe('support conversation access', () => {
         await expect(getSupportAccess({ requestId: other, guestToken: 'b'.repeat(64) })).rejects.toMatchObject({
             code: 'forbidden',
         });
+    });
+    it('keeps two independent guests isolated even when both know the other request ID', async () => {
+        const tokens = { [id]: 'a'.repeat(64), [other]: 'b'.repeat(64) };
+        SupportRequest.findById.mockImplementation((requestId) => query({ _id: requestId, senderRole: 'guest', fullname: 'Guest', guestAccessHash: hashGuestToken(tokens[requestId]) }));
+        expect((await getSupportAccess({ requestId: id, guestToken: tokens[id] })).account.role).toBe('guest');
+        expect((await getSupportAccess({ requestId: other, guestToken: tokens[other] })).account.role).toBe('guest');
+        await expect(getSupportAccess({ requestId: other, guestToken: tokens[id] })).rejects.toMatchObject({ code: 'forbidden' });
+        await expect(getSupportAccess({ requestId: id, guestToken: tokens[other] })).rejects.toMatchObject({ code: 'forbidden' });
+    });
+    it('accepts a recovered guest session only when it includes this request and has not expired', async () => {
+        const guestToken = 'c'.repeat(64);
+        SupportRequest.findById.mockReturnValue(query({ _id: other, senderRole: 'guest', fullname: 'Recovered guest' }));
+        GuestSupportSession.findOne.mockReturnValue(query({ expiresAt: new Date(Date.now() + 60000) }));
+        const access = await getSupportAccess({ requestId: other, guestToken });
+        expect(access.account).toMatchObject({ role: 'guest', id: null, expiresAt: expect.any(Number) });
+        expect(GuestSupportSession.findOne).toHaveBeenCalledWith({ tokenHash: hashGuestToken(guestToken), requestIds: other, expiresAt: { $gt: expect.any(Date) } });
+        GuestSupportSession.findOne.mockReturnValue(query(null));
+        await expect(getSupportAccess({ requestId: other, guestToken })).rejects.toMatchObject({ code: 'forbidden' });
     });
     it('never exposes internal notes, email or guest access hashes to chat participants', () => {
         const value = publicSupportRequest({

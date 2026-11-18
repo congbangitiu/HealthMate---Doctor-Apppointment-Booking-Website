@@ -17,8 +17,8 @@ The frontend's existing VITE_REACT_PUBLIC_SOCKET_URL must point to the backend S
 - After submitting Contact, use Open support conversation.
 - Contact also links to /support-requests, where signed-in patients/doctors can return to their own requests.
 - Guests receive a random request-specific capability. Only its SHA-256 hash is stored on the server.
-- Guest credentials stay in this browser's local storage and are sent using X-Support-Token, never in a URL or notification.
-- Clearing browser data loses guest access. Sharing a request URL alone does not give access.
+- Guest credentials stay in this tab's session storage and are sent using X-Support-Token, never in a URL or notification.
+- Ending the support session or clearing tab storage loses guest access. Sharing a request URL alone does not give access.
 - Existing signed-in requests can use chat. Guest requests created before this feature have no issued capability and cannot be recovered by supplying a name/email alone.
 
 ## Persistence and security
@@ -56,7 +56,7 @@ This release supports text conversation in the website. It does not request brow
 No messages or notifications are delivered by this feature while the browser is closed.
 The previous doctor/patient chat routes and UI remain in use for appointment chat.
 
-The shared notification popup shows at most six items and a View all action. Admins open support management; doctors open the appointments tab; patients open their appointment list. Support notifications resolve the sender avatar from the account, use a default avatar for guests, and display the original submission time in Vietnam time. English relative times use the i18next singular/plural keys.
+The shared notification popup shows at most six items and a View all action. Admins open support management; doctors open the appointments tab; patients open their appointment list; guests open My support requests. Support notifications resolve the sender avatar from the account, use a default avatar for guests, and display the original submission time in Vietnam time. English relative times use the i18next singular/plural keys.
 
 ## Signed-in sender notifications
 
@@ -66,7 +66,7 @@ Status changes save owner notification metadata atomically with the status. New 
 
 owner-support-subscribe verifies the JWT and actual database role and joins support:owner:<role>:<id>; the client cannot choose the target identity. The shared Header merges support updates with appointment notifications, plays the bell once per new live event, and restores the feed on login/reconnect/focus/visibility without replaying historical sounds. No toast is used.
 
-Clicking a support notification opens /support-requests?request=<id>. Opening a conversation marks only the update present at that visit as read for its signed-in owner while visible. Later background sync does not clear new updates; clicking their notification or reopening the request acknowledges them. Other open tabs update their unread counts via owner-support-changed. The Contact link to My support requests is centered below Submit. Guest notification delivery is deferred; existing guest conversation access is unchanged.
+Clicking a support notification opens /support-requests?request=<id>. A conversation acknowledges the exact latest notification only while the tab is visible, the chat bottom is in the viewport, and the reader is near the newest messages. Reading older history or switching to a hidden tab preserves unread updates. New messages do not force a reader away from older history; a New messages action jumps to the latest reply. Other open tabs update their unread counts via owner-support-changed. The Contact link to My support requests is centered below Submit. Guests now receive request-scoped notifications and use tab-scoped sessions; see guest-support.md.
 
 Support updates carry the acting admin name and current account avatar. Existing updates resolve the actor from processing history or the stored reply when actor metadata is absent. Avatar lookup failures use a neutral fallback and never undo a saved status/reply. Live socket IDs are deduplicated independently from HTTP feed restoration; the badge updates immediately before the confirming fetch. The shared audio element is unlocked on a pointer/keyboard interaction, and autoplay-blocked alerts retry on the next interaction.
 

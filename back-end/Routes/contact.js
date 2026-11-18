@@ -1,3 +1,5 @@
+import { requestGuestRecovery, inspectGuestRecovery, confirmGuestRecovery } from '../Controllers/guestSupportRecoveryController.js';
+import { getGuestSupportNotifications, readGuestSupportNotification } from '../Controllers/guestSupportNotificationsController.js';
 import { getOwnerSupportNotifications, readOwnerSupportNotification } from '../Controllers/ownerSupportNotificationsController.js';
 import { getSupportNotifications } from '../Controllers/supportNotificationsController.js';
 import { ownSupportRequests, getSupportConversation, sendSupportMessage } from '../Controllers/supportConversationController.js';
@@ -18,9 +20,14 @@ router.post(
 );
 router.get('/', authenticate, restrict(['admin']), listSupportRequests);
 router.get('/notifications', authenticate, restrict(['admin']), getSupportNotifications);
+router.post('/guest-recovery', requestGuestRecovery);
+router.post('/guest-recovery/inspect', inspectGuestRecovery);
+router.post('/guest-recovery/confirm', confirmGuestRecovery);
 router.get('/mine', ownSupportRequests);
 router.get('/my-notifications', getOwnerSupportNotifications);
 router.post('/my-notifications/read', readOwnerSupportNotification);
+router.post('/guest-notifications', getGuestSupportNotifications);
+router.post('/:id/guest-notification/read', readGuestSupportNotification);
 router.get('/:id/conversation', getSupportConversation);
 router.post('/:id/messages', sendSupportMessage);
 router.get('/:id', authenticate, restrict(['admin']), getSupportRequest);

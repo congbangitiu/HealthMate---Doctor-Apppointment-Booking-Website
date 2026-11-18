@@ -1,5 +1,5 @@
 import { getSupportAccount, getSupportAccess } from '../utils/supportAccess.js';
-import { SUPPORT_ADMIN_ROOM, supportRequestRoom, supportOwnerRoom } from '../utils/supportRealtime.js';
+import { SUPPORT_ADMIN_ROOM, supportRequestRoom, supportOwnerRoom, supportGuestRoom } from '../utils/supportRealtime.js';
 
 const supportSocketHandler = (io) => {
     io.on('connection', (socket) => {
@@ -61,6 +61,33 @@ const supportSocketHandler = (io) => {
             }),
         );
         socket.on('owner-support-unsubscribe', () => enqueue(() => leave('owner')));
+        const leaveGuests = async () => {
+            for (const key of [...subscriptions.keys()]) if (key.startsWith('guest:')) await leave(key);
+        };
+        socket.on('guest-support-subscribe', (payload = {}, acknowledge = () => {}) =>
+            enqueue(async () => {
+                try {
+                    await leaveGuests();
+                    if (!Array.isArray(payload.requests) || payload.requests.length > 100) throw new Error('forbidden');
+                    const verified = new Map();
+                    for (const proof of payload.requests) {
+                        if (!proof || typeof proof !== 'object') continue;
+                        try {
+                            const { request, account } = await getSupportAccess({ requestId: proof.requestId, guestToken: proof.guestToken });
+                            if (account.role === 'guest') verified.set(String(request._id), account);
+                        } catch (error) {
+                            if (![400, 401, 403, 404].includes(error.status)) throw error;
+                        }
+                    }
+                    for (const [id, account] of verified) await join('guest:' + id, supportGuestRoom(id), account.expiresAt);
+                    if (typeof acknowledge === 'function') acknowledge({ success: true });
+                } catch {
+                    await leaveGuests();
+                    if (typeof acknowledge === 'function') acknowledge({ success: false });
+                }
+            }),
+        );
+        socket.on('guest-support-unsubscribe', () => enqueue(leaveGuests));
         socket.on('support-chat-subscribe', (payload = {}, acknowledge = () => {}) =>
             enqueue(async () => {
                 try {

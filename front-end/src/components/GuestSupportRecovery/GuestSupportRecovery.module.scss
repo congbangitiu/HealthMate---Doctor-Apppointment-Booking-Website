@@ -1,0 +1,274 @@
+@use '../../styles/support' as support;
+.card {
+    position: relative;
+    max-width: 780px;
+    margin: 20px 0;
+    padding: 28px;
+    overflow: hidden;
+    border: 1px solid #dce7e7;
+    border-radius: 12px;
+    background: var(--whiteColor, #fff);
+    box-shadow: 0 4px 20px rgba(26, 74, 73, 0.04);
+    color: var(--textColor);
+    font-size: 16px;
+
+    p {
+        margin: 0 !important;
+        line-height: 1.6;
+    }
+}
+.header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+.mailIcon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex: 0 0 48px;
+    height: 48px;
+    border: 1px solid #d5efec;
+    border-radius: 14px;
+    background: #edf9f7;
+    color: var(--primaryColor);
+    font-size: 23px;
+}
+.check {
+    position: absolute;
+    right: -4px;
+    bottom: -4px;
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    background: var(--primaryColor);
+    color: #fff;
+    font-size: 12px;
+}
+.heading {
+    flex: 1;
+    min-width: 0;
+    h3 {
+        margin: 0 0 4px;
+        color: var(--headingColor);
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 1.4;
+    }
+    p {
+        color: var(--darkGrayColor);
+        font-size: 14px;
+    }
+}
+.close {
+    align-self: flex-start;
+    position: relative;
+    top: -8px;
+    right: -6px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #f4f7f7;
+    color: var(--darkGrayColor);
+    font-size: 18px;
+    cursor: pointer;
+    &:hover:not(:disabled) {
+        background: var(--lightRedColor);
+        color: var(--darkRedColor);
+    }
+}
+.form {
+    display: grid;
+    gap: 10px;
+    label {
+        color: var(--textColor);
+        font-size: 14px;
+        font-weight: 500;
+    }
+}
+.inputRow {
+    display: flex;
+    gap: 12px;
+    input {
+        @include support.field;
+        flex: 1;
+        width: 100%;
+        min-width: 0;
+        min-height: 46px;
+        box-sizing: border-box;
+        border-color: #ccd9da;
+        border-radius: 6px;
+    }
+}
+.primary {
+    @include support.primary-action;
+    flex-shrink: 0;
+    min-height: 46px;
+    svg {
+        font-size: 18px;
+    }
+}
+.note {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--darkGrayColor);
+    font-size: 14px;
+    svg {
+        flex-shrink: 0;
+        font-size: 15px;
+    }
+}
+.receipt {
+    padding: 18px 20px;
+    border: 1px solid #dfefea;
+    border-radius: 8px;
+    background: #f4faf8;
+    p {
+        color: #3a5751;
+        font-size: 16px;
+        overflow-wrap: anywhere;
+    }
+    strong {
+        color: var(--headingColor);
+        font-weight: 600;
+    }
+    .note {
+        margin-top: 12px;
+    }
+    &:focus {
+        outline: none;
+    }
+}
+.actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 18px;
+}
+.resend {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+}
+.textButton,
+.reveal {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    color: var(--primaryColor);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.textButton {
+    white-space: nowrap;
+    &:hover:not(:disabled) {
+        text-decoration: underline;
+    }
+    &:disabled {
+        color: var(--darkGrayColor);
+        cursor: not-allowed;
+    }
+}
+.reveal {
+    margin: 12px 0 20px;
+    padding: 10px 0;
+    font-size: 16px;
+    &:hover {
+        color: var(--primaryColor);
+    }
+}
+.countdown {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--darkGrayColor);
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+}
+.error {
+    margin-top: 16px !important;
+    color: var(--darkRedColor, #b42318);
+    font-size: 14px;
+}
+.close,
+.textButton,
+.reveal {
+    &:focus-visible {
+        outline: 2px solid var(--primaryColor);
+        outline-offset: 4px;
+    }
+}
+.spinner {
+    animation: recovery-spin 1s linear infinite;
+}
+@keyframes recovery-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .spinner {
+        animation: none;
+    }
+}
+@media (max-width: 600px) {
+    .card {
+        padding: 20px;
+        border-radius: 10px;
+        &::before {
+            left: 20px;
+        }
+    }
+    .header {
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+    .mailIcon {
+        flex-basis: 42px;
+        height: 42px;
+        border-radius: 12px;
+        font-size: 21px;
+    }
+    .inputRow {
+        flex-direction: column;
+        gap: 12px;
+    }
+    .primary {
+        width: 100%;
+    }
+    .receipt {
+        padding: 16px;
+    }
+    .actions {
+        align-items: flex-start;
+    }
+    .resend {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+.embedded {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+}

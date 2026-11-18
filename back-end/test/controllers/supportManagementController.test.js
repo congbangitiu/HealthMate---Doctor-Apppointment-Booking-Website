@@ -39,6 +39,17 @@ describe('support management', () => {
         expect(io.to).toHaveBeenCalledWith('support:owner:doctor:' + adminId);
         expect(io.emit).toHaveBeenCalledWith('owner-support-notification', expect.objectContaining({ type: 'support-update', supportStatus: 'resolved' }));
     });
+    it('saves a guest status notification with the update and delivers it to that request only', async () => {
+        const guest = { ...document, senderRole: 'guest', category: 'technical' };
+        SupportRequest.findById.mockReturnValue({ lean: vi.fn().mockResolvedValue(guest) });
+        SupportRequest.findOneAndUpdate.mockImplementation((filter, update) => ({ lean: vi.fn().mockResolvedValue({ ...guest, ...update.$set }) }));
+        const io = { to: vi.fn().mockReturnThis(), emit: vi.fn() };
+        await call(updateSupportRequest, { body: { version: 0, status: 'resolved' }, io });
+        expect(SupportRequest.findOneAndUpdate.mock.calls[0][1].$set).toMatchObject({ ownerNotificationKind: 'status', ownerNotificationRead: false });
+        expect(io.to).toHaveBeenCalledWith('support:guest:' + requestId);
+        expect(io.emit).toHaveBeenCalledWith('guest-support-notification', expect.objectContaining({ requestId, supportStatus: 'resolved' }));
+        expect(io.to).not.toHaveBeenCalledWith('support:owner:guest:undefined');
+    });
     it('does not notify the sender about an internal note', async () => {
         const io = { to: vi.fn().mockReturnThis(), emit: vi.fn() };
         await call(updateSupportRequest, { body: { version: 0, note: 'Internal only' }, io });

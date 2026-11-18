@@ -277,6 +277,7 @@ export default function Contact() {
                             {submitting ? t('submitting') : t('submit')}
                         </button>
                     </div>
+                    {!token && <p className={cx('guest-session-hint')}>{t('supportRealtime:guestContactHint')}</p>}
                     <Link className={cx('support-link')} to="/support-requests">{t('supportRealtime:myRequests')}</Link>
                 </form>
             )}

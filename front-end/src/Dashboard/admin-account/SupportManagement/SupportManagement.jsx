@@ -451,7 +451,7 @@ const SupportManagement = () => {
                 aria-labelledby="support-dialog-title"
             >
                 <DialogTitle component="div" className={cx('dialog-header')}>
-                    <h2>{t('details')}</h2>
+                    <h2 id="support-dialog-title">{t('details')}</h2>
                     <button type="button" disabled={saving} onClick={() => selectRequest('')} aria-label={t('close')}>
                         <FiX aria-hidden="true" />
                     </button>

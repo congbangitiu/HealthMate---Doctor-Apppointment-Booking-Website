@@ -1,3 +1,4 @@
+import GuestSupportSession from '../Models/GuestSupportSessionSchema.js';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import { createHash, timingSafeEqual } from 'node:crypto';
@@ -36,6 +37,12 @@ export const getSupportAccess = async ({ token, guestToken, requestId }) => {
         if (expected.length === actual.length && timingSafeEqual(expected, actual)) {
             return { request, account: { id: null, role: 'guest', fullname: request.fullname }, senderKey: 'guest' };
         }
+    }
+    if (request.senderRole === 'guest' && typeof guestToken === 'string' && /^[a-f0-9]{64}$/.test(guestToken)) {
+        const session = await GuestSupportSession.findOne({ tokenHash: hashGuestToken(guestToken), requestIds: request._id,
+            expiresAt: { $gt: new Date() },
+        }).select('expiresAt').lean();
+        if (session) return { request, account: { id: null, role: 'guest', fullname: request.fullname, expiresAt: new Date(session.expiresAt).getTime() }, senderKey: 'guest' };
     }
     const account = await getSupportAccount(token);
     const owner = String(request.senderId) === account.id && request.senderRole === account.role;

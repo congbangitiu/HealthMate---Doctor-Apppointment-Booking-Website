@@ -10,6 +10,7 @@ const Login = lazy(() => import('./../pages/Login/Login'));
 const Register = lazy(() => import('./../pages/Register/Register'));
 const ForgotPassword = lazy(() => import('./../pages/ForgotPassword/ForgotPassword'));
 const Contact = lazy(() => import('./../pages/Contact/Contact'));
+const GuestSupportRecovery = lazy(() => import('../pages/GuestSupportRecovery/GuestSupportRecovery'));
 const SupportRequests = lazy(() => import('../pages/SupportRequests/SupportRequests'));
 const Specialties = lazy(() => import('./../pages/Specialties/Specialties'));
 const SpecialtyDetails = lazy(() => import('../pages/SpecialtyDetails/SpecialtyDetails'));
@@ -38,6 +39,7 @@ const Routers = () => {
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/support-requests" element={<SupportRequests />} />
+                <Route path="/support-requests/recover" element={<GuestSupportRecovery />} />
                 <Route path="/services" element={<Services />} />
                 <Route path="/specialties" element={<Specialties />} />
                 <Route path="/specialties/:id" element={<SpecialtyDetails />} />
