@@ -17,9 +17,17 @@
     text-decoration: none;
     cursor: pointer;
 
-    &:hover:not(:disabled) { opacity: 0.8; }
-    &:disabled { opacity: 0.5; cursor: not-allowed; }
-    &:focus-visible { outline: 2px solid var(--primaryColor); outline-offset: 3px; }
+    &:hover:not(:disabled) {
+        opacity: 0.8;
+    }
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    &:focus-visible {
+        outline: 2px solid var(--primaryColor);
+        outline-offset: 3px;
+    }
 }
 
 @mixin field {
@@ -33,16 +41,28 @@
     font: inherit;
     font-size: 16px;
 
-    &:focus { outline: none; border-color: var(--primaryColor); }
-    &:focus-visible { outline: 2px solid var(--primaryColor); outline-offset: 2px; }
+    &:focus {
+        outline: none;
+        border-color: var(--primaryColor);
+    }
+    &:focus-visible {
+        outline: 2px solid var(--primaryColor);
+        outline-offset: 2px;
+    }
 }
 
 // Match the status colors used in SupportManagement.
 @mixin status-text {
     --support-status-color: #314663;
-    &[data-status='in-progress'] { --support-status-color: #795500; }
-    &[data-status='resolved'] { --support-status-color: #226642; }
-    &[data-status='spam'] { --support-status-color: #922c2c; }
+    &[data-status='in-progress'] {
+        --support-status-color: #795500;
+    }
+    &[data-status='resolved'] {
+        --support-status-color: #226642;
+    }
+    &[data-status='spam'] {
+        --support-status-color: #922c2c;
+    }
     color: var(--support-status-color);
 }
 
@@ -60,7 +80,13 @@
     line-height: 1.5;
     white-space: nowrap;
 
-    &[data-status='in-progress'] { background: #fff1ce; }
-    &[data-status='resolved'] { background: #dbf4e7; }
-    &[data-status='spam'] { background: #fce4e4; }
+    &[data-status='in-progress'] {
+        background: #fff1ce;
+    }
+    &[data-status='resolved'] {
+        background: #dbf4e7;
+    }
+    &[data-status='spam'] {
+        background: #fce4e4;
+    }
 }

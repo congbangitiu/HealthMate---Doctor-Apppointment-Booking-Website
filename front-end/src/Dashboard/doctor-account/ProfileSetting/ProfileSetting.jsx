@@ -373,19 +373,16 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
             .filter((day) => day.name !== 'Sunday'); // Remove Sunday if not needed
     }, []);
 
-    const handleTimeSlotsChange = useCallback(
-        (slots) => {
-            setFormData((prev) => {
-                if (JSON.stringify(prev.timeSlots) === JSON.stringify(slots)) return prev;
+    const handleTimeSlotsChange = useCallback((slots) => {
+        setFormData((prev) => {
+            if (JSON.stringify(prev.timeSlots) === JSON.stringify(slots)) return prev;
 
-                return {
-                    ...prev,
-                    timeSlots: slots,
-                };
-            });
-        },
-        [],
-    );
+            return {
+                ...prev,
+                timeSlots: slots,
+            };
+        });
+    }, []);
 
     const handleAvailableScheduleChange = useCallback((updatedSchedules) => {
         setFormData((prev) => {
@@ -411,397 +408,401 @@ const ProfileSetting = ({ doctorData, isMobile }) => {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <div className={cx('container')}>
-            {/* PERSONAL INFORMATION  */}
-            <h3 className={cx('title')}>{t('titles.personalInfo')}</h3>
-            <div className={cx('upperPart')}>
-                <div className={cx('leftPart')}>
-                    <div className={cx('info')}>
-                        <label htmlFor="fullname">{t('fields.fullname')}</label>
-                        <input
-                            className={cx('native-input')}
-                            type="text"
-                            id="fullname"
-                            placeholder={t('fields.fullname')}
-                            value={formData.fullname}
-                            name="fullname"
-                            onChange={handleInputChange}
-                            required
-                        />
-                    </div>
-                    <div className={cx('info')}>
-                        <label htmlFor="email">{t('fields.email')}</label>
-                        <input
-                            className={cx('native-input')}
-                            type="email"
-                            id="email"
-                            placeholder={t('fields.email')}
-                            value={formData.email}
-                            name="email"
-                            onChange={handleInputChange}
-                            required
-                        />
-                    </div>
-                    <div className={cx('info')}>
-                        <label htmlFor="phone">{t('fields.phone')}</label>
-                        <input
-                            className={cx('native-input')}
-                            type="tel"
-                            id="phone"
-                            placeholder={t('fields.phone')}
-                            inputMode="numeric"
-                            pattern="[0-9]*"
-                            value={formData.phone}
-                            name="phone"
-                            onChange={handlePhoneChange}
-                            required
-                        />
-                    </div>
-                </div>
-                <div className={cx('rightPart')}>
-                    <div className={cx('info')}>
-                        <span>
-                            <label htmlFor="message">{t('fields.bio')}</label>
-                            {errorWordLimit && <p className={cx('error')}>{errorWordLimit}</p>}
-                        </span>
-                        <textarea
-                            id="message"
-                            cols="30"
-                            rows="3"
-                            placeholder={t('fields.bioPlaceholder')}
-                            name="bio"
-                            value={formData.bio}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div className={cx('upload', 'avatar')}>
-                        {formData.photo && <img src={formData.photo} alt="" />}
-                        <input
-                            type="file"
-                            name="photo"
-                            id="customAvatar"
-                            accept=".jpg, .png, .jpeg, .webp"
-                            onChange={handleUploadAvatar}
-                        />
-                        <label htmlFor="customAvatar">
-                            {loadingAvatar ? (
-                                <SyncLoader size={7} color="#ffffff" />
-                            ) : isMobile ? (
-                                <MdFileUpload />
-                            ) : (
-                                t('fields.uploadPhoto')
-                            )}
-                        </label>
-                        <p>{t('fields.photoNote')}</p>
-                    </div>
-                    <div className={cx('upload', 'signature')}>
-                        {formData.signature && <img src={formData.signature} alt="" />}
-                        <input
-                            type="file"
-                            name="signature"
-                            id="customSignature"
-                            accept=".jpg, .png, .jpeg, .webp"
-                            onChange={handleUploadSignature}
-                        />
-                        <label htmlFor="customSignature">
-                            {loadingSignature ? (
-                                <SyncLoader size={7} color="#ffffff" />
-                            ) : isMobile ? (
-                                <MdFileUpload />
-                            ) : (
-                                t('fields.uploadSignature')
-                            )}
-                        </label>
-                        <p>{t('fields.signatureNote')}</p>
-                    </div>
-                </div>
-            </div>
-            <div className={cx('info', 'selection')}>
-                <div className={cx('field')}>
-                    <label htmlFor="gender">{t('fields.gender')}</label>
-                    <select name="gender" id="gender" value={formData.gender} onChange={handleInputChange} required>
-                        <option value="">{t('fields.genderSelect')}</option>
-                        <option value="Male">{t('fields.male')}</option>
-                        <option value="Female">{t('fields.female')}</option>
-                        <option value="Other">{t('fields.other')}</option>
-                    </select>
-                </div>
-                <div className={cx('field')}>
-                    <label htmlFor="ticketPrice">{t('fields.ticketPrice')}</label>
-                    <input
-                        className={cx('native-input')}
-                        type="number"
-                        name="ticketPrice"
-                        id="ticketPrice"
-                        value={formData.ticketPrice}
-                        onChange={handleInputChange}
-                        required
-                    />
-                </div>
-                <div className={cx('field')}>
-                    <label htmlFor="specialty">{t('fields.specialty')}</label>
-                    <input
-                        className={cx('native-input')}
-                        name="specialty"
-                        id="specialty"
-                        value={
-                            currentLanguage === 'vi'
-                                ? translateToVietnameseSpecialty(formData.specialty)
-                                : formData.specialty
-                        }
-                        required
-                        readOnly
-                    />
-                </div>
-                <div className={cx('field')}>
-                    <label htmlFor="subspecialty">{t('fields.subspecialty')}</label>
-                    <Autocomplete
-                        options={subspecialtyOptions}
-                        value={formData.subspecialty || null}
-                        getOptionLabel={(option) => (typeof option === 'object' && option?.label ? option.label : '')}
-                        isOptionEqualToValue={(option, value) => option.value === value?.value}
-                        onChange={(event, newValue) => handleSubspecialtyChange(newValue)}
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                sx={{
-                                    '& .MuiOutlinedInput-root': {
-                                        padding: '5px 10px',
-                                        fontSize: '16px',
-                                        borderRadius: '5px',
-                                        '& fieldset': {
-                                            border: '2px solid var(--darkGrayColor)',
-                                        },
-                                        '&:hover fieldset': {
-                                            border: '2px solid var(--darkGrayColor)',
-                                        },
-                                        '&.Mui-focused fieldset': {
-                                            border: '2px solid var(--darkGrayColor)',
-                                        },
-                                    },
-                                    '& .MuiInputBase-input': {
-                                        padding: '10px',
-                                        fontSize: '16px',
-                                    },
-                                }}
+                {/* PERSONAL INFORMATION  */}
+                <h3 className={cx('title')}>{t('titles.personalInfo')}</h3>
+                <div className={cx('upperPart')}>
+                    <div className={cx('leftPart')}>
+                        <div className={cx('info')}>
+                            <label htmlFor="fullname">{t('fields.fullname')}</label>
+                            <input
+                                className={cx('native-input')}
+                                type="text"
+                                id="fullname"
+                                placeholder={t('fields.fullname')}
+                                value={formData.fullname}
+                                name="fullname"
+                                onChange={handleInputChange}
+                                required
                             />
-                        )}
-                        renderOption={(optionProps, option, { selected }) => {
-                            const { key, ...liProps } = optionProps;
-                            delete liProps.div;
-
-                            return (
-                                <li
-                                    key={key}
-                                    {...liProps}
-                                    style={{
-                                        fontWeight: selected ? '500' : 'normal',
-                                        backgroundColor: selected ? 'var(--lightGreenColor)' : 'inherit',
+                        </div>
+                        <div className={cx('info')}>
+                            <label htmlFor="email">{t('fields.email')}</label>
+                            <input
+                                className={cx('native-input')}
+                                type="email"
+                                id="email"
+                                placeholder={t('fields.email')}
+                                value={formData.email}
+                                name="email"
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
+                        <div className={cx('info')}>
+                            <label htmlFor="phone">{t('fields.phone')}</label>
+                            <input
+                                className={cx('native-input')}
+                                type="tel"
+                                id="phone"
+                                placeholder={t('fields.phone')}
+                                inputMode="numeric"
+                                pattern="[0-9]*"
+                                value={formData.phone}
+                                name="phone"
+                                onChange={handlePhoneChange}
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div className={cx('rightPart')}>
+                        <div className={cx('info')}>
+                            <span>
+                                <label htmlFor="message">{t('fields.bio')}</label>
+                                {errorWordLimit && <p className={cx('error')}>{errorWordLimit}</p>}
+                            </span>
+                            <textarea
+                                id="message"
+                                cols="30"
+                                rows="3"
+                                placeholder={t('fields.bioPlaceholder')}
+                                name="bio"
+                                value={formData.bio}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div className={cx('upload', 'avatar')}>
+                            {formData.photo && <img src={formData.photo} alt="" />}
+                            <input
+                                type="file"
+                                name="photo"
+                                id="customAvatar"
+                                accept=".jpg, .png, .jpeg, .webp"
+                                onChange={handleUploadAvatar}
+                            />
+                            <label htmlFor="customAvatar">
+                                {loadingAvatar ? (
+                                    <SyncLoader size={7} color="#ffffff" />
+                                ) : isMobile ? (
+                                    <MdFileUpload />
+                                ) : (
+                                    t('fields.uploadPhoto')
+                                )}
+                            </label>
+                            <p>{t('fields.photoNote')}</p>
+                        </div>
+                        <div className={cx('upload', 'signature')}>
+                            {formData.signature && <img src={formData.signature} alt="" />}
+                            <input
+                                type="file"
+                                name="signature"
+                                id="customSignature"
+                                accept=".jpg, .png, .jpeg, .webp"
+                                onChange={handleUploadSignature}
+                            />
+                            <label htmlFor="customSignature">
+                                {loadingSignature ? (
+                                    <SyncLoader size={7} color="#ffffff" />
+                                ) : isMobile ? (
+                                    <MdFileUpload />
+                                ) : (
+                                    t('fields.uploadSignature')
+                                )}
+                            </label>
+                            <p>{t('fields.signatureNote')}</p>
+                        </div>
+                    </div>
+                </div>
+                <div className={cx('info', 'selection')}>
+                    <div className={cx('field')}>
+                        <label htmlFor="gender">{t('fields.gender')}</label>
+                        <select name="gender" id="gender" value={formData.gender} onChange={handleInputChange} required>
+                            <option value="">{t('fields.genderSelect')}</option>
+                            <option value="Male">{t('fields.male')}</option>
+                            <option value="Female">{t('fields.female')}</option>
+                            <option value="Other">{t('fields.other')}</option>
+                        </select>
+                    </div>
+                    <div className={cx('field')}>
+                        <label htmlFor="ticketPrice">{t('fields.ticketPrice')}</label>
+                        <input
+                            className={cx('native-input')}
+                            type="number"
+                            name="ticketPrice"
+                            id="ticketPrice"
+                            value={formData.ticketPrice}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </div>
+                    <div className={cx('field')}>
+                        <label htmlFor="specialty">{t('fields.specialty')}</label>
+                        <input
+                            className={cx('native-input')}
+                            name="specialty"
+                            id="specialty"
+                            value={
+                                currentLanguage === 'vi'
+                                    ? translateToVietnameseSpecialty(formData.specialty)
+                                    : formData.specialty
+                            }
+                            required
+                            readOnly
+                        />
+                    </div>
+                    <div className={cx('field')}>
+                        <label htmlFor="subspecialty">{t('fields.subspecialty')}</label>
+                        <Autocomplete
+                            options={subspecialtyOptions}
+                            value={formData.subspecialty || null}
+                            getOptionLabel={(option) =>
+                                typeof option === 'object' && option?.label ? option.label : ''
+                            }
+                            isOptionEqualToValue={(option, value) => option.value === value?.value}
+                            onChange={(event, newValue) => handleSubspecialtyChange(newValue)}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            padding: '5px 10px',
+                                            fontSize: '16px',
+                                            borderRadius: '5px',
+                                            '& fieldset': {
+                                                border: '2px solid var(--darkGrayColor)',
+                                            },
+                                            '&:hover fieldset': {
+                                                border: '2px solid var(--darkGrayColor)',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                border: '2px solid var(--darkGrayColor)',
+                                            },
+                                        },
+                                        '& .MuiInputBase-input': {
+                                            padding: '10px',
+                                            fontSize: '16px',
+                                        },
                                     }}
-                                >
-                                    {option.label}
-                                </li>
-                            );
-                        }}
-                        slotProps={{
-                            paper: {
-                                sx: {
-                                    '& .MuiAutocomplete-option': {
-                                        fontSize: '16px',
-                                        '&:hover': {
-                                            backgroundColor: 'var(--lightGrayColor) !important',
+                                />
+                            )}
+                            renderOption={(optionProps, option, { selected }) => {
+                                const { key, ...liProps } = optionProps;
+                                delete liProps.div;
+
+                                return (
+                                    <li
+                                        key={key}
+                                        {...liProps}
+                                        style={{
+                                            fontWeight: selected ? '500' : 'normal',
+                                            backgroundColor: selected ? 'var(--lightGreenColor)' : 'inherit',
+                                        }}
+                                    >
+                                        {option.label}
+                                    </li>
+                                );
+                            }}
+                            slotProps={{
+                                paper: {
+                                    sx: {
+                                        '& .MuiAutocomplete-option': {
+                                            fontSize: '16px',
+                                            '&:hover': {
+                                                backgroundColor: 'var(--lightGrayColor) !important',
+                                            },
                                         },
                                     },
                                 },
-                            },
-                        }}
-                    />
+                            }}
+                        />
+                    </div>
                 </div>
-            </div>
 
-            {/* QUALIFICATION */}
-            <h3 className={cx('title', 'other')}>{t('titles.qualifications')}</h3>
-            <div className={cx('details')}>
-                {formData.qualifications?.map((qualification, index) => (
-                    <div key={index} className={cx('credentials')}>
-                        <div className={cx('credential')}>
-                            <label htmlFor="startingDate">{t('qualifications.startingDate')}</label>
-                            <DatePicker
-                                value={qualification.startingDate ? dayjs(qualification.startingDate) : null}
-                                onChange={(value) => handleDateChange('qualifications', 'startingDate', value, index)}
-                                format="DD/MM/YYYY"
-                                disabled={!qualification.isEditable}
-                                slotProps={{
-                                    textField: getDatePickerTextFieldProps(`qualification-${index}-starting-date`),
-                                }}
-                            />
-                        </div>
-                        <div className={cx('credential')}>
-                            <label htmlFor="endingDate">{t('qualifications.endingDate')}</label>
-                            <DatePicker
-                                value={qualification.endingDate ? dayjs(qualification.endingDate) : null}
-                                onChange={(value) => handleDateChange('qualifications', 'endingDate', value, index)}
-                                format="DD/MM/YYYY"
-                                disabled={!qualification.isEditable}
-                                slotProps={{
-                                    textField: getDatePickerTextFieldProps(`qualification-${index}-ending-date`),
-                                }}
-                            />
-                        </div>
-                        <div className={cx('credential')}>
-                            <label htmlFor="degree">{t('qualifications.degree')}</label>
-                            <input
-                                className={cx('native-input', !qualification.isEditable && 'disabled')}
-                                type="text"
-                                id="degree"
-                                value={qualification.degree}
-                                name="degree"
-                                onChange={(e) => handleQuanlificationChange(e, index)}
-                                disabled={!qualification.isEditable}
-                            />
-                        </div>
-                        <div className={cx('credential')}>
-                            <label htmlFor="university">{t('qualifications.university')}</label>
-                            <input
-                                className={cx('native-input', !qualification.isEditable && 'disabled')}
-                                type="text"
-                                id="university"
-                                value={qualification.university}
-                                name="university"
-                                onChange={(e) => handleQuanlificationChange(e, index)}
-                                disabled={!qualification.isEditable}
-                            />
-                        </div>
-                        <div></div>
-                        <div className={cx('modeWrapper')}>
-                            <div className={cx('mode')} onClick={() => toggleEditable('qualifications', index)}>
-                                {qualification.isEditable ? (
-                                    <>
-                                        <LiaSaveSolid className={cx('icon')} />
-                                        <p className={cx('text')}>{t('actions.save')}</p>
-                                    </>
-                                ) : (
-                                    <>
-                                        <MdOutlineModeEditOutline className={cx('icon')} />
-                                        <p className={cx('text')}>{t('actions.edit')}</p>
-                                    </>
-                                )}
+                {/* QUALIFICATION */}
+                <h3 className={cx('title', 'other')}>{t('titles.qualifications')}</h3>
+                <div className={cx('details')}>
+                    {formData.qualifications?.map((qualification, index) => (
+                        <div key={index} className={cx('credentials')}>
+                            <div className={cx('credential')}>
+                                <label htmlFor="startingDate">{t('qualifications.startingDate')}</label>
+                                <DatePicker
+                                    value={qualification.startingDate ? dayjs(qualification.startingDate) : null}
+                                    onChange={(value) =>
+                                        handleDateChange('qualifications', 'startingDate', value, index)
+                                    }
+                                    format="DD/MM/YYYY"
+                                    disabled={!qualification.isEditable}
+                                    slotProps={{
+                                        textField: getDatePickerTextFieldProps(`qualification-${index}-starting-date`),
+                                    }}
+                                />
                             </div>
-                            <div className={cx('mode')} onClick={(e) => deleteQualification(e, index)}>
-                                <FaRegTrashAlt className={cx('icon')} />
-                                <p className={cx('text')}>{t('actions.delete')}</p>
+                            <div className={cx('credential')}>
+                                <label htmlFor="endingDate">{t('qualifications.endingDate')}</label>
+                                <DatePicker
+                                    value={qualification.endingDate ? dayjs(qualification.endingDate) : null}
+                                    onChange={(value) => handleDateChange('qualifications', 'endingDate', value, index)}
+                                    format="DD/MM/YYYY"
+                                    disabled={!qualification.isEditable}
+                                    slotProps={{
+                                        textField: getDatePickerTextFieldProps(`qualification-${index}-ending-date`),
+                                    }}
+                                />
+                            </div>
+                            <div className={cx('credential')}>
+                                <label htmlFor="degree">{t('qualifications.degree')}</label>
+                                <input
+                                    className={cx('native-input', !qualification.isEditable && 'disabled')}
+                                    type="text"
+                                    id="degree"
+                                    value={qualification.degree}
+                                    name="degree"
+                                    onChange={(e) => handleQuanlificationChange(e, index)}
+                                    disabled={!qualification.isEditable}
+                                />
+                            </div>
+                            <div className={cx('credential')}>
+                                <label htmlFor="university">{t('qualifications.university')}</label>
+                                <input
+                                    className={cx('native-input', !qualification.isEditable && 'disabled')}
+                                    type="text"
+                                    id="university"
+                                    value={qualification.university}
+                                    name="university"
+                                    onChange={(e) => handleQuanlificationChange(e, index)}
+                                    disabled={!qualification.isEditable}
+                                />
+                            </div>
+                            <div></div>
+                            <div className={cx('modeWrapper')}>
+                                <div className={cx('mode')} onClick={() => toggleEditable('qualifications', index)}>
+                                    {qualification.isEditable ? (
+                                        <>
+                                            <LiaSaveSolid className={cx('icon')} />
+                                            <p className={cx('text')}>{t('actions.save')}</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <MdOutlineModeEditOutline className={cx('icon')} />
+                                            <p className={cx('text')}>{t('actions.edit')}</p>
+                                        </>
+                                    )}
+                                </div>
+                                <div className={cx('mode')} onClick={(e) => deleteQualification(e, index)}>
+                                    <FaRegTrashAlt className={cx('icon')} />
+                                    <p className={cx('text')}>{t('actions.delete')}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
-                <button className={cx('add')} onClick={addQualification}>
-                    {t('qualifications.add')}
+                    ))}
+                    <button className={cx('add')} onClick={addQualification}>
+                        {t('qualifications.add')}
+                    </button>
+                </div>
+
+                {/* EXPERIENCES */}
+                <h3 className={cx('title', 'other')}>{t('titles.experiences')}</h3>
+                <div className={cx('details')}>
+                    {formData.experiences?.map((experience, index) => (
+                        <div key={index} className={cx('credentials')}>
+                            <div className={cx('credential')}>
+                                <label htmlFor="startingDate">{t('experiences.startingDate')}</label>
+                                <DatePicker
+                                    value={experience.startingDate ? dayjs(experience.startingDate) : null}
+                                    onChange={(value) => handleDateChange('experiences', 'startingDate', value, index)}
+                                    format="DD/MM/YYYY"
+                                    disabled={!experience.isEditable}
+                                    slotProps={{
+                                        textField: getDatePickerTextFieldProps(`experience-${index}-starting-date`),
+                                    }}
+                                />
+                            </div>
+                            <div className={cx('credential')}>
+                                <label htmlFor="endingDate">{t('experiences.endingDate')}</label>
+                                <DatePicker
+                                    value={experience.endingDate ? dayjs(experience.endingDate) : null}
+                                    onChange={(value) => handleDateChange('experiences', 'endingDate', value, index)}
+                                    format="DD/MM/YYYY"
+                                    disabled={!experience.isEditable}
+                                    slotProps={{
+                                        textField: getDatePickerTextFieldProps(`experience-${index}-ending-date`),
+                                    }}
+                                />
+                            </div>
+                            <div className={cx('credential')}>
+                                <label htmlFor="position">{t('experiences.position')}</label>
+                                <input
+                                    className={cx('native-input', !experience.isEditable && 'disabled')}
+                                    type="text"
+                                    id="position"
+                                    value={experience.position}
+                                    name="position"
+                                    onChange={(e) => handleExperienceChange(e, index)}
+                                    disabled={!experience.isEditable}
+                                />
+                            </div>
+                            <div className={cx('credential')}>
+                                <label htmlFor="hospital">{t('experiences.hospital')}</label>
+                                <input
+                                    className={cx('native-input', !experience.isEditable && 'disabled')}
+                                    type="text"
+                                    id="hospital"
+                                    value={experience.hospital}
+                                    name="hospital"
+                                    onChange={(e) => handleExperienceChange(e, index)}
+                                    disabled={!experience.isEditable}
+                                />
+                            </div>
+                            <div></div>
+                            <div className={cx('modeWrapper')}>
+                                <div className={cx('mode')} onClick={() => toggleEditable('experiences', index)}>
+                                    {experience.isEditable ? (
+                                        <>
+                                            <LiaSaveSolid className={cx('icon')} />
+                                            <p className={cx('text')}>{t('actions.save')}</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <MdOutlineModeEditOutline className={cx('icon')} />
+                                            <p className={cx('text')}>{t('actions.edit')}</p>
+                                        </>
+                                    )}
+                                </div>
+                                <div className={cx('mode')} onClick={(e) => deleteExperience(e, index)}>
+                                    <FaRegTrashAlt className={cx('icon')} />
+                                    <p className={cx('text')}>{t('actions.delete')}</p>{' '}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                    <button className={cx('add')} onClick={addExperience}>
+                        {t('experiences.add')}
+                    </button>
+                </div>
+
+                {/* TIME SLOTS */}
+                <h3 className={cx('title', 'other')}>{t('titles.timeSlots')}</h3>
+                <TimeSlots
+                    handleTimeSlotsChange={handleTimeSlotsChange}
+                    daysOfWeekWithDates={daysOfWeekWithDates}
+                    availableSchedules={formData.availableSchedules}
+                    onAvailableScheduleChange={handleAvailableScheduleChange}
+                />
+
+                {/* ABOUT */}
+                <h3 className={cx('title', 'other')}>{t('titles.about')}</h3>
+                <textarea
+                    id="message"
+                    cols="30"
+                    rows="6"
+                    placeholder={t('fields.aboutPlaceholder')}
+                    name="about"
+                    value={formData.about}
+                    onChange={handleInputChange}
+                />
+
+                <button onClick={updateProfileHandler} className={cx('submit-btn')}>
+                    {loading ? <SyncLoader size={10} color="#ffffff" /> : t('actions.update')}
                 </button>
-            </div>
-
-            {/* EXPERIENCES */}
-            <h3 className={cx('title', 'other')}>{t('titles.experiences')}</h3>
-            <div className={cx('details')}>
-                {formData.experiences?.map((experience, index) => (
-                    <div key={index} className={cx('credentials')}>
-                        <div className={cx('credential')}>
-                            <label htmlFor="startingDate">{t('experiences.startingDate')}</label>
-                            <DatePicker
-                                value={experience.startingDate ? dayjs(experience.startingDate) : null}
-                                onChange={(value) => handleDateChange('experiences', 'startingDate', value, index)}
-                                format="DD/MM/YYYY"
-                                disabled={!experience.isEditable}
-                                slotProps={{
-                                    textField: getDatePickerTextFieldProps(`experience-${index}-starting-date`),
-                                }}
-                            />
-                        </div>
-                        <div className={cx('credential')}>
-                            <label htmlFor="endingDate">{t('experiences.endingDate')}</label>
-                            <DatePicker
-                                value={experience.endingDate ? dayjs(experience.endingDate) : null}
-                                onChange={(value) => handleDateChange('experiences', 'endingDate', value, index)}
-                                format="DD/MM/YYYY"
-                                disabled={!experience.isEditable}
-                                slotProps={{
-                                    textField: getDatePickerTextFieldProps(`experience-${index}-ending-date`),
-                                }}
-                            />
-                        </div>
-                        <div className={cx('credential')}>
-                            <label htmlFor="position">{t('experiences.position')}</label>
-                            <input
-                                className={cx('native-input', !experience.isEditable && 'disabled')}
-                                type="text"
-                                id="position"
-                                value={experience.position}
-                                name="position"
-                                onChange={(e) => handleExperienceChange(e, index)}
-                                disabled={!experience.isEditable}
-                            />
-                        </div>
-                        <div className={cx('credential')}>
-                            <label htmlFor="hospital">{t('experiences.hospital')}</label>
-                            <input
-                                className={cx('native-input', !experience.isEditable && 'disabled')}
-                                type="text"
-                                id="hospital"
-                                value={experience.hospital}
-                                name="hospital"
-                                onChange={(e) => handleExperienceChange(e, index)}
-                                disabled={!experience.isEditable}
-                            />
-                        </div>
-                        <div></div>
-                        <div className={cx('modeWrapper')}>
-                            <div className={cx('mode')} onClick={() => toggleEditable('experiences', index)}>
-                                {experience.isEditable ? (
-                                    <>
-                                        <LiaSaveSolid className={cx('icon')} />
-                                        <p className={cx('text')}>{t('actions.save')}</p>
-                                    </>
-                                ) : (
-                                    <>
-                                        <MdOutlineModeEditOutline className={cx('icon')} />
-                                        <p className={cx('text')}>{t('actions.edit')}</p>
-                                    </>
-                                )}
-                            </div>
-                            <div className={cx('mode')} onClick={(e) => deleteExperience(e, index)}>
-                                <FaRegTrashAlt className={cx('icon')} />
-                                <p className={cx('text')}>{t('actions.delete')}</p>{' '}
-                            </div>
-                        </div>
-                    </div>
-                ))}
-                <button className={cx('add')} onClick={addExperience}>
-                    {t('experiences.add')}
-                </button>
-            </div>
-
-            {/* TIME SLOTS */}
-            <h3 className={cx('title', 'other')}>{t('titles.timeSlots')}</h3>
-            <TimeSlots
-                handleTimeSlotsChange={handleTimeSlotsChange}
-                daysOfWeekWithDates={daysOfWeekWithDates}
-                availableSchedules={formData.availableSchedules}
-                onAvailableScheduleChange={handleAvailableScheduleChange}
-            />
-
-            {/* ABOUT */}
-            <h3 className={cx('title', 'other')}>{t('titles.about')}</h3>
-            <textarea
-                id="message"
-                cols="30"
-                rows="6"
-                placeholder={t('fields.aboutPlaceholder')}
-                name="about"
-                value={formData.about}
-                onChange={handleInputChange}
-            />
-
-            <button onClick={updateProfileHandler} className={cx('submit-btn')}>
-                {loading ? <SyncLoader size={10} color="#ffffff" /> : t('actions.update')}
-            </button>
             </div>
         </LocalizationProvider>
     );

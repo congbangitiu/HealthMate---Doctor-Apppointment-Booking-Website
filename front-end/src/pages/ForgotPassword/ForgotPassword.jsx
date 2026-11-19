@@ -60,8 +60,10 @@ const ForgotPassword = () => {
         if (!res.ok) {
             // 429: OTP trước đó vẫn còn hiệu lực nên cho đi tiếp thay vì chặn người dùng
             if (res.status === 429) {
-                const cooldown = Number.isFinite(data.retryAfter) && data.retryAfter >= 0
-                    ? Math.ceil(data.retryAfter) : RESEND_COOLDOWN;
+                const cooldown =
+                    Number.isFinite(data.retryAfter) && data.retryAfter >= 0
+                        ? Math.ceil(data.retryAfter)
+                        : RESEND_COOLDOWN;
                 setInitialCooldown(cooldown);
                 toast.info(data.message);
                 setStep('otp');

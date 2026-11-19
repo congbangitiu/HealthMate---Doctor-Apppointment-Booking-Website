@@ -114,7 +114,6 @@ const ConfirmBooking = ({ doctorId, doctorName, doctorPhoto, selectedSlot, ticke
             if (!chatRes.ok) {
                 throw new Error(chatData.message || t('confirmBooking.toast.chatFail'));
             }
-
         } catch (error) {
             toast.error(error.message);
         } finally {

@@ -8,17 +8,24 @@ describe('formatDateToYYYYMMDD', () => {
     });
 
     it.each(['2028-02-29', '2026-12-31', '2027-01-01'])(
-        'FE-D06: preserves the leap-day or year boundary %s', (date) => {
+        'FE-D06: preserves the leap-day or year boundary %s',
+        (date) => {
             expect(formatDateToYYYYMMDD(new Date(`${date}T12:00:00+07:00`))).toBe(date);
         },
     );
 
-    it.each([['unparseable string', 'not-a-date'], ['invalid Date', new Date(NaN)], ['missing value', undefined]])(
-        'FE-D07: rejects %s instead of returning NaN fields', (_label, value) => {
-            let result;
-            try { result = formatDateToYYYYMMDD(value); }
-            catch (error) { expect(error).toBeInstanceOf(Error); return; }
-            expect(result).toBeNull();
-        },
-    );
+    it.each([
+        ['unparseable string', 'not-a-date'],
+        ['invalid Date', new Date(NaN)],
+        ['missing value', undefined],
+    ])('FE-D07: rejects %s instead of returning NaN fields', (_label, value) => {
+        let result;
+        try {
+            result = formatDateToYYYYMMDD(value);
+        } catch (error) {
+            expect(error).toBeInstanceOf(Error);
+            return;
+        }
+        expect(result).toBeNull();
+    });
 });

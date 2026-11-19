@@ -8,17 +8,23 @@ vi.mock('react-toastify', () => ({ toast: { success: mocks.success, error: mocks
 vi.mock('../../../utils/date-time/formatDateForDisplay', () => ({ default: (date) => String(date) }));
 vi.mock('../../../utils/date-time/convertTime', () => ({ default: (time) => time }));
 vi.mock('react-spinners/SyncLoader', () => ({ default: () => <span role="status">Booking in progress</span> }));
-vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key) => ({
-    'confirmBooking.confirmButton': 'Confirm booking',
-    'confirmBooking.cash': 'Cash', 'confirmBooking.eWallet': 'E-Wallet',
-    'confirmBooking.toast.noSlot': 'Please select a slot',
-    'confirmBooking.toast.noPayment': 'Please select a payment method',
-    'confirmBooking.toast.invalidSession': 'Your session is invalid. Please sign in again.',
-    'confirmBooking.toast.bookingSuccess': 'Booking created',
-    'confirmBooking.toast.createBookingFail': 'Booking failed',
-    'confirmBooking.toast.checkoutFail': 'Checkout failed',
-    'confirmBooking.toast.chatFail': 'Chat failed',
-}[key] || key) }) }));
+vi.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: (key) =>
+            ({
+                'confirmBooking.confirmButton': 'Confirm booking',
+                'confirmBooking.cash': 'Cash',
+                'confirmBooking.eWallet': 'E-Wallet',
+                'confirmBooking.toast.noSlot': 'Please select a slot',
+                'confirmBooking.toast.noPayment': 'Please select a payment method',
+                'confirmBooking.toast.invalidSession': 'Your session is invalid. Please sign in again.',
+                'confirmBooking.toast.bookingSuccess': 'Booking created',
+                'confirmBooking.toast.createBookingFail': 'Booking failed',
+                'confirmBooking.toast.checkoutFail': 'Checkout failed',
+                'confirmBooking.toast.chatFail': 'Chat failed',
+            })[key] || key,
+    }),
+}));
 
 import ConfirmBooking from './ConfirmBooking';
 
@@ -26,13 +32,20 @@ const base = 'http://localhost:5000/api/v1';
 const slot = { day: '2026-10-22', startingTime: '08:00', endingTime: '08:30' };
 const otherSlot = { ...slot, startingTime: '09:00', endingTime: '09:30' };
 const props = (overrides = {}) => ({
-    doctorId: 'doctor-id', doctorName: 'Test Doctor', doctorPhoto: 'doctor.jpg',
-    selectedSlot: slot, ticketPrice: 25, setTimeSlots: vi.fn(), ...overrides,
+    doctorId: 'doctor-id',
+    doctorName: 'Test Doctor',
+    doctorPhoto: 'doctor.jpg',
+    selectedSlot: slot,
+    ticketPrice: 25,
+    setTimeSlots: vi.fn(),
+    ...overrides,
 });
 const jsonResponse = (body, ok = true) => ({ ok, json: vi.fn().mockResolvedValue(body) });
 const deferred = () => {
     let resolve;
-    const promise = new Promise((finish) => { resolve = finish; });
+    const promise = new Promise((finish) => {
+        resolve = finish;
+    });
     return { promise, resolve };
 };
 let fetchMock;
@@ -57,7 +70,8 @@ function mockCashSuccess() {
     // Cash navigation is hard-coded. Already being on the target URL avoids jsdom's unsupported
     // cross-page navigation; these cases assert booking effects, not that a redirect occurred.
     window.history.replaceState({}, '', '/checkout-success');
-    fetchMock.mockResolvedValueOnce(jsonResponse({ booking: { _id: 'booking-id' } }))
+    fetchMock
+        .mockResolvedValueOnce(jsonResponse({ booking: { _id: 'booking-id' } }))
         .mockResolvedValueOnce(jsonResponse({ chat: { _id: 'chat-id' } }));
 }
 
@@ -85,12 +99,21 @@ describe('ConfirmBooking', () => {
         await choosePaymentAndSubmit('Cash');
         await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
         expect(fetchMock).toHaveBeenNthCalledWith(1, `${base}/bookings/create`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer unit-token' },
-            body: JSON.stringify({ doctorId: 'doctor-id', userId: 'patient-id', timeSlot: slot, ticketPrice: 25, paymentMethod: 'cash', isPaid: false }),
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: 'Bearer unit-token' },
+            body: JSON.stringify({
+                doctorId: 'doctor-id',
+                userId: 'patient-id',
+                timeSlot: slot,
+                ticketPrice: 25,
+                paymentMethod: 'cash',
+                isPaid: false,
+            }),
         });
         expect(localStorage.getItem('appointmentId')).toBe('booking-id');
         expect(fetchMock).toHaveBeenNthCalledWith(2, `${base}/chats/create-chat`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer unit-token' },
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: 'Bearer unit-token' },
             body: JSON.stringify({ doctorId: 'doctor-id', userId: 'patient-id' }),
         });
     });
@@ -110,14 +133,16 @@ describe('ConfirmBooking', () => {
 
     it('FE-B05: submits e-wallet metadata and assigns the session URL using supported hash navigation', async () => {
         const checkoutUrl = `${window.location.origin}/#stripe-checkout`;
-        fetchMock.mockResolvedValueOnce(jsonResponse({ session: { url: checkoutUrl } }))
+        fetchMock
+            .mockResolvedValueOnce(jsonResponse({ session: { url: checkoutUrl } }))
             .mockResolvedValueOnce(jsonResponse({ chat: {} }));
         const options = props();
         render(<ConfirmBooking {...options} />);
         await choosePaymentAndSubmit('E-Wallet');
         await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
         expect(fetchMock).toHaveBeenNthCalledWith(1, `${base}/bookings/checkout-session/doctor-id`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer unit-token' },
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: 'Bearer unit-token' },
             body: JSON.stringify({ timeSlot: slot, paymentMethod: 'e-wallet' }),
         });
         expect(window.location.href).toBe(checkoutUrl);
@@ -126,23 +151,27 @@ describe('ConfirmBooking', () => {
         // Hash navigation proves URL assignment only, not that external Stripe navigation works.
     });
 
-    it.each(['Cash', 'E-Wallet'])('FE-B06: shows an API error for %s without changing slots or navigating', async (method) => {
-        fetchMock.mockResolvedValue(jsonResponse({ message: 'Selected slot is unavailable' }, false));
-        const options = props();
-        render(<ConfirmBooking {...options} />);
-        await choosePaymentAndSubmit(method);
-        await waitFor(() => expect(screen.getByRole('button', { name: 'Confirm booking' })).toBeInTheDocument());
-        expect(mocks.error).toHaveBeenCalledWith('Selected slot is unavailable');
-        expect(options.setTimeSlots).not.toHaveBeenCalled();
-        expect(mocks.success).not.toHaveBeenCalled();
-        expect(localStorage.getItem('appointmentId')).toBeNull();
-        expect(window.location.pathname).toBe('/');
-        expect(fetchMock).toHaveBeenCalledTimes(1);
-    });
+    it.each(['Cash', 'E-Wallet'])(
+        'FE-B06: shows an API error for %s without changing slots or navigating',
+        async (method) => {
+            fetchMock.mockResolvedValue(jsonResponse({ message: 'Selected slot is unavailable' }, false));
+            const options = props();
+            render(<ConfirmBooking {...options} />);
+            await choosePaymentAndSubmit(method);
+            await waitFor(() => expect(screen.getByRole('button', { name: 'Confirm booking' })).toBeInTheDocument());
+            expect(mocks.error).toHaveBeenCalledWith('Selected slot is unavailable');
+            expect(options.setTimeSlots).not.toHaveBeenCalled();
+            expect(mocks.success).not.toHaveBeenCalled();
+            expect(localStorage.getItem('appointmentId')).toBeNull();
+            expect(window.location.pathname).toBe('/');
+            expect(fetchMock).toHaveBeenCalledTimes(1);
+        },
+    );
 
     it.each(['network', 'JSON'])('FE-B06: stops loading and preserves slots after a %s failure', async (kind) => {
         if (kind === 'network') fetchMock.mockRejectedValue(new Error('Network unavailable'));
-        else fetchMock.mockResolvedValue({ ok: true, json: vi.fn().mockRejectedValue(new SyntaxError('Invalid JSON')) });
+        else
+            fetchMock.mockResolvedValue({ ok: true, json: vi.fn().mockRejectedValue(new SyntaxError('Invalid JSON')) });
         const options = props();
         render(<ConfirmBooking {...options} />);
         await choosePaymentAndSubmit('Cash');
@@ -154,12 +183,17 @@ describe('ConfirmBooking', () => {
 
     it('FE-B07: reports chat failure without repeating the completed cash booking', async () => {
         mockCashSuccess();
-        fetchMock.mockReset().mockResolvedValueOnce(jsonResponse({ booking: { _id: 'booking-id' } }))
+        fetchMock
+            .mockReset()
+            .mockResolvedValueOnce(jsonResponse({ booking: { _id: 'booking-id' } }))
             .mockResolvedValueOnce(jsonResponse({ message: 'Chat unavailable' }, false));
         render(<ConfirmBooking {...props()} />);
         await choosePaymentAndSubmit('Cash');
         await waitFor(() => expect(mocks.error).toHaveBeenCalledWith('Chat unavailable'));
-        expect(fetchMock.mock.calls.map(([url]) => url)).toEqual([`${base}/bookings/create`, `${base}/chats/create-chat`]);
+        expect(fetchMock.mock.calls.map(([url]) => url)).toEqual([
+            `${base}/bookings/create`,
+            `${base}/chats/create-chat`,
+        ]);
         expect(localStorage.getItem('appointmentId')).toBe('booking-id');
     });
 
@@ -175,13 +209,22 @@ describe('ConfirmBooking', () => {
             expect(fetchMock).toHaveBeenCalledTimes(1);
             expect(button).toBeDisabled();
         } finally {
-            await act(async () => { pending.resolve(jsonResponse({ message: 'Request stopped' }, false)); await pending.promise; });
+            await act(async () => {
+                pending.resolve(jsonResponse({ message: 'Request stopped' }, false));
+                await pending.promise;
+            });
         }
     });
 
     it.each([
-        ['Cash', null], ['Cash', '{invalid-json'], ['E-Wallet', null], ['E-Wallet', '{invalid-json'],
-        ['Cash', '{}'], ['E-Wallet', '{}'], ['Cash', '{"_id":""}'], ['E-Wallet', '{"_id":""}'],
+        ['Cash', null],
+        ['Cash', '{invalid-json'],
+        ['E-Wallet', null],
+        ['E-Wallet', '{invalid-json'],
+        ['Cash', '{}'],
+        ['E-Wallet', '{}'],
+        ['Cash', '{"_id":""}'],
+        ['E-Wallet', '{"_id":""}'],
     ])('FE-B09: rejects invalid stored user %s/%s before calling the API', async (method, storedUser) => {
         if (storedUser === null) localStorage.removeItem('user');
         else localStorage.setItem('user', storedUser);
@@ -194,16 +237,18 @@ describe('ConfirmBooking', () => {
     });
 
     it.each([{}, { session: {} }, { session: { url: '  ' } }, { session: { url: 123 } }])(
-        'FE-B10: reports an invalid checkout URL and does not create a chat: %j', async (response) => {
-        fetchMock.mockResolvedValueOnce(jsonResponse(response)).mockResolvedValueOnce(jsonResponse({ chat: {} }));
-        const options = props();
-        render(<ConfirmBooking {...options} />);
-        await choosePaymentAndSubmit('E-Wallet');
-        await waitFor(() => expect(screen.getByRole('button', { name: 'Confirm booking' })).toBeInTheDocument());
-        expect(mocks.error).toHaveBeenCalledWith(expect.any(String));
-        expect(fetchMock).toHaveBeenCalledTimes(1);
-        expect(options.setTimeSlots).not.toHaveBeenCalled();
-    });
+        'FE-B10: reports an invalid checkout URL and does not create a chat: %j',
+        async (response) => {
+            fetchMock.mockResolvedValueOnce(jsonResponse(response)).mockResolvedValueOnce(jsonResponse({ chat: {} }));
+            const options = props();
+            render(<ConfirmBooking {...options} />);
+            await choosePaymentAndSubmit('E-Wallet');
+            await waitFor(() => expect(screen.getByRole('button', { name: 'Confirm booking' })).toBeInTheDocument());
+            expect(mocks.error).toHaveBeenCalledWith(expect.any(String));
+            expect(fetchMock).toHaveBeenCalledTimes(1);
+            expect(options.setTimeSlots).not.toHaveBeenCalled();
+        },
+    );
 
     it('FE-B12: unlocks after a failed request and allows a successful retry', async () => {
         const pending = deferred();
@@ -212,7 +257,9 @@ describe('ConfirmBooking', () => {
         await choosePaymentAndSubmit('Cash');
         const button = screen.getByRole('button');
         expect(button).toBeDisabled();
-        await act(async () => { pending.resolve(jsonResponse({ message: 'Temporary failure' }, false)); });
+        await act(async () => {
+            pending.resolve(jsonResponse({ message: 'Temporary failure' }, false));
+        });
         expect(button).toBeEnabled();
         expect(mocks.error).toHaveBeenCalledWith('Temporary failure');
         mockCashSuccess();
@@ -224,7 +271,8 @@ describe('ConfirmBooking', () => {
     });
 
     it('FE-B11: does not create a cash booking or paid confirmation when only starting checkout', async () => {
-        fetchMock.mockResolvedValueOnce(jsonResponse({ session: { url: `${window.location.origin}/#checkout` } }))
+        fetchMock
+            .mockResolvedValueOnce(jsonResponse({ session: { url: `${window.location.origin}/#checkout` } }))
             .mockResolvedValueOnce(jsonResponse({ chat: {} }));
         render(<ConfirmBooking {...props()} />);
         await choosePaymentAndSubmit('E-Wallet');
@@ -236,5 +284,7 @@ describe('ConfirmBooking', () => {
     });
 
     it.todo('FE-B04/FE-B05: verifies actual cash and external Stripe navigation in a browser');
-    it.todo('FE-B11: confirms slot reservation and release behavior after checkout cancellation or payment completion (integration)');
+    it.todo(
+        'FE-B11: confirms slot reservation and release behavior after checkout cancellation or payment completion (integration)',
+    );
 });

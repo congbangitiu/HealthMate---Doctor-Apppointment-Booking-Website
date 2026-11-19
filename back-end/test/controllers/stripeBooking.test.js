@@ -75,26 +75,51 @@ const expectNoBookingEffects = () => {
 beforeEach(() => {
     // Preserve the Stripe instance created at module import; reset its methods separately.
     vi.clearAllMocks();
-    for (const mock of [mocks.save, mocks.findBooking, mocks.createSession, mocks.constructEvent,
-        mocks.Doctor.findById, mocks.Doctor.updateOne, mocks.User.findById,
-        mocks.populate, mocks.sendMail, mocks.to, mocks.emit]) mock.mockReset();
+    for (const mock of [
+        mocks.save,
+        mocks.findBooking,
+        mocks.createSession,
+        mocks.constructEvent,
+        mocks.Doctor.findById,
+        mocks.Doctor.updateOne,
+        mocks.User.findById,
+        mocks.populate,
+        mocks.sendMail,
+        mocks.to,
+        mocks.emit,
+    ])
+        mock.mockReset();
     vi.useFakeTimers();
     vi.setSystemTime(now);
     vi.spyOn(console, 'error').mockImplementation(() => {});
     doctor = {
-        _id: 'doctor-id', id: 'doctor-id', fullname: 'Test Doctor',
-        ticketPrice: 25, bio: 'Doctor biography', photo: 'doctor.jpg', timeSlots: [{ ...slot }],
+        _id: 'doctor-id',
+        id: 'doctor-id',
+        fullname: 'Test Doctor',
+        ticketPrice: 25,
+        bio: 'Doctor biography',
+        photo: 'doctor.jpg',
+        timeSlots: [{ ...slot }],
     };
     user = { _id: 'patient-id', email: 'patient@example.test', fullname: 'Test Patient', photo: 'patient.jpg' };
     event = {
-        id: 'evt_completed', type: 'checkout.session.completed',
-        data: { object: {
-            id: 'cs_test_booking', payment_status: 'paid', amount_total: 2500, currency: 'usd',
-            metadata: {
-                userId: 'patient-id', doctorId: 'doctor-id', timeSlot: JSON.stringify(slot),
-                ticketPrice: '25', paymentMethod: 'e-wallet',
+        id: 'evt_completed',
+        type: 'checkout.session.completed',
+        data: {
+            object: {
+                id: 'cs_test_booking',
+                payment_status: 'paid',
+                amount_total: 2500,
+                currency: 'usd',
+                metadata: {
+                    userId: 'patient-id',
+                    doctorId: 'doctor-id',
+                    timeSlot: JSON.stringify(slot),
+                    ticketPrice: '25',
+                    paymentMethod: 'e-wallet',
+                },
             },
-        } },
+        },
     };
     savedBooking = { _id: 'booking-id', createdAt: now };
     mocks.save.mockResolvedValue(savedBooking);
@@ -139,15 +164,29 @@ describe('getCheckoutSession', () => {
         await getCheckoutSession(checkoutRequest({ userId: 'other-patient', ticketPrice: 1 }), res);
         expect(mocks.User.findById).toHaveBeenCalledExactlyOnceWith('patient-id');
         expect(mocks.createSession).toHaveBeenCalledExactlyOnceWith({
-            payment_method_types: ['card'], mode: 'payment',
+            payment_method_types: ['card'],
+            mode: 'payment',
             success_url: `${process.env.CLIENT_SITE_URL}/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${process.env.CLIENT_SITE_URL}/doctors/doctor-id`,
-            customer_email: 'patient@example.test', client_reference_id: 'doctor-id',
-            metadata: { userId: 'patient-id', doctorId: 'doctor-id', timeSlot: JSON.stringify(slot), ticketPrice: '25', paymentMethod: 'e-wallet' },
-            line_items: [{ price_data: {
-                currency: 'usd', unit_amount: 2500,
-                product_data: { name: doctor.fullname, description: doctor.bio, images: [doctor.photo] },
-            }, quantity: 1 }],
+            customer_email: 'patient@example.test',
+            client_reference_id: 'doctor-id',
+            metadata: {
+                userId: 'patient-id',
+                doctorId: 'doctor-id',
+                timeSlot: JSON.stringify(slot),
+                ticketPrice: '25',
+                paymentMethod: 'e-wallet',
+            },
+            line_items: [
+                {
+                    price_data: {
+                        currency: 'usd',
+                        unit_amount: 2500,
+                        product_data: { name: doctor.fullname, description: doctor.bio, images: [doctor.photo] },
+                    },
+                    quantity: 1,
+                },
+            ],
         });
         expect(mocks.Stripe).toHaveBeenCalledWith(process.env.STRIPE_SECRET_KEY);
         expectNoBookingEffects();
@@ -163,20 +202,30 @@ describe('getCheckoutSession', () => {
     });
 
     it.each(['doctor lookup', 'patient lookup', 'Stripe create'])(
-        'BE-S04: returns 500 without booking effects when %s fails', async (stage) => {
-            const dependency = { 'doctor lookup': mocks.populate, 'patient lookup': mocks.User.findById, 'Stripe create': mocks.createSession }[stage];
+        'BE-S04: returns 500 without booking effects when %s fails',
+        async (stage) => {
+            const dependency = {
+                'doctor lookup': mocks.populate,
+                'patient lookup': mocks.User.findById,
+                'Stripe create': mocks.createSession,
+            }[stage];
             dependency.mockRejectedValue(new Error('dependency unavailable'));
             const res = createResponse();
             await getCheckoutSession(checkoutRequest(), res);
             expect(res.status).toHaveBeenCalledWith(500);
-            expect(res.json).toHaveBeenCalledWith({ success: false, message: 'Error in creating checkout session', error: 'dependency unavailable' });
+            expect(res.json).toHaveBeenCalledWith({
+                success: false,
+                message: 'Error in creating checkout session',
+                error: 'dependency unavailable',
+            });
             if (stage !== 'Stripe create') expect(mocks.createSession).not.toHaveBeenCalled();
             expectNoBookingEffects();
         },
     );
 
     it.each(['unavailable', 'past', 'missing'])(
-        'BE-S05: rejects slot state "%s" before creating a Stripe session', async (kind) => {
+        'BE-S05: rejects slot state "%s" before creating a Stripe session',
+        async (kind) => {
             const req = checkoutRequest();
             if (kind === 'unavailable') doctor.timeSlots = [];
             if (kind === 'past') {
@@ -203,23 +252,29 @@ describe('getCheckoutSession', () => {
         expectNoBookingEffects();
     });
 
-    it.each([undefined, null, [], 'invalid'])('BE-S05: rejects malformed body %j without calling Stripe', async (body) => {
-        const req = checkoutRequest();
-        req.body = body;
-        const res = createResponse();
-        await getCheckoutSession(req, res);
-        expect(res.status).toHaveBeenCalledWith(400);
-        expect(mocks.createSession).not.toHaveBeenCalled();
-        expectNoBookingEffects();
-    });
+    it.each([undefined, null, [], 'invalid'])(
+        'BE-S05: rejects malformed body %j without calling Stripe',
+        async (body) => {
+            const req = checkoutRequest();
+            req.body = body;
+            const res = createResponse();
+            await getCheckoutSession(req, res);
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(mocks.createSession).not.toHaveBeenCalled();
+            expectNoBookingEffects();
+        },
+    );
 
-    it.each([undefined, 'cash', 'free', 'invalid'])('BE-S05: rejects payment method %s on the checkout endpoint', async (paymentMethod) => {
-        const res = createResponse();
-        await getCheckoutSession(checkoutRequest({ paymentMethod }), res);
-        expect(res.status).toHaveBeenCalledWith(400);
-        expect(mocks.createSession).not.toHaveBeenCalled();
-        expectNoBookingEffects();
-    });
+    it.each([undefined, 'cash', 'free', 'invalid'])(
+        'BE-S05: rejects payment method %s on the checkout endpoint',
+        async (paymentMethod) => {
+            const res = createResponse();
+            await getCheckoutSession(checkoutRequest({ paymentMethod }), res);
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(mocks.createSession).not.toHaveBeenCalled();
+            expectNoBookingEffects();
+        },
+    );
 
     it('BE-S05: rejects a reversed range even when it appears in doctor availability', async () => {
         const invalidSlot = { ...slot, endingTime: '07:30' };
@@ -238,21 +293,33 @@ describe('stripeWebhook', () => {
     });
 
     it.each(['invalid signature', 'missing signature'])(
-        'BE-W01: returns 400 without writes when Stripe rejects signature state "%s"', async (kind) => {
-            mocks.constructEvent.mockImplementation(() => { throw new Error('Signature verification failed'); });
+        'BE-W01: returns 400 without writes when Stripe rejects signature state "%s"',
+        async (kind) => {
+            mocks.constructEvent.mockImplementation(() => {
+                throw new Error('Signature verification failed');
+            });
             const req = webhookRequest();
             if (kind === 'missing signature') delete req.headers['stripe-signature'];
             const res = createResponse();
             await stripeWebhook(req, res);
-            expect(mocks.constructEvent).toHaveBeenCalledExactlyOnceWith(req.body, req.headers['stripe-signature'], process.env.STRIPE_WEBHOOK_SECRET);
+            expect(mocks.constructEvent).toHaveBeenCalledExactlyOnceWith(
+                req.body,
+                req.headers['stripe-signature'],
+                process.env.STRIPE_WEBHOOK_SECRET,
+            );
             expect(res.status).toHaveBeenCalledWith(400);
-            expect(res.json).toHaveBeenCalledWith({ success: false, message: 'Webhook error', error: 'Signature verification failed' });
+            expect(res.json).toHaveBeenCalledWith({
+                success: false,
+                message: 'Webhook error',
+                error: 'Signature verification failed',
+            });
             expectNoBookingEffects();
         },
     );
 
     it.each(['payment_intent.succeeded', 'checkout.session.expired'])(
-        'BE-W02: acknowledges unrelated event %s without writing a booking', async (type) => {
+        'BE-W02: acknowledges unrelated event %s without writing a booking',
+        async (type) => {
             event.type = type;
             const res = createResponse();
             await stripeWebhook(webhookRequest(), res);
@@ -267,7 +334,9 @@ describe('stripeWebhook', () => {
         const res = createResponse();
         await stripeWebhook(webhookRequest(), res);
         expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ error: 'Metadata is missing from the Stripe session' }));
+        expect(res.json).toHaveBeenCalledWith(
+            expect.objectContaining({ error: 'Metadata is missing from the Stripe session' }),
+        );
         expectNoBookingEffects();
     });
 
@@ -283,8 +352,14 @@ describe('stripeWebhook', () => {
         const res = createResponse();
         await stripeWebhook(webhookRequest(), res);
         expect(mocks.Booking).toHaveBeenCalledExactlyOnceWith({
-            doctor: 'doctor-id', user: 'patient-id', ticketPrice: '25', paymentMethod: 'e-wallet',
-            isPaid: true, timeSlot: slot, unread: true, session: 'cs_test_booking',
+            doctor: 'doctor-id',
+            user: 'patient-id',
+            ticketPrice: '25',
+            paymentMethod: 'e-wallet',
+            isPaid: true,
+            timeSlot: slot,
+            unread: true,
+            session: 'cs_test_booking',
         });
         expect(mocks.save).toHaveBeenCalledTimes(1);
         expect(mocks.Doctor.updateOne).toHaveBeenCalledTimes(2);
@@ -299,7 +374,9 @@ describe('stripeWebhook', () => {
         await stripeWebhook(webhookRequest(), createResponse());
         expect(mocks.User.findById).toHaveBeenCalledWith('patient-id');
         expect(mocks.Doctor.findById).toHaveBeenCalledWith('doctor-id');
-        expect(mocks.sendMail).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ to: user.email, subject: 'HealthMate - Booking Confirmation' }));
+        expect(mocks.sendMail).toHaveBeenCalledExactlyOnceWith(
+            expect.objectContaining({ to: user.email, subject: 'HealthMate - Booking Confirmation' }),
+        );
         const html = mocks.sendMail.mock.calls[0][0].html;
         expect(html).toContain('Test Patient');
         expect(html).toContain('Test Doctor');
@@ -307,29 +384,35 @@ describe('stripeWebhook', () => {
         expect(html).toContain('<td>Paid</td>');
         expect(mocks.to).toHaveBeenCalledExactlyOnceWith('doctor-id');
         expect(mocks.emit).toHaveBeenCalledExactlyOnceWith('booking-notification', {
-            bookingId: 'booking-id', user: { id: user._id, fullname: user.fullname, photo: user.photo },
-            timeSlot: slot, ticketPrice: '25', paymentMethod: 'e-wallet', isPaid: true,
-            unread: true, status: 'pending', createdAt: now,
+            bookingId: 'booking-id',
+            user: { id: user._id, fullname: user.fullname, photo: user.photo },
+            timeSlot: slot,
+            ticketPrice: '25',
+            paymentMethod: 'e-wallet',
+            isPaid: true,
+            unread: true,
+            status: 'pending',
+            createdAt: now,
         });
     });
 
-    it.each(['patient', 'doctor'])(
-        'BE-W06: returns 400 before saving when the %s no longer exists', async (kind) => {
-            if (kind === 'patient') user = null;
-            else doctor = null;
-            const res = createResponse();
-            await stripeWebhook(webhookRequest(), res);
-            expectNoBookingEffects();
-            expect(res.status).toHaveBeenCalledWith(400);
-            expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ error: 'User or Doctor not found' }));
-            expect(mocks.sendMail).not.toHaveBeenCalled();
-            expect(mocks.emit).not.toHaveBeenCalled();
-        },
-    );
+    it.each(['patient', 'doctor'])('BE-W06: returns 400 before saving when the %s no longer exists', async (kind) => {
+        if (kind === 'patient') user = null;
+        else doctor = null;
+        const res = createResponse();
+        await stripeWebhook(webhookRequest(), res);
+        expectNoBookingEffects();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ error: 'User or Doctor not found' }));
+        expect(mocks.sendMail).not.toHaveBeenCalled();
+        expect(mocks.emit).not.toHaveBeenCalled();
+    });
 
     it('BE-W07: does not process the same completed session twice', async () => {
         // Model the persisted session returned on the second delivery.
-        mocks.findBooking.mockResolvedValueOnce(null).mockResolvedValueOnce({ ...savedBooking, session: event.data.object.id });
+        mocks.findBooking
+            .mockResolvedValueOnce(null)
+            .mockResolvedValueOnce({ ...savedBooking, session: event.data.object.id });
         const req = webhookRequest();
         await stripeWebhook(req, createResponse());
         await stripeWebhook(req, createResponse());
@@ -354,29 +437,35 @@ describe('stripeWebhook', () => {
         await stripeWebhook(req, createResponse());
         expect(Buffer.isBuffer(req.body)).toBe(true);
         expect(mocks.constructEvent.mock.calls[0][0]).toBe(req.body);
-        expect(mocks.constructEvent).toHaveBeenCalledWith(req.body, 'test-signature', process.env.STRIPE_WEBHOOK_SECRET);
+        expect(mocks.constructEvent).toHaveBeenCalledWith(
+            req.body,
+            'test-signature',
+            process.env.STRIPE_WEBHOOK_SECRET,
+        );
     });
 
-    it.todo('BE-W09: preserves raw bytes through the actual Express app and validates a real Stripe signature (integration)');
-
-    it.each(['amount mismatch', 'unavailable slot'])(
-        'BE-W10: prevents a paid booking with %s', async (kind) => {
-            if (kind === 'amount mismatch') {
-                // A complete, otherwise valid event isolates the missing amount check.
-                event.data.object.amount_total = 100;
-            } else {
-                doctor.timeSlots = [];
-            }
-            const res = createResponse();
-            await stripeWebhook(webhookRequest(), res);
-            expect(res.status).toHaveBeenCalledWith(400);
-            expect(mocks.save).not.toHaveBeenCalled();
-            expect(mocks.Doctor.updateOne).not.toHaveBeenCalled();
-            expect(mocks.emit).not.toHaveBeenCalled();
-        },
+    it.todo(
+        'BE-W09: preserves raw bytes through the actual Express app and validates a real Stripe signature (integration)',
     );
 
-    it.todo('BE-W07/BE-W10: prevents duplicate or conflicting bookings under concurrent webhook delivery (MongoDB integration)');
+    it.each(['amount mismatch', 'unavailable slot'])('BE-W10: prevents a paid booking with %s', async (kind) => {
+        if (kind === 'amount mismatch') {
+            // A complete, otherwise valid event isolates the missing amount check.
+            event.data.object.amount_total = 100;
+        } else {
+            doctor.timeSlots = [];
+        }
+        const res = createResponse();
+        await stripeWebhook(webhookRequest(), res);
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(mocks.save).not.toHaveBeenCalled();
+        expect(mocks.Doctor.updateOne).not.toHaveBeenCalled();
+        expect(mocks.emit).not.toHaveBeenCalled();
+    });
+
+    it.todo(
+        'BE-W07/BE-W10: prevents duplicate or conflicting bookings under concurrent webhook delivery (MongoDB integration)',
+    );
 
     it('BE-W11: stops before slot updates and notifications if booking saving fails', async () => {
         mocks.save.mockRejectedValue(new Error('save unavailable'));
@@ -389,11 +478,16 @@ describe('stripeWebhook', () => {
     });
 
     it.each(['first update', 'second update', 'socket'])(
-        'BE-W12 [LIMITATION]: returns 400 after save when %s fails without proving rollback', async (stage) => {
+        'BE-W12 [LIMITATION]: returns 400 after save when %s fails without proving rollback',
+        async (stage) => {
             const error = new Error('dependency unavailable');
             if (stage === 'first update') mocks.Doctor.updateOne.mockRejectedValueOnce(error);
-            if (stage === 'second update') mocks.Doctor.updateOne.mockResolvedValueOnce({ modifiedCount: 1 }).mockRejectedValueOnce(error);
-            if (stage === 'socket') mocks.emit.mockImplementation(() => { throw error; });
+            if (stage === 'second update')
+                mocks.Doctor.updateOne.mockResolvedValueOnce({ modifiedCount: 1 }).mockRejectedValueOnce(error);
+            if (stage === 'socket')
+                mocks.emit.mockImplementation(() => {
+                    throw error;
+                });
             const res = createResponse();
             await stripeWebhook(webhookRequest(), res);
             expect(mocks.save).toHaveBeenCalledTimes(1);
@@ -406,8 +500,13 @@ describe('stripeWebhook', () => {
     );
 
     it.each(['patient lookup', 'doctor lookup', 'session lookup'])(
-        'BE-W12: stops before writing when %s fails', async (stage) => {
-            const dependency = { 'patient lookup': mocks.User.findById, 'doctor lookup': mocks.Doctor.findById, 'session lookup': mocks.findBooking }[stage];
+        'BE-W12: stops before writing when %s fails',
+        async (stage) => {
+            const dependency = {
+                'patient lookup': mocks.User.findById,
+                'doctor lookup': mocks.Doctor.findById,
+                'session lookup': mocks.findBooking,
+            }[stage];
             dependency.mockRejectedValue(new Error('dependency unavailable'));
             const res = createResponse();
             await stripeWebhook(webhookRequest(), res);
@@ -440,8 +539,13 @@ describe('stripeWebhook', () => {
         expect(mocks.Booking).toHaveBeenCalledWith(expect.objectContaining({ timeSlot: originalSlot, isPaid: true }));
     });
 
-    it.each([['19.99', 1999], ['0.29', 29], ['25', 2500]])(
-        'BE-W10: honors checkout price %s and amount %i after the doctor changes their fee', async (ticketPrice, amount) => {
+    it.each([
+        ['19.99', 1999],
+        ['0.29', 29],
+        ['25', 2500],
+    ])(
+        'BE-W10: honors checkout price %s and amount %i after the doctor changes their fee',
+        async (ticketPrice, amount) => {
             doctor.ticketPrice = 100;
             event.data.object.metadata.ticketPrice = ticketPrice;
             event.data.object.amount_total = amount;
@@ -453,8 +557,12 @@ describe('stripeWebhook', () => {
     );
 
     it.each([
-        ['currency', 'vnd'], ['currency', undefined], ['amount_total', undefined],
-        ['amount_total', '2500'], ['amount_total', -1], ['amount_total', 2500.5],
+        ['currency', 'vnd'],
+        ['currency', undefined],
+        ['amount_total', undefined],
+        ['amount_total', '2500'],
+        ['amount_total', -1],
+        ['amount_total', 2500.5],
     ])('BE-W10: rejects invalid payment field %s=%s before writes', async (field, value) => {
         event.data.object[field] = value;
         const res = createResponse();
@@ -464,9 +572,16 @@ describe('stripeWebhook', () => {
     });
 
     it.each([
-        ['ticketPrice', ''], ['ticketPrice', '-25'], ['ticketPrice', 'NaN'], ['ticketPrice', undefined],
-        ['userId', ''], ['doctorId', ''], ['paymentMethod', 'cash'],
-        ['timeSlot', 'null'], ['timeSlot', '[]'], ['timeSlot', '{}'],
+        ['ticketPrice', ''],
+        ['ticketPrice', '-25'],
+        ['ticketPrice', 'NaN'],
+        ['ticketPrice', undefined],
+        ['userId', ''],
+        ['doctorId', ''],
+        ['paymentMethod', 'cash'],
+        ['timeSlot', 'null'],
+        ['timeSlot', '[]'],
+        ['timeSlot', '{}'],
     ])('BE-W03: rejects invalid metadata field %s=%s before writes', async (field, value) => {
         event.data.object.metadata[field] = value;
         const res = createResponse();

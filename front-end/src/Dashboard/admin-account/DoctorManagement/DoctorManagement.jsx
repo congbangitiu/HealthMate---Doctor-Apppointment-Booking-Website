@@ -257,8 +257,8 @@ const DoctorManagement = ({ doctors, setDebouncedQuery, loading, error }) => {
                                                 doctor.photo
                                                     ? doctor.photo
                                                     : doctor.gender === 'male'
-                                                    ? DefaultMaleDoctorAvatar
-                                                    : DefaultFemaleDoctorAvatar
+                                                      ? DefaultMaleDoctorAvatar
+                                                      : DefaultFemaleDoctorAvatar
                                             }
                                             alt=""
                                         />

@@ -40,11 +40,9 @@ const call = async (handler, body = {}, headers = {}) => {
 beforeEach(() => {
     io = { to: vi.fn().mockReturnThis(), emit: vi.fn() };
     User.find.mockReturnValue({
-        select: vi
-            .fn()
-            .mockReturnValue({
-                lean: vi.fn().mockResolvedValue([{ _id: 'admin', fullname: 'Admin One', photo: '/admin.png' }]),
-            }),
+        select: vi.fn().mockReturnValue({
+            lean: vi.fn().mockResolvedValue([{ _id: 'admin', fullname: 'Admin One', photo: '/admin.png' }]),
+        }),
     });
     SupportRequest.updateOne.mockResolvedValue({ modifiedCount: 1 });
     getSupportAccess.mockImplementation(async ({ requestId, guestToken }) => {
@@ -83,7 +81,13 @@ describe('guest support notifications', () => {
         const res = await call(getGuestSupportNotifications, {
             requests: [{ requestId: 'request-a' }, { requestId: 'request-a', guestToken: 'secret-b' }],
         });
-        expect(res.json).toHaveBeenCalledWith({ success: true, data: [], requests: [], unreadCount: 0, unavailableRequestIds: ['request-a'] });
+        expect(res.json).toHaveBeenCalledWith({
+            success: true,
+            data: [],
+            requests: [],
+            unreadCount: 0,
+            unavailableRequestIds: ['request-a'],
+        });
     });
     it('does not treat a verified signed-in identity as a guest capability', async () => {
         getSupportAccess.mockResolvedValue({ request: row, account: { role: 'admin' } });

@@ -624,8 +624,8 @@ const SupportManagement = () => {
                                                                       to: t('statuses.' + entry.to),
                                                                   })
                                                                 : entry.type === 'note'
-                                                                ? entry.note
-                                                                : t(entry.type === 'claim' ? 'claimed' : 'released')}
+                                                                  ? entry.note
+                                                                  : t(entry.type === 'claim' ? 'claimed' : 'released')}
                                                         </p>
                                                     </li>
                                                 ))}

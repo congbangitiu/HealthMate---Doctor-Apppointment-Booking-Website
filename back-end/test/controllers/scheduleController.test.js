@@ -7,7 +7,12 @@ const mocks = vi.hoisted(() => ({
 }));
 vi.mock('../../Models/BookingSchema.js', () => ({ default: mocks.Booking }));
 vi.mock('../../Models/DoctorSchema.js', () => ({ default: mocks.Doctor }));
-import { getCalendarAvailability, rescheduleAppointment, getScheduleNotifications, markScheduleNotificationsRead } from '../../Controllers/scheduleController.js';
+import {
+    getCalendarAvailability,
+    rescheduleAppointment,
+    getScheduleNotifications,
+    markScheduleNotificationsRead,
+} from '../../Controllers/scheduleController.js';
 
 const bookingId = '507f1f77bcf86cd799439011';
 const doctorId = '507f1f77bcf86cd799439012';
@@ -133,12 +138,17 @@ describe('transactional rescheduling', () => {
         );
         expect(req.io.emit).toHaveBeenCalledWith('appointments-changed');
         expect(req.io.to).toHaveBeenCalledWith(patientId);
-        expect(req.io.emit).toHaveBeenCalledWith('reschedule-notification', expect.objectContaining({
-            id: `reschedule-${bookingId}-${update.$push.scheduleHistory._id}`,
-            appointmentId: bookingId,
-            doctor: expect.objectContaining({ fullname: 'Doctor A' }),
-            from, timeSlot: to, reason: req.body.reason,
-        }));
+        expect(req.io.emit).toHaveBeenCalledWith(
+            'reschedule-notification',
+            expect.objectContaining({
+                id: `reschedule-${bookingId}-${update.$push.scheduleHistory._id}`,
+                appointmentId: bookingId,
+                doctor: expect.objectContaining({ fullname: 'Doctor A' }),
+                from,
+                timeSlot: to,
+                reason: req.body.reason,
+            }),
+        );
         expect(req.io.in).toHaveBeenCalledWith([`calendar:doctor:${doctorId}`, `calendar:patient:${patientId}`]);
         expect(session.endSession).toHaveBeenCalled();
     });
@@ -200,8 +210,12 @@ describe('patient schedule notifications', () => {
         req.userId = patientId;
         req.userRole = 'patient';
         const entries = Array.from({ length: 8 }, (_, index) => ({
-            _id: `history-${index}`, from, to, timestamp: new Date(2026, 9, index + 1),
-            patientUnread: index > 1, actorName: 'Doctor A',
+            _id: `history-${index}`,
+            from,
+            to,
+            timestamp: new Date(2026, 9, index + 1),
+            patientUnread: index > 1,
+            actorName: 'Doctor A',
         }));
         mocks.Booking.find.mockResolvedValue([{ ...booking, scheduleHistory: entries }]);
         const res = response();
@@ -227,7 +241,9 @@ describe('patient schedule notifications', () => {
     });
 
     it('keeps the committed reschedule successful if the realtime transport fails', async () => {
-        req.io.to.mockImplementation(() => { throw new Error('offline'); });
+        req.io.to.mockImplementation(() => {
+            throw new Error('offline');
+        });
         const res = response();
         await rescheduleAppointment(req, res);
         expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ success: true }));
@@ -238,8 +254,9 @@ describe('patient schedule notifications', () => {
         req.userId = patientId;
         req.body = { before: '2026-10-22T00:00:00Z' };
         await markScheduleNotificationsRead(req, response());
-        expect(mocks.Booking.updateMany.mock.calls[0][2].arrayFilters[0]['entry.timestamp'].$lte)
-            .toEqual(new Date(req.body.before));
+        expect(mocks.Booking.updateMany.mock.calls[0][2].arrayFilters[0]['entry.timestamp'].$lte).toEqual(
+            new Date(req.body.before),
+        );
         mocks.Booking.updateMany.mockClear();
         for (const before of ['invalid', '2099-01-01T00:00:00Z']) {
             req.body = { before };

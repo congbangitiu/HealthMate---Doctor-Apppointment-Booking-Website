@@ -1,15 +1,26 @@
 // Slots use the clinic's calendar date in Vietnam, regardless of the server timezone.
 export const getBookingTimeSlotError = (slot) => {
-    if (!slot || typeof slot !== 'object' || Array.isArray(slot) ||
-        !slot.day || !slot.startingTime || !slot.endingTime) {
+    if (
+        !slot ||
+        typeof slot !== 'object' ||
+        Array.isArray(slot) ||
+        !slot.day ||
+        !slot.startingTime ||
+        !slot.endingTime
+    ) {
         return 'Invalid time slot: day, startingTime, and endingTime are required';
     }
 
     const { day, startingTime, endingTime } = slot;
     const timePattern = /^([01]\d|2[0-3]):[0-5]\d$/;
-    if (typeof day !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(day) ||
-        typeof startingTime !== 'string' || !timePattern.test(startingTime) ||
-        typeof endingTime !== 'string' || !timePattern.test(endingTime)) {
+    if (
+        typeof day !== 'string' ||
+        !/^\d{4}-\d{2}-\d{2}$/.test(day) ||
+        typeof startingTime !== 'string' ||
+        !timePattern.test(startingTime) ||
+        typeof endingTime !== 'string' ||
+        !timePattern.test(endingTime)
+    ) {
         return 'Invalid time slot: use YYYY-MM-DD and HH:mm';
     }
 
@@ -25,6 +36,4 @@ export const getBookingTimeSlotError = (slot) => {
 };
 
 export const isSameBookingTimeSlot = (left, right) =>
-    left?.day === right?.day &&
-    left?.startingTime === right?.startingTime &&
-    left?.endingTime === right?.endingTime;
+    left?.day === right?.day && left?.startingTime === right?.startingTime && left?.endingTime === right?.endingTime;

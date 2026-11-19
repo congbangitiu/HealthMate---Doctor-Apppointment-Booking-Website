@@ -85,11 +85,9 @@ describe('support conversations', () => {
             account: { id: 'admin', role: 'admin' },
         });
         User.find.mockReturnValue({
-            select: vi
-                .fn()
-                .mockReturnValue({
-                    lean: vi.fn().mockResolvedValue([{ _id: 'owner', photo: '/owner.png', email: 'private' }]),
-                }),
+            select: vi.fn().mockReturnValue({
+                lean: vi.fn().mockResolvedValue([{ _id: 'owner', photo: '/owner.png', email: 'private' }]),
+            }),
         });
         const res = await call(getSupportConversation);
         expect(res.json.mock.calls[0][0].data.request.requester).toEqual({ fullname: 'Patient', photo: '/owner.png' });
@@ -109,19 +107,15 @@ describe('support conversations', () => {
             account: { id: 'owner', role: 'patient' },
         });
         User.findOne.mockReturnValue({
-            select: vi
-                .fn()
-                .mockReturnValue({
-                    lean: vi
-                        .fn()
-                        .mockResolvedValue({
-                            _id: 'assigned-admin',
-                            fullname: 'Current admin',
-                            photo: '/admin.png',
-                            email: 'private',
-                            password: 'private',
-                        }),
+            select: vi.fn().mockReturnValue({
+                lean: vi.fn().mockResolvedValue({
+                    _id: 'assigned-admin',
+                    fullname: 'Current admin',
+                    photo: '/admin.png',
+                    email: 'private',
+                    password: 'private',
                 }),
+            }),
         });
         const res = await call(getSupportConversation);
         expect(User.findOne).toHaveBeenCalledWith({ _id: 'assigned-admin', role: 'admin' });
@@ -173,13 +167,25 @@ describe('support conversations', () => {
     });
     it('persists an admin reply and notifies only the guest attached to the request', async () => {
         const guestRequest = { ...request, senderRole: 'guest' };
-        getSupportAccess.mockResolvedValue({ request: guestRequest, account: { id: 'admin', role: 'admin', fullname: 'Admin' }, senderKey: 'admin:admin' });
-        SupportRequest.findByIdAndUpdate.mockImplementation((id, update) => ({ lean: vi.fn().mockResolvedValue({ ...guestRequest, ...update.$set }) }));
+        getSupportAccess.mockResolvedValue({
+            request: guestRequest,
+            account: { id: 'admin', role: 'admin', fullname: 'Admin' },
+            senderKey: 'admin:admin',
+        });
+        SupportRequest.findByIdAndUpdate.mockImplementation((id, update) => ({
+            lean: vi.fn().mockResolvedValue({ ...guestRequest, ...update.$set }),
+        }));
         const res = await call(sendSupportMessage);
         expect(res.status).toHaveBeenCalledWith(201);
-        expect(SupportRequest.findByIdAndUpdate.mock.calls[0][1].$set).toMatchObject({ ownerNotificationKind: 'message', ownerNotificationRead: false });
+        expect(SupportRequest.findByIdAndUpdate.mock.calls[0][1].$set).toMatchObject({
+            ownerNotificationKind: 'message',
+            ownerNotificationRead: false,
+        });
         expect(io.to).toHaveBeenCalledWith('support:guest:' + id);
-        expect(io.emit).toHaveBeenCalledWith('guest-support-notification', expect.objectContaining({ requestId: id, kind: 'message', isRead: false }));
+        expect(io.emit).toHaveBeenCalledWith(
+            'guest-support-notification',
+            expect.objectContaining({ requestId: id, kind: 'message', isRead: false }),
+        );
         expect(io.to).not.toHaveBeenCalledWith('support:owner:guest:undefined');
     });
     it('fetches missed messages after the last received ID in ascending order', async () => {

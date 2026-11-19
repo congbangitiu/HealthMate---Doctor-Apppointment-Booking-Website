@@ -25,11 +25,13 @@ beforeEach(() => {
                 url.endsWith('/mine')
                     ? { data: [{ _id: id, category: 'technical', preview: 'I need help with my appointment.' }] }
                     : url.endsWith('/guest-notifications')
-                    ? {
-                          requests: [{ _id: id, category: 'technical', status: 'in-progress', preview: 'Guest issue' }],
-                          data: [],
-                      }
-                    : { data: { request: { _id: id, category: 'technical', message: 'Original issue' } } },
+                      ? {
+                            requests: [
+                                { _id: id, category: 'technical', status: 'in-progress', preview: 'Guest issue' },
+                            ],
+                            data: [],
+                        }
+                      : { data: { request: { _id: id, category: 'technical', message: 'Original issue' } } },
         })),
     );
 });

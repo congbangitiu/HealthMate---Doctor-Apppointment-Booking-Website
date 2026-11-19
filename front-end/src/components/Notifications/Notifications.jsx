@@ -24,10 +24,10 @@ const Notifications = ({ notifications, role, handleCloseNotifications, loadErro
             role === 'guest'
                 ? '/support-requests'
                 : role === 'admin'
-                ? '/admins/management/support'
-                : role === 'doctor'
-                ? '/doctors/profile/me?tab=appointments'
-                : '/users/profile/me',
+                  ? '/admins/management/support'
+                  : role === 'doctor'
+                    ? '/doctors/profile/me?tab=appointments'
+                    : '/users/profile/me',
         );
         handleCloseNotifications();
     };
@@ -206,21 +206,21 @@ const Notifications = ({ notifications, role, handleCloseNotifications, loadErro
                                     (notification.type === 'support-update'
                                         ? notification.photo
                                         : role === 'admin'
-                                        ? notification.senderRole === 'guest'
-                                            ? null
-                                            : notification.photo
-                                        : role === 'doctor'
-                                        ? notification.user?.photo
-                                        : notification.doctor?.photo) || defaultAvatar
+                                          ? notification.senderRole === 'guest'
+                                              ? null
+                                              : notification.photo
+                                          : role === 'doctor'
+                                            ? notification.user?.photo
+                                            : notification.doctor?.photo) || defaultAvatar
                                 }
                                 alt={
                                     notification.type === 'support-update'
                                         ? notification.actorName || t('supportRealtime:supportTeam')
                                         : role === 'admin'
-                                        ? notification.fullname
-                                        : role === 'doctor'
-                                        ? notification.user?.fullname
-                                        : notification.doctor?.fullname
+                                          ? notification.fullname
+                                          : role === 'doctor'
+                                            ? notification.user?.fullname
+                                            : notification.doctor?.fullname
                                 }
                                 onError={(event) => {
                                     event.currentTarget.onerror = null;
@@ -252,8 +252,8 @@ const Notifications = ({ notifications, role, handleCloseNotifications, loadErro
                         {['admin', 'guest'].includes(role)
                             ? t('supportRealtime:noNotifications')
                             : role === 'doctor'
-                            ? t('emptyDescriptionDoctor')
-                            : t('emptyDescriptionPatient')}
+                              ? t('emptyDescriptionDoctor')
+                              : t('emptyDescriptionPatient')}
                     </p>
                 </div>
             )}

@@ -11,5 +11,3 @@ const convertFileSize = (fileSize) => {
 };
 
 export default convertFileSize;
-
-

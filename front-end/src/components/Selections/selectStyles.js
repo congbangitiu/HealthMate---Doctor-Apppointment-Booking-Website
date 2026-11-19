@@ -12,7 +12,11 @@ export const getSelectionStyles = (width = '100%') => ({
     }),
     option: (provided, state) => ({
         ...provided,
-        backgroundColor: state.isSelected ? 'var(--primaryColor)' : state.isFocused ? 'var(--lightGreenColor)' : 'white',
+        backgroundColor: state.isSelected
+            ? 'var(--primaryColor)'
+            : state.isFocused
+              ? 'var(--lightGreenColor)'
+              : 'white',
         color: state.isSelected ? 'white' : 'black',
         '&:hover': { backgroundColor: 'var(--lightGreenColor)' },
     }),

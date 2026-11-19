@@ -47,7 +47,10 @@ const sendMail = async (mailOptions, callback) => {
         return info;
     } catch (error) {
         const err = new Error(
-            error?.response?.data?.error?.message || error?.errors?.[0]?.message || error?.message || 'Failed to send email',
+            error?.response?.data?.error?.message ||
+                error?.errors?.[0]?.message ||
+                error?.message ||
+                'Failed to send email',
         );
         if (callback) return callback(err);
         throw err;

@@ -25,7 +25,7 @@ const copy = {
     },
 };
 const escape = (value) =>
-    value.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    value.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 export const guestRecoveryMail = (language, link) => {
     const text = copy[language] || copy.en;
     const url = escape(link);
@@ -37,8 +37,8 @@ export const guestRecoveryMail = (language, link) => {
         <div style="max-width:560px;margin:24px auto;padding:28px;background:white;border:1px solid #e0e8e8;border-radius:8px">
             <p style="margin-top:0">${text.greeting}</p><p>${text.intro}</p><p>${text.action}</p>
             <p style="margin:28px 0"><a href="${url}" style="display:inline-block;padding:12px 20px;background:#00b5b5;color:white;border-radius:6px;text-decoration:none">${
-            text.button
-        }</a></p>
+                text.button
+            }</a></p>
             <p>${text.expiry}</p><p>${text.ignore}</p><p>${text.closing}<br><strong>${text.team}</strong></p>
             <p style="font-size:13px;color:#65757b;overflow-wrap:anywhere">${
                 text.fallback

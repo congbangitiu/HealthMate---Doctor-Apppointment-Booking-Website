@@ -71,7 +71,9 @@ try {
     await screenshot('calendar-desktop.png');
     await evaluate(`document.querySelector('button[draggable="true"]').click()`);
     await waitFor(`document.querySelector('[role="dialog"]')`);
-    await waitFor(`(() => { const paper = document.querySelector('[class*="MuiDrawer-paper"]'); const rect = paper?.getBoundingClientRect(); return rect && rect.left >= 0 && rect.right <= innerWidth + 1; })()`);
+    await waitFor(
+        `(() => { const paper = document.querySelector('[class*="MuiDrawer-paper"]'); const rect = paper?.getBoundingClientRect(); return rect && rect.left >= 0 && rect.right <= innerWidth + 1; })()`,
+    );
     assert.ok(
         await evaluate(
             `document.querySelector('[role="dialog"]').textContent.includes('Lịch sử thay đổi') || document.querySelector('[role="dialog"]').textContent.includes('Change history')`,
@@ -79,8 +81,15 @@ try {
     );
     await screenshot('calendar-details.png');
     await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
-    await waitFor(`(() => { const paper = document.querySelector('[class*="MuiDrawer-paper"]'); return paper && paper.getBoundingClientRect().right <= innerWidth + 1 && paper.clientWidth <= innerWidth; })()`);
-    assert.ok(await evaluate(`(() => { const detail = document.querySelector('[role="dialog"]'); return detail.scrollWidth <= detail.clientWidth + 1; })()`), 'Appointment details fit the mobile drawer');
+    await waitFor(
+        `(() => { const paper = document.querySelector('[class*="MuiDrawer-paper"]'); return paper && paper.getBoundingClientRect().right <= innerWidth + 1 && paper.clientWidth <= innerWidth; })()`,
+    );
+    assert.ok(
+        await evaluate(
+            `(() => { const detail = document.querySelector('[role="dialog"]'); return detail.scrollWidth <= detail.clientWidth + 1; })()`,
+        ),
+        'Appointment details fit the mobile drawer',
+    );
     await screenshot('calendar-details-mobile.png');
     await send('Page.navigate', { url: 'http://127.0.0.1:5174/test/browser/calendar-preview.html?role=patient' });
     await waitFor(`document.querySelectorAll('[class*="agendaItem"]').length > 0`);

@@ -5,11 +5,11 @@ import { beforeAll, afterAll } from 'vitest';
 import { server } from './mocks/server';
 
 afterEach(() => {
-  cleanup();
-  localStorage.clear();
-  vi.useRealTimers();
-  vi.unstubAllGlobals();
-  vi.unstubAllEnvs();
+    cleanup();
+    localStorage.clear();
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
 });
 
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));

@@ -135,11 +135,7 @@ const Login = () => {
                             <input type="checkbox" />
                             <p className={cx('question')}>{t('remember')}</p>
                         </div>
-                        <Link
-                            to="/forgot-password"
-                            state={{ email: formData.email }}
-                            className={cx('forgot')}
-                        >
+                        <Link to="/forgot-password" state={{ email: formData.email }} className={cx('forgot')}>
                             {t('forgot')}
                         </Link>
                     </div>

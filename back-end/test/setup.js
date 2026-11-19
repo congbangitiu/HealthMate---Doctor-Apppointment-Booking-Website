@@ -10,10 +10,10 @@ process.env.EMAIL_USERNAME = 'unit@example.test';
 
 // Controller/utility không được tự đọc .env thật khi unit test.
 vi.mock('dotenv', () => ({
-  default: { config: vi.fn(() => ({ parsed: {} })) },
-  config: vi.fn(() => ({ parsed: {} })),
+    default: { config: vi.fn(() => ({ parsed: {} })) },
+    config: vi.fn(() => ({ parsed: {} })),
 }));
 
 afterEach(() => {
-  vi.useRealTimers();
+    vi.useRealTimers();
 });

@@ -297,8 +297,8 @@ describe('support chat', () => {
                 cursor === 'message-001'
                     ? { messages: [make('message-002', 'Second reply')], hasMore: true }
                     : cursor === 'message-002'
-                    ? { messages: [make('message-003', 'Third reply')], hasMore: false }
-                    : { messages: [make('message-001', 'First reply')], hasMore: false };
+                      ? { messages: [make('message-003', 'Third reply')], hasMore: false }
+                      : { messages: [make('message-001', 'First reply')], hasMore: false };
             return {
                 ok: true,
                 json: async () => ({

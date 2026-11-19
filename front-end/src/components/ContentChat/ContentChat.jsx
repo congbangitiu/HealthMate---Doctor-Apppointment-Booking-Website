@@ -449,17 +449,26 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile, on
                             {supportContact?.photo && supportContact.photo !== failedSupportPhoto ? (
                                 <img
                                     src={supportContact.photo}
-                                    alt={supportContact.fullname || supportText(supportIsAdmin ? 'supportRequest' : 'supportTeam')}
+                                    alt={
+                                        supportContact.fullname ||
+                                        supportText(supportIsAdmin ? 'supportRequest' : 'supportTeam')
+                                    }
                                     onError={() => setFailedSupportPhoto(supportContact.photo)}
                                 />
                             ) : supportIsAdmin ? (
-                                <img src={defaultAvatar} alt={supportContact?.fullname || supportText('supportRequest')} />
+                                <img
+                                    src={defaultAvatar}
+                                    alt={supportContact?.fullname || supportText('supportRequest')}
+                                />
                             ) : (
                                 <FaHeadset aria-hidden="true" />
                             )}
                         </div>
                         <div>
-                            <h4>{supportContact?.fullname || supportText(supportIsAdmin ? 'supportRequest' : 'supportTeam')}</h4>
+                            <h4>
+                                {supportContact?.fullname ||
+                                    supportText(supportIsAdmin ? 'supportRequest' : 'supportTeam')}
+                            </h4>
                             <p>{supportText(support.connected ? 'connected' : 'reconnecting')}</p>
                         </div>
                     </div>
@@ -663,7 +672,8 @@ const ContentChat = ({ selectedChat, setSelectedChat, userId, role, isMobile, on
             </div>
             {isSupport && support.hasNewMessages && (
                 <button type="button" className={cx('new-messages')} onClick={support.onJumpToLatest}>
-                    <FiArrowDown aria-hidden="true" />{supportText('newMessages')}
+                    <FiArrowDown aria-hidden="true" />
+                    {supportText('newMessages')}
                 </button>
             )}
             {isSupport && support.error && (

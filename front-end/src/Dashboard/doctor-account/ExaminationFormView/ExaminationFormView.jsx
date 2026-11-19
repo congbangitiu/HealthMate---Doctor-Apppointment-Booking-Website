@@ -215,7 +215,8 @@ const ExaminationFormView = ({ appointment, examination, onPDFUploadSuccess }) =
                                     <div>
                                         <h4>
                                             HealthMate
-                                            {examination.updatedAt && ', ' + formatDateForDisplay(examination.updatedAt)}
+                                            {examination.updatedAt &&
+                                                ', ' + formatDateForDisplay(examination.updatedAt)}
                                         </h4>
                                         <span>
                                             <img src={Watermark} alt="" />

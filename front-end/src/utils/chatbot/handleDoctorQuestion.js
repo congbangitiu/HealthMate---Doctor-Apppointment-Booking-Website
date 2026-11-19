@@ -52,8 +52,8 @@ export const handleDoctorAppointments = async ({
             appointments.length === 0
                 ? `
                     A doctor asked about their schedule for ${label} (${formatDateForDisplay(
-                      dateStr,
-                  )}), but there are no appointments recorded.
+                        dateStr,
+                    )}), but there are no appointments recorded.
 
                     No need to say greatings or salutations, please reply politely:
                     - You have no appointments for ${label}
@@ -61,8 +61,8 @@ export const handleDoctorAppointments = async ({
                 `
                 : `
                     A doctor wants to know what appointments they have scheduled for ${label} (${formatDateForDisplay(
-                      dateStr,
-                  )}). Make sure the format of appointment list has bullet points and line breaks like when I passed it in.
+                        dateStr,
+                    )}). Make sure the format of appointment list has bullet points and line breaks like when I passed it in.
 
                     Here is the list of appointments:
                     ${appointmentList}

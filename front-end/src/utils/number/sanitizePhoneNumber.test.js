@@ -11,16 +11,15 @@ describe('sanitizePhoneNumber', () => {
     });
 
     it.each([null, undefined, 901234567, {}, [], true, new String('0901234567')])(
-        'FE-U07: returns an empty string for a non-string value: %j', (value) => {
+        'FE-U07: returns an empty string for a non-string value: %j',
+        (value) => {
             expect(sanitizePhoneNumber(value)).toBe('');
         },
     );
 
-    it.each(['0901234567', '0000123', '0', ''])(
-        'FE-U08: preserves an already sanitized string: %j', (value) => {
-            expect(sanitizePhoneNumber(value)).toBe(value);
-        },
-    );
+    it.each(['0901234567', '0000123', '0', ''])('FE-U08: preserves an already sanitized string: %j', (value) => {
+        expect(sanitizePhoneNumber(value)).toBe(value);
+    });
 
     it.each(['abc', ' +()-\n\t '])('FE-U09: returns an empty string when no digits remain: %j', (value) => {
         expect(sanitizePhoneNumber(value)).toBe('');

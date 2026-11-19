@@ -64,12 +64,7 @@ const readSchedules = (schedules, calendar) => {
     return { selectedDays, selectedTimes, initialized: Boolean(schedules?.length) };
 };
 
-const TimeSlots = ({
-    handleTimeSlotsChange,
-    daysOfWeekWithDates,
-    availableSchedules,
-    onAvailableScheduleChange,
-}) => {
+const TimeSlots = ({ handleTimeSlotsChange, daysOfWeekWithDates, availableSchedules, onAvailableScheduleChange }) => {
     const { t: tProfileDoctor } = useTranslation('profileSettingDoctor');
     const { t: tSchedule } = useTranslation('schedule');
     const { isMobile } = useResponsive();

@@ -19,9 +19,11 @@ vi.mock('../../components/Recaptcha/Recaptcha', () => ({
 vi.mock('../../../config', () => ({ BASE_URL: '/api/v1' }));
 const mount = (identity = {}) =>
     render(
-        <MemoryRouter><authContext.Provider value={identity}>
-            <Contact />
-        </authContext.Provider></MemoryRouter>,
+        <MemoryRouter>
+            <authContext.Provider value={identity}>
+                <Contact />
+            </authContext.Provider>
+        </MemoryRouter>,
     );
 async function choose(label) {
     fireEvent.keyDown(screen.getByLabelText('subject'), { key: 'ArrowDown' });

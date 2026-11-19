@@ -55,9 +55,18 @@ const MyAccount = () => {
                             )}
                             <div className={cx('email-row')}>
                                 <b>{t('email')}:</b>
-                                <InfoToolTip text={userData.email || ''} maxLength={20} customStyle={{
-                                    minWidth: 0, flex: 1, textAlign: 'right', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                                }} />
+                                <InfoToolTip
+                                    text={userData.email || ''}
+                                    maxLength={20}
+                                    customStyle={{
+                                        minWidth: 0,
+                                        flex: 1,
+                                        textAlign: 'right',
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                    }}
+                                />
                             </div>
                             <p>
                                 <b>{t('phoneNumber')}:</b> (+84) {userData.phone}
@@ -116,9 +125,18 @@ const MyAccount = () => {
                             )}
                             <div className={cx('email-row')}>
                                 <b>{t('email')}:</b>
-                                <InfoToolTip text={userData.email || ''} maxLength={20} customStyle={{
-                                    minWidth: 0, flex: 1, textAlign: 'right', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                                }} />
+                                <InfoToolTip
+                                    text={userData.email || ''}
+                                    maxLength={20}
+                                    customStyle={{
+                                        minWidth: 0,
+                                        flex: 1,
+                                        textAlign: 'right',
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                    }}
+                                />
                             </div>
                             <p>
                                 <b>{t('phoneNumber')}:</b> (+84) {userData.phone}

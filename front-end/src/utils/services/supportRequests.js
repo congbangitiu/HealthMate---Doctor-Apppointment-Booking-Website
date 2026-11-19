@@ -171,10 +171,13 @@ export const useGuestRequests = () => {
     useEffect(() => {
         const deadlines = entries.map((entry) => Date.parse(entry.expiresAt)).filter(Number.isFinite);
         if (!deadlines.length) return;
-        const timer = setTimeout(() => {
-            setEntries(getGuestRequests());
-            announce();
-        }, Math.min(2147483647, Math.max(0, Math.min(...deadlines) - Date.now())));
+        const timer = setTimeout(
+            () => {
+                setEntries(getGuestRequests());
+                announce();
+            },
+            Math.min(2147483647, Math.max(0, Math.min(...deadlines) - Date.now())),
+        );
         return () => clearTimeout(timer);
     }, [entries]);
     return entries;

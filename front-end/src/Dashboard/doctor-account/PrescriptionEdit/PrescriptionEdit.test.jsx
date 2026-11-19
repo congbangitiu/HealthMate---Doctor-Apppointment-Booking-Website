@@ -12,7 +12,9 @@ vi.mock('../../../hooks/useResponsive', () => ({ default: () => ({ isTabletOrMob
 vi.mock('../../../utils/translation/translateDosageForm', () => ({ default: (value) => value }));
 vi.mock('../../../utils/translation/translateMealRelation', () => ({ default: (value) => value }));
 vi.mock('../../../utils/translation/translateTimeOfDay', () => ({ default: (value) => value }));
-vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key) => key === 'notes' ? ['Follow the instructions'] : key }) }));
+vi.mock('react-i18next', () => ({
+    useTranslation: () => ({ t: (key) => (key === 'notes' ? ['Follow the instructions'] : key) }),
+}));
 // The source delete control is a div with an icon; label the icon in this test only.
 vi.mock('react-icons/fa', () => ({ FaRegTrashAlt: () => <svg role="img" aria-label="Remove medication" /> }));
 import PrescriptionEdit from './PrescriptionEdit';
@@ -20,13 +22,22 @@ import PrescriptionEdit from './PrescriptionEdit';
 const base = 'http://localhost:5000/api/v1';
 const csv = 'Name,Strength,Dosage Form\nParacetamol,500 mg,Tablet\nAmoxicillin,250 mg,Capsule\nIncomplete,,Tablet\n';
 const medicine = (name = 'Existing medicine') => ({
-    name, dosage: { timesPerDay: 2, quantityPerTime: 1, totalUnits: 10,
-        timeOfDay: ['Morning'], dosageForm: 'Tablet', mealRelation: 'After meal' },
+    name,
+    dosage: {
+        timesPerDay: 2,
+        quantityPerTime: 1,
+        totalUnits: 10,
+        timeOfDay: ['Morning'],
+        dosageForm: 'Tablet',
+        mealRelation: 'After meal',
+    },
 });
 const jsonResponse = (body = {}, ok = true) => ({ ok, json: vi.fn().mockResolvedValue(body) });
 const deferred = () => {
     let resolve;
-    const promise = new Promise((finish) => { resolve = finish; });
+    const promise = new Promise((finish) => {
+        resolve = finish;
+    });
     return { promise, resolve };
 };
 let apiFetch;
@@ -35,11 +46,17 @@ let user;
 
 // Use async act instead of RTL's real zero-delay wait under Vitest fake timers.
 const originalAsyncWrapper = getConfig().asyncWrapper;
-beforeAll(() => configure({ asyncWrapper: async (action) => {
-    let result;
-    await act(async () => { result = await action(); });
-    return result;
-} }));
+beforeAll(() =>
+    configure({
+        asyncWrapper: async (action) => {
+            let result;
+            await act(async () => {
+                result = await action();
+            });
+            return result;
+        },
+    }),
+);
 afterAll(() => configure({ asyncWrapper: originalAsyncWrapper }));
 
 beforeEach(() => {
@@ -47,40 +64,76 @@ beforeEach(() => {
     user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     apiFetch = vi.fn().mockResolvedValue(jsonResponse());
     // Real PapaParse reads a tiny fixture instead of fetching the production CSV.
-    fetchMock = vi.fn((url, options) => url === '/mock-data/Medicine.csv'
-        ? Promise.resolve({ text: vi.fn().mockResolvedValue(csv) }) : apiFetch(url, options));
+    fetchMock = vi.fn((url, options) =>
+        url === '/mock-data/Medicine.csv'
+            ? Promise.resolve({ text: vi.fn().mockResolvedValue(csv) })
+            : apiFetch(url, options),
+    );
     vi.stubGlobal('fetch', fetchMock);
     vi.stubGlobal('scrollTo', vi.fn());
     mocks.success.mockClear();
     mocks.error.mockClear();
     vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
-        x: 0, y: 0, top: 0, left: 0, width: 200, height: 40, right: 200, bottom: 40, toJSON: () => ({}),
+        x: 0,
+        y: 0,
+        top: 0,
+        left: 0,
+        width: 200,
+        height: 40,
+        right: 200,
+        bottom: 40,
+        toJSON: () => ({}),
     });
 });
 
 async function renderEditor(overrides = {}) {
     const options = {
-        appointment: { user: { fullname: 'Test Patient', gender: 'female', dateOfBirth: '2000-01-01', phone: '901234567', address: 'Test address' } },
-        setAppointment: vi.fn(), diseaseName: 'Test condition', setDiseaseName: vi.fn(),
-        doctorAdvice: 'Test advice', setDoctorAdvice: vi.fn(), medications: [medicine()],
-        id: 'booking-id', createdTime: undefined, isSigned: false, setIsSigned: vi.fn(), ...overrides,
+        appointment: {
+            user: {
+                fullname: 'Test Patient',
+                gender: 'female',
+                dateOfBirth: '2000-01-01',
+                phone: '901234567',
+                address: 'Test address',
+            },
+        },
+        setAppointment: vi.fn(),
+        diseaseName: 'Test condition',
+        setDiseaseName: vi.fn(),
+        doctorAdvice: 'Test advice',
+        setDoctorAdvice: vi.fn(),
+        medications: [medicine()],
+        id: 'booking-id',
+        createdTime: undefined,
+        isSigned: false,
+        setIsSigned: vi.fn(),
+        ...overrides,
     };
     const changes = vi.fn();
     let currentMedications;
     function Editor() {
         const [medications, setMedications] = useState(options.medications);
         currentMedications = medications;
-        return <PrescriptionEdit {...options} medications={medications} setMedications={(value) => {
-            changes(value);
-            setMedications(value);
-        }} />;
+        return (
+            <PrescriptionEdit
+                {...options}
+                medications={medications}
+                setMedications={(value) => {
+                    changes(value);
+                    setMedications(value);
+                }}
+            />
+        );
     }
     let view;
-    await act(async () => { view = render(<Editor />); });
+    await act(async () => {
+        view = render(<Editor />);
+    });
     return { ...view, options, changes, getMedications: () => currentMedications };
 }
 
-const medicineInput = (index = 0) => screen.getAllByRole('combobox').filter((element) => element.tagName === 'INPUT')[index];
+const medicineInput = (index = 0) =>
+    screen.getAllByRole('combobox').filter((element) => element.tagName === 'INPUT')[index];
 const row = (index = 0) => medicineInput(index).closest('[class*="_medication_"]');
 const dosageForm = (index = 0) => row(index).querySelector('input[type="text"]:not([role="combobox"])');
 async function chooseMedicine(index = 0) {
@@ -93,7 +146,10 @@ describe('PrescriptionEdit', () => {
     it('FE-P01: selects a CSV medicine with its full name and read-only dosage form', async () => {
         const view = await renderEditor();
         await chooseMedicine();
-        expect(view.getMedications()[0]).toMatchObject({ name: 'Paracetamol 500 mg', dosage: { dosageForm: 'Tablet' } });
+        expect(view.getMedications()[0]).toMatchObject({
+            name: 'Paracetamol 500 mg',
+            dosage: { dosageForm: 'Tablet' },
+        });
         expect(dosageForm()).toHaveValue('Tablet');
         expect(dosageForm()).toHaveAttribute('readonly');
         expect(fetchMock).toHaveBeenCalledWith('/mock-data/Medicine.csv');
@@ -145,10 +201,19 @@ describe('PrescriptionEdit', () => {
     it('FE-P05: adds a medicine with the default dosage and a non-custom form', async () => {
         const view = await renderEditor({ medications: [] });
         await user.click(screen.getByRole('button', { name: 'button.add' }));
-        expect(view.getMedications()).toEqual([{
-            name: '', dosage: { timesPerDay: 0, quantityPerTime: 0, totalUnits: 0,
-                timeOfDay: ['Morning'], dosageForm: '', mealRelation: 'After meal' },
-        }]);
+        expect(view.getMedications()).toEqual([
+            {
+                name: '',
+                dosage: {
+                    timesPerDay: 0,
+                    quantityPerTime: 0,
+                    totalUnits: 0,
+                    timeOfDay: ['Morning'],
+                    dosageForm: '',
+                    mealRelation: 'After meal',
+                },
+            },
+        ]);
         expect(dosageForm()).toHaveAttribute('readonly');
     });
 
@@ -168,18 +233,28 @@ describe('PrescriptionEdit', () => {
     it.each([
         [undefined, 'POST', '/prescriptions', 'create', 'Prescription saved successfully!'],
         ['2026-10-22T10:00:00Z', 'PUT', '/prescriptions/booking-id', 'update', 'Prescription updated successfully!'],
-    ])('FE-P07/FE-P08: uses %s to choose the correct save request', async (createdTime, method, path, action, message) => {
-        const view = await renderEditor({ createdTime });
-        await user.click(screen.getByRole('button', { name: 'button.save' }));
-        expect(apiFetch).toHaveBeenNthCalledWith(1, `${base}${path}`, {
-            method, headers: { 'Content-Type': 'application/json', Authorization: 'Bearer unit-token' },
-            body: JSON.stringify({ appointment: 'booking-id', diseaseName: 'Test condition', medications: view.options.medications,
-                doctorAdvice: 'Test advice', action, isSigned: false }),
-        });
-        expect(apiFetch).toHaveBeenCalledTimes(2);
-        expect(mocks.success).toHaveBeenCalledWith(message);
-        expect(mocks.error).not.toHaveBeenCalled();
-    });
+    ])(
+        'FE-P07/FE-P08: uses %s to choose the correct save request',
+        async (createdTime, method, path, action, message) => {
+            const view = await renderEditor({ createdTime });
+            await user.click(screen.getByRole('button', { name: 'button.save' }));
+            expect(apiFetch).toHaveBeenNthCalledWith(1, `${base}${path}`, {
+                method,
+                headers: { 'Content-Type': 'application/json', Authorization: 'Bearer unit-token' },
+                body: JSON.stringify({
+                    appointment: 'booking-id',
+                    diseaseName: 'Test condition',
+                    medications: view.options.medications,
+                    doctorAdvice: 'Test advice',
+                    action,
+                    isSigned: false,
+                }),
+            });
+            expect(apiFetch).toHaveBeenCalledTimes(2);
+            expect(mocks.success).toHaveBeenCalledWith(message);
+            expect(mocks.error).not.toHaveBeenCalled();
+        },
+    );
 
     it('FE-P09: waits for prescription saving before updating booking status to done', async () => {
         const save = deferred();
@@ -190,34 +265,52 @@ describe('PrescriptionEdit', () => {
         await user.click(screen.getByRole('button', { name: 'button.save' }));
         expect(apiFetch).toHaveBeenCalledTimes(1);
         expect(screen.getByRole('status')).toBeInTheDocument();
-        await act(async () => { save.resolve(jsonResponse()); await save.promise; });
+        await act(async () => {
+            save.resolve(jsonResponse());
+            await save.promise;
+        });
         expect(apiFetch).toHaveBeenNthCalledWith(2, `${base}/bookings/booking-id/status`, {
-            method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer unit-token' },
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', Authorization: 'Bearer unit-token' },
             body: JSON.stringify({ status: 'done' }),
         });
         expect(mocks.success).not.toHaveBeenCalledWith('Appointment status updated successfully!');
         expect(timer).not.toHaveBeenCalledWith(expect.any(Function), 2000);
-        await act(async () => { status.resolve(jsonResponse()); await status.promise; });
+        await act(async () => {
+            status.resolve(jsonResponse());
+            await status.promise;
+        });
         expect(mocks.success).toHaveBeenCalledWith('Appointment status updated successfully!');
         expect(screen.queryByRole('status')).not.toBeInTheDocument();
         expect(timer).toHaveBeenCalledWith(expect.any(Function), 2000);
     });
 
-    it.each(['HTTP', 'network', 'JSON'])('FE-P10: stops without updating booking after a save %s failure', async (kind) => {
-        if (kind === 'network') apiFetch.mockRejectedValueOnce(new Error('Network unavailable'));
-        else if (kind === 'JSON') apiFetch.mockResolvedValueOnce({ ok: true, json: vi.fn().mockRejectedValue(new Error('Invalid JSON')) });
-        else apiFetch.mockResolvedValueOnce(jsonResponse({ message: 'Save rejected' }, false));
-        await renderEditor();
-        await user.click(screen.getByRole('button', { name: 'button.save' }));
-        expect(apiFetch).toHaveBeenCalledTimes(1);
-        expect(mocks.error).toHaveBeenCalledWith(kind === 'HTTP' ? 'Save rejected' : kind === 'network' ? 'Network unavailable' : 'Invalid JSON');
-        expect(mocks.success).not.toHaveBeenCalled();
-        expect(screen.queryByRole('status')).not.toBeInTheDocument();
-        expect(screen.getByRole('button', { name: 'button.save' })).toBeInTheDocument();
-    });
+    it.each(['HTTP', 'network', 'JSON'])(
+        'FE-P10: stops without updating booking after a save %s failure',
+        async (kind) => {
+            if (kind === 'network') apiFetch.mockRejectedValueOnce(new Error('Network unavailable'));
+            else if (kind === 'JSON')
+                apiFetch.mockResolvedValueOnce({
+                    ok: true,
+                    json: vi.fn().mockRejectedValue(new Error('Invalid JSON')),
+                });
+            else apiFetch.mockResolvedValueOnce(jsonResponse({ message: 'Save rejected' }, false));
+            await renderEditor();
+            await user.click(screen.getByRole('button', { name: 'button.save' }));
+            expect(apiFetch).toHaveBeenCalledTimes(1);
+            expect(mocks.error).toHaveBeenCalledWith(
+                kind === 'HTTP' ? 'Save rejected' : kind === 'network' ? 'Network unavailable' : 'Invalid JSON',
+            );
+            expect(mocks.success).not.toHaveBeenCalled();
+            expect(screen.queryByRole('status')).not.toBeInTheDocument();
+            expect(screen.getByRole('button', { name: 'button.save' })).toBeInTheDocument();
+        },
+    );
 
     it('FE-P11: reports status failure after saving without claiming booking completion or repeating the save', async () => {
-        apiFetch.mockResolvedValueOnce(jsonResponse()).mockResolvedValueOnce(jsonResponse({ message: 'Status rejected' }, false));
+        apiFetch
+            .mockResolvedValueOnce(jsonResponse())
+            .mockResolvedValueOnce(jsonResponse({ message: 'Status rejected' }, false));
         await renderEditor();
         await user.click(screen.getByRole('button', { name: 'button.save' }));
         expect(apiFetch).toHaveBeenCalledTimes(2);
@@ -227,10 +320,15 @@ describe('PrescriptionEdit', () => {
     });
 
     it.each(['save HTTP', 'save network', 'status HTTP'])(
-        'FE-P12: retains the form without scheduling reload after %s failure', async (kind) => {
+        'FE-P12: retains the form without scheduling reload after %s failure',
+        async (kind) => {
             if (kind === 'save network') apiFetch.mockRejectedValueOnce(new Error('Request failed'));
-            else if (kind === 'save HTTP') apiFetch.mockResolvedValueOnce(jsonResponse({ message: 'Request failed' }, false));
-            else apiFetch.mockResolvedValueOnce(jsonResponse()).mockResolvedValueOnce(jsonResponse({ message: 'Request failed' }, false));
+            else if (kind === 'save HTTP')
+                apiFetch.mockResolvedValueOnce(jsonResponse({ message: 'Request failed' }, false));
+            else
+                apiFetch
+                    .mockResolvedValueOnce(jsonResponse())
+                    .mockResolvedValueOnce(jsonResponse({ message: 'Request failed' }, false));
             await renderEditor();
             const timer = vi.spyOn(globalThis, 'setTimeout');
             await user.click(screen.getByRole('button', { name: 'button.save' }));
@@ -256,7 +354,10 @@ describe('PrescriptionEdit', () => {
         const snapshot = structuredClone(original);
         const view = await renderEditor({ medications: original });
         await chooseMedicine();
-        expect(view.getMedications()[0]).toMatchObject({ name: 'Paracetamol 500 mg', dosage: { dosageForm: 'Tablet' } });
+        expect(view.getMedications()[0]).toMatchObject({
+            name: 'Paracetamol 500 mg',
+            dosage: { dosageForm: 'Tablet' },
+        });
         expect(original).toEqual(snapshot);
         expect(view.getMedications()[0]).not.toBe(original[0]);
         expect(view.getMedications()[0].dosage).not.toBe(original[0].dosage);
@@ -264,8 +365,10 @@ describe('PrescriptionEdit', () => {
     });
 
     it('FE-P15: permits retry with the same form data after saving is rejected', async () => {
-        apiFetch.mockResolvedValueOnce(jsonResponse({ message: 'Save rejected' }, false))
-            .mockResolvedValueOnce(jsonResponse()).mockResolvedValueOnce(jsonResponse());
+        apiFetch
+            .mockResolvedValueOnce(jsonResponse({ message: 'Save rejected' }, false))
+            .mockResolvedValueOnce(jsonResponse())
+            .mockResolvedValueOnce(jsonResponse());
         await renderEditor();
         const timer = vi.spyOn(globalThis, 'setTimeout');
         await user.click(screen.getByRole('button', { name: 'button.save' }));
@@ -279,5 +382,7 @@ describe('PrescriptionEdit', () => {
         expect(timer).toHaveBeenCalledWith(expect.any(Function), 2000);
     });
 
-    it.todo('FE-P12: verifies real reload after success and preservation of unsaved form data after failure in a browser');
+    it.todo(
+        'FE-P12: verifies real reload after success and preservation of unsaved form data after failure in a browser',
+    );
 });

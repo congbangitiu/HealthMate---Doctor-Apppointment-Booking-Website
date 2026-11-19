@@ -75,8 +75,8 @@ const SupportRequests = () => {
         item.category !== 'other'
             ? t('contact:categories.' + item.category)
             : item.subject && item.subject !== item._id
-            ? item.subject
-            : t('supportRequest');
+              ? item.subject
+              : t('supportRequest');
     const formatDate = (value) =>
         new Date(value).toLocaleDateString(i18n?.language?.startsWith('vi') ? 'vi-VN' : 'en-US', {
             day: 'numeric',
@@ -182,8 +182,8 @@ const SupportRequests = () => {
                         response.status === 404
                             ? 'requestNotFound'
                             : [401, 403].includes(response.status)
-                            ? 'forbidden'
-                            : 'chatFailed',
+                              ? 'forbidden'
+                              : 'chatFailed',
                     );
                 return response.json();
             })

@@ -19,7 +19,7 @@ const AdminSearch = ({ title, total, placeholder, query, setQuery }) => {
     const handleClearSearch = () => {
         setQuery('');
     };
-    
+
     return (
         <div className={cx('container')}>
             <h4>

@@ -34,7 +34,11 @@ export const getGuestSupportNotifications = async (req, res) => {
             success: true,
             data: data.slice(0, 12),
             unreadCount: notices.filter((row) => row.ownerNotificationRead === false).length,
-            unavailableRequestIds: [...new Set(proofs.map((proof) => proof?.requestId).filter((id) => typeof id === 'string' && !requests.has(id)))],
+            unavailableRequestIds: [
+                ...new Set(
+                    proofs.map((proof) => proof?.requestId).filter((id) => typeof id === 'string' && !requests.has(id)),
+                ),
+            ],
             requests: rows
                 .map((row) => ({
                     _id: row._id,

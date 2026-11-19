@@ -284,7 +284,9 @@ describe('login', () => {
     });
 
     it('BE-L10: issues a token with a fifteen-day lifetime', async () => {
-        mocks.User.findOne.mockResolvedValue(createAccountDocument({ id: 'patient-id', role: 'patient', email: 'patient@example.test' }));
+        mocks.User.findOne.mockResolvedValue(
+            createAccountDocument({ id: 'patient-id', role: 'patient', email: 'patient@example.test' }),
+        );
         mocks.bcryptCompare.mockResolvedValue(true);
         const res = createResponse();
         await login({ body: { email: 'patient@example.test', password: 'Password123' } }, res);
@@ -333,10 +335,7 @@ describe('registerAndVerifyOTP', () => {
         Model.findOne.mockResolvedValue({ _id: `${role}-id`, role });
         const res = createResponse();
 
-        await registerAndVerifyOTP(
-            { body: validRegistrationBody({ role, email: `${role}@example.test` }) },
-            res,
-        );
+        await registerAndVerifyOTP({ body: validRegistrationBody({ role, email: `${role}@example.test` }) }, res);
 
         expect(Model.findOne).toHaveBeenCalledWith({ email: `${role}@example.test` });
         expect(res.status).toHaveBeenCalledWith(400);
@@ -376,10 +375,7 @@ describe('registerAndVerifyOTP', () => {
         mocks.otpFindOne.mockResolvedValue({ otp: '123456', createdAt: new Date() });
         const res = createResponse();
 
-        await registerAndVerifyOTP(
-            { body: validRegistrationBody({ confirmedPassword: 'DifferentPassword123' }) },
-            res,
-        );
+        await registerAndVerifyOTP({ body: validRegistrationBody({ confirmedPassword: 'DifferentPassword123' }) }, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith({ message: 'Passwords do not match!' });
@@ -398,10 +394,7 @@ describe('registerAndVerifyOTP', () => {
         const email = `${role}@example.test`;
         const res = createResponse();
 
-        await registerAndVerifyOTP(
-            { body: validRegistrationBody({ role, email, fullname: `Test ${role}` }) },
-            res,
-        );
+        await registerAndVerifyOTP({ body: validRegistrationBody({ role, email, fullname: `Test ${role}` }) }, res);
 
         expect(mocks.bcryptGenSalt).toHaveBeenCalledWith(10);
         expect(mocks.bcryptHash).toHaveBeenCalledWith('Password123', 'unit-test-salt');
@@ -415,9 +408,7 @@ describe('registerAndVerifyOTP', () => {
         );
         expect(saveMock).toHaveBeenCalledTimes(1);
         expect(mocks.otpDeleteOne).toHaveBeenCalledWith({ email });
-        expect(saveMock.mock.invocationCallOrder[0]).toBeLessThan(
-            mocks.otpDeleteOne.mock.invocationCallOrder[0],
-        );
+        expect(saveMock.mock.invocationCallOrder[0]).toBeLessThan(mocks.otpDeleteOne.mock.invocationCallOrder[0]);
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith({
             success: true,
@@ -504,18 +495,21 @@ describe('registerAndVerifyOTP', () => {
         expect(mocks.doctorSave).not.toHaveBeenCalled();
     });
 
-    it.each(['patient', 'doctor'])('BE-R11: rejects a %s registration when the email exists in the other collection', async (role) => {
-        const otherModel = role === 'patient' ? mocks.Doctor : mocks.User;
-        otherModel.findOne.mockResolvedValue({ email: 'patient@example.test' });
-        mocks.otpFindOne.mockResolvedValue({ otp: '123456', createdAt: new Date() });
-        const res = createResponse();
-        await registerAndVerifyOTP({ body: validRegistrationBody({ role }) }, res);
-        expect(res.status).toHaveBeenCalledWith(400);
-        expect(mocks.bcryptHash).not.toHaveBeenCalled();
-        expect(mocks.userSave).not.toHaveBeenCalled();
-        expect(mocks.doctorSave).not.toHaveBeenCalled();
-        expect(mocks.otpDeleteOne).not.toHaveBeenCalled();
-    });
+    it.each(['patient', 'doctor'])(
+        'BE-R11: rejects a %s registration when the email exists in the other collection',
+        async (role) => {
+            const otherModel = role === 'patient' ? mocks.Doctor : mocks.User;
+            otherModel.findOne.mockResolvedValue({ email: 'patient@example.test' });
+            mocks.otpFindOne.mockResolvedValue({ otp: '123456', createdAt: new Date() });
+            const res = createResponse();
+            await registerAndVerifyOTP({ body: validRegistrationBody({ role }) }, res);
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(mocks.bcryptHash).not.toHaveBeenCalled();
+            expect(mocks.userSave).not.toHaveBeenCalled();
+            expect(mocks.doctorSave).not.toHaveBeenCalled();
+            expect(mocks.otpDeleteOne).not.toHaveBeenCalled();
+        },
+    );
 
     it.each([
         ['missing', undefined],

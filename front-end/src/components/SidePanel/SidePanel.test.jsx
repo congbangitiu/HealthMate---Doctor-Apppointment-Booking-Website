@@ -7,22 +7,34 @@ const mocks = vi.hoisted(() => ({ confirmationProps: vi.fn() }));
 vi.mock('../../hooks/useResponsive', () => ({ default: () => ({ isMobile: false }) }));
 vi.mock('../../utils/date-time/formatDateForDisplay', () => ({ default: (date) => String(date) }));
 vi.mock('../../utils/date-time/convertTime', () => ({ default: (time) => time }));
-vi.mock('react-i18next', () => ({ useTranslation: () => ({
-    t: (key, values) => ({
-        'sidePanel.bookButton': 'Book appointment',
-        'sidePanel.fullyBooked': `No available slots for ${values?.doctorName || ''}`,
-    }[key] || key),
-}) }));
+vi.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: (key, values) =>
+            ({
+                'sidePanel.bookButton': 'Book appointment',
+                'sidePanel.fullyBooked': `No available slots for ${values?.doctorName || ''}`,
+            })[key] || key,
+    }),
+}));
 vi.mock('../../Dashboard/user-account/ConfirmBooking/ConfirmBooking', () => ({
-    default: (props) => { mocks.confirmationProps(props); return null; },
+    default: (props) => {
+        mocks.confirmationProps(props);
+        return null;
+    },
 }));
 
 import SidePanel from './SidePanel';
 
 const at = (startingTime, endingTime = '11:30') => ({ day: '2026-10-21', startingTime, endingTime });
 const props = (overrides = {}) => ({
-    doctorId: 'doctor-id', doctorName: 'Test Doctor', doctorPhoto: 'doctor.jpg', ticketPrice: 25,
-    timeSlots: [at('11:00')], role: 'patient', expandedSidePanel: true, setExpandedSidePanel: vi.fn(),
+    doctorId: 'doctor-id',
+    doctorName: 'Test Doctor',
+    doctorPhoto: 'doctor.jpg',
+    ticketPrice: 25,
+    timeSlots: [at('11:00')],
+    role: 'patient',
+    expandedSidePanel: true,
+    setExpandedSidePanel: vi.fn(),
     ...overrides,
 });
 
@@ -90,7 +102,8 @@ describe('SidePanel', () => {
     });
 
     it.each([
-        ['empty', []], ['past-only', [at('09:00', '09:30')]],
+        ['empty', []],
+        ['past-only', [at('09:00', '09:30')]],
     ])('FE-S04: shows fully booked for %s availability', (_label, timeSlots) => {
         render(<SidePanel {...props({ timeSlots })} />);
         expect(screen.getByText('No available slots for Test Doctor')).toBeInTheDocument();
@@ -107,7 +120,11 @@ describe('SidePanel', () => {
         await user.click(screen.getByRole('button', { name: 'Book appointment' }));
         expect(await screen.findByRole('dialog')).toBeVisible();
         expect(mocks.confirmationProps.mock.lastCall[0]).toMatchObject({
-            doctorId: 'doctor-id', doctorName: 'Test Doctor', doctorPhoto: 'doctor.jpg', ticketPrice: 25, selectedSlot: slot,
+            doctorId: 'doctor-id',
+            doctorName: 'Test Doctor',
+            doctorPhoto: 'doctor.jpg',
+            ticketPrice: 25,
+            selectedSlot: slot,
         });
         expect(mocks.confirmationProps.mock.lastCall[0].setTimeSlots).toEqual(expect.any(Function));
         await user.keyboard('{Escape}');

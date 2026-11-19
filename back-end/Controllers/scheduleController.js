@@ -46,9 +46,14 @@ export const getScheduleNotifications = async (req, res) => {
     try {
         const bookings = await Booking.find({ user: req.userId, 'scheduleHistory.0': { $exists: true } });
         const entries = bookings.flatMap((booking) => booking.scheduleHistory.map((entry) => ({ booking, entry })));
-        const notifications = entries.sort((a, b) => new Date(b.entry.timestamp) - new Date(a.entry.timestamp))
-            .slice(0, 6).map(({ booking, entry }) => scheduleNotification(booking, entry));
-        return res.json({ data: notifications, unreadCount: entries.filter(({ entry }) => entry.patientUnread).length });
+        const notifications = entries
+            .sort((a, b) => new Date(b.entry.timestamp) - new Date(a.entry.timestamp))
+            .slice(0, 6)
+            .map(({ booking, entry }) => scheduleNotification(booking, entry));
+        return res.json({
+            data: notifications,
+            unreadCount: entries.filter(({ entry }) => entry.patientUnread).length,
+        });
     } catch {
         return res.status(500).json({ code: 'LOAD_FAILED' });
     }
@@ -57,7 +62,8 @@ export const getScheduleNotifications = async (req, res) => {
 export const markScheduleNotificationsRead = async (req, res) => {
     if (!req.userId || req.userRole !== 'patient') return res.status(403).json({ code: 'FORBIDDEN' });
     const before = req.body?.before ? new Date(req.body.before) : new Date();
-    if (!Number.isFinite(before.getTime()) || before > new Date()) return res.status(400).json({ code: 'INVALID_REQUEST' });
+    if (!Number.isFinite(before.getTime()) || before > new Date())
+        return res.status(400).json({ code: 'INVALID_REQUEST' });
     try {
         await Booking.updateMany(
             { user: req.userId, 'scheduleHistory.patientUnread': true },
@@ -181,9 +187,9 @@ export const rescheduleAppointment = async (req, res) => {
             await Doctor.updateOne({ _id: req.userId }, { $addToSet: { timeSlots: from } }, { session });
         });
         try {
-            req.io?.to(String(updated.user?._id || updated.user)).emit(
-                'reschedule-notification', scheduleNotification(updated, scheduleChange),
-            );
+            req.io
+                ?.to(String(updated.user?._id || updated.user))
+                .emit('reschedule-notification', scheduleNotification(updated, scheduleChange));
         } catch {
             // The saved history is returned by the notifications API after reconnect.
         }

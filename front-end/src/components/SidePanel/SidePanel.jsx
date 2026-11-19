@@ -42,9 +42,12 @@ const SidePanel = ({
 
     useEffect(() => {
         if (!selectedSlot) return;
-        const currentSlot = timeSlots.find((slot) =>
-            slot.day === selectedSlot.day && slot.startingTime === selectedSlot.startingTime &&
-            slot.endingTime === selectedSlot.endingTime);
+        const currentSlot = timeSlots.find(
+            (slot) =>
+                slot.day === selectedSlot.day &&
+                slot.startingTime === selectedSlot.startingTime &&
+                slot.endingTime === selectedSlot.endingTime,
+        );
         if (currentSlot !== selectedSlot) setSelectedSlot(currentSlot || null);
         if (!currentSlot) setOpenDialog(false);
     }, [timeSlots, selectedSlot, setSelectedSlot]);

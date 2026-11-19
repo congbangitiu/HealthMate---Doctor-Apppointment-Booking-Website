@@ -231,7 +231,8 @@ const PrescriptionView = ({ appointment, prescription, onPDFUploadSuccess }) => 
                                 <div>
                                     <h4>
                                         HealthMate
-                                        {prescription?.updatedAt && ', ' + formatDateForDisplay(prescription?.updatedAt)}
+                                        {prescription?.updatedAt &&
+                                            ', ' + formatDateForDisplay(prescription?.updatedAt)}
                                     </h4>
                                     <span>
                                         <img src={Watermark} alt="" />

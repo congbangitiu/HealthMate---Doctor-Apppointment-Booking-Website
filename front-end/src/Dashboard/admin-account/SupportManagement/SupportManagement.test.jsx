@@ -100,7 +100,9 @@ describe('SupportManagement', () => {
         const before = fetch.mock.calls.length;
         vi.useFakeTimers();
         try {
-            await act(async () => { await vi.advanceTimersByTimeAsync(90000); });
+            await act(async () => {
+                await vi.advanceTimersByTimeAsync(90000);
+            });
             expect(fetch).toHaveBeenCalledTimes(before);
             const onChange = socket.on.mock.calls.filter(([event]) => event === 'support-requests-changed').at(-1)[1];
             await act(async () => {

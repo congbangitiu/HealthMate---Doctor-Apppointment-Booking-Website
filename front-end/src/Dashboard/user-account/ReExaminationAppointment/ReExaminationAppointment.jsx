@@ -106,7 +106,9 @@ const ReExaminationAppointment = ({ appointment }) => {
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>{formatDateForDisplay(appointment.nextAppointment.timeSlot?.day)}</td>
+                                                <td>
+                                                    {formatDateForDisplay(appointment.nextAppointment.timeSlot?.day)}
+                                                </td>
                                                 <td>
                                                     {convertTime(appointment.nextAppointment.timeSlot?.startingTime)}
                                                 </td>

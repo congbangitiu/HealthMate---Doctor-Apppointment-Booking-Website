@@ -2,8 +2,7 @@ import cron from 'node-cron';
 import Doctor from '../Models/DoctorSchema.js';
 import { parseISO, isBefore } from 'date-fns';
 
-const getVietnamCalendarDay = () =>
-    new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+const getVietnamCalendarDay = () => new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 
 // Generate weekly time slots for all approved doctors
 const getNextDateForDayName = (dayName, today) => {
@@ -121,11 +120,7 @@ export const generateWeeklySlotsForAllDoctors = async () => {
             );
 
             if (newUniqueSlots.length > 0 || orderChanged) {
-                await Doctor.findByIdAndUpdate(
-                    doctor._id,
-                    { $set: { timeSlots: mergedSlots } },
-                    { new: true },
-                );
+                await Doctor.findByIdAndUpdate(doctor._id, { $set: { timeSlots: mergedSlots } }, { new: true });
             }
         }
 

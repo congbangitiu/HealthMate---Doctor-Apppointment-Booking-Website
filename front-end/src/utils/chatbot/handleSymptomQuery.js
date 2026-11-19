@@ -13,7 +13,7 @@ const handleSymptomQuery = async (userMessage) => {
 
     return {
         specialty,
-        doctors: data.data, 
+        doctors: data.data,
     };
 };
 
