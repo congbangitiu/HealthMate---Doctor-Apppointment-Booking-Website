@@ -49,11 +49,9 @@ describe('authenticate', () => {
     });
 
     it('BE-A02: attaches userId and userRole when the access token is valid', async () => {
-        const token = jwt.sign(
-            { id: 'patient-test-id', role: 'patient' },
-            process.env.JWT_SECRET_KEY,
-            { expiresIn: '1h' },
-        );
+        const token = jwt.sign({ id: 'patient-test-id', role: 'patient' }, process.env.JWT_SECRET_KEY, {
+            expiresIn: '1h',
+        });
         const req = { headers: { authorization: `Bearer ${token}` } };
         const res = createResponse();
         const next = vi.fn();
@@ -68,11 +66,9 @@ describe('authenticate', () => {
     });
 
     it('BE-A03: returns 401 with a specific message when the token has expired', async () => {
-        const token = jwt.sign(
-            { id: 'patient-test-id', role: 'patient' },
-            process.env.JWT_SECRET_KEY,
-            { expiresIn: -1 },
-        );
+        const token = jwt.sign({ id: 'patient-test-id', role: 'patient' }, process.env.JWT_SECRET_KEY, {
+            expiresIn: -1,
+        });
         const req = { headers: { authorization: `Bearer ${token}` } };
         const res = createResponse();
         const next = vi.fn();

@@ -150,7 +150,9 @@
 }
 
 .container .notifications .support-notification {
-    img { flex: 0 0 50px; }
+    img {
+        flex: 0 0 50px;
+    }
 
     .details {
         flex: 1;
@@ -186,7 +188,11 @@
     font-weight: 600;
     text-align: center;
     cursor: pointer;
-    &:hover { background: var(--extremeLightGrayColor); }
-    &:focus-visible { outline: 2px solid var(--primaryColor); outline-offset: -2px; }
+    &:hover {
+        background: var(--extremeLightGrayColor);
+    }
+    &:focus-visible {
+        outline: 2px solid var(--primaryColor);
+        outline-offset: -2px;
+    }
 }
-

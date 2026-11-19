@@ -16,8 +16,8 @@ const generateAppointmentWrapper = (appointments, doctor) => {
                     <ul style="margin: 8px 0 0 16px; padding: 0; list-style-type: disc; font-size: 14px;">
                         <li><strong>Date:</strong> ${formatDate(appointment.timeSlot.day)}</li>
                         <li><strong>Time:</strong> ${convertTime(appointment.timeSlot.startingTime)} – ${convertTime(
-                appointment.timeSlot.endingTime,
-            )}</li>
+                            appointment.timeSlot.endingTime,
+                        )}</li>
                     </ul>
                 </div>
             `,

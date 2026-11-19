@@ -10,14 +10,27 @@ import VerifyOTP from './VerifyOTP';
 
 const base = 'http://localhost:5000/api/v1';
 const formData = {
-    email: 'patient@example.test', fullname: 'Test Patient', username: 'patient', phone: '0901234567',
-    password: 'Password1', confirmedPassword: 'Password1', role: 'patient', photo: 'photo.jpg', gender: 'female',
+    email: 'patient@example.test',
+    fullname: 'Test Patient',
+    username: 'patient',
+    phone: '0901234567',
+    password: 'Password1',
+    confirmedPassword: 'Password1',
+    role: 'patient',
+    photo: 'photo.jpg',
+    gender: 'female',
 };
 const props = (overrides = {}) => ({ formData, tab: 'email', onVerified: vi.fn(), ...overrides });
-const response = (body, status = 200) => ({ ok: status >= 200 && status < 300, status, text: vi.fn().mockResolvedValue(JSON.stringify(body)) });
+const response = (body, status = 200) => ({
+    ok: status >= 200 && status < 300,
+    status,
+    text: vi.fn().mockResolvedValue(JSON.stringify(body)),
+});
 const deferred = () => {
     let resolve;
-    const promise = new Promise((finish) => { resolve = finish; });
+    const promise = new Promise((finish) => {
+        resolve = finish;
+    });
     return { promise, resolve };
 };
 let fetchMock;
@@ -26,11 +39,17 @@ let user;
 // RTL's default async wrapper waits for a real zero-delay timeout. With Vitest fake
 // timers, wrap interactions in async act instead and restore the wrapper after this suite.
 const originalAsyncWrapper = getConfig().asyncWrapper;
-beforeAll(() => configure({ asyncWrapper: async (action) => {
-    let result;
-    await act(async () => { result = await action(); });
-    return result;
-} }));
+beforeAll(() =>
+    configure({
+        asyncWrapper: async (action) => {
+            let result;
+            await act(async () => {
+                result = await action();
+            });
+            return result;
+        },
+    }),
+);
 afterAll(() => configure({ asyncWrapper: originalAsyncWrapper }));
 
 beforeEach(() => {
@@ -51,7 +70,10 @@ async function enterOTP(code) {
 }
 
 async function tick(seconds) {
-    for (let index = 0; index < seconds; index++) await act(async () => { vi.advanceTimersByTime(1000); });
+    for (let index = 0; index < seconds; index++)
+        await act(async () => {
+            vi.advanceTimersByTime(1000);
+        });
 }
 
 describe('VerifyOTP', () => {
@@ -68,13 +90,17 @@ describe('VerifyOTP', () => {
     it('FE-O02: sends the custom verification payload and passes the full response to onVerified', async () => {
         const data = { resetToken: 'reset-token', message: 'Verified' };
         fetchMock.mockResolvedValue(response(data));
-        const options = props({ endpoint: '/auth/forgot-password/verify', buildPayload: vi.fn((otp) => ({ email: formData.email, otp })) });
+        const options = props({
+            endpoint: '/auth/forgot-password/verify',
+            buildPayload: vi.fn((otp) => ({ email: formData.email, otp })),
+        });
         render(<VerifyOTP {...options} />);
         await enterOTP('123456');
         await user.click(screen.getByRole('button', { name: 'Verify OTP' }));
         expect(options.buildPayload).toHaveBeenCalledWith('123456');
         expect(fetchMock).toHaveBeenCalledWith(`${base}/auth/forgot-password/verify`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: formData.email, otp: '123456' }),
         });
         expect(options.onVerified).toHaveBeenCalledWith(data);
@@ -95,11 +121,17 @@ describe('VerifyOTP', () => {
         ['error field', { error: 'OTP expired', message: 'Other message' }, 400, 'OTP expired'],
         ['message field', { message: 'Too many attempts' }, 429, 'Too many attempts'],
         ['fallback', {}, 500, 'Verification failed'],
-        ['HTML', '<html>Error</html>', 502, 'Server returned an unexpected response (HTTP 502). Please try again later!'],
+        [
+            'HTML',
+            '<html>Error</html>',
+            502,
+            'Server returned an unexpected response (HTTP 502). Please try again later!',
+        ],
         ['network', null, 0, 'Network unavailable'],
     ])('FE-O04: reports a %s failure without calling onVerified', async (kind, body, status, message) => {
         if (kind === 'network') fetchMock.mockRejectedValue(new Error(message));
-        else if (kind === 'HTML') fetchMock.mockResolvedValue({ ok: false, status, text: vi.fn().mockResolvedValue(body) });
+        else if (kind === 'HTML')
+            fetchMock.mockResolvedValue({ ok: false, status, text: vi.fn().mockResolvedValue(body) });
         else fetchMock.mockResolvedValue(response(body, status));
         const options = props();
         render(<VerifyOTP {...options} />);
@@ -122,9 +154,13 @@ describe('VerifyOTP', () => {
         expect(mocks.success).toHaveBeenCalledWith('Account created successfully!');
         expect(timer).toHaveBeenCalledWith(expect.any(Function), 2000);
         expect(screen.getByRole('status')).toBeInTheDocument();
-        await act(async () => { vi.advanceTimersByTime(1999); });
+        await act(async () => {
+            vi.advanceTimersByTime(1999);
+        });
         expect(screen.getByRole('status')).toBeInTheDocument();
-        await act(async () => { vi.advanceTimersByTime(1); });
+        await act(async () => {
+            vi.advanceTimersByTime(1);
+        });
         expect(screen.queryByRole('status')).not.toBeInTheDocument();
         expect(mocks.error).not.toHaveBeenCalled();
     });
@@ -149,7 +185,10 @@ describe('VerifyOTP', () => {
         expect(onResend).toHaveBeenCalledTimes(1);
         expect(button).toBeDisabled();
         expect([...document.querySelectorAll('input')].map((input) => input.value).join('')).toBe('123456');
-        await act(async () => { pending.resolve(); await pending.promise; });
+        await act(async () => {
+            pending.resolve();
+            await pending.promise;
+        });
         expect([...document.querySelectorAll('input')].every((input) => input.value === '')).toBe(true);
         expect(screen.getByRole('button', { name: 'Verify OTP' })).toBeDisabled();
         expect(screen.getByText('Resend OTP in 3s')).toBeInTheDocument();

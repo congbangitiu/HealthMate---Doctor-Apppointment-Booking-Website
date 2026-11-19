@@ -13,17 +13,24 @@ beforeEach(() => {
 });
 
 describe('Review.calcAverageRatings', () => {
-    it.each([[2, 4.5], [1, 5], [3, 0]])(
-        'BE-RV01: stores count %i and average %s from the aggregation result', async (count, average) => {
-            const aggregate = vi.spyOn(Review, 'aggregate').mockResolvedValue([{ _id: doctorId, numOfRating: count, avgRating: average }]);
-            await Review.calcAverageRatings(doctorId);
-            expect(aggregate).toHaveBeenCalledExactlyOnceWith([
-                { $match: { doctor: doctorId } },
-                { $group: { _id: '$doctor', numOfRating: { $sum: 1 }, avgRating: { $avg: '$rating' } } },
-            ]);
-            expect(mocks.updateDoctor).toHaveBeenCalledExactlyOnceWith(doctorId, { totalRating: count, averageRating: average });
-        },
-    );
+    it.each([
+        [2, 4.5],
+        [1, 5],
+        [3, 0],
+    ])('BE-RV01: stores count %i and average %s from the aggregation result', async (count, average) => {
+        const aggregate = vi
+            .spyOn(Review, 'aggregate')
+            .mockResolvedValue([{ _id: doctorId, numOfRating: count, avgRating: average }]);
+        await Review.calcAverageRatings(doctorId);
+        expect(aggregate).toHaveBeenCalledExactlyOnceWith([
+            { $match: { doctor: doctorId } },
+            { $group: { _id: '$doctor', numOfRating: { $sum: 1 }, avgRating: { $avg: '$rating' } } },
+        ]);
+        expect(mocks.updateDoctor).toHaveBeenCalledExactlyOnceWith(doctorId, {
+            totalRating: count,
+            averageRating: average,
+        });
+    });
 
     it('BE-RV02: resets count and average to zero when no reviews remain', async () => {
         vi.spyOn(Review, 'aggregate').mockResolvedValue([]);
@@ -67,18 +74,25 @@ describe('Review.calcAverageRatings', () => {
         await expect(Review.calcAverageRatings(doctorId)).rejects.toBe(error);
     });
 
-    it.todo('BE-RV03: aggregates actual reviews for one doctor without mixing another doctor reviews (MongoDB integration)');
-    it.todo('BE-RV05: verifies post-save rating updates and async failure handling with real middleware (MongoDB integration)');
+    it.todo(
+        'BE-RV03: aggregates actual reviews for one doctor without mixing another doctor reviews (MongoDB integration)',
+    );
+    it.todo(
+        'BE-RV05: verifies post-save rating updates and async failure handling with real middleware (MongoDB integration)',
+    );
 });
 
 describe('Review schema validation', () => {
-    it.each([[0, true], [5, true], [-1, false], [6, false]])(
-        'BE-RV06: validates rating %s with expected acceptance %s', (rating, valid) => {
-            const error = new Review({ doctor: doctorId, reviewText: 'Test feedback', rating }).validateSync();
-            if (valid) expect(error).toBeUndefined();
-            else expect(error.errors.rating).toBeDefined();
-        },
-    );
+    it.each([
+        [0, true],
+        [5, true],
+        [-1, false],
+        [6, false],
+    ])('BE-RV06: validates rating %s with expected acceptance %s', (rating, valid) => {
+        const error = new Review({ doctor: doctorId, reviewText: 'Test feedback', rating }).validateSync();
+        if (valid) expect(error).toBeUndefined();
+        else expect(error.errors.rating).toBeDefined();
+    });
 
     it('BE-RV06: rejects missing review text with the real schema', () => {
         const error = new Review({ doctor: doctorId, rating: 4 }).validateSync();

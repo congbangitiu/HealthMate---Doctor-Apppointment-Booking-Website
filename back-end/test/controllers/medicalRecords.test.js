@@ -13,16 +13,28 @@ const mocks = vi.hoisted(() => {
         return { Model, save };
     };
     return {
-        prescription: makeModel(), examination: makeModel(),
-        Booking: { findById: vi.fn() }, populate: vi.fn(), to: vi.fn(), emit: vi.fn(),
+        prescription: makeModel(),
+        examination: makeModel(),
+        Booking: { findById: vi.fn() },
+        populate: vi.fn(),
+        to: vi.fn(),
+        emit: vi.fn(),
     };
 });
 vi.mock('../../Models/PrescriptionSchema.js', () => ({ default: mocks.prescription.Model }));
 vi.mock('../../Models/ExaminationSchema.js', () => ({ default: mocks.examination.Model }));
 vi.mock('../../Models/BookingSchema.js', () => ({ default: mocks.Booking }));
 
-import { createPrescription, getPrescriptionByAppointmentId, updatePrescriptionByAppointmentId } from '../../Controllers/prescriptionController.js';
-import { createExamination, getExaminationByAppointmentId, updateExaminationByAppointmentId } from '../../Controllers/examinationController.js';
+import {
+    createPrescription,
+    getPrescriptionByAppointmentId,
+    updatePrescriptionByAppointmentId,
+} from '../../Controllers/prescriptionController.js';
+import {
+    createExamination,
+    getExaminationByAppointmentId,
+    updateExaminationByAppointmentId,
+} from '../../Controllers/examinationController.js';
 
 // Load real schemas during collection, outside fake clocks and individual test timeouts.
 const [actualPrescription, actualExamination] = await Promise.all([
@@ -44,20 +56,41 @@ const response = () => {
 };
 const cases = [
     {
-        name: 'Prescription', key: 'prescription', create: createPrescription,
-        get: getPrescriptionByAppointmentId, update: updatePrescriptionByAppointmentId,
-        body: { appointment: appointmentId, diseaseName: 'Test diagnosis', medications: [], doctorAdvice: 'Test advice' },
+        name: 'Prescription',
+        key: 'prescription',
+        create: createPrescription,
+        get: getPrescriptionByAppointmentId,
+        update: updatePrescriptionByAppointmentId,
+        body: {
+            appointment: appointmentId,
+            diseaseName: 'Test diagnosis',
+            medications: [],
+            doctorAdvice: 'Test advice',
+        },
         missingField: 'diseaseName',
     },
     {
-        name: 'Examination', key: 'examination', create: createExamination,
-        get: getExaminationByAppointmentId, update: updateExaminationByAppointmentId,
-        body: { appointment: appointmentId, chiefComplaint: 'Test complaint', clinicalIndications: 'Test indications', conclusion: 'Test conclusion', ultrasoundRequest: ['Liver'] },
+        name: 'Examination',
+        key: 'examination',
+        create: createExamination,
+        get: getExaminationByAppointmentId,
+        update: updateExaminationByAppointmentId,
+        body: {
+            appointment: appointmentId,
+            chiefComplaint: 'Test complaint',
+            clinicalIndications: 'Test indications',
+            conclusion: 'Test conclusion',
+            ultrasoundRequest: ['Liver'],
+        },
         missingField: 'chiefComplaint',
     },
 ];
 const request = (body) => ({
-    params: { appointmentId }, body: { ...body }, userId: 'doctor-id', userRole: 'doctor', io: { to: mocks.to },
+    params: { appointmentId },
+    body: { ...body },
+    userId: 'doctor-id',
+    userRole: 'doctor',
+    io: { to: mocks.to },
 });
 
 beforeEach(() => {
@@ -74,8 +107,10 @@ beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime(now);
     booking = {
-        _id: appointmentId, doctor: { _id: 'doctor-id', fullname: 'Test Doctor', photo: 'doctor.jpg' },
-        user: { _id: 'patient-id' }, timeSlot: { ...slot },
+        _id: appointmentId,
+        doctor: { _id: 'doctor-id', fullname: 'Test Doctor', photo: 'doctor.jpg' },
+        user: { _id: 'patient-id' },
+        timeSlot: { ...slot },
     };
     // Supports both await findById (examination create) and findById().populate (other paths).
     mocks.Booking.findById.mockImplementation(() => {
@@ -94,21 +129,30 @@ for (const config of cases) {
             const res = response();
             await config.create(request(config.body), res);
             expect(mocks.Booking.findById).toHaveBeenCalledWith(appointmentId);
-            expect(Model).toHaveBeenCalledExactlyOnceWith(config.key === 'prescription'
-                ? { ...config.body, actionHistory: [{ action: 'create', timestamp: now }] }
-                : config.body);
+            expect(Model).toHaveBeenCalledExactlyOnceWith(
+                config.key === 'prescription'
+                    ? { ...config.body, actionHistory: [{ action: 'create', timestamp: now }] }
+                    : config.body,
+            );
             expect(save).toHaveBeenCalledTimes(1);
             expect(res.status).toHaveBeenCalledWith(201);
-            expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ success: true, data: expect.objectContaining(config.body) }));
+            expect(res.json).toHaveBeenCalledWith(
+                expect.objectContaining({ success: true, data: expect.objectContaining(config.body) }),
+            );
             if (config.key === 'prescription') {
                 expect(mocks.to).toHaveBeenCalledExactlyOnceWith('patient-id');
                 expect(mocks.emit).toHaveBeenCalledExactlyOnceWith('prescription-notification', {
-                    appointmentId, doctor: { id: 'doctor-id', fullname: 'Test Doctor', photo: 'doctor.jpg' },
-                    timeSlot: slot, actionHistory: [{ action: 'create', timestamp: now }], createdAt: now,
+                    appointmentId,
+                    doctor: { id: 'doctor-id', fullname: 'Test Doctor', photo: 'doctor.jpg' },
+                    timeSlot: slot,
+                    actionHistory: [{ action: 'create', timestamp: now }],
+                    createdAt: now,
                 });
             } else {
                 expect(mocks.emit).not.toHaveBeenCalled();
-                expect(mocks.Booking.findById.mock.invocationCallOrder[0]).toBeLessThan(save.mock.invocationCallOrder[0]);
+                expect(mocks.Booking.findById.mock.invocationCallOrder[0]).toBeLessThan(
+                    save.mock.invocationCallOrder[0],
+                );
             }
         });
 
@@ -149,7 +193,12 @@ for (const config of cases) {
         });
 
         it('BE-M07: updates the matching appointment with validators and a history push', async () => {
-            const updated = { _id: 'record-id', ...config.body, actionHistory: [{ action: 'update', timestamp: now }], updatedAt: now };
+            const updated = {
+                _id: 'record-id',
+                ...config.body,
+                actionHistory: [{ action: 'update', timestamp: now }],
+                updatedAt: now,
+            };
             Model.findOneAndUpdate.mockResolvedValue(updated);
             const res = response();
             await config.update(request(config.body), res);
@@ -164,7 +213,10 @@ for (const config of cases) {
             expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ success: true, data: updated }));
             if (config.key === 'prescription') {
                 expect(mocks.to).toHaveBeenCalledWith('patient-id');
-                expect(mocks.emit).toHaveBeenCalledWith('prescription-notification', expect.objectContaining({ appointmentId, actionHistory: updated.actionHistory, createdAt: now }));
+                expect(mocks.emit).toHaveBeenCalledWith(
+                    'prescription-notification',
+                    expect.objectContaining({ appointmentId, actionHistory: updated.actionHistory, createdAt: now }),
+                );
             } else expect(mocks.emit).not.toHaveBeenCalled();
         });
 
@@ -201,56 +253,72 @@ for (const config of cases) {
             delete body.appointment;
             const res = response();
             await config.update(request(body), res);
-            expect(Model.findOneAndUpdate).toHaveBeenCalledWith({ appointment: appointmentId }, expect.any(Object), expect.any(Object));
+            expect(Model.findOneAndUpdate).toHaveBeenCalledWith(
+                { appointment: appointmentId },
+                expect.any(Object),
+                expect.any(Object),
+            );
             expect(mocks.Booking.findById).toHaveBeenCalledWith(appointmentId);
             expect(res.status).toHaveBeenCalledWith(200);
         });
 
-        it.each(['create', 'update'])('BE-M11: rejects an unrelated doctor attempting to %s another doctor record', async (operation) => {
-            Model.findOneAndUpdate.mockResolvedValue({ _id: 'record-id', ...config.body });
-            const req = request(config.body);
-            req.userId = 'unrelated-doctor-id';
-            const res = response();
-            await config[operation](req, res);
-            expect(res.status.mock.calls[0][0]).toBeGreaterThanOrEqual(400);
-            expect(res.status.mock.calls[0][0]).toBeLessThan(500);
-            expect(save).not.toHaveBeenCalled();
-            expect(Model.findOneAndUpdate).not.toHaveBeenCalled();
-            expect(mocks.emit).not.toHaveBeenCalled();
-        });
+        it.each(['create', 'update'])(
+            'BE-M11: rejects an unrelated doctor attempting to %s another doctor record',
+            async (operation) => {
+                Model.findOneAndUpdate.mockResolvedValue({ _id: 'record-id', ...config.body });
+                const req = request(config.body);
+                req.userId = 'unrelated-doctor-id';
+                const res = response();
+                await config[operation](req, res);
+                expect(res.status.mock.calls[0][0]).toBeGreaterThanOrEqual(400);
+                expect(res.status.mock.calls[0][0]).toBeLessThan(500);
+                expect(save).not.toHaveBeenCalled();
+                expect(Model.findOneAndUpdate).not.toHaveBeenCalled();
+                expect(mocks.emit).not.toHaveBeenCalled();
+            },
+        );
 
-        it.each(['missing booking', 'populate error'])('BE-M12: prevents writes when checking ownership encounters a %s', async (outcome) => {
-            Model.findOneAndUpdate.mockResolvedValue({ _id: 'record-id', ...config.body });
-            if (outcome === 'missing booking') booking = null;
-            else mocks.populate.mockRejectedValue(new Error('populate unavailable'));
-            const res = response();
-            await config.update(request(config.body), res);
-            expect(Model.findOneAndUpdate).not.toHaveBeenCalled();
-            expect(res.status).toHaveBeenCalledWith(outcome === 'missing booking' ? 404 : 500);
-            expect(mocks.emit).not.toHaveBeenCalled();
-        });
+        it.each(['missing booking', 'populate error'])(
+            'BE-M12: prevents writes when checking ownership encounters a %s',
+            async (outcome) => {
+                Model.findOneAndUpdate.mockResolvedValue({ _id: 'record-id', ...config.body });
+                if (outcome === 'missing booking') booking = null;
+                else mocks.populate.mockRejectedValue(new Error('populate unavailable'));
+                const res = response();
+                await config.update(request(config.body), res);
+                expect(Model.findOneAndUpdate).not.toHaveBeenCalled();
+                expect(res.status).toHaveBeenCalledWith(outcome === 'missing booking' ? 404 : 500);
+                expect(mocks.emit).not.toHaveBeenCalled();
+            },
+        );
 
-        it.each(['create', 'update'])('BE-M11: rejects unauthenticated %s before querying or writing', async (operation) => {
-            const req = request(config.body);
-            delete req.userId;
-            const res = response();
-            await config[operation](req, res);
-            expect(res.status).toHaveBeenCalledWith(401);
-            expect(mocks.Booking.findById).not.toHaveBeenCalled();
-            expect(Model).not.toHaveBeenCalled();
-            expect(save).not.toHaveBeenCalled();
-            expect(Model.findOneAndUpdate).not.toHaveBeenCalled();
-        });
+        it.each(['create', 'update'])(
+            'BE-M11: rejects unauthenticated %s before querying or writing',
+            async (operation) => {
+                const req = request(config.body);
+                delete req.userId;
+                const res = response();
+                await config[operation](req, res);
+                expect(res.status).toHaveBeenCalledWith(401);
+                expect(mocks.Booking.findById).not.toHaveBeenCalled();
+                expect(Model).not.toHaveBeenCalled();
+                expect(save).not.toHaveBeenCalled();
+                expect(Model.findOneAndUpdate).not.toHaveBeenCalled();
+            },
+        );
 
-        it.each(['patient', 'admin'])('BE-M11: rejects record writes by role %s even with a matching id', async (role) => {
-            const req = request(config.body);
-            req.userRole = role;
-            const res = response();
-            await config.create(req, res);
-            expect(res.status).toHaveBeenCalledWith(403);
-            expect(Model).not.toHaveBeenCalled();
-            expect(save).not.toHaveBeenCalled();
-        });
+        it.each(['patient', 'admin'])(
+            'BE-M11: rejects record writes by role %s even with a matching id',
+            async (role) => {
+                const req = request(config.body);
+                req.userRole = role;
+                const res = response();
+                await config.create(req, res);
+                expect(res.status).toHaveBeenCalledWith(403);
+                expect(Model).not.toHaveBeenCalled();
+                expect(save).not.toHaveBeenCalled();
+            },
+        );
 
         it.todo('BE-M11: enforces roles and appointment ownership through the actual Express routes (integration)');
         it.todo('BE-M07: verifies actual update validators and persisted history with MongoDB instead of query mocks');
@@ -274,7 +342,8 @@ describe('Examination schema history', () => {
     it('BE-M13: serializes appended history without dropping earlier entries or adding subdocument ids', () => {
         const createdAt = new Date(now.getTime() - 60000);
         const record = new actualSchemas.examination({
-            ...examinationBody, actionHistory: [{ action: 'create', timestamp: createdAt }],
+            ...examinationBody,
+            actionHistory: [{ action: 'create', timestamp: createdAt }],
         });
         record.actionHistory.push({ action: 'update', timestamp: now });
         expect(record.validateSync()).toBeUndefined();

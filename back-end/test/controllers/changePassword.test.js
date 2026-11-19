@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mocks = vi.hoisted(() => ({
-    User: { findById: vi.fn() }, Doctor: { findById: vi.fn() },
+    User: { findById: vi.fn() },
+    Doctor: { findById: vi.fn() },
     bcrypt: { compare: vi.fn(), genSalt: vi.fn(), hash: vi.fn() },
 }));
 vi.mock('../../Models/UserSchema.js', () => ({ default: mocks.User }));
@@ -23,11 +24,14 @@ const response = () => {
     return res;
 };
 const request = (overrides = {}) => ({
-    userId: 'account-id', params: { id: 'different-body-untrusted-id' },
+    userId: 'account-id',
+    params: { id: 'different-body-untrusted-id' },
     body: { oldPassword: 'OldPass123', newPassword: 'NewPass123', confirmedNewPassword: 'NewPass123', ...overrides },
 });
 const makeAccount = () => ({
-    _id: 'account-id', password: 'old-password-hash', confirmedPassword: 'old-password-hash',
+    _id: 'account-id',
+    password: 'old-password-hash',
+    confirmedPassword: 'old-password-hash',
     save: vi.fn().mockResolvedValue(undefined),
 });
 let account;
@@ -77,7 +81,10 @@ for (const config of [
             const res = response();
             await config.handler(request({ confirmedNewPassword: 'OtherPass123' }), res);
             expect(res.status).toHaveBeenCalledWith(400);
-            expect(res.json).toHaveBeenCalledWith({ success: false, message: 'The new password and confirm new password do not match !!!' });
+            expect(res.json).toHaveBeenCalledWith({
+                success: false,
+                message: 'The new password and confirm new password do not match !!!',
+            });
             expect(account.password).toBe('old-password-hash');
             expect(account.confirmedPassword).toBe('old-password-hash');
             expect(mocks.bcrypt.hash).not.toHaveBeenCalled();
@@ -93,7 +100,9 @@ for (const config of [
             expect(mocks.bcrypt.hash).toHaveBeenCalledWith('NewPass123', 'test-salt');
             expect(account.password).toBe('new-password-hash');
             expect(account.save).toHaveBeenCalledTimes(1);
-            expect(mocks.bcrypt.hash.mock.invocationCallOrder[0]).toBeLessThan(account.save.mock.invocationCallOrder[0]);
+            expect(mocks.bcrypt.hash.mock.invocationCallOrder[0]).toBeLessThan(
+                account.save.mock.invocationCallOrder[0],
+            );
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.json).toHaveBeenCalledWith({ success: true, message: 'Password changed successfully' });
         });
@@ -117,10 +126,14 @@ for (const config of [
         });
 
         it.each(['User lookup', 'compare', 'salt', 'hash', 'save'])(
-            'BE-D05: returns 500 when %s fails', async (stage) => {
+            'BE-D05: returns 500 when %s fails',
+            async (stage) => {
                 const dependency = {
-                    'User lookup': mocks.User.findById, compare: mocks.bcrypt.compare,
-                    salt: mocks.bcrypt.genSalt, hash: mocks.bcrypt.hash, save: account.save,
+                    'User lookup': mocks.User.findById,
+                    compare: mocks.bcrypt.compare,
+                    salt: mocks.bcrypt.genSalt,
+                    hash: mocks.bcrypt.hash,
+                    save: account.save,
                 }[stage];
                 dependency.mockRejectedValue(new Error('dependency unavailable'));
                 const res = response();
@@ -137,7 +150,9 @@ for (const config of [
             it('BE-D08: keeps confirmedPassword consistent with the saved password hash', async () => {
                 expect(actualUser.schema.path('confirmedPassword')).toBeDefined();
                 let saved;
-                account.save.mockImplementation(async () => { saved = { password: account.password, confirmedPassword: account.confirmedPassword }; });
+                account.save.mockImplementation(async () => {
+                    saved = { password: account.password, confirmedPassword: account.confirmedPassword };
+                });
                 const res = response();
                 await config.handler(request(), res);
                 expect(res.status).toHaveBeenCalledWith(200);
@@ -159,7 +174,9 @@ for (const config of [
                 await config.handler(request(), res);
                 expect(mocks.User.findById).toHaveBeenCalledWith('account-id');
                 expect(mocks.Doctor.findById).toHaveBeenCalledWith('account-id');
-                expect(mocks.User.findById.mock.invocationCallOrder[0]).toBeLessThan(mocks.Doctor.findById.mock.invocationCallOrder[0]);
+                expect(mocks.User.findById.mock.invocationCallOrder[0]).toBeLessThan(
+                    mocks.Doctor.findById.mock.invocationCallOrder[0],
+                );
                 expect(account).not.toHaveProperty('confirmedPassword');
                 expect(account.password).toBe('new-password-hash');
                 expect(res.status).toHaveBeenCalledWith(200);
@@ -179,7 +196,9 @@ for (const config of [
             it('BE-D08: synchronizes confirmedPassword when the Doctor controller uses a User record', async () => {
                 const patient = makeAccount();
                 let saved;
-                patient.save.mockImplementation(async () => { saved = { password: patient.password, confirmedPassword: patient.confirmedPassword }; });
+                patient.save.mockImplementation(async () => {
+                    saved = { password: patient.password, confirmedPassword: patient.confirmedPassword };
+                });
                 mocks.User.findById.mockResolvedValue(patient);
                 await config.handler(request(), response());
                 expect(patient.confirmedPassword).toBe(patient.password);

@@ -54,7 +54,9 @@ const ConfirmCancel = ({ setShowConfirmCancel, appointment, onConfirm }) => {
         }
     };
 
-    const appointmentDate = appointment?.timeSlot?.day ? formatDateForDisplay(appointment.timeSlot.day) : t('confirmCancel.date');
+    const appointmentDate = appointment?.timeSlot?.day
+        ? formatDateForDisplay(appointment.timeSlot.day)
+        : t('confirmCancel.date');
     const startTime = appointment?.timeSlot?.startingTime
         ? convertTime(appointment.timeSlot.startingTime)
         : t('confirmCancel.time');
@@ -81,7 +83,9 @@ const ConfirmCancel = ({ setShowConfirmCancel, appointment, onConfirm }) => {
                 </div>
             </div>
             <div className={cx('buttons')}>
-                <button disabled={loading} onClick={() => setShowConfirmCancel(false)}>{t('confirmCancel.quit')}</button>
+                <button disabled={loading} onClick={() => setShowConfirmCancel(false)}>
+                    {t('confirmCancel.quit')}
+                </button>
                 <button disabled={loading} onClick={handleConfirmCancel}>
                     {loading ? <SyncLoader size={7} color="#ffffff" /> : t('confirmCancel.confirm')}
                 </button>

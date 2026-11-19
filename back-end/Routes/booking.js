@@ -1,5 +1,10 @@
 import express from 'express';
-import { getCalendarAvailability, rescheduleAppointment, getScheduleNotifications, markScheduleNotificationsRead } from '../Controllers/scheduleController.js';
+import {
+    getCalendarAvailability,
+    rescheduleAppointment,
+    getScheduleNotifications,
+    markScheduleNotificationsRead,
+} from '../Controllers/scheduleController.js';
 import { authenticate, restrict } from './../auth/verifyToken.js';
 import {
     createBooking,

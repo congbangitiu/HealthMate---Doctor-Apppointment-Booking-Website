@@ -35,7 +35,7 @@ export default defineConfig({
     ],
     build: {
         // Raise the warning threshold because the default vendor chunk may exceed 500 kB.
-        // Do not use custom manualChunks: separating React from packages that depend on it can cause a "Cannot access '...' before initialization" error at runtime due to circular dependencies between chunks. 
+        // Do not use custom manualChunks: separating React from packages that depend on it can cause a "Cannot access '...' before initialization" error at runtime due to circular dependencies between chunks.
         // Vite's default chunking combined with lazy routes (React.lazy) safely splits the bundle in the correct initialization order.
         chunkSizeWarningLimit: 1000,
     },

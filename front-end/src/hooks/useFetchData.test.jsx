@@ -11,7 +11,10 @@ let fetchMock;
 const deferred = () => {
     let resolve;
     let reject;
-    const promise = new Promise((finish, fail) => { resolve = finish; reject = fail; });
+    const promise = new Promise((finish, fail) => {
+        resolve = finish;
+        reject = fail;
+    });
     return { promise, resolve, reject };
 };
 const jsonResponse = (body, ok = true) => ({ ok, json: vi.fn().mockResolvedValue(body) });
@@ -29,7 +32,10 @@ describe('useFetchData', () => {
         const { result } = renderHook(() => useFetchData(urlA));
         expect(result.current).toEqual({ data: [], loading: true, error: null });
         const data = [{ _id: 'doctor-id' }];
-        await act(async () => { pending.resolve(jsonResponse({ data })); await pending.promise; });
+        await act(async () => {
+            pending.resolve(jsonResponse({ data }));
+            await pending.promise;
+        });
         expect(result.current).toEqual({ data, loading: false, error: null });
     });
 
@@ -52,7 +58,8 @@ describe('useFetchData', () => {
 
     it.each(['network', 'JSON parsing'])('FE-H04: stops loading and exposes a %s error', async (kind) => {
         if (kind === 'network') fetchMock.mockRejectedValue(new TypeError('Network unavailable'));
-        else fetchMock.mockResolvedValue({ ok: true, json: vi.fn().mockRejectedValue(new SyntaxError('Invalid JSON')) });
+        else
+            fetchMock.mockResolvedValue({ ok: true, json: vi.fn().mockRejectedValue(new SyntaxError('Invalid JSON')) });
         const { result } = renderHook(() => useFetchData(urlA));
         await waitFor(() => expect(result.current.loading).toBe(false));
         expect(result.current.error).toBe(kind === 'network' ? 'Network unavailable' : 'Invalid JSON');
@@ -60,21 +67,28 @@ describe('useFetchData', () => {
     });
 
     it('FE-H05: refetches a changed URL with the configured authorization token', async () => {
-        fetchMock.mockResolvedValueOnce(jsonResponse({ data: ['A'] })).mockResolvedValueOnce(jsonResponse({ data: ['B'] }));
+        fetchMock
+            .mockResolvedValueOnce(jsonResponse({ data: ['A'] }))
+            .mockResolvedValueOnce(jsonResponse({ data: ['B'] }));
         const { result, rerender } = renderHook(({ url }) => useFetchData(url), { initialProps: { url: urlA } });
         await waitFor(() => expect(result.current.data).toEqual(['A']));
         rerender({ url: urlB });
         await waitFor(() => expect(result.current.data).toEqual(['B']));
         expect(fetchMock).toHaveBeenCalledTimes(2);
         for (const [index, url] of [urlA, urlB].entries()) {
-            expect(fetchMock).toHaveBeenNthCalledWith(index + 1, url, expect.objectContaining({
-                headers: expect.objectContaining({ Authorization: 'Bearer unit-test-token' }),
-            }));
+            expect(fetchMock).toHaveBeenNthCalledWith(
+                index + 1,
+                url,
+                expect.objectContaining({
+                    headers: expect.objectContaining({ Authorization: 'Bearer unit-test-token' }),
+                }),
+            );
         }
     });
 
     it('FE-H06 [REGRESSION]: clears an earlier error after a successful refetch', async () => {
-        fetchMock.mockResolvedValueOnce(jsonResponse({ message: 'First request failed' }, false))
+        fetchMock
+            .mockResolvedValueOnce(jsonResponse({ message: 'First request failed' }, false))
             .mockResolvedValueOnce(jsonResponse({ data: ['B'] }));
         const { result, rerender } = renderHook(({ url }) => useFetchData(url), { initialProps: { url: urlA } });
         await waitFor(() => expect(result.current.error).toBe('First request failed'));
@@ -90,9 +104,15 @@ describe('useFetchData', () => {
         fetchMock.mockReturnValueOnce(first.promise).mockReturnValueOnce(second.promise);
         const { result, rerender } = renderHook(({ url }) => useFetchData(url), { initialProps: { url: urlA } });
         rerender({ url: urlB });
-        await act(async () => { second.resolve(jsonResponse({ data: ['B'] })); await second.promise; });
+        await act(async () => {
+            second.resolve(jsonResponse({ data: ['B'] }));
+            await second.promise;
+        });
         expect(result.current.data).toEqual(['B']);
-        await act(async () => { first.resolve(jsonResponse({ data: ['A'] })); await first.promise; });
+        await act(async () => {
+            first.resolve(jsonResponse({ data: ['A'] }));
+            await first.promise;
+        });
         expect(result.current.data).toEqual(['B']);
     });
 
@@ -104,7 +124,10 @@ describe('useFetchData', () => {
         unmount();
         expect(options.signal?.aborted).toBe(true);
         const lateResponse = jsonResponse({ data: ['Late result'] });
-        await act(async () => { pending.resolve(lateResponse); await pending.promise; });
+        await act(async () => {
+            pending.resolve(lateResponse);
+            await pending.promise;
+        });
         expect(lateResponse.json).not.toHaveBeenCalled();
     });
 
@@ -119,7 +142,10 @@ describe('useFetchData', () => {
             await first.promise.catch(() => {});
         });
         expect(result.current).toEqual({ data: [], loading: true, error: null });
-        await act(async () => { second.resolve(jsonResponse({ data: ['B'] })); await second.promise; });
+        await act(async () => {
+            second.resolve(jsonResponse({ data: ['B'] }));
+            await second.promise;
+        });
         expect(result.current).toEqual({ data: ['B'], loading: false, error: null });
     });
 
@@ -131,7 +157,10 @@ describe('useFetchData', () => {
         await waitFor(() => expect(oldResponse.json).toHaveBeenCalledTimes(1));
         rerender({ url: urlB });
         await waitFor(() => expect(result.current.data).toEqual(['B']));
-        await act(async () => { oldJson.resolve({ data: ['A'] }); await oldJson.promise; });
+        await act(async () => {
+            oldJson.resolve({ data: ['A'] });
+            await oldJson.promise;
+        });
         expect(result.current).toEqual({ data: ['B'], loading: false, error: null });
     });
 
@@ -142,7 +171,10 @@ describe('useFetchData', () => {
         await waitFor(() => expect(result.current.data).toEqual(['A']));
         rerender({ url: urlB });
         expect(result.current).toEqual({ data: ['A'], loading: true, error: null });
-        await act(async () => { next.resolve(jsonResponse({ data: ['B'] })); await next.promise; });
+        await act(async () => {
+            next.resolve(jsonResponse({ data: ['B'] }));
+            await next.promise;
+        });
         expect(result.current).toEqual({ data: ['B'], loading: false, error: null });
     });
 });

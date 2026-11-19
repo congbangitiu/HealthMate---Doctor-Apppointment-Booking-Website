@@ -3,8 +3,12 @@ import getDateForDay from './getDateForDay';
 
 function expectInvalidDay(input) {
     let result;
-    try { result = getDateForDay(input); }
-    catch (error) { expect(error).toBeInstanceOf(Error); return; }
+    try {
+        result = getDateForDay(input);
+    } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        return;
+    }
     expect(result).toBeNull();
 }
 
@@ -19,8 +23,10 @@ describe('getDateForDay', () => {
     });
 
     it.each([
-        ['Wednesday', '2026-10-21'], ['Saturday', '2026-10-24'],
-        ['Sunday', '2026-10-25'], ['Monday', '2026-10-26'],
+        ['Wednesday', '2026-10-21'],
+        ['Saturday', '2026-10-24'],
+        ['Sunday', '2026-10-25'],
+        ['Monday', '2026-10-26'],
     ])('FE-D02: returns the next %s within seven days', (day, expected) => {
         expect(getDateForDay(day)).toBe(expected);
     });
@@ -35,7 +41,8 @@ describe('getDateForDay', () => {
     });
 
     it.each(['00:00:00', '00:30:00', '06:59:59', '07:00:00'])(
-        'FE-D03: retains the Vietnam calendar date at %s', (time) => {
+        'FE-D03: retains the Vietnam calendar date at %s',
+        (time) => {
             vi.setSystemTime(new Date(`2026-10-20T${time}+07:00`));
             expect(new Date().getTimezoneOffset()).toBe(-420);
             expect(getDateForDay('Tuesday')).toBe('2026-10-20');
@@ -44,6 +51,7 @@ describe('getDateForDay', () => {
     );
 
     it.each(['NotADay', 'tuesday', '', null, undefined])(
-        'FE-D04: rejects an invalid weekday instead of returning an unrelated date: %j', expectInvalidDay,
+        'FE-D04: rejects an invalid weekday instead of returning an unrelated date: %j',
+        expectInvalidDay,
     );
 });

@@ -9,9 +9,13 @@ const mocks = vi.hoisted(() => {
     Booking.findById = vi.fn();
     Booking.findOne = vi.fn();
     return {
-        Booking, childSave,
+        Booking,
+        childSave,
         Doctor: { findById: vi.fn(), updateOne: vi.fn() },
-        User: { findById: vi.fn() }, sendMail: vi.fn(), to: vi.fn(), emit: vi.fn(),
+        User: { findById: vi.fn() },
+        sendMail: vi.fn(),
+        to: vi.fn(),
+        emit: vi.fn(),
     };
 });
 vi.mock('../../Models/BookingSchema.js', () => ({ default: mocks.Booking }));
@@ -38,11 +42,22 @@ const response = () => {
     return res;
 };
 const createRequest = (overrides = {}) => ({
-    userId: 'doctor-id', userRole: 'doctor', io: { to: mocks.to },
-    body: { doctorId: 'doctor-id', userId: 'patient-id', currentBookingId: 'parent-id', timeSlot: { ...slot }, ...overrides },
+    userId: 'doctor-id',
+    userRole: 'doctor',
+    io: { to: mocks.to },
+    body: {
+        doctorId: 'doctor-id',
+        userId: 'patient-id',
+        currentBookingId: 'parent-id',
+        timeSlot: { ...slot },
+        ...overrides,
+    },
 });
 const updateRequest = (nextAppointmentTimeSlot = slot) => ({
-    params: { id: 'parent-id' }, body: { nextAppointmentTimeSlot }, userId: 'doctor-id', userRole: 'doctor',
+    params: { id: 'parent-id' },
+    body: { nextAppointmentTimeSlot },
+    userId: 'doctor-id',
+    userRole: 'doctor',
 });
 const expectNoCreation = () => {
     expect(mocks.Booking).not.toHaveBeenCalled();
@@ -54,13 +69,25 @@ const expectNoCreation = () => {
 
 beforeEach(() => {
     vi.clearAllMocks();
-    for (const mock of [mocks.Booking.findById, mocks.Booking.findOne, mocks.childSave,
-        mocks.Doctor.findById, mocks.Doctor.updateOne, mocks.User.findById, mocks.sendMail, mocks.to, mocks.emit]) mock.mockReset();
+    for (const mock of [
+        mocks.Booking.findById,
+        mocks.Booking.findOne,
+        mocks.childSave,
+        mocks.Doctor.findById,
+        mocks.Doctor.updateOne,
+        mocks.User.findById,
+        mocks.sendMail,
+        mocks.to,
+        mocks.emit,
+    ])
+        mock.mockReset();
     vi.useFakeTimers();
     vi.setSystemTime(now);
     vi.spyOn(console, 'error').mockImplementation(() => {});
     parent = {
-        _id: 'parent-id', doctor: 'doctor-id', user: 'patient-id',
+        _id: 'parent-id',
+        doctor: 'doctor-id',
+        user: 'patient-id',
         nextAppointment: { timeSlot: { ...slot, day: '2026-10-23' }, pdfInfo: { ...pdf } },
         save: vi.fn().mockImplementation(async () => parent),
     };
@@ -80,7 +107,9 @@ beforeEach(() => {
 
 describe('createReExaminationBooking', () => {
     it.each([
-        ['doctor', 'Doctor not found'], ['patient', 'User not found'], ['parent', 'Current booking not found'],
+        ['doctor', 'Doctor not found'],
+        ['patient', 'User not found'],
+        ['parent', 'Current booking not found'],
     ])('BE-N01: returns 404 without saving when the %s does not exist', async (kind, message) => {
         const originalParent = parent;
         if (kind === 'doctor') doctor = null;
@@ -103,25 +132,47 @@ describe('createReExaminationBooking', () => {
         expect(parent.nextAppointment).toEqual({ timeSlot: slot });
         expect(parent.save).toHaveBeenCalledTimes(1);
         expect(mocks.Booking).toHaveBeenCalledExactlyOnceWith({
-            doctor: 'doctor-id', user: 'patient-id', ticketPrice: '0', paymentMethod: 'free', isPaid: true,
-            timeSlot: slot, unread: true, isReExamination: true, parentBooking: 'parent-id',
+            doctor: 'doctor-id',
+            user: 'patient-id',
+            ticketPrice: '0',
+            paymentMethod: 'free',
+            isPaid: true,
+            timeSlot: slot,
+            unread: true,
+            isReExamination: true,
+            parentBooking: 'parent-id',
         });
         expect(parent.save.mock.invocationCallOrder[0]).toBeLessThan(mocks.childSave.mock.invocationCallOrder[0]);
         expect(res.status).toHaveBeenCalledWith(201);
-        expect(res.json).toHaveBeenCalledWith({ success: true, message: 'Re-examination booking created successfully', booking: savedChild });
+        expect(res.json).toHaveBeenCalledWith({
+            success: true,
+            message: 'Re-examination booking created successfully',
+            booking: savedChild,
+        });
     });
 
     it('BE-N03: increments the count, emails the patient and emits to the patient room', async () => {
         await createReExaminationBooking(createRequest(), response());
-        expect(mocks.Doctor.updateOne).toHaveBeenCalledExactlyOnceWith({ _id: 'doctor-id' }, { $inc: { totalPatients: 1 } });
-        expect(mocks.sendMail).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({
-            to: user.email, subject: 'HealthMate - Re-Examination Appointment Confirmation',
-            html: expect.stringContaining('Free (Re-examination)'),
-        }));
+        expect(mocks.Doctor.updateOne).toHaveBeenCalledExactlyOnceWith(
+            { _id: 'doctor-id' },
+            { $inc: { totalPatients: 1 } },
+        );
+        expect(mocks.sendMail).toHaveBeenCalledExactlyOnceWith(
+            expect.objectContaining({
+                to: user.email,
+                subject: 'HealthMate - Re-Examination Appointment Confirmation',
+                html: expect.stringContaining('Free (Re-examination)'),
+            }),
+        );
         expect(mocks.to).toHaveBeenCalledExactlyOnceWith('patient-id');
         expect(mocks.emit).toHaveBeenCalledExactlyOnceWith('re-examination-notification', {
-            bookingId: 'child-id', doctor: { id: doctor._id, fullname: doctor.fullname, photo: doctor.photo },
-            timeSlot: slot, createdAt: now, type: 're-examination', status: 'scheduled', isReExamination: true,
+            bookingId: 'child-id',
+            doctor: { id: doctor._id, fullname: doctor.fullname, photo: doctor.photo },
+            timeSlot: slot,
+            createdAt: now,
+            type: 're-examination',
+            status: 'scheduled',
+            isReExamination: true,
         });
     });
 
@@ -156,10 +207,13 @@ describe('createReExaminationBooking', () => {
     });
 
     it.each(['doctor lookup', 'patient lookup', 'parent lookup', 'parent save'])(
-        'BE-N10: creates no child when %s fails', async (stage) => {
+        'BE-N10: creates no child when %s fails',
+        async (stage) => {
             const dependency = {
-                'doctor lookup': mocks.Doctor.findById, 'patient lookup': mocks.User.findById,
-                'parent lookup': mocks.Booking.findById, 'parent save': parent.save,
+                'doctor lookup': mocks.Doctor.findById,
+                'patient lookup': mocks.User.findById,
+                'parent lookup': mocks.Booking.findById,
+                'parent save': parent.save,
             }[stage];
             dependency.mockRejectedValue(new Error('database unavailable'));
             const res = response();
@@ -170,11 +224,15 @@ describe('createReExaminationBooking', () => {
     );
 
     it.each(['child save', 'count update', 'socket'])(
-        'BE-N10 [LIMITATION]: reports 500 after the parent was saved when %s fails', async (stage) => {
+        'BE-N10 [LIMITATION]: reports 500 after the parent was saved when %s fails',
+        async (stage) => {
             const error = new Error('dependency unavailable');
             if (stage === 'child save') mocks.childSave.mockRejectedValue(error);
             if (stage === 'count update') mocks.Doctor.updateOne.mockRejectedValue(error);
-            if (stage === 'socket') mocks.emit.mockImplementation(() => { throw error; });
+            if (stage === 'socket')
+                mocks.emit.mockImplementation(() => {
+                    throw error;
+                });
             const res = response();
             await createReExaminationBooking(createRequest(), res);
             expect(parent.save).toHaveBeenCalledTimes(1);
@@ -204,8 +262,16 @@ describe('updateNextAppointmentTimeSlot', () => {
 
     it.each([
         ['missing day', { ...slot, day: '' }, 'Invalid time slot: day, startingTime, and endingTime are required'],
-        ['missing start', { ...slot, startingTime: '' }, 'Invalid time slot: day, startingTime, and endingTime are required'],
-        ['missing end', { ...slot, endingTime: '' }, 'Invalid time slot: day, startingTime, and endingTime are required'],
+        [
+            'missing start',
+            { ...slot, startingTime: '' },
+            'Invalid time slot: day, startingTime, and endingTime are required',
+        ],
+        [
+            'missing end',
+            { ...slot, endingTime: '' },
+            'Invalid time slot: day, startingTime, and endingTime are required',
+        ],
         ['equal times', { ...slot, endingTime: '08:00' }, 'Starting time must be earlier than ending time'],
         ['reversed times', { ...slot, endingTime: '07:30' }, 'Starting time must be earlier than ending time'],
         ['past date', { ...slot, day: '2026-10-20' }, 'Date must be in the future'],
@@ -228,7 +294,8 @@ describe('updateNextAppointmentTimeSlot', () => {
     });
 
     it.each([undefined, null, {}, { nextAppointmentTimeSlot: { ...slot, day: '2026-02-30' } }])(
-        'BE-N06: rejects malformed update body %j without changing parent or child', async (body) => {
+        'BE-N06: rejects malformed update body %j without changing parent or child',
+        async (body) => {
             const req = updateRequest();
             req.body = body;
             const previousParent = structuredClone(parent.nextAppointment);
@@ -247,7 +314,10 @@ describe('updateNextAppointmentTimeSlot', () => {
     it('BE-N07: updates both slots while preserving the parent PDF metadata', async () => {
         const res = response();
         await updateNextAppointmentTimeSlot(updateRequest(), res);
-        expect(mocks.Booking.findOne).toHaveBeenCalledExactlyOnceWith({ parentBooking: 'parent-id', isReExamination: true });
+        expect(mocks.Booking.findOne).toHaveBeenCalledExactlyOnceWith({
+            parentBooking: 'parent-id',
+            isReExamination: true,
+        });
         expect(parent.nextAppointment).toEqual({ timeSlot: slot, pdfInfo: pdf });
         expect(child.timeSlot).toEqual(slot);
         expect(child.save).toHaveBeenCalledTimes(1);
@@ -281,10 +351,13 @@ describe('updateNextAppointmentTimeSlot', () => {
     it.todo('BE-N09: define whether a missing nextAppointment should be created or rejected');
 
     it.each(['parent lookup', 'child lookup', 'child save', 'parent save'])(
-        'BE-N10 [LIMITATION]: reports a %s failure without proving rollback', async (stage) => {
+        'BE-N10 [LIMITATION]: reports a %s failure without proving rollback',
+        async (stage) => {
             const dependency = {
-                'parent lookup': mocks.Booking.findById, 'child lookup': mocks.Booking.findOne,
-                'child save': child.save, 'parent save': parent.save,
+                'parent lookup': mocks.Booking.findById,
+                'child lookup': mocks.Booking.findOne,
+                'child save': child.save,
+                'parent save': parent.save,
             }[stage];
             dependency.mockRejectedValue(new Error('database unavailable'));
             const res = response();

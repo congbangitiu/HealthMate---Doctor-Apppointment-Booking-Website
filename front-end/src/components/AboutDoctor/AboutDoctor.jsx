@@ -31,7 +31,8 @@ const AboutDoctor = ({ fullname, about, qualifications, experiences, hidden }) =
                         {qualifications?.map((qualification, index) => (
                             <div key={index} className={cx('education-detail')}>
                                 <p>
-                                    {formatDateForDisplay(qualification.startingDate)} - {formatDateForDisplay(qualification.endingDate)}
+                                    {formatDateForDisplay(qualification.startingDate)} -{' '}
+                                    {formatDateForDisplay(qualification.endingDate)}
                                 </p>
                                 <div className={cx('education-location')}>
                                     <p>{qualification.degree}</p>

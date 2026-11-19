@@ -3,58 +3,58 @@
 # Các biến có "sync: false" sẽ để trống và bạn nhập giá trị trong dashboard
 # (tránh commit secret vào repo).
 services:
-  - type: web
-    name: healthmate-api
-    runtime: node
-    plan: free
-    rootDir: back-end
-    # Dùng "npm install" thay vì "npm ci": npm ci đòi lock khớp tuyệt đối với
-    # package.json, nhưng npm của Render (Node 22) và local (Node 24) giải cây
-    # phụ thuộc googleapis hơi khác nhau -> ci báo lệch. "npm install" tự hòa giải.
-    buildCommand: npm install
-    startCommand: npm start
-    # Render tự ping "/" để health check; index.js đã trả "API is working".
-    healthCheckPath: /
-    envVars:
-      # KHÔNG khai PORT: Render tự inject PORT và code đọc process.env.PORT.
-      - key: NODE_ENV
-        value: production
-      - key: MONGO_URL
-        sync: false
-      - key: JWT_SECRET_KEY
-        sync: false
-      # URL frontend đã deploy (Vercel) — dùng cho redirect Stripe & tham chiếu client.
-      - key: CLIENT_SITE_URL
-        sync: false
-      - key: STRIPE_SECRET_KEY
-        sync: false
-      - key: STRIPE_WEBHOOK_SECRET
-        sync: false
-      - key: CLOUDINARY_CLOUD_NAME
-        sync: false
-      - key: CLOUDINARY_API_KEY
-        sync: false
-      - key: CLOUDINARY_API_SECRET
-        sync: false
-      - key: UPLOAD_PRESET
-        sync: false
-      # Địa chỉ Gmail dùng làm người gửi (chính tài khoản đã cấp OAuth bên dưới).
-      - key: EMAIL_USERNAME
-        sync: false
-      # Gmail API OAuth2 — gửi mail qua HTTP (Render chặn SMTP). Lấy từ Google Cloud.
-      - key: GMAIL_CLIENT_ID
-        sync: false
-      - key: GMAIL_CLIENT_SECRET
-        sync: false
-      - key: GMAIL_REFRESH_TOKEN
-        sync: false
-      - key: TWILIO_ACCOUNT_SID
-        sync: false
-      - key: TWILIO_AUTH_TOKEN
-        sync: false
-      - key: PHONE_NUMBER
-        sync: false
-      # Secret bảo vệ endpoint /api/v1/cron/slot-maintenance. Tự sinh 1 chuỗi ngẫu nhiên dài và nhập trong dashboard.
-      # External cron phải gửi header x-cron-secret khớp giá trị này.
-      - key: CRON_SECRET
-        sync: false
+    - type: web
+      name: healthmate-api
+      runtime: node
+      plan: free
+      rootDir: back-end
+      # Dùng "npm install" thay vì "npm ci": npm ci đòi lock khớp tuyệt đối với
+      # package.json, nhưng npm của Render (Node 22) và local (Node 24) giải cây
+      # phụ thuộc googleapis hơi khác nhau -> ci báo lệch. "npm install" tự hòa giải.
+      buildCommand: npm install
+      startCommand: npm start
+      # Render tự ping "/" để health check; index.js đã trả "API is working".
+      healthCheckPath: /
+      envVars:
+          # KHÔNG khai PORT: Render tự inject PORT và code đọc process.env.PORT.
+          - key: NODE_ENV
+            value: production
+          - key: MONGO_URL
+            sync: false
+          - key: JWT_SECRET_KEY
+            sync: false
+          # URL frontend đã deploy (Vercel) — dùng cho redirect Stripe & tham chiếu client.
+          - key: CLIENT_SITE_URL
+            sync: false
+          - key: STRIPE_SECRET_KEY
+            sync: false
+          - key: STRIPE_WEBHOOK_SECRET
+            sync: false
+          - key: CLOUDINARY_CLOUD_NAME
+            sync: false
+          - key: CLOUDINARY_API_KEY
+            sync: false
+          - key: CLOUDINARY_API_SECRET
+            sync: false
+          - key: UPLOAD_PRESET
+            sync: false
+          # Địa chỉ Gmail dùng làm người gửi (chính tài khoản đã cấp OAuth bên dưới).
+          - key: EMAIL_USERNAME
+            sync: false
+          # Gmail API OAuth2 — gửi mail qua HTTP (Render chặn SMTP). Lấy từ Google Cloud.
+          - key: GMAIL_CLIENT_ID
+            sync: false
+          - key: GMAIL_CLIENT_SECRET
+            sync: false
+          - key: GMAIL_REFRESH_TOKEN
+            sync: false
+          - key: TWILIO_ACCOUNT_SID
+            sync: false
+          - key: TWILIO_AUTH_TOKEN
+            sync: false
+          - key: PHONE_NUMBER
+            sync: false
+          # Secret bảo vệ endpoint /api/v1/cron/slot-maintenance. Tự sinh 1 chuỗi ngẫu nhiên dài và nhập trong dashboard.
+          # External cron phải gửi header x-cron-secret khớp giá trị này.
+          - key: CRON_SECRET
+            sync: false

@@ -2,10 +2,7 @@
 // LƯU Ý: Render Cron Job chạy theo giờ UTC. 00:00 giờ VN (GMT+7) = 17:00 UTC, nên schedule trong render.yaml là "0 17 * * *".
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import {
-    removeExpiredSlotsForAllDoctors,
-    generateWeeklySlotsForAllDoctors,
-} from '../utils/slotManager.js';
+import { removeExpiredSlotsForAllDoctors, generateWeeklySlotsForAllDoctors } from '../utils/slotManager.js';
 
 dotenv.config();
 

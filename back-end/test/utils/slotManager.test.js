@@ -7,11 +7,18 @@ const mocks = vi.hoisted(() => ({
 vi.mock('../../Models/DoctorSchema.js', () => ({ default: mocks.Doctor }));
 vi.mock('node-cron', () => ({ default: { schedule: mocks.schedule } }));
 
-import { generateWeeklySlotsForAllDoctors, removeExpiredSlotsForAllDoctors, initSlotGenerationCron } from '../../utils/slotManager.js';
+import {
+    generateWeeklySlotsForAllDoctors,
+    removeExpiredSlotsForAllDoctors,
+    initSlotGenerationCron,
+} from '../../utils/slotManager.js';
 
 const makeDoctor = (overrides = {}) => ({
-    _id: 'doctor-id', availableSchedules: [{ day: 'Thursday', shifts: ['Morning'] }],
-    timeSlots: [], save: vi.fn().mockResolvedValue(undefined), ...overrides,
+    _id: 'doctor-id',
+    availableSchedules: [{ day: 'Thursday', shifts: ['Morning'] }],
+    timeSlots: [],
+    save: vi.fn().mockResolvedValue(undefined),
+    ...overrides,
 });
 const generatedSlots = () => mocks.Doctor.findByIdAndUpdate.mock.calls[0]?.[1].$set.timeSlots;
 const runningInUtc = process.env.SLOT_TEST_TZ === 'UTC';
@@ -38,7 +45,9 @@ describe('generateWeeklySlotsForAllDoctors', () => {
         ['Afternoon', 6, '13:00', '16:00'],
         ['Evening', 6, '18:00', '21:00'],
     ])('BE-T01: generates %s as %i consecutive thirty-minute slots', async (shift, count, start, end) => {
-        mocks.Doctor.find.mockResolvedValue([makeDoctor({ availableSchedules: [{ day: 'Thursday', shifts: [shift] }] })]);
+        mocks.Doctor.find.mockResolvedValue([
+            makeDoctor({ availableSchedules: [{ day: 'Thursday', shifts: [shift] }] }),
+        ]);
         await generateWeeklySlotsForAllDoctors();
         const slots = generatedSlots();
         expect(slots).toHaveLength(count);
@@ -52,13 +61,17 @@ describe('generateWeeklySlotsForAllDoctors', () => {
     });
 
     it('BE-T02: ignores an unknown shift without writing slots', async () => {
-        mocks.Doctor.find.mockResolvedValue([makeDoctor({ availableSchedules: [{ day: 'Thursday', shifts: ['Night'] }] })]);
+        mocks.Doctor.find.mockResolvedValue([
+            makeDoctor({ availableSchedules: [{ day: 'Thursday', shifts: ['Night'] }] }),
+        ]);
         await generateWeeklySlotsForAllDoctors();
         expect(mocks.Doctor.findByIdAndUpdate).not.toHaveBeenCalled();
     });
 
     it.each([
-        ['Wednesday', '2026-10-28'], ['Tuesday', '2026-10-27'], ['Thursday', '2026-10-22'],
+        ['Wednesday', '2026-10-28'],
+        ['Tuesday', '2026-10-27'],
+        ['Thursday', '2026-10-22'],
     ])('BE-T03: maps %s to the next occurrence %s', async (day, expected) => {
         mocks.Doctor.find.mockResolvedValue([makeDoctor({ availableSchedules: [{ day, shifts: ['Morning'] }] })]);
         await generateWeeklySlotsForAllDoctors();
@@ -67,12 +80,17 @@ describe('generateWeeklySlotsForAllDoctors', () => {
     });
 
     it('BE-T04: ignores an invalid day name', async () => {
-        mocks.Doctor.find.mockResolvedValue([makeDoctor({ availableSchedules: [{ day: 'NotADay', shifts: ['Morning'] }] })]);
+        mocks.Doctor.find.mockResolvedValue([
+            makeDoctor({ availableSchedules: [{ day: 'NotADay', shifts: ['Morning'] }] }),
+        ]);
         await generateWeeklySlotsForAllDoctors();
         expect(mocks.Doctor.findByIdAndUpdate).not.toHaveBeenCalled();
     });
 
-    it.each([['missing', undefined], ['empty', []]])('BE-T05: skips %s schedules and queries only approved doctors', async (_label, availableSchedules) => {
+    it.each([
+        ['missing', undefined],
+        ['empty', []],
+    ])('BE-T05: skips %s schedules and queries only approved doctors', async (_label, availableSchedules) => {
         mocks.Doctor.find.mockResolvedValue([makeDoctor({ availableSchedules })]);
         await generateWeeklySlotsForAllDoctors();
         expect(mocks.Doctor.find).toHaveBeenCalledExactlyOnceWith({ isApproved: 'approved' });
@@ -81,7 +99,9 @@ describe('generateWeeklySlotsForAllDoctors', () => {
     });
 
     it('BE-T06: normalizes shift case and surrounding whitespace', async () => {
-        mocks.Doctor.find.mockResolvedValue([makeDoctor({ availableSchedules: [{ day: 'Thursday', shifts: [' mOrNiNg '] }] })]);
+        mocks.Doctor.find.mockResolvedValue([
+            makeDoctor({ availableSchedules: [{ day: 'Thursday', shifts: [' mOrNiNg '] }] }),
+        ]);
         await generateWeeklySlotsForAllDoctors();
         expect(generatedSlots()).toHaveLength(7);
         expect(generatedSlots()[0].startingTime).toBe('08:00');
@@ -102,7 +122,9 @@ describe('generateWeeklySlotsForAllDoctors', () => {
             { day: '2026-10-23', startingTime: '09:00', endingTime: '09:30' },
             { day: '2026-10-23', startingTime: '08:00', endingTime: '08:30' },
         ];
-        mocks.Doctor.find.mockResolvedValue([makeDoctor({ timeSlots: slots, availableSchedules: [{ day: 'Thursday', shifts: ['Night'] }] })]);
+        mocks.Doctor.find.mockResolvedValue([
+            makeDoctor({ timeSlots: slots, availableSchedules: [{ day: 'Thursday', shifts: ['Night'] }] }),
+        ]);
         await generateWeeklySlotsForAllDoctors();
         expect(generatedSlots()).toEqual([slots[2], slots[1], slots[0]]);
         expect(mocks.Doctor.findByIdAndUpdate.mock.calls[0][2]).toEqual({ new: true });
@@ -121,13 +143,17 @@ describe('generateWeeklySlotsForAllDoctors', () => {
         expect(doctor.timeSlots).toHaveLength(7);
     });
 
-    it.each(['duplicate shift', 'duplicate schedule'])('BE-T10: removes duplicates from a new batch with %s', async (kind) => {
-        const entry = { day: 'Thursday', shifts: ['Morning'] };
-        const availableSchedules = kind === 'duplicate shift' ? [{ ...entry, shifts: ['Morning', 'Morning'] }] : [entry, entry];
-        mocks.Doctor.find.mockResolvedValue([makeDoctor({ availableSchedules })]);
-        await generateWeeklySlotsForAllDoctors();
-        expect(generatedSlots()).toHaveLength(7);
-    });
+    it.each(['duplicate shift', 'duplicate schedule'])(
+        'BE-T10: removes duplicates from a new batch with %s',
+        async (kind) => {
+            const entry = { day: 'Thursday', shifts: ['Morning'] };
+            const availableSchedules =
+                kind === 'duplicate shift' ? [{ ...entry, shifts: ['Morning', 'Morning'] }] : [entry, entry];
+            mocks.Doctor.find.mockResolvedValue([makeDoctor({ availableSchedules })]);
+            await generateWeeklySlotsForAllDoctors();
+            expect(generatedSlots()).toHaveLength(7);
+        },
+    );
 
     it.each([
         ['2026-12-31T10:00:00+07:00', 'Friday', '2027-01-01'],
@@ -151,15 +177,21 @@ describe('generateWeeklySlotsForAllDoctors', () => {
 
     it('BE-T11: handles Vietnamese month rollover at 00:30 on January first', async () => {
         vi.setSystemTime(new Date('2027-01-01T00:30:00+07:00'));
-        mocks.Doctor.find.mockResolvedValue([makeDoctor({ availableSchedules: [{ day: 'Saturday', shifts: ['Morning'] }] })]);
+        mocks.Doctor.find.mockResolvedValue([
+            makeDoctor({ availableSchedules: [{ day: 'Saturday', shifts: ['Morning'] }] }),
+        ]);
         await generateWeeklySlotsForAllDoctors();
         expect(generatedSlots()).toHaveLength(7);
         expect(generatedSlots().every((item) => item.day === '2027-01-02')).toBe(true);
     });
 
     it.each([
-        ['Wednesday', '2026-10-28'], ['Thursday', '2026-10-22'], ['Friday', '2026-10-23'],
-        ['Saturday', '2026-10-24'], ['Sunday', '2026-10-25'], ['Monday', '2026-10-26'],
+        ['Wednesday', '2026-10-28'],
+        ['Thursday', '2026-10-22'],
+        ['Friday', '2026-10-23'],
+        ['Saturday', '2026-10-24'],
+        ['Sunday', '2026-10-25'],
+        ['Monday', '2026-10-26'],
         ['Tuesday', '2026-10-27'],
     ])('BE-T11: maps %s to %s late at night without leaving the seven-day window', async (day, expected) => {
         vi.setSystemTime(new Date('2026-10-21T23:59:59.999+07:00'));
@@ -198,7 +230,9 @@ describe('generateWeeklySlotsForAllDoctors', () => {
         expect(doctor.timeSlots).toHaveLength(14);
         expect(doctor.timeSlots).toContainEqual(existing);
         expect(doctor.timeSlots).toContainEqual(unrelated);
-        expect(new Set(doctor.timeSlots.map((item) => `${item.day}|${item.startingTime}|${item.endingTime}`)).size).toBe(14);
+        expect(
+            new Set(doctor.timeSlots.map((item) => `${item.day}|${item.startingTime}|${item.endingTime}`)).size,
+        ).toBe(14);
     });
 
     it('BE-T11: generates several schedule days from the same unmodified calendar anchor', async () => {
@@ -206,7 +240,11 @@ describe('generateWeeklySlotsForAllDoctors', () => {
         mocks.Doctor.find.mockResolvedValue([makeDoctor({ availableSchedules })]);
         await generateWeeklySlotsForAllDoctors();
         expect(generatedSlots()).toHaveLength(21);
-        expect([...new Set(generatedSlots().map((item) => item.day))]).toEqual(['2026-10-22', '2026-10-23', '2026-10-28']);
+        expect([...new Set(generatedSlots().map((item) => item.day))]).toEqual([
+            '2026-10-22',
+            '2026-10-23',
+            '2026-10-28',
+        ]);
     });
 
     it.each(['find', 'update'])('BE-T14 [LIMITATION]: logs and swallows the generation %s error', async (stage) => {
@@ -220,7 +258,11 @@ describe('generateWeeklySlotsForAllDoctors', () => {
 
 describe('removeExpiredSlotsForAllDoctors', () => {
     it('BE-T12: removes yesterday but preserves today and tomorrow, including earlier times today', async () => {
-        const slots = ['2026-10-20', '2026-10-21', '2026-10-22'].map((day) => ({ day, startingTime: '08:00', endingTime: '08:30' }));
+        const slots = ['2026-10-20', '2026-10-21', '2026-10-22'].map((day) => ({
+            day,
+            startingTime: '08:00',
+            endingTime: '08:30',
+        }));
         const doctor = makeDoctor({ timeSlots: slots });
         mocks.Doctor.find.mockResolvedValue([doctor]);
         await removeExpiredSlotsForAllDoctors();
@@ -260,7 +302,11 @@ describe('removeExpiredSlotsForAllDoctors', () => {
     });
 
     it('BE-T12: preserves unparseable legacy dates instead of silently deleting them', async () => {
-        const slots = ['invalid-date', '2026-02-30', '2026-10-22'].map((day) => ({ day, startingTime: '08:00', endingTime: '08:30' }));
+        const slots = ['invalid-date', '2026-02-30', '2026-10-22'].map((day) => ({
+            day,
+            startingTime: '08:00',
+            endingTime: '08:30',
+        }));
         const doctor = makeDoctor({ timeSlots: slots });
         mocks.Doctor.find.mockResolvedValue([doctor]);
         await removeExpiredSlotsForAllDoctors();
@@ -269,16 +315,15 @@ describe('removeExpiredSlotsForAllDoctors', () => {
     });
 
     it.each([
-        ['missing', undefined], ['empty', []],
+        ['missing', undefined],
+        ['empty', []],
         ['future-only', [{ day: '2026-10-22', startingTime: '08:00', endingTime: '08:30' }]],
-    ])(
-        'BE-T13: does not save for %s slots without expired entries', async (_label, timeSlots) => {
-            const doctor = makeDoctor({ timeSlots });
-            mocks.Doctor.find.mockResolvedValue([doctor]);
-            await removeExpiredSlotsForAllDoctors();
-            expect(doctor.save).not.toHaveBeenCalled();
-        },
-    );
+    ])('BE-T13: does not save for %s slots without expired entries', async (_label, timeSlots) => {
+        const doctor = makeDoctor({ timeSlots });
+        mocks.Doctor.find.mockResolvedValue([doctor]);
+        await removeExpiredSlotsForAllDoctors();
+        expect(doctor.save).not.toHaveBeenCalled();
+    });
 
     it.each(['find', 'save'])('BE-T14 [LIMITATION]: logs and swallows the cleanup %s error', async (stage) => {
         const doctor = makeDoctor({ timeSlots: [{ day: '2026-10-20' }] });
@@ -295,9 +340,16 @@ describe('initSlotGenerationCron', () => {
         const doctor = makeDoctor({ timeSlots: [{ day: '2026-10-20', startingTime: '08:00', endingTime: '08:30' }] });
         mocks.Doctor.find.mockResolvedValue([doctor]);
         let finishCleanup;
-        doctor.save.mockImplementation(() => new Promise((resolve) => { finishCleanup = resolve; }));
+        doctor.save.mockImplementation(
+            () =>
+                new Promise((resolve) => {
+                    finishCleanup = resolve;
+                }),
+        );
         initSlotGenerationCron();
-        expect(mocks.schedule).toHaveBeenCalledExactlyOnceWith('0 0 * * *', expect.any(Function), { timezone: 'Asia/Ho_Chi_Minh' });
+        expect(mocks.schedule).toHaveBeenCalledExactlyOnceWith('0 0 * * *', expect.any(Function), {
+            timezone: 'Asia/Ho_Chi_Minh',
+        });
         const pending = mocks.schedule.mock.calls[0][1]();
         await Promise.resolve();
         expect(doctor.save).toHaveBeenCalledTimes(1);
@@ -307,6 +359,8 @@ describe('initSlotGenerationCron', () => {
         await pending;
         expect(mocks.Doctor.find).toHaveBeenCalledTimes(2);
         expect(mocks.Doctor.findByIdAndUpdate).toHaveBeenCalledTimes(1);
-        expect(doctor.save.mock.invocationCallOrder[0]).toBeLessThan(mocks.Doctor.findByIdAndUpdate.mock.invocationCallOrder[0]);
+        expect(doctor.save.mock.invocationCallOrder[0]).toBeLessThan(
+            mocks.Doctor.findByIdAndUpdate.mock.invocationCallOrder[0],
+        );
     });
 });

@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types'; 
+import PropTypes from 'prop-types';
 
 import classNames from 'classnames/bind';
 import styles from './Error.module.scss';
-import errorIcon from '../../assets/images/error-icon.png'
+import errorIcon from '../../assets/images/error-icon.png';
 
 const cx = classNames.bind(styles);
 
@@ -16,7 +16,7 @@ const Error = ({ errorMessage }) => {
 };
 
 Error.propTypes = {
-    errorMessage: PropTypes.string.isRequired 
+    errorMessage: PropTypes.string.isRequired,
 };
 
 export default Error;

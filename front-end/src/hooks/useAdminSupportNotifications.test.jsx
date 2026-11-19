@@ -3,23 +3,34 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import useAdminSupportNotifications from './useAdminSupportNotifications';
 
 const channel = vi.hoisted(() => ({ handlers: new Map(), emit: vi.fn() }));
-vi.mock('../utils/services/socket', () => ({ default: {
-    on: (event, handler) => {
-        if (!channel.handlers.has(event)) channel.handlers.set(event, new Set());
-        channel.handlers.get(event).add(handler);
+vi.mock('../utils/services/socket', () => ({
+    default: {
+        on: (event, handler) => {
+            if (!channel.handlers.has(event)) channel.handlers.set(event, new Set());
+            channel.handlers.get(event).add(handler);
+        },
+        off: (event, handler) => channel.handlers.get(event)?.delete(handler),
+        emit: channel.emit,
     },
-    off: (event, handler) => channel.handlers.get(event)?.delete(handler),
-    emit: channel.emit,
-} }));
+}));
 vi.mock('../../config', () => ({ BASE_URL: '/api/v1' }));
 let items;
 beforeEach(() => {
     items = [];
     channel.handlers.clear();
     channel.emit.mockImplementation((event, payload, callback) => callback?.({ success: true }));
-    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => ({ data: items, unreadCount: items.filter((item) => !item.isRead).length }) })));
+    vi.stubGlobal(
+        'fetch',
+        vi.fn(async () => ({
+            ok: true,
+            json: async () => ({ data: items, unreadCount: items.filter((item) => !item.isRead).length }),
+        })),
+    );
 });
-const fire = (event, data) => act(async () => { for (const handler of channel.handlers.get(event) || []) handler(data); });
+const fire = (event, data) =>
+    act(async () => {
+        for (const handler of channel.handlers.get(event) || []) handler(data);
+    });
 describe('admin support notifications', () => {
     it('restores unread notifications from the database without playing historical alerts', async () => {
         items = [{ id: 'created:one', requestId: 'one', isRead: false }];
@@ -27,7 +38,11 @@ describe('admin support notifications', () => {
         const { result } = renderHook(() => useAdminSupportNotifications('admin-token', true, onLive));
         await waitFor(() => expect(result.current.unreadCount).toBe(1));
         expect(onLive).not.toHaveBeenCalled();
-        expect(channel.emit).toHaveBeenCalledWith('admin-support-subscribe', { token: 'admin-token' }, expect.any(Function));
+        expect(channel.emit).toHaveBeenCalledWith(
+            'admin-support-subscribe',
+            { token: 'admin-token' },
+            expect.any(Function),
+        );
     });
     it('deduplicates live alerts, refreshes counts and recovers missed notifications on reconnect', async () => {
         const onLive = vi.fn();

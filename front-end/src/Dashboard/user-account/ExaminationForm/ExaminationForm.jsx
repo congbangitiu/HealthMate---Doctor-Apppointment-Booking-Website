@@ -44,7 +44,6 @@ const ExaminationForm = ({ appointment }) => {
     };
 
     console.log(examination?.pdfInfo);
-    
 
     return (
         <>
@@ -152,7 +151,8 @@ const ExaminationForm = ({ appointment }) => {
                                     <div>
                                         <h4>
                                             HealthMate
-                                            {examination?.updatedAt && ', ' + formatDateForDisplay(examination?.updatedAt)}
+                                            {examination?.updatedAt &&
+                                                ', ' + formatDateForDisplay(examination?.updatedAt)}
                                         </h4>
                                         <span>
                                             <img src={Watermark} alt="" />

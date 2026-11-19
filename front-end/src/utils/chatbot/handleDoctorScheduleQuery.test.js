@@ -2,8 +2,16 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 vi.mock('../../../config', () => ({ BASE_URL: 'http://localhost:5000/api/v1' }));
 import handleDoctorScheduleQuery from './handleDoctorScheduleQuery';
 
-const alice = { _id: 'alice-id', fullname: 'Alice Nguyen', availableSchedules: [{ day: 'Monday', shifts: ['Morning'] }] };
-const jsonResponse = (body, ok = true, status = ok ? 200 : 500) => ({ ok, status, json: vi.fn().mockResolvedValue(body) });
+const alice = {
+    _id: 'alice-id',
+    fullname: 'Alice Nguyen',
+    availableSchedules: [{ day: 'Monday', shifts: ['Morning'] }],
+};
+const jsonResponse = (body, ok = true, status = ok ? 200 : 500) => ({
+    ok,
+    status,
+    json: vi.fn().mockResolvedValue(body),
+});
 let fetchMock;
 
 beforeEach(() => {
@@ -13,7 +21,8 @@ beforeEach(() => {
 
 describe('handleDoctorScheduleQuery', () => {
     it.each(['Dr. ALICE NGUYEN!', 'Doctor Alice Nguyen?', 'When is Alice available?'])(
-        'FE-C10: normalizes titles, case and punctuation in %j', async (text) => {
+        'FE-C10: normalizes titles, case and punctuation in %j',
+        async (text) => {
             fetchMock.mockResolvedValue(jsonResponse({ data: [alice] }));
             await expect(handleDoctorScheduleQuery(text)).resolves.toBe(alice);
             expect(fetchMock).toHaveBeenCalledTimes(1);
@@ -33,30 +42,33 @@ describe('handleDoctorScheduleQuery', () => {
     });
 
     it.each([{ data: [] }, {}, { data: null }, null])(
-        'FE-C11: returns null when the response contains no doctor list: %j', async (body) => {
+        'FE-C11: returns null when the response contains no doctor list: %j',
+        async (body) => {
             fetchMock.mockResolvedValue(jsonResponse(body));
             await expect(handleDoctorScheduleQuery('Dr Alice')).resolves.toBeNull();
         },
     );
 
     it.each([
-        ['shared-name-first', 'Doctor John Brown'], ['exact-name-first', 'Doctor John Brown'],
+        ['shared-name-first', 'Doctor John Brown'],
+        ['exact-name-first', 'Doctor John Brown'],
         ['shared-name-first', 'When is Doctor JOHN BROWN available?'],
         ['exact-name-first', 'When is Doctor JOHN BROWN available?'],
-    ])(
-        'FE-C12: resolves the explicit full name with API order %s in %j', async (order, text) => {
-            const adams = { _id: 'adams-id', fullname: 'John Adams' };
-            const brown = { _id: 'brown-id', fullname: 'John Brown' };
-            const doctors = order === 'shared-name-first' ? [adams, brown] : [brown, adams];
-            fetchMock.mockResolvedValue(jsonResponse({ data: doctors }));
-            await expect(handleDoctorScheduleQuery(text)).resolves.toBe(brown);
+    ])('FE-C12: resolves the explicit full name with API order %s in %j', async (order, text) => {
+        const adams = { _id: 'adams-id', fullname: 'John Adams' };
+        const brown = { _id: 'brown-id', fullname: 'John Brown' };
+        const doctors = order === 'shared-name-first' ? [adams, brown] : [brown, adams];
+        fetchMock.mockResolvedValue(jsonResponse({ data: doctors }));
+        await expect(handleDoctorScheduleQuery(text)).resolves.toBe(brown);
+    });
+
+    it.each([400, 500])(
+        'FE-C13: rejects HTTP %i instead of treating an error payload as doctor data',
+        async (status) => {
+            fetchMock.mockResolvedValue(jsonResponse({ message: 'Request rejected', data: [alice] }, false, status));
+            await expect(handleDoctorScheduleQuery('Dr Alice')).rejects.toBeInstanceOf(Error);
         },
     );
-
-    it.each([400, 500])('FE-C13: rejects HTTP %i instead of treating an error payload as doctor data', async (status) => {
-        fetchMock.mockResolvedValue(jsonResponse({ message: 'Request rejected', data: [alice] }, false, status));
-        await expect(handleDoctorScheduleQuery('Dr Alice')).rejects.toBeInstanceOf(Error);
-    });
 
     it.each(['network', 'JSON'])('FE-C13: propagates a %s failure to the caller', async (kind) => {
         const error = kind === 'network' ? new TypeError('Network unavailable') : new SyntaxError('Invalid JSON');

@@ -46,7 +46,9 @@
 
                 &.pending {
                     // Use &. for modifier classes
-                    transition: width 0.3s ease, box-shadow 0.3s ease;
+                    transition:
+                        width 0.3s ease,
+                        box-shadow 0.3s ease;
                     transform: scale(1) !important;
                 }
 

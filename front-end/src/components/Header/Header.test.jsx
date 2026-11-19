@@ -11,18 +11,22 @@ import Header from './Header';
 const socket = vi.hoisted(() => ({ connected: true, handlers: new Map(), emit: vi.fn() }));
 const responsive = vi.hoisted(() => ({ mobile: false }));
 const emptyData = vi.hoisted(() => []);
-vi.mock('../../utils/services/socket', () => ({ default: {
-    ...socket,
-    on: (event, handler) => {
-        if (!socket.handlers.has(event)) socket.handlers.set(event, new Set());
-        socket.handlers.get(event).add(handler);
+vi.mock('../../utils/services/socket', () => ({
+    default: {
+        ...socket,
+        on: (event, handler) => {
+            if (!socket.handlers.has(event)) socket.handlers.set(event, new Set());
+            socket.handlers.get(event).add(handler);
+        },
+        off: (event, handler) => socket.handlers.get(event)?.delete(handler),
     },
-    off: (event, handler) => socket.handlers.get(event)?.delete(handler),
-} }));
+}));
 vi.mock('../../hooks/useFetchData', () => ({ default: () => ({ data: emptyData }) }));
 vi.mock('../../hooks/useResponsive', () => ({ default: () => ({ isMobile: responsive.mobile, isTablet: false }) }));
 const notification = {
-    id: 'reschedule-booking-1-history-1', appointmentId: 'booking-1', type: 'reschedule',
+    id: 'reschedule-booking-1-history-1',
+    appointmentId: 'booking-1',
+    type: 'reschedule',
     doctor: { _id: 'doctor-1', fullname: 'Doctor One', photo: '/doctor.png' },
     from: { day: '2099-06-01', startingTime: '08:00', endingTime: '08:30' },
     timeSlot: { day: '2099-06-02', startingTime: '09:00', endingTime: '09:30' },
@@ -32,11 +36,17 @@ let stored;
 let fetchMock;
 const play = vi.fn();
 const Location = () => <output data-testid="path">{useLocation().pathname + useLocation().search}</output>;
-const mount = () => render(
-    <authContext.Provider value={{ user: { _id: 'patient-1', fullname: 'Patient One' }, role: 'patient', token: 'test-token' }}>
-        <MemoryRouter><Header /><Location /></MemoryRouter>
-    </authContext.Provider>,
-);
+const mount = () =>
+    render(
+        <authContext.Provider
+            value={{ user: { _id: 'patient-1', fullname: 'Patient One' }, role: 'patient', token: 'test-token' }}
+        >
+            <MemoryRouter>
+                <Header />
+                <Location />
+            </MemoryRouter>
+        </authContext.Provider>,
+    );
 beforeEach(async () => {
     responsive.mobile = false;
     sessionStorage.removeItem('healthmate.support.guests');
@@ -46,12 +56,18 @@ beforeEach(async () => {
     supportToast.mockClear();
     stored = [];
     play.mockReset().mockResolvedValue(undefined);
-    vi.stubGlobal('Audio', vi.fn(function () { return { play }; }));
+    vi.stubGlobal(
+        'Audio',
+        vi.fn(function () {
+            return { play };
+        }),
+    );
     fetchMock = vi.fn(async (url) => ({
         ok: true,
-        json: async () => url.endsWith('/calendar/notifications')
-            ? { data: stored, unreadCount: stored.length }
-            : { success: true, unreadCount: 0 },
+        json: async () =>
+            url.endsWith('/calendar/notifications')
+                ? { data: stored, unreadCount: stored.length }
+                : { success: true, unreadCount: 0 },
     }));
     vi.stubGlobal('fetch', fetchMock);
 });
@@ -71,11 +87,17 @@ describe('patient reschedule notifications', () => {
         expect(await screen.findByText('1')).toBeInTheDocument();
         expect(play).toHaveBeenCalledTimes(1);
         await user.click(screen.getByRole('button', { name: 'Notifications' }));
-        const message = await screen.findByText((_, element) => element.tagName === 'P' && element.textContent.includes('Doctor One rescheduled your appointment'));
+        const message = await screen.findByText(
+            (_, element) =>
+                element.tagName === 'P' && element.textContent.includes('Doctor One rescheduled your appointment'),
+        );
         expect(message.querySelector('b')).toHaveTextContent('rescheduled');
         expect(message).toHaveTextContent('08:00–08:30');
         expect(message).toHaveTextContent('09:00–09:30');
-        expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/calendar/notifications/read'), expect.objectContaining({ method: 'POST' }));
+        expect(fetchMock).toHaveBeenCalledWith(
+            expect.stringContaining('/calendar/notifications/read'),
+            expect.objectContaining({ method: 'POST' }),
+        );
         await user.click(message);
         expect(screen.getByTestId('path')).toHaveTextContent('/users/appointments/my-appointments/booking-1');
         unmount();
@@ -87,11 +109,21 @@ describe('patient reschedule notifications', () => {
         stored = [notification];
         mount();
         expect(await screen.findByText('1')).toBeInTheDocument();
-        stored = [notification, { ...notification, id: 'reschedule-booking-1-history-2', createdAt: '2099-05-02T00:00:00Z' }];
-        await act(async () => { for (const handler of socket.handlers.get('connect')) handler(); });
+        stored = [
+            notification,
+            { ...notification, id: 'reschedule-booking-1-history-2', createdAt: '2099-05-02T00:00:00Z' },
+        ];
+        await act(async () => {
+            for (const handler of socket.handlers.get('connect')) handler();
+        });
         expect(await screen.findByText('2')).toBeInTheDocument();
         await user.click(screen.getByRole('button', { name: 'Notifications' }));
-        expect(await screen.findAllByText((_, element) => element.tagName === 'P' && element.textContent.includes('Doctor One rescheduled your appointment'))).toHaveLength(2);
+        expect(
+            await screen.findAllByText(
+                (_, element) =>
+                    element.tagName === 'P' && element.textContent.includes('Doctor One rescheduled your appointment'),
+            ),
+        ).toHaveLength(2);
     });
 });
 
@@ -100,19 +132,38 @@ describe('admin support bell', () => {
         const user = userEvent.setup();
         stored = [];
         fetchMock.mockImplementation(async (url) => ({
-            ok: true, json: async () => url.endsWith('/contacts/notifications')
-                ? { data: stored, unreadCount: stored.filter((item) => !item.isRead).length }
-                : { success: true, data: [], unreadCount: 0 },
+            ok: true,
+            json: async () =>
+                url.endsWith('/contacts/notifications')
+                    ? { data: stored, unreadCount: stored.filter((item) => !item.isRead).length }
+                    : { success: true, data: [], unreadCount: 0 },
         }));
-        render(<authContext.Provider value={{ user: { _id: 'admin-1', fullname: 'Admin' }, role: 'admin', token: 'admin-token' }}>
-            <MemoryRouter><Header /><Location /></MemoryRouter>
-        </authContext.Provider>);
+        render(
+            <authContext.Provider
+                value={{ user: { _id: 'admin-1', fullname: 'Admin' }, role: 'admin', token: 'admin-token' }}
+            >
+                <MemoryRouter>
+                    <Header />
+                    <Location />
+                </MemoryRouter>
+            </authContext.Provider>,
+        );
         await waitFor(() => expect(socket.handlers.get('support-notification')?.size).toBe(1));
-        const event = { id: 'created:request-1', requestId: 'request-1', fullname: 'Guest One', category: 'technical',
-            kind: 'request', createdAt: '2099-11-10T00:00:00Z', isRead: false };
+        const event = {
+            id: 'created:request-1',
+            requestId: 'request-1',
+            fullname: 'Guest One',
+            category: 'technical',
+            kind: 'request',
+            createdAt: '2099-11-10T00:00:00Z',
+            isRead: false,
+        };
         stored = [event];
         await act(async () => {
-            for (const handler of socket.handlers.get('support-notification')) { handler(event); handler(event); }
+            for (const handler of socket.handlers.get('support-notification')) {
+                handler(event);
+                handler(event);
+            }
         });
         expect(await screen.findByText('1')).toBeInTheDocument();
         expect(play).toHaveBeenCalledTimes(1);
@@ -124,60 +175,121 @@ describe('admin support bell', () => {
 });
 
 describe('signed-in sender support bell', () => {
-    it.each(['patient', 'doctor'])('updates the %s bell with one sound and opens the exact support conversation', async (role) => {
-        fetchMock.mockImplementation(async (url) => ({ ok: true, json: async () => url.endsWith('/contacts/my-notifications')
-            ? { data: stored, unreadCount: stored.filter((item) => !item.isRead).length }
-            : { success: true, data: [], unreadCount: 0 },
-        }));
-        render(<authContext.Provider value={{ user: { _id: 'owner', fullname: 'Owner' }, role, token: 'owner-token' }}>
-            <MemoryRouter><Header /><Location /></MemoryRouter>
-        </authContext.Provider>);
-        await waitFor(() => expect(socket.handlers.get('owner-support-notification')?.size).toBe(1));
-        const event = { id: 'status:update-1', requestId: 'request-1', type: 'support-update', category: 'technical', kind: 'status', supportStatus: 'resolved', isRead: false, createdAt: '2099-11-01T00:00:00Z' };
-        stored = [event];
-        await act(async () => {
-            for (const handler of socket.handlers.get('owner-support-notification')) { handler(event); handler(event); }
-        });
-        expect(await screen.findByText('1')).toBeInTheDocument();
-        expect(play).toHaveBeenCalledTimes(1);
-        expect(supportToast).not.toHaveBeenCalled();
-        const user = userEvent.setup();
-        await user.click(screen.getByRole('button', { name: 'Notifications' }));
-        await user.click(await screen.findByRole('button', { name: /Your support request.*has been updated to Resolved/ }));
-        expect(screen.getByTestId('path')).toHaveTextContent('/support-requests?request=request-1');
-    });
+    it.each(['patient', 'doctor'])(
+        'updates the %s bell with one sound and opens the exact support conversation',
+        async (role) => {
+            fetchMock.mockImplementation(async (url) => ({
+                ok: true,
+                json: async () =>
+                    url.endsWith('/contacts/my-notifications')
+                        ? { data: stored, unreadCount: stored.filter((item) => !item.isRead).length }
+                        : { success: true, data: [], unreadCount: 0 },
+            }));
+            render(
+                <authContext.Provider value={{ user: { _id: 'owner', fullname: 'Owner' }, role, token: 'owner-token' }}>
+                    <MemoryRouter>
+                        <Header />
+                        <Location />
+                    </MemoryRouter>
+                </authContext.Provider>,
+            );
+            await waitFor(() => expect(socket.handlers.get('owner-support-notification')?.size).toBe(1));
+            const event = {
+                id: 'status:update-1',
+                requestId: 'request-1',
+                type: 'support-update',
+                category: 'technical',
+                kind: 'status',
+                supportStatus: 'resolved',
+                isRead: false,
+                createdAt: '2099-11-01T00:00:00Z',
+            };
+            stored = [event];
+            await act(async () => {
+                for (const handler of socket.handlers.get('owner-support-notification')) {
+                    handler(event);
+                    handler(event);
+                }
+            });
+            expect(await screen.findByText('1')).toBeInTheDocument();
+            expect(play).toHaveBeenCalledTimes(1);
+            expect(supportToast).not.toHaveBeenCalled();
+            const user = userEvent.setup();
+            await user.click(screen.getByRole('button', { name: 'Notifications' }));
+            await user.click(
+                await screen.findByRole('button', { name: /Your support request.*has been updated to Resolved/ }),
+            );
+            expect(screen.getByTestId('path')).toHaveTextContent('/support-requests?request=request-1');
+        },
+    );
 });
 
-
 describe('guest support bell', () => {
-    it.each([false, true])('plays one sound, opens the guest request and ends the session (mobile: %s)', async (mobile) => {
-        responsive.mobile = mobile;
-        sessionStorage.setItem('healthmate.support.guests', JSON.stringify([{ id: 'guest-request', guestToken: 'guest-secret' }]));
-        fetchMock.mockImplementation(async (url) => ({ ok: true, json: async () => url.endsWith('/contacts/guest-notifications')
-            ? { data: stored, unreadCount: stored.filter((item) => !item.isRead).length } : { success: true, unreadCount: 0 },
-        }));
-        render(<authContext.Provider value={{ user: null, role: null, token: null }}>
-            <MemoryRouter><Header /><Location /></MemoryRouter>
-        </authContext.Provider>);
-        await waitFor(() => expect(socket.handlers.get('guest-support-notification')?.size).toBe(1));
-        const event = { id: 'status:guest', requestId: 'guest-request', type: 'support-update', kind: 'status', supportStatus: 'resolved',
-            actorName: 'Admin One', photo: '/admin.png', isRead: false, createdAt: '2099-11-01T00:00:00Z' };
-        stored = [event];
-        await act(async () => { for (const handler of socket.handlers.get('guest-support-notification')) { handler(event); handler(event); } });
-        expect(await screen.findByText('1')).toBeInTheDocument();
-        expect(play).toHaveBeenCalledTimes(1);
-        const user = userEvent.setup();
-        await user.click(screen.getByRole('button', { name: 'Notifications' }));
-        expect(screen.getByRole('img', { name: 'Admin One' })).toHaveAttribute('src', '/admin.png');
-        expect(fetchMock.mock.calls.some(([url]) => url.endsWith('/guest-notification/read'))).toBe(false);
-        await user.click(await screen.findByRole('button', { name: /Your support request #guest-request has been updated to Resolved/ }));
-        expect(screen.getByTestId('path')).toHaveTextContent('/support-requests?request=guest-request');
-        expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/guest-request/guest-notification/read'), expect.objectContaining({
-            headers: { 'Content-Type': 'application/json', 'X-Support-Token': 'guest-secret' }, body: JSON.stringify({ notificationId: 'status:guest' }),
-        }));
-        const { endGuestSupportSession } = await import('../../utils/services/supportRequests');
-        await act(async () => endGuestSupportSession());
-        expect(screen.queryByRole('button', { name: 'Notifications' })).not.toBeInTheDocument();
-        expect(socket.emit).toHaveBeenCalledWith('guest-support-unsubscribe');
-    });
+    it.each([false, true])(
+        'plays one sound, opens the guest request and ends the session (mobile: %s)',
+        async (mobile) => {
+            responsive.mobile = mobile;
+            sessionStorage.setItem(
+                'healthmate.support.guests',
+                JSON.stringify([{ id: 'guest-request', guestToken: 'guest-secret' }]),
+            );
+            fetchMock.mockImplementation(async (url) => ({
+                ok: true,
+                json: async () =>
+                    url.endsWith('/contacts/guest-notifications')
+                        ? { data: stored, unreadCount: stored.filter((item) => !item.isRead).length }
+                        : { success: true, unreadCount: 0 },
+            }));
+            render(
+                <authContext.Provider value={{ user: null, role: null, token: null }}>
+                    <MemoryRouter>
+                        <Header />
+                        <Location />
+                    </MemoryRouter>
+                </authContext.Provider>,
+            );
+            await waitFor(() => expect(socket.handlers.get('guest-support-notification')?.size).toBe(1));
+            const event = {
+                id: 'status:guest',
+                requestId: 'guest-request',
+                type: 'support-update',
+                kind: 'status',
+                supportStatus: 'resolved',
+                actorName: 'Admin One',
+                photo: '/admin.png',
+                isRead: false,
+                createdAt: '2099-11-01T00:00:00Z',
+            };
+            stored = [event];
+            await act(async () => {
+                for (const handler of socket.handlers.get('guest-support-notification')) {
+                    handler(event);
+                    handler(event);
+                }
+            });
+            expect(await screen.findByText('1')).toBeInTheDocument();
+            expect(play).toHaveBeenCalledTimes(1);
+            const user = userEvent.setup();
+            await user.click(screen.getByRole('button', { name: 'Notifications' }));
+            expect(screen.getByRole('img', { name: 'Admin One' })).toHaveAttribute('src', '/admin.png');
+            expect(fetchMock.mock.calls.some(([url]) => url.endsWith('/guest-notification/read'))).toBe(false);
+            await user.click(
+                await screen.findByRole('button', {
+                    name: /Your support request #guest-request has been updated to Resolved/,
+                }),
+            );
+            expect(screen.getByTestId('path')).toHaveTextContent('/support-requests?request=guest-request');
+            expect(fetchMock).toHaveBeenCalledWith(
+                expect.stringContaining('/guest-request/guest-notification/read'),
+                expect.objectContaining({
+                    headers: { 'Content-Type': 'application/json', 'X-Support-Token': 'guest-secret' },
+                    body: JSON.stringify({ notificationId: 'status:guest' }),
+                }),
+            );
+            const { endGuestSupportSession } = await import('../../utils/services/supportRequests');
+            await act(async () => endGuestSupportSession());
+            expect(screen.queryByRole('button', { name: 'Notifications' })).not.toBeInTheDocument();
+            expect(socket.emit).toHaveBeenCalledWith('guest-support-unsubscribe');
+        },
+    );
 });

@@ -39,10 +39,24 @@ export const getSupportAccess = async ({ token, guestToken, requestId }) => {
         }
     }
     if (request.senderRole === 'guest' && typeof guestToken === 'string' && /^[a-f0-9]{64}$/.test(guestToken)) {
-        const session = await GuestSupportSession.findOne({ tokenHash: hashGuestToken(guestToken), requestIds: request._id,
+        const session = await GuestSupportSession.findOne({
+            tokenHash: hashGuestToken(guestToken),
+            requestIds: request._id,
             expiresAt: { $gt: new Date() },
-        }).select('expiresAt').lean();
-        if (session) return { request, account: { id: null, role: 'guest', fullname: request.fullname, expiresAt: new Date(session.expiresAt).getTime() }, senderKey: 'guest' };
+        })
+            .select('expiresAt')
+            .lean();
+        if (session)
+            return {
+                request,
+                account: {
+                    id: null,
+                    role: 'guest',
+                    fullname: request.fullname,
+                    expiresAt: new Date(session.expiresAt).getTime(),
+                },
+                senderKey: 'guest',
+            };
     }
     const account = await getSupportAccount(token);
     const owner = String(request.senderId) === account.id && request.senderRole === account.role;

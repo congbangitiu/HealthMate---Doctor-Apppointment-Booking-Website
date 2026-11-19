@@ -71,7 +71,9 @@ export const createContactRequest = async (req, res) => {
             senderRole: req.userRole || 'guest',
         });
         await emitSupportNotification(req.io, request);
-        return res.status(201).json({ success: true, data: { id: request._id.toString(), ...(guestToken ? { guestToken } : {}) } });
+        return res
+            .status(201)
+            .json({ success: true, data: { id: request._id.toString(), ...(guestToken ? { guestToken } : {}) } });
     } catch {
         return fail(500, 'sendFailed');
     }

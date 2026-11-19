@@ -54,11 +54,8 @@ const createAccount = () => ({
     save: vi.fn().mockResolvedValue(undefined),
 });
 
-const signResetToken = (payload = {}, options = {}) => jwt.sign(
-    { email, model: 'User', resetId, ...payload },
-    resetSecret,
-    { expiresIn: '10m', ...options },
-);
+const signResetToken = (payload = {}, options = {}) =>
+    jwt.sign({ email, model: 'User', resetId, ...payload }, resetSecret, { expiresIn: '10m', ...options });
 
 const resetBody = (overrides = {}) => ({
     resetToken: signResetToken(),
@@ -110,7 +107,9 @@ describe('forgotPassword', () => {
         const res = createResponse();
         await forgotPassword({ body: { email } }, res);
         expect(mocks.PasswordReset.findOneAndUpdate).toHaveBeenCalledWith(
-            { email }, expect.objectContaining({ email, model: 'Doctor' }), { upsert: true, new: true },
+            { email },
+            expect.objectContaining({ email, model: 'Doctor' }),
+            { upsert: true, new: true },
         );
         expect(res.status).toHaveBeenCalledWith(200);
         expect(mocks.sendMail).toHaveBeenCalledWith(expect.objectContaining({ to: email }));
@@ -134,38 +133,49 @@ describe('forgotPassword', () => {
 
     it('BE-F05: allows resending at exactly sixty seconds and resets attempts and creation time', async () => {
         mocks.User.findOne.mockResolvedValue(createAccount());
-        mocks.PasswordReset.findOne.mockResolvedValue(createResetRequest({ createdAt: new Date(now.getTime() - 60000), attempts: 4 }));
+        mocks.PasswordReset.findOne.mockResolvedValue(
+            createResetRequest({ createdAt: new Date(now.getTime() - 60000), attempts: 4 }),
+        );
         const res = createResponse();
         await forgotPassword({ body: { email } }, res);
         expect(res.status).toHaveBeenCalledWith(200);
         expect(mocks.PasswordReset.findOneAndUpdate).toHaveBeenCalledWith(
-            { email }, expect.objectContaining({ attempts: 0, createdAt: now }), { upsert: true, new: true },
+            { email },
+            expect.objectContaining({ attempts: 0, createdAt: now }),
+            { upsert: true, new: true },
         );
     });
 
-    it.each([[0, '100000'], [0.999999, '999999']])(
-        'BE-F06: hashes a six-digit OTP for random value %s and sends it only by email',
-        async (random, otp) => {
-            vi.spyOn(Math, 'random').mockReturnValue(random);
-            mocks.User.findOne.mockResolvedValue(createAccount());
-            mocks.bcrypt.hash.mockResolvedValue('hashed-otp');
-            const res = createResponse();
-            await forgotPassword({ body: { email } }, res);
-            expect(mocks.bcrypt.genSalt).toHaveBeenCalledWith(10);
-            expect(mocks.bcrypt.hash).toHaveBeenCalledWith(otp, 'test-salt');
-            expect(mocks.PasswordReset.findOneAndUpdate).toHaveBeenCalledWith(
-                { email }, { email, model: 'User', otp: 'hashed-otp', attempts: 0, createdAt: now }, { upsert: true, new: true },
-            );
-            expect(mocks.sendMail).toHaveBeenCalledWith(expect.objectContaining({ to: email, html: expect.stringContaining(otp.split('').join(' ')) }));
-            expect(res.status).toHaveBeenCalledWith(200);
-            expect(res.json).toHaveBeenCalledWith({ success: true, message: 'OTP sent successfully to your email!' });
-            expect(mocks.Doctor.findOne).not.toHaveBeenCalled();
-            expect(mocks.PasswordReset.findOneAndUpdate.mock.invocationCallOrder[0]).toBeLessThan(mocks.sendMail.mock.invocationCallOrder[0]);
-        },
-    );
+    it.each([
+        [0, '100000'],
+        [0.999999, '999999'],
+    ])('BE-F06: hashes a six-digit OTP for random value %s and sends it only by email', async (random, otp) => {
+        vi.spyOn(Math, 'random').mockReturnValue(random);
+        mocks.User.findOne.mockResolvedValue(createAccount());
+        mocks.bcrypt.hash.mockResolvedValue('hashed-otp');
+        const res = createResponse();
+        await forgotPassword({ body: { email } }, res);
+        expect(mocks.bcrypt.genSalt).toHaveBeenCalledWith(10);
+        expect(mocks.bcrypt.hash).toHaveBeenCalledWith(otp, 'test-salt');
+        expect(mocks.PasswordReset.findOneAndUpdate).toHaveBeenCalledWith(
+            { email },
+            { email, model: 'User', otp: 'hashed-otp', attempts: 0, createdAt: now },
+            { upsert: true, new: true },
+        );
+        expect(mocks.sendMail).toHaveBeenCalledWith(
+            expect.objectContaining({ to: email, html: expect.stringContaining(otp.split('').join(' ')) }),
+        );
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({ success: true, message: 'OTP sent successfully to your email!' });
+        expect(mocks.Doctor.findOne).not.toHaveBeenCalled();
+        expect(mocks.PasswordReset.findOneAndUpdate.mock.invocationCallOrder[0]).toBeLessThan(
+            mocks.sendMail.mock.invocationCallOrder[0],
+        );
+    });
 
     it.each(['User lookup', 'Doctor lookup', 'reset lookup', 'salt', 'hash', 'upsert', 'mail'])(
-        'BE-F07: returns 500 without success when %s fails', async (stage) => {
+        'BE-F07: returns 500 without success when %s fails',
+        async (stage) => {
             mocks.User.findOne.mockResolvedValue(stage === 'Doctor lookup' ? null : createAccount());
             const dependency = {
                 'User lookup': mocks.User.findOne,
@@ -188,7 +198,8 @@ describe('forgotPassword', () => {
 
 describe('verifyForgotPasswordOTP', () => {
     it.each([{ otp: '123456' }, { email }, { email, otp: '' }])(
-        'BE-V01: rejects incomplete input %j without querying the reset request', async (body) => {
+        'BE-V01: rejects incomplete input %j without querying the reset request',
+        async (body) => {
             const res = createResponse();
             await verifyForgotPasswordOTP({ body }, res);
             expect(res.status).toHaveBeenCalledWith(400);
@@ -226,28 +237,36 @@ describe('verifyForgotPasswordOTP', () => {
         expect(mocks.PasswordReset.deleteOne).toHaveBeenCalledWith({ _id: resetId });
         expect(request.save).not.toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.json).toHaveBeenCalledWith({ success: false, message: 'Too many incorrect attempts. Please request a new OTP!' });
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: 'Too many incorrect attempts. Please request a new OTP!',
+        });
     });
 
-    it.each(['User', 'Doctor'])('BE-V04: issues a ten-minute reset JWT for %s using the separate reset secret', async (model) => {
-        const request = createResetRequest({ model });
-        mocks.PasswordReset.findOne.mockResolvedValue(request);
-        mocks.bcrypt.compare.mockResolvedValue(true);
-        const res = createResponse();
-        await verifyForgotPasswordOTP({ body: { email, otp: '123456' } }, res);
-        expect(mocks.bcrypt.compare).toHaveBeenCalledWith('123456', 'hashed-otp');
-        expect(res.status).toHaveBeenCalledWith(200);
-        const token = res.json.mock.calls[0][0].resetToken;
-        const payload = jwt.verify(token, resetSecret);
-        expect(payload).toMatchObject({ email, model, resetId });
-        expect(payload.exp - payload.iat).toBe(600);
-        expect(() => jwt.verify(token, process.env.JWT_SECRET_KEY)).toThrow();
-        expect(request.save).not.toHaveBeenCalled();
-        expect(mocks.PasswordReset.deleteOne).not.toHaveBeenCalled();
-    });
+    it.each(['User', 'Doctor'])(
+        'BE-V04: issues a ten-minute reset JWT for %s using the separate reset secret',
+        async (model) => {
+            const request = createResetRequest({ model });
+            mocks.PasswordReset.findOne.mockResolvedValue(request);
+            mocks.bcrypt.compare.mockResolvedValue(true);
+            const res = createResponse();
+            await verifyForgotPasswordOTP({ body: { email, otp: '123456' } }, res);
+            expect(mocks.bcrypt.compare).toHaveBeenCalledWith('123456', 'hashed-otp');
+            expect(res.status).toHaveBeenCalledWith(200);
+            const token = res.json.mock.calls[0][0].resetToken;
+            const payload = jwt.verify(token, resetSecret);
+            expect(payload).toMatchObject({ email, model, resetId });
+            expect(payload.exp - payload.iat).toBe(600);
+            expect(() => jwt.verify(token, process.env.JWT_SECRET_KEY)).toThrow();
+            expect(request.save).not.toHaveBeenCalled();
+            expect(mocks.PasswordReset.deleteOne).not.toHaveBeenCalled();
+        },
+    );
 
     it('BE-V05: rejects an expired OTP even while its record remains in MongoDB', async () => {
-        mocks.PasswordReset.findOne.mockResolvedValue(createResetRequest({ createdAt: new Date(now.getTime() - 601000) }));
+        mocks.PasswordReset.findOne.mockResolvedValue(
+            createResetRequest({ createdAt: new Date(now.getTime() - 601000) }),
+        );
         mocks.bcrypt.compare.mockResolvedValue(true);
         const res = createResponse();
         await verifyForgotPasswordOTP({ body: { email, otp: '123456' } }, res);
@@ -280,7 +299,8 @@ describe('verifyForgotPasswordOTP', () => {
     });
 
     it.each([undefined, null, 'invalid-date', new Date(now.getTime() + 1)])(
-        'BE-V07: rejects a missing, invalid or future OTP creation timestamp: %j', async (createdAt) => {
+        'BE-V07: rejects a missing, invalid or future OTP creation timestamp: %j',
+        async (createdAt) => {
             const record = createResetRequest({ createdAt });
             mocks.PasswordReset.findOne.mockResolvedValue(record);
             mocks.bcrypt.compare.mockResolvedValue(true);
@@ -295,7 +315,8 @@ describe('verifyForgotPasswordOTP', () => {
     );
 
     it.each(['lookup', 'compare', 'attempt save', 'attempt deletion'])(
-        'BE-V06: returns 500 without a token when %s fails', async (stage) => {
+        'BE-V06: returns 500 without a token when %s fails',
+        async (stage) => {
             const request = createResetRequest({ attempts: stage === 'attempt deletion' ? 4 : 0 });
             mocks.PasswordReset.findOne.mockResolvedValue(request);
             const dependency = {
@@ -315,7 +336,8 @@ describe('verifyForgotPasswordOTP', () => {
 
 describe('resetPassword', () => {
     it.each(['resetToken', 'newPassword', 'confirmedPassword'])(
-        'BE-P01: rejects a missing %s without querying the database', async (field) => {
+        'BE-P01: rejects a missing %s without querying the database',
+        async (field) => {
             const res = createResponse();
             await resetPassword({ body: resetBody({ [field]: '' }) }, res);
             expect(res.status).toHaveBeenCalledWith(400);
@@ -346,7 +368,8 @@ describe('resetPassword', () => {
     });
 
     it.each(['malformed', 'wrong signature', 'expired', 'access token'])(
-        'BE-P05: rejects token type "%s" before querying reset records', async (kind) => {
+        'BE-P05: rejects token type "%s" before querying reset records',
+        async (kind) => {
             const token = {
                 malformed: 'not-a-token',
                 'wrong signature': jwt.sign({ email, resetId }, 'wrong-secret'),
@@ -363,7 +386,9 @@ describe('resetPassword', () => {
     );
 
     it.each(['absent', 'different email'])('BE-P06: rejects a reset record that is %s', async (kind) => {
-        mocks.PasswordReset.findById.mockResolvedValue(kind === 'absent' ? null : createResetRequest({ email: 'other@example.test' }));
+        mocks.PasswordReset.findById.mockResolvedValue(
+            kind === 'absent' ? null : createResetRequest({ email: 'other@example.test' }),
+        );
         const res = createResponse();
         await resetPassword({ body: resetBody() }, res);
         expect(mocks.PasswordReset.findById).toHaveBeenCalledWith(resetId);
@@ -392,31 +417,35 @@ describe('resetPassword', () => {
         expect(mocks.PasswordReset.deleteOne).not.toHaveBeenCalled();
     });
 
-    it.each([['BE-P09', 'User'], ['BE-P10', 'Doctor']])(
-        '%s: saves the new hash to %s and consumes the request after saving', async (_id, model) => {
-            const account = createAccount();
-            mocks[model].findOne.mockResolvedValue(account);
-            mocks.PasswordReset.findById.mockResolvedValue(createResetRequest({ model }));
-            const res = createResponse();
-            await resetPassword({ body: resetBody({ resetToken: signResetToken({ model }) }) }, res);
-            expect(mocks[model].findOne).toHaveBeenCalledWith({ email });
-            expect(mocks[model === 'User' ? 'Doctor' : 'User'].findOne).not.toHaveBeenCalled();
-            expect(mocks.bcrypt.compare).toHaveBeenCalledWith('NewPass123', 'old-password-hash');
-            expect(mocks.bcrypt.genSalt).toHaveBeenCalledWith(10);
-            expect(mocks.bcrypt.hash).toHaveBeenCalledWith('NewPass123', 'test-salt');
-            expect(account.password).toBe('new-password-hash');
-            if (model === 'User') expect(account.confirmedPassword).toBe('new-password-hash');
-            else expect(account).not.toHaveProperty('confirmedPassword');
-            expect(account.save).toHaveBeenCalledTimes(1);
-            expect(mocks.PasswordReset.deleteOne).toHaveBeenCalledWith({ _id: resetId });
-            expect(account.save.mock.invocationCallOrder[0]).toBeLessThan(mocks.PasswordReset.deleteOne.mock.invocationCallOrder[0]);
-            expect(res.status).toHaveBeenCalledWith(200);
-            expect(res.json).toHaveBeenCalledWith({ success: true, message: 'Your password has been reset successfully!' });
-        },
-    );
+    it.each([
+        ['BE-P09', 'User'],
+        ['BE-P10', 'Doctor'],
+    ])('%s: saves the new hash to %s and consumes the request after saving', async (_id, model) => {
+        const account = createAccount();
+        mocks[model].findOne.mockResolvedValue(account);
+        mocks.PasswordReset.findById.mockResolvedValue(createResetRequest({ model }));
+        const res = createResponse();
+        await resetPassword({ body: resetBody({ resetToken: signResetToken({ model }) }) }, res);
+        expect(mocks[model].findOne).toHaveBeenCalledWith({ email });
+        expect(mocks[model === 'User' ? 'Doctor' : 'User'].findOne).not.toHaveBeenCalled();
+        expect(mocks.bcrypt.compare).toHaveBeenCalledWith('NewPass123', 'old-password-hash');
+        expect(mocks.bcrypt.genSalt).toHaveBeenCalledWith(10);
+        expect(mocks.bcrypt.hash).toHaveBeenCalledWith('NewPass123', 'test-salt');
+        expect(account.password).toBe('new-password-hash');
+        if (model === 'User') expect(account.confirmedPassword).toBe('new-password-hash');
+        else expect(account).not.toHaveProperty('confirmedPassword');
+        expect(account.save).toHaveBeenCalledTimes(1);
+        expect(mocks.PasswordReset.deleteOne).toHaveBeenCalledWith({ _id: resetId });
+        expect(account.save.mock.invocationCallOrder[0]).toBeLessThan(
+            mocks.PasswordReset.deleteOne.mock.invocationCallOrder[0],
+        );
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({ success: true, message: 'Your password has been reset successfully!' });
+    });
 
     it.each(['request lookup', 'account lookup', 'compare', 'salt', 'hash', 'account save'])(
-        'BE-P11: preserves the reset request when %s fails', async (stage) => {
+        'BE-P11: preserves the reset request when %s fails',
+        async (stage) => {
             const account = createAccount();
             mocks.User.findOne.mockResolvedValue(account);
             const dependency = {

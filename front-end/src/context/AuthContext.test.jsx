@@ -27,7 +27,11 @@ function renderSession(auth) {
             </>
         );
     }
-    return render(<auth.AuthContextProvider><SessionProbe /></auth.AuthContextProvider>);
+    return render(
+        <auth.AuthContextProvider>
+            <SessionProbe />
+        </auth.AuthContextProvider>,
+    );
 }
 
 function seedSession() {
@@ -79,19 +83,23 @@ describe('AuthContextProvider', () => {
     });
 
     it.each(['{invalid-json', 'undefined'])(
-        'FE-A06 [REGRESSION]: tolerates corrupted stored user value %s', async (storedUser) => {
+        'FE-A06 [REGRESSION]: tolerates corrupted stored user value %s',
+        async (storedUser) => {
             localStorage.setItem('user', storedUser);
             renderSession(await loadAuth());
             expect(readSession()).toEqual(emptySession);
         },
     );
 
-    it.each(['patient', 'doctor', 'admin'])('FE-A10: restores a valid stored %s session on a fresh import', async (role) => {
-        seedSession();
-        localStorage.setItem('role', role);
-        renderSession(await loadAuth());
-        expect(readSession()).toEqual({ ...session, role });
-    });
+    it.each(['patient', 'doctor', 'admin'])(
+        'FE-A10: restores a valid stored %s session on a fresh import',
+        async (role) => {
+            seedSession();
+            localStorage.setItem('role', role);
+            renderSession(await loadAuth());
+            expect(readSession()).toEqual({ ...session, role });
+        },
+    );
 
     it('FE-A11 [REGRESSION]: restores null session values after logout and a fresh module import', async () => {
         seedSession();
@@ -103,15 +111,18 @@ describe('AuthContextProvider', () => {
         expect(readSession()).toEqual(emptySession);
     });
 
-    it.each(['null', 'undefined'])('FE-A12: migrates stored sentinel values "%s" to an empty session', async (value) => {
-        localStorage.setItem('user', 'null');
-        localStorage.setItem('role', value);
-        localStorage.setItem('token', value);
-        renderSession(await loadAuth());
-        expect(readSession()).toEqual(emptySession);
-        expect(localStorage.getItem('role')).toBeNull();
-        expect(localStorage.getItem('token')).toBeNull();
-    });
+    it.each(['null', 'undefined'])(
+        'FE-A12: migrates stored sentinel values "%s" to an empty session',
+        async (value) => {
+            localStorage.setItem('user', 'null');
+            localStorage.setItem('role', value);
+            localStorage.setItem('token', value);
+            renderSession(await loadAuth());
+            expect(readSession()).toEqual(emptySession);
+            expect(localStorage.getItem('role')).toBeNull();
+            expect(localStorage.getItem('token')).toBeNull();
+        },
+    );
 
     it('FE-A13: discards stale credentials when the stored user cannot be parsed', async () => {
         seedSession();

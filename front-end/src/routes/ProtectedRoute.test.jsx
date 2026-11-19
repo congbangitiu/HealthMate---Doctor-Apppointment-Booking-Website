@@ -7,19 +7,32 @@ import ProtectedRoute from './ProtectedRoute';
 
 function LoginPage() {
     const navigate = useNavigate();
-    return <><p>Login page</p><button onClick={() => navigate(-1)}>Go back</button></>;
+    return (
+        <>
+            <p>Login page</p>
+            <button onClick={() => navigate(-1)}>Go back</button>
+        </>
+    );
 }
 
 function renderRoute(value, allowedRoles = ['patient']) {
     return render(
         <authContext.Provider value={value}>
-            <MemoryRouter initialEntries={['/origin', '/private']} initialIndex={1}
-                future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+            <MemoryRouter
+                initialEntries={['/origin', '/private']}
+                initialIndex={1}
+                future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+            >
                 <Routes>
                     <Route path="/origin" element={<p>Origin page</p>} />
-                    <Route path="/private" element={
-                        <ProtectedRoute allowedRoles={allowedRoles}><p>Private content</p></ProtectedRoute>
-                    } />
+                    <Route
+                        path="/private"
+                        element={
+                            <ProtectedRoute allowedRoles={allowedRoles}>
+                                <p>Private content</p>
+                            </ProtectedRoute>
+                        }
+                    />
                     <Route path="/login" element={<LoginPage />} />
                 </Routes>
             </MemoryRouter>
@@ -29,7 +42,8 @@ function renderRoute(value, allowedRoles = ['patient']) {
 
 describe('ProtectedRoute', () => {
     it.each(['patient', 'doctor', 'admin'])(
-        'FE-A07: renders private content when role %s is allowed and a token exists', (role) => {
+        'FE-A07: renders private content when role %s is allowed and a token exists',
+        (role) => {
             renderRoute({ role, token: 'test-token' }, [role]);
             expect(screen.getByText('Private content')).toBeInTheDocument();
             expect(screen.queryByText('Login page')).not.toBeInTheDocument();
@@ -57,7 +71,8 @@ describe('ProtectedRoute', () => {
     });
 
     it.each(['null', 'undefined'])(
-        'FE-A09 [REGRESSION]: treats stored sentinel token "%s" as logged out', async (token) => {
+        'FE-A09 [REGRESSION]: treats stored sentinel token "%s" as logged out',
+        async (token) => {
             renderRoute({ role: 'patient', token });
             expect(screen.queryByText('Private content')).not.toBeInTheDocument();
             expect(await screen.findByText('Login page')).toBeInTheDocument();

@@ -61,8 +61,10 @@ export const emitSupportNotification = async (io, request) => {
 };
 
 export const supportGuestRoom = (id) => 'support:guest:' + id;
-export const supportRecipientRoom = (request) => request.senderRole === 'guest'
-    ? supportGuestRoom(request._id) : supportOwnerRoom(request.senderRole, request.senderId);
+export const supportRecipientRoom = (request) =>
+    request.senderRole === 'guest'
+        ? supportGuestRoom(request._id)
+        : supportOwnerRoom(request.senderRole, request.senderId);
 export const supportOwnerRoom = (role, id) => 'support:owner:' + role + ':' + id;
 export const hasSupportOwner = (request) =>
     request.senderRole === 'guest' || Boolean(request.senderId && ['patient', 'doctor'].includes(request.senderRole));

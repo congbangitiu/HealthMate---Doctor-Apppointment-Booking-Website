@@ -31,11 +31,7 @@ const FAQ = () => {
                 <h2>{t('faqs.title')}</h2>
                 <div className={cx('faqs')}>
                     {faqs.map((faq, index) => (
-                        <div
-                            key={index}
-                            className={cx('faq')}
-                            onClick={() => toggleAccordion(index)}
-                        >
+                        <div key={index} className={cx('faq')} onClick={() => toggleAccordion(index)}>
                             <div className={cx('question')}>
                                 <p>{faq.question}</p>
                                 {openIndexes.includes(index) ? (

@@ -17,8 +17,11 @@ const days = [
     { name: 'Friday', date: '2026-10-23' },
 ];
 const props = (overrides = {}) => ({
-    handleTimeSlotsChange: vi.fn(), onAvailableScheduleChange: vi.fn(),
-    daysOfWeekWithDates: days, availableSchedules: [], ...overrides,
+    handleTimeSlotsChange: vi.fn(),
+    onAvailableScheduleChange: vi.fn(),
+    daysOfWeekWithDates: days,
+    availableSchedules: [],
+    ...overrides,
 });
 const lastSlots = (options) => options.handleTimeSlotsChange.mock.lastCall?.[0];
 const lastSchedules = (options) => options.onAvailableScheduleChange.mock.lastCall?.[0];
@@ -36,19 +39,29 @@ async function toggleOption(user, selectIndex, optionName) {
 
 class RenderBoundary extends Component {
     state = { failed: false };
-    static getDerivedStateFromError() { return { failed: true }; }
-    render() { return this.state.failed ? <p>Rendering failed</p> : this.props.children; }
+    static getDerivedStateFromError() {
+        return { failed: true };
+    }
+    render() {
+        return this.state.failed ? <p>Rendering failed</p> : this.props.children;
+    }
 }
 RenderBoundary.propTypes = { children: PropTypes.node.isRequired };
 
 function ScheduleEditor() {
     const [schedules, setSchedules] = useState([{ day: 'Thursday', shifts: ['Morning'] }]);
     const [slots, setSlots] = useState([]);
-    return <>
-        <TimeSlots daysOfWeekWithDates={days} availableSchedules={schedules}
-            onAvailableScheduleChange={setSchedules} handleTimeSlotsChange={setSlots} />
-        <output aria-label="Parent slot count">{slots.length}</output>
-    </>;
+    return (
+        <>
+            <TimeSlots
+                daysOfWeekWithDates={days}
+                availableSchedules={schedules}
+                onAvailableScheduleChange={setSchedules}
+                handleTimeSlotsChange={setSlots}
+            />
+            <output aria-label="Parent slot count">{slots.length}</output>
+        </>
+    );
 }
 
 beforeEach(() => {
@@ -56,13 +69,23 @@ beforeEach(() => {
     vi.setSystemTime(new Date('2026-10-21T10:00:00+07:00'));
     // jsdom has no layout; provide a visible anchor for the actual MUI menus.
     vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
-        x: 0, y: 0, top: 0, left: 0, width: 120, height: 30, right: 120, bottom: 30, toJSON: () => ({}),
+        x: 0,
+        y: 0,
+        top: 0,
+        left: 0,
+        width: 120,
+        height: 30,
+        right: 120,
+        bottom: 30,
+        toJSON: () => ({}),
     });
 });
 
 describe('TimeSlots', () => {
     it.each([
-        ['Morning', 7, '08:00', '11:30'], ['Afternoon', 6, '13:00', '16:00'], ['Evening', 6, '18:00', '21:00'],
+        ['Morning', 7, '08:00', '11:30'],
+        ['Afternoon', 6, '13:00', '16:00'],
+        ['Evening', 6, '18:00', '21:00'],
     ])('FE-T01: generates %s as %i consecutive thirty-minute slots', (shift, count, start, end) => {
         const options = props({ availableSchedules: [{ day: 'Thursday', shifts: [shift] }] });
         render(<TimeSlots {...options} />);
@@ -83,13 +106,19 @@ describe('TimeSlots', () => {
         render(<TimeSlots {...options} />);
         await toggleOption(user, 0, 'Friday (2026-10-23)');
         await toggleOption(user, 0, 'Thursday (2026-10-22)');
-        expect(lastSchedules(options)).toEqual([{ day: 'Thursday', shifts: [] }, { day: 'Friday', shifts: [] }]);
+        expect(lastSchedules(options)).toEqual([
+            { day: 'Thursday', shifts: [] },
+            { day: 'Friday', shifts: [] },
+        ]);
     });
 
     it('FE-T03: removes the deselected day and its shifts while retaining other days', async () => {
-        const options = props({ availableSchedules: [
-            { day: 'Thursday', shifts: ['Morning'] }, { day: 'Friday', shifts: ['Evening'] },
-        ] });
+        const options = props({
+            availableSchedules: [
+                { day: 'Thursday', shifts: ['Morning'] },
+                { day: 'Friday', shifts: ['Evening'] },
+            ],
+        });
         render(<TimeSlots {...options} />);
         await toggleOption(userEvent.setup(), 0, 'Thursday (2026-10-22)');
         expect(lastSchedules(options)).toEqual([{ day: 'Friday', shifts: ['Evening'] }]);
@@ -98,22 +127,29 @@ describe('TimeSlots', () => {
     });
 
     it('FE-T04: adds a second shift without changing another day shifts', async () => {
-        const options = props({ availableSchedules: [
-            { day: 'Thursday', shifts: ['Morning'] }, { day: 'Friday', shifts: ['Afternoon'] },
-        ] });
+        const options = props({
+            availableSchedules: [
+                { day: 'Thursday', shifts: ['Morning'] },
+                { day: 'Friday', shifts: ['Afternoon'] },
+            ],
+        });
         render(<TimeSlots {...options} />);
         await toggleOption(userEvent.setup(), 1, 'Evening');
         expect(lastSchedules(options)).toEqual([
-            { day: 'Thursday', shifts: ['Morning', 'Evening'] }, { day: 'Friday', shifts: ['Afternoon'] },
+            { day: 'Thursday', shifts: ['Morning', 'Evening'] },
+            { day: 'Friday', shifts: ['Afternoon'] },
         ]);
         expect(lastSlots(options)).toHaveLength(19);
         expect(lastSlots(options).filter((slot) => slot.day === '2026-10-23')).toHaveLength(6);
     });
 
     it('FE-T05: preloads only schedules whose days exist in the provided calendar', () => {
-        const options = props({ availableSchedules: [
-            { day: 'Thursday', shifts: ['Morning'] }, { day: 'NotADay', shifts: ['Evening'] },
-        ] });
+        const options = props({
+            availableSchedules: [
+                { day: 'Thursday', shifts: ['Morning'] },
+                { day: 'NotADay', shifts: ['Evening'] },
+            ],
+        });
         render(<TimeSlots {...options} />);
         expect(lastSchedules(options)).toEqual([{ day: 'Thursday', shifts: ['Morning'] }]);
         expect(screen.getAllByRole('combobox')).toHaveLength(2);
@@ -134,9 +170,12 @@ describe('TimeSlots', () => {
     });
 
     it('FE-T07: groups generated table rows by date without losing slots', () => {
-        const options = props({ availableSchedules: [
-            { day: 'Thursday', shifts: ['Morning'] }, { day: 'Friday', shifts: ['Afternoon'] },
-        ] });
+        const options = props({
+            availableSchedules: [
+                { day: 'Thursday', shifts: ['Morning'] },
+                { day: 'Friday', shifts: ['Afternoon'] },
+            ],
+        });
         render(<TimeSlots {...options} />);
         const table = screen.getByRole('table');
         expect(within(table).getAllByRole('row')).toHaveLength(14);
@@ -149,13 +188,21 @@ describe('TimeSlots', () => {
         // The boundary contains React's error so the test can inspect the rendered failure explicitly.
         vi.spyOn(console, 'error').mockImplementation(() => {});
         const options = props({ availableSchedules: [{ day: 'Thursday', shifts: ['Night'] }] });
-        render(<RenderBoundary><TimeSlots {...options} /></RenderBoundary>);
+        render(
+            <RenderBoundary>
+                <TimeSlots {...options} />
+            </RenderBoundary>,
+        );
         expect(screen.queryByText('Rendering failed')).not.toBeInTheDocument();
         expect(lastSlots(options)).toEqual([]);
     });
 
     it('FE-T09: keeps a preloaded schedule cleared when parent callbacks update the input props', async () => {
-        render(<StrictMode><ScheduleEditor /></StrictMode>);
+        render(
+            <StrictMode>
+                <ScheduleEditor />
+            </StrictMode>,
+        );
         expect(screen.getByLabelText('Parent slot count')).toHaveTextContent('7');
         await toggleOption(userEvent.setup(), 0, 'Thursday (2026-10-22)');
         expect(screen.getByLabelText('Parent slot count')).toHaveTextContent('0');

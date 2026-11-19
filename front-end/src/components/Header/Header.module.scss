@@ -86,7 +86,9 @@
         gap: 10px;
         align-items: center;
         margin-right: -10px;
-        transition: background-color 0.3s, box-shadow 0.3s;
+        transition:
+            background-color 0.3s,
+            box-shadow 0.3s;
 
         & > div:first-child {
             display: flex;
@@ -321,7 +323,7 @@
                             width: 40px;
                             height: 40px;
                         }
-                        
+
                         & .name {
                             display: none;
                         }
@@ -396,7 +398,9 @@
                 display: block;
                 transform: translateX(100%);
                 opacity: 0;
-                transition: transform linear 0.2s, opacity linear 0.2s;
+                transition:
+                    transform linear 0.2s,
+                    opacity linear 0.2s;
 
                 & .menu-icon {
                     display: block !important;

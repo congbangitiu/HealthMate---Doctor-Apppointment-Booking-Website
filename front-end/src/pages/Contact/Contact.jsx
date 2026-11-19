@@ -123,8 +123,8 @@ export default function Contact() {
                     response.status === 401
                         ? 'sessionExpired'
                         : codes.includes(result.code)
-                        ? result.code
-                        : 'sendFailed',
+                          ? result.code
+                          : 'sendFailed',
                 );
                 return;
             }
@@ -264,7 +264,9 @@ export default function Contact() {
                                     <span>{t('requestIdLabel')}</span>
                                     <code>#{requestId}</code>
                                 </div>
-                                    <Link className={cx('chat-link')} to={'/support-requests?request=' + requestId}>{t('supportRealtime:openChat')}</Link>
+                                <Link className={cx('chat-link')} to={'/support-requests?request=' + requestId}>
+                                    {t('supportRealtime:openChat')}
+                                </Link>
                             </div>
                         </div>
                     )}
@@ -278,7 +280,9 @@ export default function Contact() {
                         </button>
                     </div>
                     {!token && <p className={cx('guest-session-hint')}>{t('supportRealtime:guestContactHint')}</p>}
-                    <Link className={cx('support-link')} to="/support-requests">{t('supportRealtime:myRequests')}</Link>
+                    <Link className={cx('support-link')} to="/support-requests">
+                        {t('supportRealtime:myRequests')}
+                    </Link>
                 </form>
             )}
         </div>

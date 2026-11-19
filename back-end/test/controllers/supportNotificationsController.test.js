@@ -9,19 +9,17 @@ beforeEach(() => {
         select: vi.fn().mockReturnThis(),
         sort: vi.fn().mockReturnThis(),
         limit: vi.fn().mockReturnThis(),
-        lean: vi
-            .fn()
-            .mockResolvedValue([
-                {
-                    _id: id,
-                    fullname: 'Sender',
-                    category: 'technical',
-                    createdAt: new Date(),
-                    readBy: ['admin-1'],
-                    history: [{ note: 'Internal' }],
-                    guestAccessHash: 'private',
-                },
-            ]),
+        lean: vi.fn().mockResolvedValue([
+            {
+                _id: id,
+                fullname: 'Sender',
+                category: 'technical',
+                createdAt: new Date(),
+                readBy: ['admin-1'],
+                history: [{ note: 'Internal' }],
+                guestAccessHash: 'private',
+            },
+        ]),
     };
     SupportRequest.find.mockReturnValue(chain);
     SupportRequest.countDocuments.mockResolvedValue(7);

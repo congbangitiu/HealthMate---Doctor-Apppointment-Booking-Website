@@ -27,9 +27,13 @@ export const ownSupportRequests = async (req, res) => {
             .sort({ createdAt: -1 })
             .limit(100)
             .lean();
-        return res.json({ success: true, data: requests.map(({ message, ...item }) => ({
-            ...item, preview: (message || '').replace(/\s+/g, ' ').trim().slice(0, 180),
-        })) });
+        return res.json({
+            success: true,
+            data: requests.map(({ message, ...item }) => ({
+                ...item,
+                preview: (message || '').replace(/\s+/g, ' ').trim().slice(0, 180),
+            })),
+        });
     } catch (error) {
         return reject(res, error);
     }

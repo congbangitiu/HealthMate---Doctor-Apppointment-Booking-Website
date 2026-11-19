@@ -67,19 +67,36 @@ describe('support conversation access', () => {
     });
     it('keeps two independent guests isolated even when both know the other request ID', async () => {
         const tokens = { [id]: 'a'.repeat(64), [other]: 'b'.repeat(64) };
-        SupportRequest.findById.mockImplementation((requestId) => query({ _id: requestId, senderRole: 'guest', fullname: 'Guest', guestAccessHash: hashGuestToken(tokens[requestId]) }));
+        SupportRequest.findById.mockImplementation((requestId) =>
+            query({
+                _id: requestId,
+                senderRole: 'guest',
+                fullname: 'Guest',
+                guestAccessHash: hashGuestToken(tokens[requestId]),
+            }),
+        );
         expect((await getSupportAccess({ requestId: id, guestToken: tokens[id] })).account.role).toBe('guest');
         expect((await getSupportAccess({ requestId: other, guestToken: tokens[other] })).account.role).toBe('guest');
-        await expect(getSupportAccess({ requestId: other, guestToken: tokens[id] })).rejects.toMatchObject({ code: 'forbidden' });
-        await expect(getSupportAccess({ requestId: id, guestToken: tokens[other] })).rejects.toMatchObject({ code: 'forbidden' });
+        await expect(getSupportAccess({ requestId: other, guestToken: tokens[id] })).rejects.toMatchObject({
+            code: 'forbidden',
+        });
+        await expect(getSupportAccess({ requestId: id, guestToken: tokens[other] })).rejects.toMatchObject({
+            code: 'forbidden',
+        });
     });
     it('accepts a recovered guest session only when it includes this request and has not expired', async () => {
         const guestToken = 'c'.repeat(64);
-        SupportRequest.findById.mockReturnValue(query({ _id: other, senderRole: 'guest', fullname: 'Recovered guest' }));
+        SupportRequest.findById.mockReturnValue(
+            query({ _id: other, senderRole: 'guest', fullname: 'Recovered guest' }),
+        );
         GuestSupportSession.findOne.mockReturnValue(query({ expiresAt: new Date(Date.now() + 60000) }));
         const access = await getSupportAccess({ requestId: other, guestToken });
         expect(access.account).toMatchObject({ role: 'guest', id: null, expiresAt: expect.any(Number) });
-        expect(GuestSupportSession.findOne).toHaveBeenCalledWith({ tokenHash: hashGuestToken(guestToken), requestIds: other, expiresAt: { $gt: expect.any(Date) } });
+        expect(GuestSupportSession.findOne).toHaveBeenCalledWith({
+            tokenHash: hashGuestToken(guestToken),
+            requestIds: other,
+            expiresAt: { $gt: expect.any(Date) },
+        });
         GuestSupportSession.findOne.mockReturnValue(query(null));
         await expect(getSupportAccess({ requestId: other, guestToken })).rejects.toMatchObject({ code: 'forbidden' });
     });

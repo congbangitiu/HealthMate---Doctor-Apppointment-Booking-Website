@@ -66,7 +66,9 @@ beforeEach(() => {
     vi.setSystemTime(now);
     vi.spyOn(console, 'error').mockImplementation(() => {});
     doctor = {
-        _id: 'doctor-id', fullname: 'Test Doctor', ticketPrice: 25,
+        _id: 'doctor-id',
+        fullname: 'Test Doctor',
+        ticketPrice: 25,
         timeSlots: [{ ...slot }],
     };
     user = { _id: 'patient-id', fullname: 'Test Patient', email: 'patient@example.test', photo: 'patient.jpg' };
@@ -134,8 +136,13 @@ describe('createBooking', () => {
         const res = createResponse();
         await createBooking(createRequest({ isPaid: true, unread: false }), res);
         expect(mocks.Booking).toHaveBeenCalledExactlyOnceWith({
-            doctor: 'doctor-id', user: 'patient-id', timeSlot: slot,
-            ticketPrice: 25, paymentMethod: 'cash', isPaid: false, unread: true,
+            doctor: 'doctor-id',
+            user: 'patient-id',
+            timeSlot: slot,
+            ticketPrice: 25,
+            paymentMethod: 'cash',
+            isPaid: false,
+            unread: true,
         });
         expect(mocks.save).toHaveBeenCalledTimes(1);
         expect(mocks.Doctor.updateOne).toHaveBeenCalledTimes(2);
@@ -143,16 +150,23 @@ describe('createBooking', () => {
         expect(mocks.Doctor.updateOne).toHaveBeenNthCalledWith(2, { _id: 'doctor-id' }, { $inc: { totalPatients: 1 } });
         expect(mocks.save.mock.invocationCallOrder[0]).toBeLessThan(mocks.Doctor.updateOne.mock.invocationCallOrder[0]);
         expect(res.status).toHaveBeenCalledWith(201);
-        expect(res.json).toHaveBeenCalledWith({ success: true, message: 'Booking created successfully', booking: savedBooking });
+        expect(res.json).toHaveBeenCalledWith({
+            success: true,
+            message: 'Booking created successfully',
+            booking: savedBooking,
+        });
     });
 
     it('BE-B05: emails the patient and notifies only the selected doctor with the saved booking details', async () => {
         const res = createResponse();
         await createBooking(createRequest(), res);
-        expect(mocks.sendMail).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({
-            to: user.email, subject: 'HealthMate - Booking Confirmation',
-            html: expect.stringContaining('Test Patient'),
-        }));
+        expect(mocks.sendMail).toHaveBeenCalledExactlyOnceWith(
+            expect.objectContaining({
+                to: user.email,
+                subject: 'HealthMate - Booking Confirmation',
+                html: expect.stringContaining('Test Patient'),
+            }),
+        );
         const html = mocks.sendMail.mock.calls[0][0].html;
         expect(html).toContain('Test Doctor');
         expect(html).toContain('$25');
@@ -162,10 +176,17 @@ describe('createBooking', () => {
         expect(mocks.emit).toHaveBeenCalledExactlyOnceWith('booking-notification', {
             bookingId: 'booking-id',
             user: { id: user._id, fullname: user.fullname, photo: user.photo },
-            timeSlot: slot, ticketPrice: 25, paymentMethod: 'cash',
-            isPaid: false, unread: true, status: 'pending', createdAt: now,
+            timeSlot: slot,
+            ticketPrice: 25,
+            paymentMethod: 'cash',
+            isPaid: false,
+            unread: true,
+            status: 'pending',
+            createdAt: now,
         });
-        expect(mocks.Doctor.updateOne.mock.invocationCallOrder[1]).toBeLessThan(mocks.sendMail.mock.invocationCallOrder[0]);
+        expect(mocks.Doctor.updateOne.mock.invocationCallOrder[1]).toBeLessThan(
+            mocks.sendMail.mock.invocationCallOrder[0],
+        );
         expect(mocks.sendMail.mock.invocationCallOrder[0]).toBeLessThan(mocks.emit.mock.invocationCallOrder[0]);
     });
 
@@ -174,7 +195,11 @@ describe('createBooking', () => {
         const res = createResponse();
         await createBooking(createRequest(), res);
         expect(res.status).toHaveBeenCalledWith(500);
-        expect(res.json).toHaveBeenCalledWith({ success: false, message: 'Error creating booking', error: 'save unavailable' });
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: 'Error creating booking',
+            error: 'save unavailable',
+        });
         expect(mocks.Doctor.updateOne).not.toHaveBeenCalled();
         expect(mocks.sendMail).not.toHaveBeenCalled();
         expect(mocks.emit).not.toHaveBeenCalled();
@@ -246,21 +271,30 @@ describe('createBooking', () => {
         expectNoBookingEffects();
     });
 
-    it.each([1, 0, -1, '0', null, undefined])('BE-B09: uses the server price for storage, email and notification when client price is %s', async (ticketPrice) => {
-        const res = createResponse();
-        await createBooking(createRequest({ ticketPrice }), res);
-        expect(res.status).toHaveBeenCalledWith(201);
-        expect(mocks.Booking).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ ticketPrice: 25 }));
-        expect(mocks.sendMail.mock.calls[0][0].html).toContain('$25');
-        expect(mocks.emit).toHaveBeenCalledWith('booking-notification', expect.objectContaining({ ticketPrice: 25 }));
-    });
+    it.each([1, 0, -1, '0', null, undefined])(
+        'BE-B09: uses the server price for storage, email and notification when client price is %s',
+        async (ticketPrice) => {
+            const res = createResponse();
+            await createBooking(createRequest({ ticketPrice }), res);
+            expect(res.status).toHaveBeenCalledWith(201);
+            expect(mocks.Booking).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ ticketPrice: 25 }));
+            expect(mocks.sendMail.mock.calls[0][0].html).toContain('$25');
+            expect(mocks.emit).toHaveBeenCalledWith(
+                'booking-notification',
+                expect.objectContaining({ ticketPrice: 25 }),
+            );
+        },
+    );
 
-    it.each([undefined, 'e-wallet', 'free', 'invalid'])('BE-B08: rejects payment method %s on the cash endpoint', async (paymentMethod) => {
-        const res = createResponse();
-        await createBooking(createRequest({ paymentMethod }), res);
-        expect(res.status).toHaveBeenCalledWith(400);
-        expectNoBookingEffects();
-    });
+    it.each([undefined, 'e-wallet', 'free', 'invalid'])(
+        'BE-B08: rejects payment method %s on the cash endpoint',
+        async (paymentMethod) => {
+            const res = createResponse();
+            await createBooking(createRequest({ paymentMethod }), res);
+            expect(res.status).toHaveBeenCalledWith(400);
+            expectNoBookingEffects();
+        },
+    );
 
     it('BE-B08: rejects an impossible date even when it appears in doctor availability', async () => {
         const invalidSlot = { ...slot, day: '2026-02-30' };
@@ -273,23 +307,28 @@ describe('createBooking', () => {
 
     it.todo('BE-B12: only one concurrent request can reserve a given slot (MongoDB integration)');
 
-    it.each([1, 2])('BE-B13 [LIMITATION]: returns 500 after the booking was saved when doctor update %i fails', async (update) => {
-        if (update === 2) mocks.Doctor.updateOne.mockResolvedValueOnce({ modifiedCount: 1 });
-        mocks.Doctor.updateOne.mockRejectedValueOnce(new Error('doctor update unavailable'));
-        const res = createResponse();
-        await createBooking(createRequest(), res);
-        expect(mocks.save).toHaveBeenCalledTimes(1);
-        expect(mocks.Doctor.updateOne).toHaveBeenCalledTimes(update);
-        expect(res.status).toHaveBeenCalledWith(500);
-        expect(mocks.sendMail).not.toHaveBeenCalled();
-        expect(mocks.emit).not.toHaveBeenCalled();
-        // A failed response does not prove the saved booking was rolled back.
-    });
+    it.each([1, 2])(
+        'BE-B13 [LIMITATION]: returns 500 after the booking was saved when doctor update %i fails',
+        async (update) => {
+            if (update === 2) mocks.Doctor.updateOne.mockResolvedValueOnce({ modifiedCount: 1 });
+            mocks.Doctor.updateOne.mockRejectedValueOnce(new Error('doctor update unavailable'));
+            const res = createResponse();
+            await createBooking(createRequest(), res);
+            expect(mocks.save).toHaveBeenCalledTimes(1);
+            expect(mocks.Doctor.updateOne).toHaveBeenCalledTimes(update);
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(mocks.sendMail).not.toHaveBeenCalled();
+            expect(mocks.emit).not.toHaveBeenCalled();
+            // A failed response does not prove the saved booking was rolled back.
+        },
+    );
 
     it.todo('BE-B13: atomically rolls back booking, slot removal and patient count on failure (MongoDB integration)');
 
     it('BE-B14 [LIMITATION]: returns 500 after database writes and email if WebSocket emission fails', async () => {
-        mocks.emit.mockImplementation(() => { throw new Error('socket unavailable'); });
+        mocks.emit.mockImplementation(() => {
+            throw new Error('socket unavailable');
+        });
         const res = createResponse();
         await createBooking(createRequest(), res);
         expect(mocks.save).toHaveBeenCalledTimes(1);
