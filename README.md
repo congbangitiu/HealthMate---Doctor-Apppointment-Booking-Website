@@ -1,6 +1,6 @@
 <div id="top" align="center">
 </div>
-<img src="front-end/src/assets/images/SwiperImg1.jpg" alt="Logo">
+<img src="front-end/src/assets/images/Banner-GitHub.webp" alt="Banner">
 <div align="center">
   <img src="front-end/src/assets/images/logo.png" alt="Logo" width="200">
   <h1 align="center">HealthMate</h1>
@@ -47,6 +47,8 @@
 - **Personalized Experience:** Suggest suitable doctors based on medical history and location, and allow users to store and track personal health records.
 
 - **AI Support & Interactivity:** Integrate an AI assistant to answer common health-related questions and improve user engagement without requiring in-person visits.
+
+- **Contact Support:** Allow users to submit support requests and receive assistance from administrators when they need help with the platform.
 
 - **Secure Online Payment:** Enable safe, convenient payment through third-party services, ensuring confidentiality and seamless booking confirmation.
 
@@ -161,6 +163,8 @@
 - [x] **Admin Dashboard with Analytics:** Interactive charts provide insights on appointments, revenue, and user stats for better management.
 
 - [x] **Multilingual Support:** Real-time language switching between English and Vietnamese for accessibility and inclusivity.
+
+- [x] **Contact Support:** Users can submit support requests and follow up on their issues, while administrators manage incoming requests.
 
 - [ ] **Detailed medical documentation:** The form cannot capture complex clinical data, lacks support for attaching diagnostic results, and does not include a digital doctor’s signature, reducing authenticity and professionalism.
 
