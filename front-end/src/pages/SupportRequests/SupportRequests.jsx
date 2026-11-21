@@ -94,7 +94,6 @@ const SupportRequests = () => {
         if (id) setConversationVisit((n) => n + 1);
     };
     useEffect(() => {
-        if (!selectedId) return;
         const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
         window.scrollTo({ top: 0, left: 0, behavior: reducedMotion ? 'instant' : 'smooth' });
     }, [selectedId]);
